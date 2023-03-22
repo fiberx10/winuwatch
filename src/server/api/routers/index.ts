@@ -79,11 +79,67 @@ export const WatchesRouter = createTRPCRouter({
           box : input.box,
           papers : input.papers,
           price : input.price,
-
         },
       });
-    }
-  ),
+    }),
+  update : publicProcedure
+    .input(z.object({
+        id : z.string(),
+        name: z.string(),
+        ImageURL : z.array(z.string()),
+        owner_ref : z.string(),
+        condition : z.string(),
+        years : z.number(),
+        movement : z.string(),
+        case_size : z.string(),
+        dail : z.string(),
+        case_material : z.string(),
+        bracelet_material : z.string(),
+        water_proof : z.string(),
+        box : z.string(),
+        papers : z.string(),
+        price : z.number(),
+    }))
+    .mutation(({ ctx, input }) => {
+        return ctx.prisma.watches.update({
+            data : {
+            name: input.name,
+            imageURL : input.ImageURL,
+            owner_ref : input.owner_ref,
+            years : input.years,
+            movement : input.movement,
+            case_size : input.case_size,
+            dail : input.dail,
+            case_material : input.case_material,
+            bracelet_material : input.bracelet_material,
+            water_proof : input.water_proof,
+            box : input.box,
+            papers : input.papers,
+            price : input.price,
+            }
+        });
+    }),
+  delete : publicProcedure
+    .input(z.object({
+        id : z.string(),
+    }))
+    .mutation(({ ctx, input }) => {
+        return ctx.prisma.watches.delete({
+            where : {
+                id : input.id
+            }
+        });
+    }),
+
+
+
+
+
+
+
+
+
+
 });
 
 
