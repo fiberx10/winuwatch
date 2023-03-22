@@ -10,7 +10,12 @@
     "start": "next start"
   },
   "dependencies": {
+    "@emotion/react": "^11.10.6",
+    "@emotion/styled": "^11.10.6",
+    "@mui/material": "^5.11.14",
+    "@paypal/react-paypal-js": "^7.8.2",
     "@prisma/client": "^4.9.0",
+    "@splidejs/react-splide": "^0.7.12",
     "@tanstack/react-query": "^4.20.2",
     "@trpc/client": "^10.9.0",
     "@trpc/next": "^10.9.0",
@@ -18,9 +23,11 @@
     "@trpc/server": "^10.9.0",
     "next": "^13.2.1",
     "react": "18.2.0",
+    "react-alice-carousel": "^2.7.0",
     "react-dom": "18.2.0",
     "superjson": "1.9.1",
-    "zod": "^3.20.6"
+    "zod": "^3.20.6",
+    "zustand": "^4.3.6"
   },
   "devDependencies": {
     "@types/eslint": "^8.21.1",

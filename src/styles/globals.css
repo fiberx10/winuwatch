@@ -1,16 +1,194 @@
-html,
-body {
-  padding: 0;
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-}
-
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
 * {
-  box-sizing: border-box;
+  margin: 0;
+  font-family: "Kanit", sans-serif;
+}
+@media only screen and (max-width: 930px) {
+  .alice-carousel__next-btn {
+    display: none !important;
+  }
+  .alice-carousel__prev-btn {
+    display: none !important;
+  }
+}
+.MuiRating-icon {
+  color: #987358;
+}
+.alice-carousel__dots-item {
+  width: 150px !important;
+  height: 4px !important;
+  border-radius: 0 !important;
+  background-color: #a7a7a7 !important;
+}
+.alice-carousel__dots .__active {
+  background-color: black !important;
+}
+.alice-carousel__dots-item:hover {
+  background-color: black !important;
+}
+.alice-carousel__dots {
+  display: flex;
+  align-items: flex-start;
+  padding: 0px 10px !important;
+}
+.alice-carousel__prev-btn {
+  position: absolute;
+  right: 3rem !important;
+  bottom: 0rem;
+  border: 1px solid black;
+
+  padding: 10px !important  ;
+  border-radius: 50%;
+  width: fit-content !important;
+}
+.alice-carousel__prev-btn-wrapper {
+  display: flex !important;
+  height: 20px;
+  align-items: center;
+  justify-content: center;
+}
+.alice-carousel__next-btn-item {
+  color: black !important;
+}
+.alice-carousel__prev-btn-item {
+  color: black !important;
+}
+.alice-carousel__next-btn {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  border: 1px solid black;
+  padding: 10px !important  ;
+  border-radius: 50%;
+  width: fit-content !important;
+}
+.alice-carousel__next-btn-wrapper {
+  display: flex !important;
+  height: 20px;
+  align-items: center;
+  justify-content: center;
+}
+.alice-carousel__prev-btn-item:hover,
+.alice-carousel__next-btn-item:hover {
+  color: black !important;
+}
+/* .alice-carousel__stage-item {
+  width: 350px !important;
+  margin-left: 10px !important;
+}
+.alice-carousel__stage {
+  width: 380px !important;
+  margin-left: 50px !important;
+  margin-right: 0px !important;
+} */
+
+/* .is-active img {
+  height: 350px !important;
+  width: 303px !important;
+  object-fit: contain;
+  transition: all 0.3s ease-in-out;
+} */
+.carouImgCon {
+  height: 350px;
+  display: flex;
+  align-items: flex-end;
+}
+
+.is-active .is-visible .carouImgCon img {
+  height: 350px;
+  width: 303px;
+  object-fit: contain;
+  transition: all 0.3s ease-in-out;
+}
+
+.splide__slide--clone img {
+  height: 250px !important;
+  width: initial !important;
+}
+
+.splide__slide--clone .activeName {
+  opacity: 0 !important;
+}
+.is-active .is-visible .activeName {
+  opacity: 1;
+}
+.is-next .activeName {
+  opacity: 0 !important;
+}
+.is-prev img {
+  height: 250px !important;
+  width: initial !important;
+}
+.is-prev .activeName {
+  opacity: 0 !important;
+}
+/* .is-next .activeName {
+  opacity: 0;
+}
+.is-prev .activeName {
+  opacity: 0;
+} */
+.activeName {
+  opacity: 0;
+}
+.is-next img {
+  height: 250px !important;
+  width: initial !important;
+}
+
+@media only screen and (min-width: 426px) and (max-width: 1344px) {
+  .is-next img {
+    height: 250px !important;
+    width: initial !important;
+  }
+  .is-prev img {
+    height: 250px !important;
+    width: initial !important;
+  }
+}
+.activeName {
+  margin-top: 20px;
+}
+.activeName p {
+  font-weight: 275;
+  font-size: 20px;
+}
+.activeName h2 {
+  font-weight: 400;
+  font-size: 30px;
+  font-family: "Iskry", sans-serif;
+  text-transform: uppercase;
+}
+.activeName span {
+  font-weight: 300;
+  font-size: 16px;
+}
+
+.splide__slide {
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+}
+.splide__track--nav > .splide__list > .splide__slide.is-active {
+  border: 0 !important;
+}
+.splideArr {
+  position: absolute !important;
+  bottom: 24% !important;
+  left: 50% !important;
+}
+@media only screen and (width: 1024px) {
+  .splideArr {
+    left: 45% !important;
+  }
+}
+.splide__arrow--prev {
+  left: -1rem !important;
+  border: 1px solid black !important;
+}
+.splide__arrow--next {
+  right: -3rem !important;
+  border: 1px solid black !important;
+}
+.splide__arrow {
+  background-color: transparent !important;
 }

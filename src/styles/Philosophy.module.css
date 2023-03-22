@@ -1,0 +1,101 @@
+.philoMain {
+  position: relative;
+}
+.philoImg {
+  width: 100%;
+  background: linear-gradient(
+      180deg,
+      #ffffff 0%,
+      rgba(255, 255, 255, 0) 47.35%,
+      #ffffff 99.33%
+    ),
+    url(../images/Philo.png);
+  height: 1630px;
+  background-position: 50%;
+  background-repeat: no-repeat;
+  position: absolute;
+  top: 5%;
+  background-position: contain;
+  z-index: -999;
+}
+.Philo {
+  height: 2072px;
+  background: linear-gradient(
+    180deg,
+    #ffffff 0%,
+    rgba(206, 198, 189, 0) 50.83%,
+    #a8957e 100%
+  );
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+.philoHeader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 1rem;
+  width: 848px;
+  margin-top: 5rem;
+}
+.philoHeader h1 {
+  text-transform: uppercase;
+  font-weight: 400;
+  font-size: 45px;
+  line-height: 68px;
+  color: #987358;
+}
+.philoHeader p {
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 133.9%;
+  color: #987358;
+}
+.philoBotTxt {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: 848px;
+  gap: 1rem;
+
+  margin-bottom: 10rem;
+}
+.philoBotTxt h1 {
+  font-weight: 400;
+  font-size: 45px;
+  line-height: 159.9%;
+  text-transform: uppercase;
+  color: white;
+}
+.philoBotTxt p {
+  font-weight: 275;
+  font-size: 20px;
+  line-height: 159.9%;
+  color: white;
+}
+@media only screen and (min-width: 320px) and (max-width: 848px) {
+  .philoHeader {
+    width: 100%;
+  }
+  .philoHeader h1 {
+    font-size: 35px;
+  }
+  .philoHeader p {
+    font-size: 16px;
+  }
+  .philoBotTxt {
+    width: 100%;
+  }
+  .philoBotTxt h1 {
+    font-size: 35px;
+  }
+  .philoBotTxt p {
+    font-size: 16px;
+  }
+}
