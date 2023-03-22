@@ -1,8 +1,5 @@
 import Image from "next/image";
-import React, { useState } from "react";
-import tester from "@/images/tester.png";
-import minus from "@/images/Minus.png";
-import plus from "@/images/plus.png";
+import { useState } from "react";
 import styles from "@/styles/CompetitionPage.module.css";
 import useStore from "./Store";
 import { BackendLink } from "./Backend";
@@ -98,7 +95,7 @@ const CompetitionComponent = ({ data }) => {
             onClick={() => counter > 1 && setCounter(counter - 1)}
             className={styles.CounterSelec}
           >
-            <Image src={minus} alt="minus" />
+            <Image src="/images/Minus.png" alt="minus" />
           </div>
           <div className={styles.counterValue}>{counter}</div>
           <div
@@ -107,7 +104,7 @@ const CompetitionComponent = ({ data }) => {
             }
             className={styles.CounterSelec}
           >
-            <Image src={plus} alt="plus" />
+            <Image src="/images/plus.png" alt="plus" />
           </div>
         </div>
         <button onClick={SetItem}>ADD TO CART</button>

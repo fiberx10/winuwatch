@@ -1,15 +1,9 @@
 import React, { useEffect, useState } from "react";
 import styles from "@/styles/Cart.module.css";
 import Image from "next/image";
-import tester from "@/images/tester.png";
-import minus from "@/images/Minus.png";
-import plus from "@/images/plus.png";
 import useStore from "./Store";
-import Link from "next/link";
-import { Router, useRouter } from "next/router";
-import {
-  BackendLink
-} from './Backend'
+import { useRouter } from "next/router";
+import { BackendLink } from "./Backend";
 const CartComp = () => {
   const [checkData, setCheckData] = useState();
   const [items, setItems] = useState();
@@ -137,7 +131,7 @@ const CartComp = () => {
           return (
             <div className={styles.Watch} key={i}>
               <div className={styles.watchLeft}>
-                <Image alt="watchImage" src={tester} />
+                <Image alt="watchImage" src="/images/tester.png" />
                 <div className={styles.watchleftDesc}>
                   <h1>{item.Watch.name}</h1>
                   <h4>{item.Watch.bracelet_material}</h4>
@@ -150,7 +144,7 @@ const CartComp = () => {
                     onClick={() => decreCart(item)}
                     className={styles.CounterSelec}
                   >
-                    <Image src={minus} alt="minus" />
+                    <Image src="/images/Minus.png" alt="minus" />
                   </div>
                   <div className={styles.counterValue}>
                     {items &&
@@ -166,7 +160,7 @@ const CartComp = () => {
                     onClick={() => increCart(item)}
                     className={styles.CounterSelec}
                   >
-                    <Image src={plus} alt="plus" />
+                    <Image src="/images/plus.png" alt="plus" />
                   </div>
                 </div>
                 <div className={styles.CartPriceCon}>

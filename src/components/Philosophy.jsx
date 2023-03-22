@@ -1,7 +1,5 @@
 import React from "react";
 import styles from "@/styles/Philosophy.module.css";
-import philo from "@/images/Philo.png";
-import Image from "next/image";
 
 const Philosophy = () => {
   return (
