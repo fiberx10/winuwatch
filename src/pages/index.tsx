@@ -6,8 +6,18 @@ import Link from "next/link";
 import { api } from "@/utils/api";
 
 const Home: NextPage = () => {
-  const hello = api.example.hello.useQuery({ text: "from tRPC" });
+  const {
+    data: Watches,
+    isLoading: isWatchesLoading,
+    error: WatchesError,
+  } = api.Watches.getAll.useQuery();
+  /*const { mutateAsync } = api.Payment.create.useMutation();
 
+  const handle = async () => {
+    return await mutateAsync({
+      name: "Test",
+    });
+  };*/
   return (
     <>
       <Head>
@@ -44,9 +54,7 @@ const Home: NextPage = () => {
               </div>
             </Link>
           </div>
-          <p className={styles.showcaseText}>
-            {hello.data ? hello.data.greeting : "Loading tRPC query..."}
-          </p>
+          <p className={styles.showcaseText}></p>
         </div>
       </main>
     </>

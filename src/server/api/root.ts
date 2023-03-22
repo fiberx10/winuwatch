@@ -1,5 +1,5 @@
 import { createTRPCRouter } from "@/server/api/trpc";
-import { WatchesRouter,CompetitionRouter } from "@/server/api/routers";
+import { WatchesRouter,CompetitionRouter,PaymentRouter } from "@/server/api/routers";
 
 /**
  * This is the primary router for your server.
@@ -9,6 +9,7 @@ import { WatchesRouter,CompetitionRouter } from "@/server/api/routers";
 export const appRouter = createTRPCRouter({
   Competition : CompetitionRouter,
   Watches : WatchesRouter,
+  //Payment : PaymentRouter
 });
 
 // export type definition of API

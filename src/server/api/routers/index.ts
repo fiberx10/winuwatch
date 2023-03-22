@@ -41,9 +41,34 @@ export const WatchesRouter = createTRPCRouter({
         data: {
           name: input.name,
           price: input.price,
-          ImageURL : input.ImageURL
+          imageURL : input.ImageURL
         },
       });
     }
   ),
 });
+
+
+export const PaymentRouter = createTRPCRouter({
+  getAll: publicProcedure.query(({ ctx }) => {
+    return ctx.prisma.order.findMany();
+  }),
+  /*
+  create : publicProcedure
+    .input(z.object({
+      name : z.string(),
+
+    }))
+    .mutation(({ ctx, input }) => {
+      /*return ctx.prisma.order.create({
+        data: {
+          name: input.name,
+        },
+      });
+      return {
+        status : "success",
+        error : null
+      }
+    }
+  ),*/
+})

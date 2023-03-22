@@ -2,32 +2,58 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+    provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "mongodb"
-  url      = env("DATABASE_URL")
+    provider = "mongodb"
+    url      = env("DATABASE_URL")
 }
 
 model Watches {
-  id          String        @id @default(auto()) @map("_id") @db.ObjectId
-  name        String
-  price       Float
-  imageURL       String[] // ID Backedn URL/public/[id].jpg
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
-  Competition Competition?
-  @@map("watches")
+    id          String       @id @default(auto()) @map("_id") @db.ObjectId
+    name        String
+    price       Float
+    imageURL    String[] // ID Backedn URL/public/[id].jpg
+    createdAt   DateTime     @default(now())
+    updatedAt   DateTime     @updatedAt
+    Competition Competition?
+    Order       Order?
+
+    @@map("watches")
 }
 
 model Competition {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  name      String
-  price     Int
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  watchesId String   @db.ObjectId @unique
-  Watches   Watches  @relation(fields: [watchesId], references: [id])
-  @@map("competition")
+    id        String   @id @default(auto()) @map("_id") @db.ObjectId
+    name      String
+    price     Int
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    watchesId String   @unique @db.ObjectId
+    Watches   Watches  @relation(fields: [watchesId], references: [id])
+
+    @@map("competition")
+}
+
+enum OrderStatus {
+    PENDING
+    CONFIRMED
+    CANCELLED
+}
+
+enum PaymentMethod {
+    PAYPAL
+    STRIPE
+}
+
+model Order {
+    id        String   @id @default(auto()) @map("_id") @db.ObjectId
+    name      String
+    price     Int
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    watchesId String   @unique @db.ObjectId
+    paymentMethod PaymentMethod
+    Watches   Watches  @relation(fields: [watchesId], references: [id])
+    @@map("order")
 }
