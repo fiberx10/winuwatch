@@ -15,7 +15,21 @@ export const CompetitionRouter = createTRPCRouter({
         },
       });
     }),
-
+    add : publicProcedure
+    .input(z.object({
+      name: z.string(),
+      price: z.number(),
+      ImageURL : z.array(z.string())
+    }))
+    .mutation(({ ctx, input }) => {
+      return ctx.prisma.watches.create({
+        data: {
+          name: input.name,
+          price: input.price,
+          imageURL : input.ImageURL
+        },
+      });
+    }
 });
 
 export const WatchesRouter = createTRPCRouter({
@@ -34,15 +48,38 @@ export const WatchesRouter = createTRPCRouter({
   add : publicProcedure
     .input(z.object({ 
       name: z.string(),
-      price: z.number(),
-      ImageURL : z.array(z.string())
+      ImageURL : z.array(z.string()),
+      owner_ref : z.string(),
+      condition : z.string(),
+      years : z.number(),
+      movement : z.string(),
+      case_size : z.string(),
+      dail : z.string(),
+      case_material : z.string(),
+      bracelet_material : z.string(),
+      water_proof : z.string(),
+      box : z.string(),
+      papers : z.string(),
+      price : z.number(),
+
     }))
     .mutation(({ ctx, input }) => {
       return ctx.prisma.watches.create({
         data: {
           name: input.name,
-          price: input.price,
-          imageURL : input.ImageURL
+          imageURL : input.ImageURL,
+          owner_ref : input.owner_ref,
+          years : input.years,
+          movement : input.movement,
+          case_size : input.case_size,
+          dail : input.dail,
+          case_material : input.case_material,
+          bracelet_material : input.bracelet_material,
+          water_proof : input.water_proof,
+          box : input.box,
+          papers : input.papers,
+          price : input.price,
+
         },
       });
     }

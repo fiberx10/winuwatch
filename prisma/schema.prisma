@@ -24,7 +24,6 @@ model Watches {
     water_proof String
     box        String
     papers     String
-    price       Float
     imageURL    String[] // ID Backedn URL/public/[id].jpg
     createdAt   DateTime     @default(now())
     updatedAt   DateTime     @updatedAt
