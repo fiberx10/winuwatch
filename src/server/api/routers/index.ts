@@ -15,21 +15,87 @@ export const CompetitionRouter = createTRPCRouter({
         },
       });
     }),
-    add : publicProcedure
+  add : publicProcedure
     .input(z.object({
       name: z.string(),
-      price: z.number(),
-      ImageURL : z.array(z.string())
+        start_date : z.string(),
+        end_date : z.string(),
+        remaining_tickets : z.number(),
+        drawing_date : z.string(),
+        total_tickets : z.number(),
+        ticket_price : z.number(),
+        location : z.string(),
+        second_reward : z.string(),
+        status : z.string(),
+        winner : z.string(),
+        watchesId : z.string(),
     }))
     .mutation(({ ctx, input }) => {
       return ctx.prisma.watches.create({
         data: {
           name: input.name,
-          price: input.price,
-          imageURL : input.ImageURL
+            start_date : input.start_date,
+            end_date : input.end_date,
+            remaining_tickets : input.remaining_tickets,
+            drawing_date : input.drawing_date,
+            total_tickets : input.total_tickets,
+            ticket_price : input.ticket_price,
+            location : input.location,
+            second_reward : input.second_reward,
+            status : input.status,
+            winner : input.winner,
+            watchesId : input.watchesId,
         },
       });
-    }
+    }),
+  update : publicProcedure
+    .input(z.object({
+        id : z.string(),
+        name: z.string(),
+        start_date : z.string(),
+        end_date : z.string(),
+        remaining_tickets : z.number(),
+        drawing_date : z.string(),
+        total_tickets : z.number(),
+        ticket_price : z.number(),
+        location : z.string(),
+        second_reward : z.string(),
+        status : z.string(),
+        winner : z.string(),
+        watchesId : z.string(),
+    }))
+    .mutation(({ ctx, input }) => {
+        return ctx.prisma.watches.update({
+            data : {
+            name: input.name,
+            start_date : input.start_date,
+            end_date : input.end_date,
+            remaining_tickets : input.remaining_tickets,
+            drawing_date : input.drawing_date,
+            total_tickets : input.total_tickets,
+            ticket_price : input.ticket_price,
+            location : input.location,
+            second_reward : input.second_reward,
+            status : input.status,
+            winner : input.winner,
+            watchesId : input.watchesId,
+            },
+            where : {
+                id : input.id
+            }
+        })
+    }),
+  delete : publicProcedure
+    .input(z.object({
+        id : z.string(),
+    }))
+    .mutation(({ ctx, input }) => {
+        return ctx.prisma.watches.delete({
+            where : {
+                id : input.id
+            }
+        })
+    }),
 });
 
 export const WatchesRouter = createTRPCRouter({
