@@ -5,7 +5,7 @@
       rgba(255, 255, 255, 0.8) 0%,
       rgba(104, 83, 67, 0.8) 100%
     ),
-    url(../images/main\ image.png);
+    url(../../public/images/main\ image.png);
   background-size: cover;
   background-position: center;
   display: flex;
@@ -67,7 +67,7 @@
 }
 @font-face {
   font-family: Iskry;
-  src: url(../images/Iskry-Regular.otf);
+  src: url(../../public/images/Iskry-Regular.otf);
 }
 .HeaderTit h1 {
   position: absolute;
@@ -157,7 +157,7 @@
       rgba(255, 255, 255, 0) 36.25%,
       #ffffff 100%
     ),
-    url(../images/tester.png);
+    url(../../public/images/tester.png);
   width: 491px;
   height: 489px;
 }
@@ -461,7 +461,7 @@
 
 .certifContainer {
   min-height: 769px;
-  background: url(../images/certifcover.png);
+  background: url(../../public/images/certifcover.png);
   background-size: cover;
   background-repeat: no-repeat;
   display: flex;
@@ -490,7 +490,7 @@
   bottom: 7rem;
 }
 .certifBox {
-  background: url(../images/cover.png);
+  background: url(../../public/images/cover.png);
   background-repeat: no-repeat;
   display: flex;
   align-items: center;

@@ -1,7 +1,6 @@
 import NavBar from "./NavBar";
 import styles from "@/styles/Home.module.css";
-import winwatch from "../images/winuwatch.png";
-import vector from "../images/Vector.svg";
+
 import Image from "next/image";
 
 export default function Header() {
@@ -11,7 +10,7 @@ export default function Header() {
     <div className={styles.HomeHeader}>
       <NavBar />
       <div className={styles.HeaderTit}>
-        <Image alt="WinUWatch" src={winwatch} />
+        <Image alt="WinUWatch" src="/images/winuwatch.png" />
         <h1>win your dream watch</h1>
       </div>
       <div className={styles.HeaderDesc}>
@@ -31,7 +30,7 @@ export default function Header() {
             })
           }
           alt="vector"
-          src={vector}
+          src="/images/Vector.svg"
         />
       </div>
     </div>

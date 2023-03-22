@@ -1,9 +1,5 @@
 import React from "react";
 import styles from "../styles/Home.module.css";
-import rec1 from "../images/rec1.png";
-import rec2 from "../images/rec2.png";
-import rec3 from "../images/rec3.png";
-import rec4 from "../images/rec4.png";
 import "@splidejs/react-splide/css";
 import { Splide, SplideSlide } from "@splidejs/react-splide";
 import Image from "next/image";
@@ -11,19 +7,19 @@ import Image from "next/image";
 const Winners = () => {
   const data = [
     {
-      img: rec1,
+      img: "/images/rec1.png",
       name: "Mike Hero",
     },
     {
-      img: rec2,
+      img: "/images/rec2.png",
       name: "Watch title",
     },
     {
-      img: rec3,
+      img: "/images/rec3.png",
       name: "Watch title",
     },
     {
-      img: rec4,
+      img: "/images/rec4.png",
       name: "Watch title",
     },
   ];

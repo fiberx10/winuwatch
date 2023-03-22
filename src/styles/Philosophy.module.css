@@ -9,7 +9,7 @@
       rgba(255, 255, 255, 0) 47.35%,
       #ffffff 99.33%
     ),
-    url(../images/Philo.png);
+    url(../../public/images/Philo.png);
   height: 1630px;
   background-position: 50%;
   background-repeat: no-repeat;

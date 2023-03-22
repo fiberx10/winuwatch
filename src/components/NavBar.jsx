@@ -1,10 +1,5 @@
-import logo from "../images/logo.png";
-import global from "../images/global.png";
-
 import styles from "../styles/Home.module.css";
-
 import { useEffect, useState } from "react";
-import burgerMenu from "../images/burgerMenu.svg";
 import { Drawer } from "@mui/material";
 import Image from "next/image";
 import Link from "next/link";
@@ -68,7 +63,7 @@ export default function NavBar() {
           onClick={() => setOpen(!open)}
           className={styles.burger}
           alt="menu"
-          src={burgerMenu}
+          src="/images/burgerMenu.svg"
         />
         <Drawer className={styles.Drawer} anchor="left" open={open}>
           <div className={styles.DrawerCon}>
@@ -120,7 +115,7 @@ export default function NavBar() {
           </div>
         </Drawer>
       </div>
-      <Image className={styles.Logo} alt="logo" src={logo} />
+      <Image className={styles.Logo} alt="logo" src="/images/logo.png" />
       <div className={styles.flexEnd}>
         <span
           style={{
@@ -160,7 +155,7 @@ export default function NavBar() {
         >
           cart ({number})
         </span>
-        <Image alt="global" src={global} />
+        <Image alt="global" src="/images/global.png" />
       </div>
     </div>
   );

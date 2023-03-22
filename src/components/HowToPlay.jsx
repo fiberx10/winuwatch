@@ -1,7 +1,6 @@
 import React from "react";
 import styles from "../styles/Home.module.css";
-import line from "../images/Line.png";
-import dot1 from "../images/Dot.svg";
+
 import Image from "next/image";
 
 const HowToPlay = () => {
@@ -26,11 +25,11 @@ const HowToPlay = () => {
           </p>
         </div>
         <div className={styles.howtoLine}>
-          <Image src={line} alt="line" />
-          <Image className={styles.dot1} src={dot1} alt="dot" />
-          <Image className={styles.dot2} src={dot1} alt="dot" />
-          <Image className={styles.dot3} src={dot1} alt="dot" />
-          <Image className={styles.dot4} src={dot1} alt="dot" />
+          <Image src="/images/Line.png" alt="line" />
+          <Image className={styles.dot1} src="/images/Dot.svg" alt="dot" />
+          <Image className={styles.dot2} src="/images/Dot.svg" alt="dot" />
+          <Image className={styles.dot3} src="/images/Dot.svg" alt="dot" />
+          <Image className={styles.dot4} src="/images/Dot.svg" alt="dot" />
         </div>
         <div className={styles.howtoTxt3}>
           <h2>Buy your tickets</h2>

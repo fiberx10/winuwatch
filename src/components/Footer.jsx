@@ -1,9 +1,5 @@
 import React from "react";
 import styles from "../styles/Home.module.css";
-import footerLogo from "../images/FooterLogo.png";
-import visa from "../images/visa.svg";
-import visareclight from "../images/viacirclight.png";
-import visarecdark from "../images/visacircdark.png";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -17,7 +13,7 @@ const Footer = () => {
   return (
     <div className={styles.Footer}>
       <div className={styles.FooterTop}>
-        <Image src={footerLogo} alt="logo" />
+        <Image src="/images/FooterLogo.png" alt="logo" />
         <div className={styles.menusGrid}>
           {data.map((menu, i) => {
             return (
@@ -47,11 +43,11 @@ const Footer = () => {
             <p>100% Secure payment</p>
             <div className={styles.paymentIcons}>
               <div className={styles.visa}>
-                <Image src={visa} alt="visa" />
+                <Image src="/images/visa.svg" alt="visa" />
               </div>
               <div className={styles.visaicons}>
-                <Image src={visareclight} alt="visareclight" />
-                <Image src={visarecdark} alt="visarecdark" />
+                <Image src="/images/viacirclight.png" alt="visareclight" />
+                <Image src="/images/visacircdark.png" alt="visarecdark" />
               </div>
             </div>
           </div>
