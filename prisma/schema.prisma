@@ -2,16 +2,32 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-    provider = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
-    provider = "sqlite"
-    url      = env("DATABASE_URL")
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
 }
 
-model Example {
-    id        String   @id @default(cuid())
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+model Watches {
+  id          String        @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  price       Float
+  imageURL       String[] // ID Backedn URL/public/[id].jpg
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  Competition Competition?
+  @@map("watches")
+}
+
+model Competition {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  price     Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  watchesId String   @db.ObjectId @unique
+  Watches   Watches  @relation(fields: [watchesId], references: [id])
+  @@map("competition")
 }
