@@ -1,82 +1,77 @@
-import React from "react";
-import amazon from "@/images/amazon.png";
-import pinging from "@/images/pinging.png";
-import feros from "@/images/feros.png";
-import BINBOWS from "@/images/BINBOWS.png";
 import styles from "@/styles/Charity.module.css";
 import Image from "next/image";
-import charityHand from "@/images/charityHand.png";
+
 
 const Charit = () => {
   const data = [
     {
-      img: amazon,
+      img: "/images/amazon.png",
       name: "AMAZON.INC",
       amount: 2346,
       desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur et sollicitudin eros. ",
     },
     {
-      img: pinging,
+      img: "/images/pinging.png",
       name: "PINGING.INC",
       amount: 2346,
       desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur et sollicitudin eros. ",
     },
     {
-      img: feros,
+      img: "/images/feros.png",
       name: "FEROS CORP",
       amount: 2346,
       desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur et sollicitudin eros. ",
     },
     {
-      img: BINBOWS,
+      img: "/images/BINBOWS.png",
       name: "BINBOWS",
       amount: 2346,
       desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur et sollicitudin eros. ",
     },
     {
-      img: amazon,
+      img: "/images/amazon.png",
       name: "AMAZON.INC",
       amount: 2346,
       desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur et sollicitudin eros. ",
     },
     {
-      img: pinging,
+      img: "/images/pinging.png",
       name: "PINGING.INC",
       amount: 2346,
       desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur et sollicitudin eros. ",
     },
     {
-      img: feros,
+      img: "/images/feros.png",
       name: "FEROS CORP",
       amount: 2346,
       desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur et sollicitudin eros. ",
     },
     {
-      img: BINBOWS,
+      img: "/images/BINBOWS.png",
       name: "BINBOWS",
       amount: 2346,
       desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur et sollicitudin eros. ",
     },
     {
-      img: amazon,
+      img: "/images/amazon.png",
       name: "AMAZON.INC",
       amount: 2346,
       desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur et sollicitudin eros. ",
     },
     {
-      img: pinging,
+     img: "/images/pinging.png",
       name: "PINGING.INC",
       amount: 2346,
       desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur et sollicitudin eros. ",
     },
     {
-      img: feros,
+      img: "/images/feros.png",
       name: "FEROS CORP",
       amount: 2346,
       desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur et sollicitudin eros. ",
     },
     {
-      img: BINBOWS,
+      img: "/images/BINBOWS.png",
       name: "BINBOWS",
       amount: 2346,
       desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur et sollicitudin eros. ",
@@ -86,7 +81,7 @@ const Charit = () => {
     <div className={styles.CharityMain}>
       <div className={styles.CharityHeader}>
         <div className={styles.CharityH1}>
-          <Image alt="charityHand" src={charityHand} />
+          <Image alt="charityHand" src="/images/charityHand.png" />
           <h1>Total Raised For Charity</h1>
         </div>
         <h3>£594,828</h3>

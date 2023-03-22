@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styles from "@/styles/Checkout.module.css";
 
-import tester from "@/images/tester.png";
 import Image from "next/image";
-import minus from "@/images/Minus.png";
-import plus from "@/images/plus.png";
 import { BackendLink, PaypalID } from "./Backend";
 import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js";
 import { useRouter } from "next/router";
@@ -405,7 +402,7 @@ const CheckoutComp = () => {
                         <div className={styles.orderItem} key={i}>
                           <Image
                             className={styles.orderImg}
-                            src={tester}
+                            src="/images/tester.png"
                             alt="watching"
                           />
                           <div className={styles.orderTit}>
@@ -438,7 +435,7 @@ const CheckoutComp = () => {
                               onClick={() => decreCart(order)}
                               className={styles.CounterSelec}
                             >
-                              <Image src={minus} alt="minus" />
+                              <Image src="/images/Minus.png" alt="minus" />
                             </div>
                             <div className={styles.counterValue}>
                               {itemsForFetch &&
@@ -457,7 +454,7 @@ const CheckoutComp = () => {
                               onClick={() => increCart(order)}
                               className={styles.CounterSelec}
                             >
-                              <Image src={plus} alt="plus" />
+                              <Image src="/images/plus.png" alt="plus" />
                             </div>
                           </div>
                         </div>
