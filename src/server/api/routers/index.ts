@@ -15,6 +15,7 @@ export const CompetitionRouter = createTRPCRouter({
         },
       });
     }),
+
 });
 
 export const WatchesRouter = createTRPCRouter({
