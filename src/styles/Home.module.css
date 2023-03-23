@@ -132,6 +132,7 @@
   .flexStart {
     min-width: 100px !important;
   }
+
   .RevTop {
     flex-direction: column;
   }
@@ -140,6 +141,7 @@
   .howtoText {
     height: fit-content !important;
   }
+
 }
 
 .Comp {

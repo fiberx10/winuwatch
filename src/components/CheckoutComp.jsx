@@ -401,8 +401,10 @@ const CheckoutComp = () => {
                       return (
                         <div className={styles.orderItem} key={i}>
                           <Image
+
                             width={106}
                             height={105}
+
                             className={styles.orderImg}
                             src="/images/tester.png"
                             alt="watching"
@@ -437,12 +439,14 @@ const CheckoutComp = () => {
                               onClick={() => decreCart(order)}
                               className={styles.CounterSelec}
                             >
+
                               <Image
                                 width={13}
                                 height={1}
                                 src="/images/Minus.png"
                                 alt="minus"
                               />
+
                             </div>
                             <div className={styles.counterValue}>
                               {itemsForFetch &&
@@ -461,12 +465,14 @@ const CheckoutComp = () => {
                               onClick={() => increCart(order)}
                               className={styles.CounterSelec}
                             >
+
                               <Image
                                 width={11}
                                 height={11}
                                 src="/images/plus.png"
                                 alt="plus"
                               />
+
                             </div>
                           </div>
                         </div>

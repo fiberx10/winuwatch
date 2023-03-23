@@ -16,6 +16,7 @@ export const CompetitionRouter = createTRPCRouter({
         },
       });
     }),
+
   add: publicProcedure
     .input(
       z.object({
@@ -40,6 +41,7 @@ export const CompetitionRouter = createTRPCRouter({
       });
     }
   ),
+
 
 });
 
@@ -118,7 +120,9 @@ export const WatchesRouter = createTRPCRouter({
         },
       });
     }),
+
 });
+
 
 export const PaymentRouter = createTRPCRouter({
   getAll: publicProcedure.query(({ ctx }) => {
@@ -142,4 +146,4 @@ export const PaymentRouter = createTRPCRouter({
       }
     }
   ),*/
-});
+})

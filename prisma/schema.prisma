@@ -32,13 +32,12 @@ model Watches {
     @@map("watches")
 }
 
-enum CompetitionStatus {
-    ACTIVE
-    NOT_ACTIVE
-    COMPLETED
+
+    @@map("watches")
 }
 
 model Competition {
+
     id                String            @id @default(auto()) @map("_id") @db.ObjectId
     name              String
     start_date        DateTime
@@ -56,6 +55,7 @@ model Competition {
     updatedAt         DateTime          @updatedAt
     watchesId         String            @unique @db.ObjectId
     Watches           Watches           @relation(fields: [watchesId], references: [id])
+
     @@map("competition")
 }
 
@@ -71,14 +71,13 @@ enum PaymentMethod {
 }
 
 model Order {
-    id            String        @id @default(auto()) @map("_id") @db.ObjectId
-    name          String
-    price         Int
-    createdAt     DateTime      @default(now())
-    updatedAt     DateTime      @updatedAt
-    watchesId     String        @unique @db.ObjectId
+    id        String   @id @default(auto()) @map("_id") @db.ObjectId
+    name      String
+    price     Int
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    watchesId String   @unique @db.ObjectId
     paymentMethod PaymentMethod
-    Watches       Watches       @relation(fields: [watchesId], references: [id])
-
+    Watches   Watches  @relation(fields: [watchesId], references: [id])
     @@map("order")
 }

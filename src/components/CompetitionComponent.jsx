@@ -96,6 +96,7 @@ const CompetitionComponent = ({ data }) => {
             className={styles.CounterSelec}
           >
             <Image width={13} height={1} src="/images/Minus.png" alt="minus" />
+
           </div>
           <div className={styles.counterValue}>{counter}</div>
           <div
@@ -104,7 +105,9 @@ const CompetitionComponent = ({ data }) => {
             }
             className={styles.CounterSelec}
           >
+
             <Image width={11} height={11} src="/images/plus.png" alt="plus" />
+
           </div>
         </div>
         <button onClick={SetItem}>ADD TO CART</button>

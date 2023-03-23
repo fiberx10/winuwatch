@@ -10,12 +10,14 @@ export default function Header() {
     <div className={styles.HomeHeader}>
       <NavBar />
       <div className={styles.HeaderTit}>
+
         <Image
           width={872}
           height={99}
           alt="WinUWatch"
           src="/images/winuwatch.png"
         />
+
         <h1>win your dream watch</h1>
       </div>
       <div className={styles.HeaderDesc}>
@@ -34,8 +36,10 @@ export default function Header() {
               behavior: "smooth",
             })
           }
+
           width={19}
           height={10}
+
           alt="vector"
           src="/images/Vector.svg"
         />
