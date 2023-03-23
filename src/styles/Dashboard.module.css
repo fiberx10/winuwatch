@@ -1,0 +1,61 @@
+.MainCon {
+  display: flex;
+  align-items: flex-start;
+  background-color: #eaedf7;
+}
+.Dashboard {
+  width: 240px;
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  background-color: #a8957e;
+  color: hsla(0, 0%, 100%, 0.4);
+}
+.logo {
+  display: grid;
+  place-items: center;
+  border-bottom: 1px solid hsla(0, 0%, 100%, 0.4);
+  padding: 12.5px 0px;
+}
+.logo img {
+  -webkit-filter: invert(1);
+  filter: invert(1);
+}
+.Dashmenus {
+  border-bottom: 1px solid hsla(0, 0%, 100%, 0.4);
+  padding: 20px 0px;
+  transition: all 0.5s ease-in-out;
+}
+.Menu {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  height: 43px;
+  font-size: 14px;
+  cursor: pointer;
+}
+.Menu:hover {
+  color: white !important;
+}
+.Menu p {
+  width: 70%;
+}
+.Nav {
+  background-color: white;
+  box-shadow: -7.829px 11.607px 20px 0 hsla(244, 8%, 59%, 0.09);
+  width: 100%;
+  height: 65px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.dashBody {
+  width: 100%;
+  display: flex;
+  padding-left: 240px;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.Body {
+  padding: 20px;
+}

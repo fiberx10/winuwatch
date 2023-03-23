@@ -194,3 +194,11 @@
 .splide__arrow {
   background-color: transparent !important;
 }
+
+.bm-burger-button button {
+  width: 5rem !important;
+  height: 5rem !important;
+}
+.bm-menu-wrap {
+  background-color: white;
+}
