@@ -1,0 +1,213 @@
+.CartMain {
+  background: #f8f6f4;
+  min-height: 976px;
+  padding: 50px;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+.Watch {
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+.watchLeft {
+  display: flex;
+  gap: 2rem;
+}
+.watchLeft img {
+  width: 196px;
+  height: 195px;
+  box-shadow: 0px 4px 30px -6px rgba(0, 0, 0, 0.1);
+}
+.watchleftDesc {
+  display: flex;
+  flex-direction: column;
+  width: 20rem;
+}
+.watchleftDesc h1 {
+  font-weight: 500;
+  font-size: 32px;
+  text-transform: uppercase;
+  color: #1e1e1e;
+}
+.watchleftDesc h4 {
+  font-weight: 500;
+  font-size: 18px;
+  text-transform: uppercase;
+  color: rgba(30, 30, 30, 0.65);
+}
+.watchleftDesc p {
+  font-weight: 400;
+  font-size: 14px;
+  text-transform: uppercase;
+  color: rgba(30, 30, 30, 0.45);
+}
+.Counter {
+  display: flex;
+  align-items: center;
+  width: 137px;
+  justify-content: space-between;
+  background: #ffffff;
+  border: 1px solid rgba(152, 115, 88, 0.12);
+}
+.CounterSelec {
+  background: #ffffff;
+  border: 1px solid rgba(152, 115, 88, 0.12);
+  width: 44px;
+  height: 33px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+.counterValue {
+  width: 50%;
+  display: grid;
+  place-items: center;
+}
+.CartPriceCon {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 3rem;
+  width: 200px;
+}
+.CartPriceCon h2 {
+  font-weight: 600;
+  font-size: 24px;
+  text-transform: uppercase;
+  color: #1e1e1e;
+}
+.CartPriceCon p {
+  font-weight: 600;
+  font-size: 18px;
+  text-transform: uppercase;
+  color: #987358;
+  cursor: pointer;
+}
+.CartSubTotal {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid rgba(152, 115, 88, 0.5);
+  border-bottom: 1px solid rgba(152, 115, 88, 0.5);
+  padding: 2rem 0;
+}
+.CartSubTotal p {
+  font-weight: 600;
+  font-size: 18px;
+  text-transform: uppercase;
+  color: rgba(30, 30, 30, 0.6);
+}
+.CartSubTotal span {
+  font-weight: 600;
+  font-size: 24px;
+  text-transform: uppercase;
+  color: #1e1e1e;
+}
+.CartTotal {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+}
+.CartTotal p {
+  font-weight: 600;
+  font-size: 18px;
+  text-transform: uppercase;
+  color: rgba(30, 30, 30, 0.6);
+}
+.CartTotal span {
+  font-weight: 600;
+  font-size: 24px;
+  text-transform: uppercase;
+  color: #1e1e1e;
+}
+.cartCheckoutCon {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
+.cartCheckoutCon button {
+  width: 278px;
+  height: 48px;
+  background: #cbb9ac;
+  border: 0;
+  font-weight: 600;
+  font-size: 20px;
+  text-transform: uppercase;
+  color: #ffffff;
+  font-family: "Orbitron", sans-serif;
+  cursor: pointer;
+}
+.CartRight {
+  display: flex;
+  align-items: flex-start;
+  gap: 5rem;
+}
+@media only screen and (max-width: 768px) {
+  .CartMain {
+    margin-top: 30px;
+    padding: 20px;
+  }
+  .Watch {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .CartPriceCon {
+    flex-direction: row;
+    align-items: center;
+    width: 60%;
+  }
+  .CartRight {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+@media only screen and (max-width: 599px) {
+  .CartMain {
+    margin-top: 30px;
+    padding: 20px 10px;
+  }
+  .watchleftDesc {
+    width: 100%;
+  }
+  .CartPriceCon {
+    gap: 3rem;
+  }
+  .watchLeft {
+    gap: 1rem;
+  }
+  .watchLeft img {
+    width: 136.07px;
+    height: 135.37px;
+    border: 0.694214px solid rgba(0, 0, 0, 0.15);
+    box-shadow: 0px 2.77686px 20.8264px -4.16528px rgba(0, 0, 0, 0.1);
+    border-radius: 4.8595px;
+  }
+  .CartRight {
+    gap: 0rem;
+  }
+  .watchleftDesc h1 {
+    font-size: 20px;
+  }
+}
+@media only screen and (max-width: 320px) {
+  .watchLeft {
+    flex-direction: column;
+  }
+  .CartRight {
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+  }
+  .Watch {
+    align-items: center;
+    justify-content: center;
+  }
+}
