@@ -13,7 +13,7 @@ import useCart, { OrderStore } from "./Store";
 
 const CheckoutComp = () => {
   const router = useRouter();
-  const { order, updateOrder, cardDetails, reset } = useCart();
+  const { order, cardDetails, reset, addComp, removeComp, updateComp } = useCart();
   const Total = cardDetails()?.totalCost;
   const [error, setError] = useState<string | undefined>();
   const {
