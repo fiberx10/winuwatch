@@ -131,7 +131,12 @@ const CartComp = () => {
           return (
             <div className={styles.Watch} key={i}>
               <div className={styles.watchLeft}>
-                <Image alt="watchImage" src="/images/tester.png" />
+                <Image
+                  width={196}
+                  height={195}
+                  alt="watchImage"
+                  src="/images/tester.png"
+                />
                 <div className={styles.watchleftDesc}>
                   <h1>{item.Watch.name}</h1>
                   <h4>{item.Watch.bracelet_material}</h4>
@@ -144,7 +149,12 @@ const CartComp = () => {
                     onClick={() => decreCart(item)}
                     className={styles.CounterSelec}
                   >
-                    <Image src="/images/Minus.png" alt="minus" />
+                    <Image
+                      width={13}
+                      height={1}
+                      src="/images/Minus.png"
+                      alt="minus"
+                    />
                   </div>
                   <div className={styles.counterValue}>
                     {items &&
@@ -160,7 +170,12 @@ const CartComp = () => {
                     onClick={() => increCart(item)}
                     className={styles.CounterSelec}
                   >
-                    <Image src="/images/plus.png" alt="plus" />
+                    <Image
+                      width={11}
+                      height={11}
+                      src="/images/plus.png"
+                      alt="plus"
+                    />
                   </div>
                 </div>
                 <div className={styles.CartPriceCon}>

@@ -163,7 +163,13 @@ export default function NavBar() {
         >
           cart ({number})
         </span>
-        <Image width={11} height={10} alt="global" src="/images/global.png" />
+        <Image
+          width={15}
+          style={{ objectFit: "contain" }}
+          height={15}
+          alt="global"
+          src="/images/global.png"
+        />
       </div>
     </div>
   );
