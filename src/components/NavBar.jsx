@@ -112,8 +112,8 @@ export default function NavBar() {
               How to play
             </span>
             <hr />
-            <span onClick={() => router.push("/Philosophy")}>philosophy</span>
-            <span onClick={() => router.push("/Charity")}>Charity</span>
+            <span onClick={() => router.push("/philosophy")}>philosophy</span>
+            <span onClick={() => router.push("/charity")}>Charity</span>
           </div>
         </Drawer>
       </div>
