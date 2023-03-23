@@ -9,12 +9,15 @@ export const CompetitionRouter = createTRPCRouter({
   }),
   byID: publicProcedure
     .input(z.object({ id: z.string() }))
-    .query(({ ctx, input }) => {
+    .query( ({ ctx, input }) => {
       return ctx.prisma.competition.findUnique({
         where: {
           id: input.id,
         },
-      });
+        include : {
+          Watches : true
+        }
+      })
     }),
 
   add: publicProcedure

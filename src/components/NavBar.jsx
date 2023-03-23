@@ -9,14 +9,11 @@ import { useRouter } from "next/router";
 export default function NavBar() {
   const [open, setOpen] = useState(false);
   const router = useRouter();
-  const bears = useStore((state) => state.bears);
-  const [number, setNumber] = useState();
-  useEffect(() => {
-    setNumber(typeof window !== "undefined" ? bears : 0);
-  }, [bears]);
-  let howTo =
+  const {cardDetails} = useStore();
+ 
+  const howTo =
     typeof window !== "undefined" && document.getElementById("Howtoplay");
-  let theComp =
+  const theComp =
     typeof window !== "undefined" && document.getElementById("theComp");
   return (
     <div
@@ -165,7 +162,7 @@ export default function NavBar() {
           }}
           onClick={() => router.push("/Cart")}
         >
-          cart ({number})
+          cart {cardDetails().items}
         </span>
 
         <Image
