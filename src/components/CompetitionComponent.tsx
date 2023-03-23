@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { useState } from "react";
 import styles from "@/styles/CompetitionPage.module.css";
-import useCart from "./Store";
+import {useCart} from "./Store";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import { Competition, Watches } from "@prisma/client";

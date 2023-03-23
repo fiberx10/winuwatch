@@ -3,13 +3,13 @@ import { useEffect, useState } from "react";
 import { Drawer } from "@mui/material";
 import Image from "next/image";
 import Link from "next/link";
-import useStore from "./Store";
+import {useCart} from "./Store";
 import { useRouter } from "next/router";
 
 export default function NavBar() {
   const [open, setOpen] = useState(false);
   const router = useRouter();
-  const { cardDetails } = useStore();
+  const { cardDetails } = useCart();
 
   const howTo =
     typeof window !== "undefined" && document.getElementById("Howtoplay");

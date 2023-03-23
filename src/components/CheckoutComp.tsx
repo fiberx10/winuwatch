@@ -7,19 +7,35 @@ import { env } from "../env.mjs";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { api, RouterInputs } from "@/utils/api";
 import { z } from "zod";
-import { OrderStore,useCart } from "./Store";
+import { OrderStore, useCart, Formater } from "./Store";
 //import { CreateOrderSchema} from "@/utils/Schema";
 //import { zodResolver } from '@hookform/resolvers/zod';
 
+const IsLegal = (Birthdate?: Date) => {
+  const LegalAge = 18;
+  const now = new Date();
+  const date = Birthdate || new Date();
+  return (
+    new Date(
+      now.getFullYear() - LegalAge,
+      now.getMonth(),
+      now.getDate()
+    ).getTime() >= date.getTime()
+  );
+};
+
 const CheckoutComp = () => {
   const router = useRouter();
-  const { order, cardDetails, reset, addComp, removeComp, updateComp } = useCart();
-  const Total = cardDetails()?.totalCost;
+  const { order, cardDetails, reset, addComp, removeComp, updateComp } =
+    useCart();
+  const { totalCost, Number_of_item } = cardDetails();
   const [error, setError] = useState<string | undefined>();
+  const VAT = 0.2;
   const {
     register,
     handleSubmit,
     formState: { errors },
+    getValues,
   } = useForm<RouterInputs["Payment"]["create"]>({
     defaultValues: {
       date: new Date(),
@@ -35,20 +51,14 @@ const CheckoutComp = () => {
     //check if the date is more than 16 years
     const LegalAge = 18;
     const now = new Date();
-    if (
-      data.date &&
-      new Date(
-        now.getFullYear() - LegalAge,
-        now.getMonth(),
-        now.getDate()
-      ).getTime() >= data.date.getTime()
-    ) {
+
+    if (data.date && IsLegal(data.date)) {
       const { sucess, error: trpcError } = await api.Payment.create
         .useMutation()
         .mutateAsync({ ...data });
       if (sucess && !trpcError) {
         reset(); // here we reset the cart
-        router.push("/payment"); // push soemwher
+        await router.push("/payment"); // push soemwher
       } else {
         // handle error
         setError(trpcError);
@@ -58,19 +68,17 @@ const CheckoutComp = () => {
       setError("You must be 18 years or older to purchase ");
     }
   };
-  const {
-    data: items,
-    isLoading,
-  } = api.Competition.getAll.useQuery({
-    ids : order?.comps.map((comp) => comp.compID) || [],
+  const { data: items, isLoading } = api.Competition.getAll.useQuery({
+    ids: order?.comps.map((comp) => comp.compID) || [],
   });
-   
 
   return (
     <div className={styles.CheckoutMain}>
-      {items !== undefined && (
+      {items && (
         <div className={styles.formMain}>
-          <form onSubmit={handleSubmit(onSubmit)}>
+          <form
+            
+          >
             <div className={styles.CheckoutLeft}>
               <div className={styles.leftFormItem}>
                 <h1>Billing Information</h1>
@@ -80,12 +88,6 @@ const CheckoutComp = () => {
                       <label htmlFor="firstName">First Name</label>
                       <input
                         required
-                        onChange={(e) =>
-                          setFormData((prevState) => ({
-                            ...prevState,
-                            firstName: e.target.value,
-                          }))
-                        }
                         id="firstName"
                         type={"text"}
                         name="firstName"
@@ -95,12 +97,6 @@ const CheckoutComp = () => {
                       <label htmlFor="lastName">Last Name</label>
                       <input
                         required
-                        onChange={(e) =>
-                          setFormData((prevState) => ({
-                            ...prevState,
-                            lastName: e.target.value,
-                          }))
-                        }
                         id="lastName"
                         type={"text"}
                         name="lastName"
@@ -112,12 +108,6 @@ const CheckoutComp = () => {
                       <label htmlFor="Country">Country/Region</label>
                       <input
                         required
-                        onChange={(e) =>
-                          setFormData((prevState) => ({
-                            ...prevState,
-                            country: e.target.value,
-                          }))
-                        }
                         id="Country"
                         type={"text"}
                         name="Country"
@@ -127,12 +117,6 @@ const CheckoutComp = () => {
                       <label htmlFor="lastName">Address</label>
                       <input
                         required
-                        onChange={(e) =>
-                          setFormData((prevState) => ({
-                            ...prevState,
-                            address: e.target.value,
-                          }))
-                        }
                         id="Address"
                         type={"text"}
                         name="Address"
@@ -142,74 +126,31 @@ const CheckoutComp = () => {
                   <div className={styles.formRow}>
                     <div className={styles.formField}>
                       <label htmlFor="Town">Town/City</label>
-                      <input
-                        required
-                        onChange={(e) =>
-                          setFormData((prevState) => ({
-                            ...prevState,
-                            town: e.target.value,
-                          }))
-                        }
-                        id="Town"
-                        type={"text"}
-                        name="Town"
-                      />
+                      <input required id="Town" type={"text"} name="Town" />
                     </div>
                     <div className={styles.formField}>
                       <label htmlFor="lastName">ZIP</label>
-                      <input
-                        required
-                        onChange={(e) =>
-                          setFormData((prevState) => ({
-                            ...prevState,
-                            zip: e.target.value,
-                          }))
-                        }
-                        id="Zip"
-                        name="Zip"
-                        type={"number"}
-                      />
+                      <input required id="Zip" name="Zip" type={"number"} />
                     </div>
                   </div>
                   <div className={styles.formRow}>
                     <div className={styles.formField}>
                       <label htmlFor="Phone">Phone</label>
-                      <input
-                        required
-                        onChange={(e) =>{}
-                        }
-                        id="Phone"
-                        type={"number"}
-                        name="Phone"
-                      />
+                      <input required id="Phone" type={"number"} name="Phone" />
                     </div>
                     <div className={styles.formField}>
                       <label htmlFor="Email">Email</label>
-                      <input
-                        required
-                        onChange={(e) =>
-                         {}
-                        }
-                        id="Email"
-                        name="Email"
-                        type="Email"
-                      />
+                      <input required id="Email" name="Email" type="Email" />
                     </div>
                   </div>
                   <div className={styles.FinalRow}>
                     <div className={styles.formField}>
                       <label htmlFor="Date">Date of birth</label>
-                      <input
-                        required
-                        onChange={(e) => {e}}
-                        id="Date"
-                        name="Date"
-                        type={"date"}
-                      />
+                      <input required id="Date" name="Date" type={"date"} />
                       <p
                         style={{
                           color: "red",
-                          display: formData.date <= minAge ? "none" : "flex",
+                          display: IsLegal(getValues("date")) ? "none" : "flex",
                         }}
                       >
                         Age must be higher than 18years
@@ -227,17 +168,11 @@ const CheckoutComp = () => {
                       name="payment"
                       value="Paypal"
                       defaultChecked
-                      onChange={(e) =>
-                        setFormData((prevState) => ({
-                          ...prevState,
-                          payMeth: e.target.value,
-                        }))
-                      }
                     />
                     <p
                       style={{
                         color:
-                          formData.payMeth === "Paypal"
+                          getValues("paymentMethod") === "PAYPAL"
                             ? "#987358"
                             : "rgba(30, 30, 30, 0.6)",
                       }}
@@ -246,21 +181,11 @@ const CheckoutComp = () => {
                     </p>
                   </div>
                   <div className={styles.method}>
-                    <input
-                      type="radio"
-                      name="payment"
-                      value="Stripe"
-                      onChange={(e) =>
-                        setFormData((prevState) => ({
-                          ...prevState,
-                          payMeth: e.target.value,
-                        }))
-                      }
-                    />
+                    <input type="radio" name="payment" value="Stripe" />
                     <p
                       style={{
                         color:
-                          formData.payMeth === "Stripe"
+                          getValues("paymentMethod") === "STRIPE"
                             ? "#987358"
                             : "rgba(30, 30, 30, 0.6)",
                       }}
@@ -271,27 +196,11 @@ const CheckoutComp = () => {
                 </div>
                 <div className={styles.SignMeUp}>
                   <label>
-                    <input
-                      onChange={(e) =>
-                        setFormData((prevState) => ({
-                          ...prevState,
-                          checkedEmail: !formData.checkedEmail,
-                        }))
-                      }
-                      type="checkbox"
-                    />
+                    <input type="checkbox" />
                     <p>Sign me up to recieve email updates and news</p>
                   </label>
                   <label>
-                    <input
-                      onChange={(e) =>
-                        setFormData((prevState) => ({
-                          ...prevState,
-                          checkedSMS: !formData.checkedSMS,
-                        }))
-                      }
-                      type="checkbox"
-                    />
+                    <input type="checkbox" />
                     <p>Sign me up to recieve SMS updates and news</p>
                   </label>
                 </div>
@@ -310,7 +219,7 @@ const CheckoutComp = () => {
               <h1> Order Summary</h1>
               <div className={styles.RightCon}>
                 <div className={styles.OrdersFlex}>
-                  {checkData &&
+                  {/*checkData &&
                     checkData.map((order, i) => {
                       itemsForFetch &&
                         itemsForFetch.map((ite) => {
@@ -346,18 +255,14 @@ const CheckoutComp = () => {
                             </span>
                             <h3>
                               Remaining Tickets:{" "}
-                              {itemsForFetch &&
-                                itemsForFetch.map((ite) => {
-                                  return (
-                                    ite.compID === order.id &&
-                                    order.remaining_tickets - ite.number_tickets
-                                  );
-                                })}
+                              {
+                                //TODO:
+                              }
                             </h3>
                           </div>
                           <div className={styles.Counter}>
                             <div
-                              onClick={() => decreCart(order)}
+                              onClick={() => {}}
                               className={styles.CounterSelec}
                             >
                               <Image
@@ -368,20 +273,17 @@ const CheckoutComp = () => {
                               />
                             </div>
                             <div className={styles.counterValue}>
-                              {itemsForFetch &&
-                                itemsForFetch.map((ite) => {
-                                  return (
-                                    ite.compID === order.id &&
-                                    ite.number_tickets
-                                  );
-                                })}
+                              {
+                                //TODO:
+                              }
+                              0
                             </div>
                             <div
                               // onClick={() =>
                               //   counter < item.remaining_tickets &&
                               //   setCounter(counter + 1)
                               // }
-                              onClick={() => increCart(order)}
+                              onClick={() => {}}
                               className={styles.CounterSelec}
                             >
                               <Image
@@ -394,25 +296,25 @@ const CheckoutComp = () => {
                           </div>
                         </div>
                       );
-                    })}
+                            */}
                 </div>
                 <div className={styles.orderSumBot}>
                   <div className={styles.orderSum}>
                     <h2>Sub Total</h2>
-                    <span>${total.reduce((a, b) => a + b, 0)}.00</span>
+                    <span>{Formater(totalCost)}</span>
                   </div>
                   <div className={styles.orderSum}>
-                    <h3>Total</h3>
-                    <span>${total.reduce((a, b) => a + b, 0)}.00</span>
+                    <p>{`Total + (20%) VAT`}</p>
+                    <span>{Formater(totalCost * 1.02)}</span>
                   </div>
-                  {formData.payMeth === "paypal" ? (
+                  {getValues("paymentMethod") === "PAYPAL" ? (
                     <PayPalScriptProvider
                       options={{
                         "client-id": `${env.NEXT_PUBLIC_PAYPAL_ID}`,
                       }}
                     >
                       <PayPalButtons
-                        forceReRender={[Total]}
+                        forceReRender={[totalCost]}
                         createOrder={(data, actions) => {
                           return actions.order
                             .create({
@@ -420,7 +322,7 @@ const CheckoutComp = () => {
                                 {
                                   amount: {
                                     currency_code: "USD",
-                                    value: Total,
+                                    value: (totalCost * 1.02).toString(),
                                   },
                                 },
                               ],
@@ -430,8 +332,10 @@ const CheckoutComp = () => {
                               return orderId;
                             });
                         }}
+                        /*
                         onApprove={function (data, actions) {
-                          return actions.order
+                          
+                          return actions?.order?
                             .capture()
                             .then(function (details) {
                               details.status === "COMPLETED" &&
@@ -458,7 +362,8 @@ const CheckoutComp = () => {
                                 // details.status
                               );
                             });
-                        }}
+                          }}
+                          */
                         style={{ layout: "horizontal" }}
                       />
                     </PayPalScriptProvider>
