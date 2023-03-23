@@ -1,146 +1,76 @@
 import React, { useEffect, useState } from "react";
 import styles from "@/styles/Checkout.module.css";
-
 import Image from "next/image";
-import { BackendLink, PaypalID } from "./Backend";
 import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js";
 import { useRouter } from "next/router";
+import { env } from "../env.mjs";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { api, RouterInputs } from "@/utils/api";
+import { z } from "zod";
+import useCart, { OrderStore } from "./Store";
+//import { CreateOrderSchema} from "@/utils/Schema";
+//import { zodResolver } from '@hookform/resolvers/zod';
 
 const CheckoutComp = () => {
   const router = useRouter();
-  const total = [];
-  const minAge = "2005-01-01";
-  const [items, setItems] = useState();
-  const [itemsForFetch, setItemsForFetch] = useState();
-  const [checkData, setCheckData] = useState();
-  const [Total, setTotal] = useState("");
-
-  const [formData, setFormData] = useState({
-    items: items,
-    firstName: "",
-    lastName: "",
-    country: "",
-    address: "",
-    town: "",
-    zip: "",
-    phone: "",
-    email: "",
-    date: "",
-    payMeth: "paypal",
-    checkedEmail: false,
-    checkedSMS: false,
+  const { order, updateOrder, cardDetails, reset } = useCart();
+  const Total = cardDetails()?.totalCost;
+  const [error, setError] = useState<string | undefined>();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<RouterInputs["Payment"]["create"]>({
+    defaultValues: {
+      date: new Date(),
+      paymentMethod: "STRIPE",
+      checkedEmail: false,
+      checkedSMS: false,
+      watchids: order?.comps.map((comp) => comp.compID) || [],
+    },
   });
-  useEffect(() => {
-    setTotal(String(total.reduce((a, b) => a + b, 0)));
-  }, [total]);
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      var a = localStorage.getItem("cartItems");
-      var b = JSON.parse(localStorage.getItem("cartItems"));
-
-      setItems(a);
-      setItemsForFetch(b ? b : []);
-      setFormData((prevState) => ({ ...prevState, items: b }));
-    }
-  }, []);
-  useEffect(() => {
-    const arr = [];
-    const fetchItems = async () => {
-      itemsForFetch &&
-        itemsForFetch.map((ite) => {
-          fetch(`${BackendLink}/details/${ite.compID}`)
-            .then((res) => res.json())
-            .then((data) => arr.push(data))
-            .then(() => setCheckData([...arr]));
-        });
-    };
-    fetchItems();
-  }, [itemsForFetch]);
-
-  function decreCart(item) {
-    if (typeof window !== "undefined") {
-      var check = itemsForFetch.filter((it) => {
-        return item.id === it.compID && it.number_tickets;
-      });
-      var change = {
-        compID: item.id,
-        number_tickets:
-          check[0].number_tickets > 1
-            ? check[0].number_tickets - 1
-            : check[0].number_tickets,
-      };
-      if (
-        itemsForFetch.map((u) => u.compID === change.compID)[0] === true ||
-        itemsForFetch.map((u) => u.compID === change.compID)[1] === true
-      ) {
-        const newa = itemsForFetch.map((u) =>
-          u.compID !== change.compID ? u : change
-        );
-        localStorage.setItem("cartItems", JSON.stringify(newa));
-        var a = JSON.parse(localStorage.getItem("cartItems"));
-        var b = localStorage.getItem("cartItems");
-
-        setItems(b);
-        setItemsForFetch(a);
+  const onSubmit: SubmitHandler<RouterInputs["Payment"]["create"]> = async (
+    data
+  ) => {
+    //check if the date is more than 16 years
+    const LegalAge = 18;
+    const now = new Date();
+    if (
+      data.date &&
+      new Date(
+        now.getFullYear() - LegalAge,
+        now.getMonth(),
+        now.getDate()
+      ).getTime() >= data.date.getTime()
+    ) {
+      const { sucess, error: trpcError } = await api.Payment.create
+        .useMutation()
+        .mutateAsync({ ...data });
+      if (sucess && !trpcError) {
+        reset(); // here we reset the cart
+        router.push("/payment"); // push soemwher
+      } else {
+        // handle error
+        setError(trpcError);
+        //do something with error
       }
-      //   } else {
-      //     a.push(items);
-      //   }
-
-      //   // Alert the array value
-      //   // Re-serialize the array back into a string and store it in localStorage
+    } else {
+      setError("You must be 18 years or older to purchase ");
     }
-  }
-  function increCart(item) {
-    if (typeof window !== "undefined") {
-      var check = itemsForFetch.filter((it) => {
-        return item.id === it.compID && it.number_tickets;
-      });
-      var change = {
-        compID: item.id,
-        number_tickets:
-          check[0].number_tickets < item.remaining_tickets
-            ? check[0].number_tickets + 1
-            : check[0].number_tickets,
-      };
-      if (
-        itemsForFetch.map((u) => u.compID === change.compID)[0] === true ||
-        itemsForFetch.map((u) => u.compID === change.compID)[1] === true
-      ) {
-        const newa = itemsForFetch.map((u) =>
-          u.compID !== change.compID ? u : change
-        );
-        localStorage.setItem("cartItems", JSON.stringify(newa));
-        var a = JSON.parse(localStorage.getItem("cartItems"));
-        var b = localStorage.getItem("cartItems");
-
-        setItems(b);
-        setItemsForFetch(a);
-      }
-      //   } else {
-      //     a.push(items);
-      //   }
-
-      //   // Alert the array value
-      //   // Re-serialize the array back into a string and store it in localStorage
-    }
-  }
-
-  function handleSubmit(e) {
-    formData.date <= minAge
-      ? console.log(formData)
-      : console.log("Age must be 18 or more.");
-    e.preventDefault();
-  }
-  function handleDate(e) {
-    setFormData((prevState) => ({ ...prevState, date: e.target.value }));
-  }
+  };
+  const {
+    data: items,
+    isLoading,
+  } = api.Competition.getAll.useQuery({
+    ids : order?.comps.map((comp) => comp.compID) || [],
+  });
+   
 
   return (
     <div className={styles.CheckoutMain}>
       {items !== undefined && (
         <div className={styles.formMain}>
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit(onSubmit)}>
             <div className={styles.CheckoutLeft}>
               <div className={styles.leftFormItem}>
                 <h1>Billing Information</h1>
@@ -246,11 +176,7 @@ const CheckoutComp = () => {
                       <label htmlFor="Phone">Phone</label>
                       <input
                         required
-                        onChange={(e) =>
-                          setFormData((prevState) => ({
-                            ...prevState,
-                            phone: e.target.value,
-                          }))
+                        onChange={(e) =>{}
                         }
                         id="Phone"
                         type={"number"}
@@ -262,10 +188,7 @@ const CheckoutComp = () => {
                       <input
                         required
                         onChange={(e) =>
-                          setFormData((prevState) => ({
-                            ...prevState,
-                            email: e.target.value,
-                          }))
+                         {}
                         }
                         id="Email"
                         name="Email"
@@ -278,7 +201,7 @@ const CheckoutComp = () => {
                       <label htmlFor="Date">Date of birth</label>
                       <input
                         required
-                        onChange={(e) => handleDate(e)}
+                        onChange={(e) => {e}}
                         id="Date"
                         name="Date"
                         type={"date"}
@@ -401,10 +324,8 @@ const CheckoutComp = () => {
                       return (
                         <div className={styles.orderItem} key={i}>
                           <Image
-
                             width={106}
                             height={105}
-
                             className={styles.orderImg}
                             src="/images/tester.png"
                             alt="watching"
@@ -439,14 +360,12 @@ const CheckoutComp = () => {
                               onClick={() => decreCart(order)}
                               className={styles.CounterSelec}
                             >
-
                               <Image
                                 width={13}
                                 height={1}
                                 src="/images/Minus.png"
                                 alt="minus"
                               />
-
                             </div>
                             <div className={styles.counterValue}>
                               {itemsForFetch &&
@@ -465,14 +384,12 @@ const CheckoutComp = () => {
                               onClick={() => increCart(order)}
                               className={styles.CounterSelec}
                             >
-
                               <Image
                                 width={11}
                                 height={11}
                                 src="/images/plus.png"
                                 alt="plus"
                               />
-
                             </div>
                           </div>
                         </div>
@@ -491,7 +408,7 @@ const CheckoutComp = () => {
                   {formData.payMeth === "paypal" ? (
                     <PayPalScriptProvider
                       options={{
-                        "client-id": `${PaypalID}`,
+                        "client-id": `${env.NEXT_PUBLIC_PAYPAL_ID}`,
                       }}
                     >
                       <PayPalButtons

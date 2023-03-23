@@ -6,7 +6,7 @@ interface Comp {
   number_tickets: number;
   price_per_ticket: number;
 }
-interface OrderStore extends Order {
+export interface OrderStore extends Order {
   comps: Comp[];
 }
 
@@ -15,24 +15,28 @@ export const Formater = (value : number | bigint) => new Intl.NumberFormat("en-U
   currency: "USD",
 }).format(value);
 
-export default create<{
-  order:
-    | OrderStore
-    | undefined
-    | {
-        comps: Comp[];
-      };
-  updateOrder: (NewOrder: OrderStore) => void;
-  addComp: ({ compID, number_tickets, price_per_ticket }: Comp) => void;
-  removeComp: (compID: string) => void;
-  cardDetails: () => {
-    totalCost : number;
-    Number_of_item: number;
-  };
-  updateComp: ({ compID, number_tickets }: Comp) => void;
-  updateTotal: (total: number) => void;
-}>((set, get) => ({
+interface RootState {
+    order:
+      | OrderStore
+      | undefined
+      | {
+          comps: Comp[];
+        };
+    updateOrder: (NewOrder: OrderStore) => void;
+    addComp: ({ compID, number_tickets, price_per_ticket }: Comp) => void;
+    removeComp: (compID: string) => void;
+    cardDetails: () => {
+      totalCost : number;
+      Number_of_item: number;
+    };
+    updateComp: ({ compID, number_tickets }: Comp) => void;
+    updateTotal: (total: number) => void;
+    reset: () => void;
+  }
+
+export default create<RootState>((set, get) => ({
   order: undefined,
+  reset: () => set({ order: undefined }),
   updateOrder: (NewOrder) =>
     set(({ order }) => ({
       order: order ? { ...order, ...NewOrder } : NewOrder,

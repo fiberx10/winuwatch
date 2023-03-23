@@ -2,7 +2,7 @@ import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { CompetitionStatus } from "@prisma/client";
-
+import {CreateOrderSchema} from "@/utils/Schema"
 export const CompetitionRouter = createTRPCRouter({
   getAll: publicProcedure
     .input(
@@ -159,27 +159,36 @@ export const WatchesRouter = createTRPCRouter({
     }),
 });
 
+
+
 export const PaymentRouter = createTRPCRouter({
   getAll: publicProcedure.query(({ ctx }) => {
     return ctx.prisma.order.findMany();
   }),
 
-  /*
   create : publicProcedure
-    .input(z.object({
-      name : z.string(),
+  .input(CreateOrderSchema)
+  .mutation(({ ctx, input }) => {
+    const {watchids, ...data} = input;
 
-    }))
-    .mutation(({ ctx, input }) => {
-      /*return ctx.prisma.order.create({
-        data: {
-          name: input.name,
-        },
-      });
+    //TODO: Create Order 
+    console.log(input)
+
+    return{
+      sucess : true,
+      error : "no error"
+    }
+
+    /*return ctx.prisma.order.create({
+      data: {
+        name: input.name,
+      },
+    });
       return {
         status : "success",
         error : null
       }
     }
-  ),*/
+    ),*/
+  })
 });
