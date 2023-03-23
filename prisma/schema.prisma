@@ -30,10 +30,7 @@ model Watches {
     Competition       Competition?
     Order Order?
     @@map("watches")
-}
 
-
-    @@map("watches")
 }
 
 model Competition {
@@ -80,4 +77,10 @@ model Order {
     paymentMethod PaymentMethod
     Watches   Watches  @relation(fields: [watchesId], references: [id])
     @@map("order")
+}
+
+enum CompetitionStatus {
+    ACTIVE
+    NOT_ACTIVE
+    COMPLETED
 }
