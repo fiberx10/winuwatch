@@ -141,7 +141,6 @@
   .howtoText {
     height: fit-content !important;
   }
-
 }
 
 .Comp {
@@ -177,6 +176,7 @@
   flex-wrap: wrap;
   align-items: center;
   width: 100%;
+  row-gap: 10rem;
   justify-content: space-evenly;
 }
 .timer {
