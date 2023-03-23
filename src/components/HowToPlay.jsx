@@ -25,11 +25,35 @@ const HowToPlay = () => {
           </p>
         </div>
         <div className={styles.howtoLine}>
-          <Image src="/images/Line.png" alt="line" />
-          <Image className={styles.dot1} src="/images/Dot.svg" alt="dot" />
-          <Image className={styles.dot2} src="/images/Dot.svg" alt="dot" />
-          <Image className={styles.dot3} src="/images/Dot.svg" alt="dot" />
-          <Image className={styles.dot4} src="/images/Dot.svg" alt="dot" />
+          <Image height={559} width={1} src="/images/Line.png" alt="line" />
+          <Image
+            width={10}
+            height={10}
+            className={styles.dot1}
+            src="/images/Dot.svg"
+            alt="dot"
+          />
+          <Image
+            width={10}
+            height={10}
+            className={styles.dot2}
+            src="/images/Dot.svg"
+            alt="dot"
+          />
+          <Image
+            width={10}
+            height={10}
+            className={styles.dot3}
+            src="/images/Dot.svg"
+            alt="dot"
+          />
+          <Image
+            width={10}
+            height={10}
+            className={styles.dot4}
+            src="/images/Dot.svg"
+            alt="dot"
+          />
         </div>
         <div className={styles.howtoTxt3}>
           <h2>Buy your tickets</h2>
