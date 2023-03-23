@@ -34,7 +34,7 @@ interface RootState {
     reset: () => void;
   }
 
-export default create<RootState>((set, get) => ({
+export const useCart =  create<RootState>((set, get) => ({
   order: undefined,
   reset: () => set({ order: undefined }),
   updateOrder: (NewOrder) =>

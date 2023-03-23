@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import styles from "@/styles/Cart.module.css";
 import Image from "next/image";
-import useStore, { Formater } from "./Store";
+import { Formater,useCart } from "./Store";
 import { useRouter } from "next/router";
 import { BackendLink } from "./Backend";
 import { api } from "@/utils/api";
 import Link from "next/link";
 const CartComp = () => {
-  const { cardDetails, order, addComp, updateComp, removeComp } = useStore();
+  const { cardDetails, order, addComp, updateComp, removeComp } = useCart();
   const {
     data: items,
     isLoading,
