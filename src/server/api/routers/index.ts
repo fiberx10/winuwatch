@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
+import { CompetitionStatus } from "@prisma/client";
 
 export const CompetitionRouter = createTRPCRouter({
   getAll: publicProcedure.query(({ ctx }) => {
@@ -21,87 +22,25 @@ export const CompetitionRouter = createTRPCRouter({
         name: z.string(),
         start_date: z.date(),
         end_date: z.date(),
-        remaining_tickets: z.number(),
-        drawing_date: z.string(),
-        total_tickets: z.number(),
-        ticket_price: z.number(),
-        location: z.string(),
-        second_reward: z.string(),
-        status: z.string(),
-        winner: z.string(),
-        watchesId: z.string(),
+        drawing_date : z.date(),
+        remaining_tickets : z.number(),
+        total_tickets : z.number(),
+        ticket_price : z.number(),
+        location : z.string(),
+        second_reward : z.string(),
+        price : z.number(),
+        status : z.enum([CompetitionStatus.ACTIVE, CompetitionStatus.NOT_ACTIVE, CompetitionStatus.COMPLETED]),
+        winner : z.string().optional(),
+        watchesId : z.string(),
       })
     )
     .mutation(({ ctx, input }) => {
-      return ctx.prisma.watches.create({
-        data: {
-          name: input.name,
-          start_date: input.start_date,
-          end_date: input.end_date,
-          remaining_tickets: input.remaining_tickets,
-          drawing_date: input.drawing_date,
-          total_tickets: input.total_tickets,
-          ticket_price: input.ticket_price,
-          location: input.location,
-          second_reward: input.second_reward,
-          status: input.status,
-          winner: input.winner,
-          watchesId: input.watchesId,
-        },
+      return ctx.prisma.competition.create({
+        data: input,
       });
-    }),
-  update: publicProcedure
-    .input(
-      z.object({
-        id: z.string(),
-        name: z.string(),
-        start_date: z.date(),
-        end_date: z.date(),
-        remaining_tickets: z.number(),
-        drawing_date: z.string(),
-        total_tickets: z.number(),
-        ticket_price: z.number(),
-        location: z.string(),
-        second_reward: z.string(),
-        status: z.string(),
-        winner: z.string(),
-        watchesId: z.string(),
-      })
-    )
-    .mutation(({ ctx, input }) => {
-      return ctx.prisma.watches.update({
-        data: {
-          name: input.name,
-          start_date: input.start_date,
-          end_date: input.end_date,
-          remaining_tickets: input.remaining_tickets,
-          drawing_date: input.drawing_date,
-          total_tickets: input.total_tickets,
-          ticket_price: input.ticket_price,
-          location: input.location,
-          second_reward: input.second_reward,
-          status: input.status,
-          winner: input.winner,
-          watchesId: input.watchesId,
-        },
-        where: {
-          id: input.id,
-        },
-      });
-    }),
-  delete: publicProcedure
-    .input(
-      z.object({
-        id: z.string(),
-      })
-    )
-    .mutation(({ ctx, input }) => {
-      return ctx.prisma.watches.delete({
-        where: {
-          id: input.id,
-        },
-      });
-    }),
+    }
+  ),
+
 });
 
 export const WatchesRouter = createTRPCRouter({
@@ -121,8 +60,7 @@ export const WatchesRouter = createTRPCRouter({
     .input(
       z.object({
         name: z.string(),
-        ImageURL: z.array(z.string()),
-        owner_ref: z.string(),
+        owner_ref: z.string().optional(),
         condition: z.string(),
         years: z.number(),
         movement: z.string(),
@@ -131,68 +69,40 @@ export const WatchesRouter = createTRPCRouter({
         case_material: z.string(),
         bracelet_material: z.string(),
         water_proof: z.string(),
-        box: z.string(),
-        papers: z.string(),
-        price: z.number(),
+        box: z.boolean().default(false),
+        papers: z.boolean().default(false),
+        imageURL: z.array(z.string()),
       })
     )
     .mutation(({ ctx, input }) => {
       return ctx.prisma.watches.create({
-        data: {
-          name: input.name,
-          imageURL: input.ImageURL,
-          owner_ref: input.owner_ref,
-          years: input.years,
-          movement: input.movement,
-          case_size: input.case_size,
-          dail: input.dail,
-          case_material: input.case_material,
-          bracelet_material: input.bracelet_material,
-          water_proof: input.water_proof,
-          box: input.box,
-          papers: input.papers,
-          price: input.price,
-        },
+        data: input,
       });
     }),
   update: publicProcedure
     .input(
       z.object({
         id: z.string(),
-        name: z.string(),
-        ImageURL: z.array(z.string()),
-        owner_ref: z.string(),
-        condition: z.string(),
-        years: z.number(),
-        movement: z.string(),
-        case_size: z.number(),
-        dail: z.string(),
-        case_material: z.string(),
-        bracelet_material: z.string(),
-        water_proof: z.string(),
-        box: z.string(),
-        papers: z.string(),
+        name: z.string().optional(),
+        owner_ref: z.string().optional(),
+        condition: z.string().optional(),
+        years: z.number().optional(),
+        movement: z.string().optional(),
+        case_size: z.number().optional(),
+        dail: z.string().optional(),
+        case_material: z.string().optional(),
+        bracelet_material: z.string().optional(),
+        water_proof: z.string().optional(),
+        box: z.boolean().optional(),
+        papers: z.boolean().optional(),
+        imageURL: z.array(z.string()),
       })
     )
     .mutation(({ ctx, input }) => {
+      const { id, ...data } = input;
       return ctx.prisma.watches.update({
-        data: {
-          name: input.name,
-          imageURL: input.ImageURL,
-          owner_ref: input.owner_ref,
-          years: input.years,
-          movement: input.movement,
-          case_size: input.case_size,
-          dail: input.dail,
-          case_material: input.case_material,
-          bracelet_material: input.bracelet_material,
-          water_proof: input.water_proof,
-          box: input.box,
-          papers: input.papers
-        },
-        where: {
-          id: input.id,
-        }
+        data,
+        where: { id },
       });
     }),
   delete: publicProcedure

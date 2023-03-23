@@ -13,7 +13,7 @@ datasource db {
 model Watches {
     id                String       @id @default(auto()) @map("_id") @db.ObjectId
     name              String
-    owner_ref         String
+    owner_ref         String?
     condition         String
     years             Int
     movement          String
@@ -21,9 +21,9 @@ model Watches {
     dail              String
     case_material     String
     bracelet_material String
-    water_proof       String
-    box               String
-    papers            String
+    water_proof       String?
+    box               Boolean
+    papers            Boolean
     imageURL          String[] // ID Backedn URL/public/[id].jpg
     createdAt         DateTime     @default(now())
     updatedAt         DateTime     @updatedAt
@@ -51,7 +51,7 @@ model Competition {
     second_reward     String
     price            Float
     status            CompetitionStatus
-    winner            String
+    winner            String?
     createdAt         DateTime          @default(now())
     updatedAt         DateTime          @updatedAt
     watchesId         String            @unique @db.ObjectId
