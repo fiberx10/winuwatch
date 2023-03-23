@@ -5,11 +5,9 @@
 /.pnp
 package-lock.json
 .pnp.js
-/yarn.lock
+
 # testing
 /coverage
-
-.idea
 
 # database
 /prisma/db.sqlite
