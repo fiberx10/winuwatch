@@ -25,6 +25,7 @@ const HowToPlay = () => {
           </p>
         </div>
         <div className={styles.howtoLine}>
+
           <Image height={559} width={1} src="/images/Line.png" alt="line" />
           <Image
             width={10}
@@ -54,6 +55,7 @@ const HowToPlay = () => {
             src="/images/Dot.svg"
             alt="dot"
           />
+
         </div>
         <div className={styles.howtoTxt3}>
           <h2>Buy your tickets</h2>

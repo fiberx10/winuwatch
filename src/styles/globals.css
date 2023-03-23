@@ -166,7 +166,9 @@
 .splide__slide {
   display: flex;
   flex-direction: column;
-  justify-content: end;
+
+  justify-content: flex-end;
+
 }
 .splide__track--nav > .splide__list > .splide__slide.is-active {
   border: 0 !important;

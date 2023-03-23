@@ -59,7 +59,9 @@ const Charit = () => {
       desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur et sollicitudin eros. ",
     },
     {
-     img: "/images/pinging.png",
+
+      img: "/images/pinging.png",
+
       name: "PINGING.INC",
       amount: 2346,
       desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur et sollicitudin eros. ",
@@ -81,7 +83,14 @@ const Charit = () => {
     <div className={styles.CharityMain}>
       <div className={styles.CharityHeader}>
         <div className={styles.CharityH1}>
-          <Image alt="charityHand" src="/images/charityHand.png" />
+
+          <Image
+            width={40}
+            height={40}
+            alt="charityHand"
+            src="/images/charityHand.png"
+          />
+
           <h1>Total Raised For Charity</h1>
         </div>
         <h3>£594,828</h3>
@@ -104,7 +113,12 @@ const Charit = () => {
                   }}
                   className={styles.CharityImgCon}
                 >
-                  <Image alt="charity" src={charity.img} />
+
+                  <Image 
+                    width={40}
+                    height={40}
+                  alt="charity" src={charity.img} />
+
                 </div>
                 <div>
                   <h4>DONATIONS</h4>
