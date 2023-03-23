@@ -9,8 +9,8 @@ import { useRouter } from "next/router";
 export default function NavBar() {
   const [open, setOpen] = useState(false);
   const router = useRouter();
-  const {cardDetails} = useStore();
- 
+  const { cardDetails } = useStore();
+
   const howTo =
     typeof window !== "undefined" && document.getElementById("Howtoplay");
   const theComp =
@@ -60,10 +60,8 @@ export default function NavBar() {
           onClick={() => setOpen(!open)}
           className={styles.burger}
           alt="menu"
-
           width={38}
           height={7}
-
           src="/images/burgerMenu.svg"
         />
         <Drawer className={styles.Drawer} anchor="left" open={open}>
@@ -162,7 +160,7 @@ export default function NavBar() {
           }}
           onClick={() => router.push("/Cart")}
         >
-          cart {cardDetails().items}
+          {`Cart (${cardDetails().items})`}
         </span>
 
         <Image
@@ -172,7 +170,6 @@ export default function NavBar() {
           alt="global"
           src="/images/global.png"
         />
-
       </div>
     </div>
   );
