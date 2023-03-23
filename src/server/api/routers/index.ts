@@ -1,7 +1,5 @@
 import { z } from "zod";
-
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
-
 export const CompetitionRouter = createTRPCRouter({
   getAll: publicProcedure.query(({ ctx }) => {
     return ctx.prisma.competition.findMany();
@@ -33,18 +31,18 @@ export const CompetitionRouter = createTRPCRouter({
     .mutation(({ ctx, input }) => {
       return ctx.prisma.watches.create({
         data: {
-          name: input.name,
-            start_date : input.start_date,
-            end_date : input.end_date,
-            remaining_tickets : input.remaining_tickets,
-            drawing_date : input.drawing_date,
-            total_tickets : input.total_tickets,
-            ticket_price : input.ticket_price,
-            location : input.location,
-            second_reward : input.second_reward,
-            status : input.status,
-            winner : input.winner,
-            watchesId : input.watchesId,
+            drawing_date: input.drawing_date,
+            end_date: input.end_date,
+            location: input.location,
+            name: input.name,
+            remaining_tickets: input.remaining_tickets,
+            second_reward: input.second_reward,
+            start_date: input.start_date,
+            status: input.status,
+            ticket_price: input.ticket_price,
+            total_tickets: input.total_tickets,
+            watchesId: input.watchesId,
+            winner: input.winner,
         },
       });
     }),
