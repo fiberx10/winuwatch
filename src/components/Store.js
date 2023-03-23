@@ -6,9 +6,12 @@ const a = JSON.parse(
 );
 const useStore = create((set) => ({
   bears: a !== null ? a.length : 0,
+  Menu: "Vue d'ensemble",
   orderData: null,
   // @ts-ignore
   increasePopulation: (params) => set((state) => ({ bears: params })),
+  // @ts-ignore
+  selectMenu: (params) => set((state) => ({ Menu: params })),
   // @ts-ignore
   FillData: (params) => set((state) => ({ orderData: params })),
 }));
