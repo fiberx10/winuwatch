@@ -86,7 +86,8 @@ const CompetitionComponent = ({
         <button onClick={() => {
           addComp({
             compID : data.id,
-            number_tickets : counter
+            number_tickets : counter,
+            price_per_ticket : data.price
           })
         }} >ADD TO CART</button>
       </div>

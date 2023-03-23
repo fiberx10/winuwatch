@@ -4,10 +4,17 @@ import { Order } from "@prisma/client";
 interface Comp {
   compID: string;
   number_tickets: number;
+  price_per_ticket: number;
 }
 interface OrderStore extends Order {
   comps: Comp[];
 }
+
+export const Formater = (value : number | bigint) => new Intl.NumberFormat("en-US", {
+  style: "currency",
+  currency: "USD",
+}).format(value);
+
 export default create<{
   order:
     | OrderStore
@@ -16,13 +23,14 @@ export default create<{
         comps: Comp[];
       };
   updateOrder: (NewOrder: OrderStore) => void;
-  addComp: ({ compID, number_tickets }: Comp) => void;
+  addComp: ({ compID, number_tickets, price_per_ticket }: Comp) => void;
   removeComp: (compID: string) => void;
   cardDetails: () => {
-    total: number;
-    items: number;
+    totalCost : number;
+    Number_of_item: number;
   };
   updateComp: ({ compID, number_tickets }: Comp) => void;
+  updateTotal: (total: number) => void;
 }>((set, get) => ({
   order: undefined,
   updateOrder: (NewOrder) =>
@@ -31,16 +39,29 @@ export default create<{
     })),
   cardDetails: () => {
     const { order } = get();
+    
     return order
       ? {
-          total: order.comps.reduce((acc, c) => acc + c.number_tickets, 0),
-          items: order.comps.length,
+        
+          totalCost : order.comps.reduce((acc, c) => {
+              return acc + c.number_tickets * c.price_per_ticket;
+            }, 0),
+          Number_of_item: order.comps.length,
         }
       : {
-          total: 0,
-          items: 0,
+         
+          totalCost : 0,
+          Number_of_item: 0,
         };
   },
+  updateTotal: (total) =>
+    set(({ order }) => ({
+      order: order && {
+        ...order,
+        total,
+      },
+    })),
+
   addComp: (comp) =>
     set(({ order }) => ({
       order: order

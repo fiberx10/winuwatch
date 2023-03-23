@@ -160,7 +160,7 @@ export default function NavBar() {
           }}
           onClick={() => router.push("/Cart")}
         >
-          {`Cart (${cardDetails().items})`}
+          {`Cart (${cardDetails().Number_of_item})`}
         </span>
 
         <Image

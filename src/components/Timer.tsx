@@ -2,17 +2,16 @@ import React from "react";
 import { useState, useEffect } from "react";
 import styles from "../styles/Home.module.css";
 
-const Timer = ({ date }: { date: string }) => {
+const Timer = ({ date }: { date: Date }) => {
   const [days, setDays] = useState(0);
   const [hours, setHours] = useState(0);
   const [minutes, setMinutes] = useState(0);
   const [seconds, setSeconds] = useState(0);
 
-  // please change format of date from "DD/MM/YY" to "YYYY/MM/DD"
   useEffect(() => {
     const getTime = () => {
-      const time = Date.parse(date) - Date.now();
-
+      //Calculate the time difference between now and the date
+      const time = date.getTime() - new Date().getTime();
       setDays(Math.floor(time / (1000 * 60 * 60 * 24)));
       setHours(Math.floor((time / (1000 * 60 * 60)) % 24));
       setMinutes(Math.floor((time / 1000 / 60) % 60));
