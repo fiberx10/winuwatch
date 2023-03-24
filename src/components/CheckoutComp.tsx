@@ -6,8 +6,7 @@ import { useRouter } from "next/router";
 import { env } from "../env.mjs";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { api, RouterInputs, Formater } from "@/utils";
-
-import { OrderStore, useCart} from "./Store";
+import {useCart} from "./Store";
 
 //import { CreateOrderSchema} from "@/utils/Schema";
 //import { zodResolver } from '@hookform/resolvers/zod';
@@ -25,6 +24,9 @@ const IsLegal = (Birthdate?: Date) => {
   );
 };
 
+
+type CreatePayemtnTYpe = RouterInputs["Payment"]["create"];
+
 const CheckoutComp = () => {
   const router = useRouter();
   const { competitions, cardDetails, reset, addComp, removeComp, updateComp } =
@@ -37,7 +39,7 @@ const CheckoutComp = () => {
     handleSubmit,
     formState: { errors },
     getValues,
-  } = useForm<RouterInputs["Payment"]["create"]>({
+  } = useForm<CreatePayemtnTYpe>({
     defaultValues: {
       date: new Date(),
       paymentMethod: "STRIPE",

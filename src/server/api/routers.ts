@@ -4,6 +4,7 @@ import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { CompetitionStatus } from "@prisma/client";
 import { CreateOrderSchema } from "@/utils";
 export const CompetitionRouter = createTRPCRouter({
+
   getAll: publicProcedure
     .input(
       z.object({
@@ -42,6 +43,30 @@ export const CompetitionRouter = createTRPCRouter({
         },
       });
     }),
+  updateOne : publicProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        status: z
+          .enum([
+            CompetitionStatus.ACTIVE,
+            CompetitionStatus.NOT_ACTIVE,
+            CompetitionStatus.COMPLETED,
+          ])
+          .optional(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { id, ...data } = input;
+      return await ctx.prisma.competition.update({
+        data: {
+          ...data
+        },
+        where: {
+          id,
+        },
+      });
+    })
 });
 
 export const WatchesRouter = createTRPCRouter({

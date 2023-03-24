@@ -1,18 +1,24 @@
 import { create } from "zustand";
 import { Order } from "@prisma/client";
 
-interface Comp {
+interface Comp  {
   compID: string;
   number_tickets: number;
   price_per_ticket: number;
 }
-export interface OrderStore extends Order {
-  comps: Comp[];
-}
+
 
 interface RootState {
-  competitions: Comp[];
-  addComp: ({ compID, number_tickets, price_per_ticket }: Comp) => void;
+  competitions: {
+    compID: string;
+    number_tickets: number;
+    price_per_ticket: number;
+  }[];
+  addComp: ({ compID, number_tickets, price_per_ticket }: {
+    compID: string;
+    number_tickets: number;
+    price_per_ticket: number;
+  }) => void;
   removeComp: (compID: string) => void;
   cardDetails: () => {
     totalCost: number;
