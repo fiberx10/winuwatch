@@ -753,6 +753,9 @@
   .Comp {
     text-align: center;
   }
+  .watchConSkelet {
+    width: 100% !important;
+  }
   .burger {
     display: flex;
   }
@@ -782,7 +785,7 @@
   }
   .HomeHeader {
     background-position: 23% 50%;
-    overflow-x: hidden;
+    overflow: hidden;
   }
   .HeaderTit {
     margin-bottom: -60px;
