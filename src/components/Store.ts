@@ -10,31 +10,41 @@ export interface OrderStore extends Order {
   comps: Comp[];
 }
 
-export const Formater = (value : number | bigint) => new Intl.NumberFormat("en-US", {
-  style: "currency",
-  currency: "USD",
-}).format(value);
+export const Formater = (value: number | bigint) =>
+  new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+  }).format(value);
 
 interface RootState {
-    order:
-      | OrderStore
-      | undefined
-      | {
-          comps: Comp[];
-        };
-    updateOrder: (NewOrder: OrderStore) => void;
-    addComp: ({ compID, number_tickets, price_per_ticket }: Comp) => void;
-    removeComp: (compID: string) => void;
-    cardDetails: () => {
-      totalCost : number;
-      Number_of_item: number;
-    };
-    updateComp: ({ compID, number_tickets }: Comp) => void;
-    updateTotal: (total: number) => void;
-    reset: () => void;
-  }
+  order:
+    | OrderStore
+    | undefined
+    | {
+        comps: Comp[];
+      };
+  updateOrder: (NewOrder: OrderStore) => void;
+  addComp: ({ compID, number_tickets, price_per_ticket }: Comp) => void;
+  removeComp: (compID: string) => void;
+  cardDetails: () => {
+    totalCost: number;
+    Number_of_item: number;
+  };
+  updateComp: ({ compID, number_tickets }: Comp) => void;
+  updateTotal: (total: number) => void;
+  reset: () => void;
+}
 
-export const useCart =  create<RootState>((set, get) => ({
+type Pages = "Vue d'ensemble" | "Concours" | "Prix";
+export const useStore = create<{
+  menu: Pages, 
+  selectMenu: (params: "Vue d'ensemble" | "Concours" | "Prix") => void;
+}>((set, get) => ({
+  menu: "Vue d'ensemble",
+  selectMenu: (params) => set({ menu: params }),
+}));
+
+export const useCart = create<RootState>((set, get) => ({
   order: undefined,
   reset: () => set({ order: undefined }),
   updateOrder: (NewOrder) =>
@@ -43,18 +53,16 @@ export const useCart =  create<RootState>((set, get) => ({
     })),
   cardDetails: () => {
     const { order } = get();
-    
+
     return order
       ? {
-        
-          totalCost : order.comps.reduce((acc, c) => {
-              return acc + c.number_tickets * c.price_per_ticket;
-            }, 0),
+          totalCost: order.comps.reduce((acc, c) => {
+            return acc + c.number_tickets * c.price_per_ticket;
+          }, 0),
           Number_of_item: order.comps.length,
         }
       : {
-         
-          totalCost : 0,
+          totalCost: 0,
           Number_of_item: 0,
         };
   },

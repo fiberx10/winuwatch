@@ -1,9 +1,7 @@
 import NavBar from "./NavBar";
 import styles from "@/styles/Home.module.css";
 import { useState } from "react";
-
 import Image from "next/image";
-import { useState } from "react";
 
 export default function Header() {
   const theComp =

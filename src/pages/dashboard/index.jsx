@@ -2,7 +2,7 @@
 import DashboardComp from "../../components/dashboard/DashboardComp";
 import styles from "@/styles/Dashboard.module.css";
 import DashboardMainNav from "../../components/dashboard/DashboardMainNav";
-import useStore from "@/components/Store";
+import {useStore} from "@/components/Store";
 import DashboardNav from "../../components/dashboard/DashboardNav";
 
 const index = () => {

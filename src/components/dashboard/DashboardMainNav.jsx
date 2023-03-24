@@ -8,7 +8,7 @@ import {
   UsergroupAddOutlined,
 } from "@ant-design/icons/lib/icons";
 import Image from "next/image";
-import useStore from "@/components/Store";
+import {useStore} from "@/components/Store";
 
 const DashboardMainNav = () => {
   const Menu = useStore((state) => state.Menu);
