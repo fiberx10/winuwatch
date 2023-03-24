@@ -751,6 +751,9 @@
   .burger {
     display: flex;
   }
+  .watchConSkelet {
+    width: 100% !important;
+  }
   .Logo {
     position: absolute;
     left: 39%;
@@ -777,7 +780,7 @@
   }
   .HomeHeader {
     background-position: 23% 50%;
-    overflow-x: hidden;
+    overflow: hidden;
   }
   .HeaderTit {
     margin-bottom: -60px;
