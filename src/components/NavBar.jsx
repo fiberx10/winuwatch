@@ -1,5 +1,5 @@
 import styles from "../styles/Home.module.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Drawer } from "@mui/material";
 import Image from "next/image";
 import { useCart } from "./Store";
@@ -7,6 +7,7 @@ import { useRouter } from "next/router";
 
 export default function NavBar() {
   const [open, setOpen] = useState(false);
+  const [navColor, setNavColor] = useState("");
   const router = useRouter();
   const { cardDetails } = useCart();
 
@@ -14,24 +15,23 @@ export default function NavBar() {
     typeof window !== "undefined" && document.getElementById("Howtoplay");
   const theComp =
     typeof window !== "undefined" && document.getElementById("theComp");
-  console.log(typeof window !== "undefined" && location.pathname === "/");
+  useEffect(() => {
+    typeof window !== "undefined" && location.pathname !== "/"
+      ? setNavColor("#927C66")
+      : setNavColor("white");
+  }, []);
+  console.log(navColor);
   return (
     <div
       onClick={() => open && setOpen(false)}
       className={styles.NavBarContainer}
       style={{
-        color:
-          typeof window !== "undefined" && location.pathname !== "/"
-            ? "#927C66"
-            : "white",
+        color: navColor,
       }}
     >
       <div
         style={{
-          borderBottom:
-            typeof window !== "undefined" && location.pathname !== "/"
-              ? "1px solid #927C66"
-              : "1px solid white",
+          borderBottom: `1px solid ${navColor}`,
         }}
         className={styles.flexStart}
       >
@@ -138,19 +138,12 @@ export default function NavBar() {
         height={105.42}
         className={styles.Logo}
         alt="logo"
-        src={`/images/${
-          typeof window !== "undefined" && location.pathname !== "/"
-            ? "logo.png"
-            : "newLogo.png"
-        }`}
+        src={`/images/${navColor === "white" ? "newLogo.png" : "logo.png"}`}
       />
 
       <div
         style={{
-          borderBottom:
-            typeof window !== "undefined" && location.pathname !== "/"
-              ? "1px solid #927C66"
-              : "1px solid white",
+          borderBottom: `1px solid ${navColor}`,
         }}
         className={styles.flexEnd}
       >
@@ -196,10 +189,7 @@ export default function NavBar() {
         <Image
           width={15}
           style={{
-            filter:
-              typeof window !== "undefined" && location.pathname !== "/"
-                ? ""
-                : "brightness(0) invert(1)",
+            filter: navColor === "white" ? "brightness(0) invert(1)" : "",
           }}
           height={15}
           alt="global"
