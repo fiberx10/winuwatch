@@ -1,5 +1,6 @@
 import NavBar from "./NavBar";
 import styles from "@/styles/Home.module.css";
+import { useState } from "react";
 
 import Image from "next/image";
 import { useState } from "react";
@@ -32,13 +33,7 @@ export default function Header() {
         </video>
       </div>
       <div className={styles.HeaderTit}>
-
-        <Image
-          width={872}
-          height={99}
-          alt="WinUWatch"
-          src="/images/winuwatch.png"
-        />
+        <h2>winuwatch</h2>
 
         <h1>win your dream watch</h1>
       </div>
@@ -58,10 +53,8 @@ export default function Header() {
               behavior: "smooth",
             })
           }
-
           width={19}
           height={10}
-
           alt="vector"
           src="/images/Vector.svg"
         />
