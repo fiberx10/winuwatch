@@ -71,6 +71,10 @@ export default function NavBar() {
         <Image
           style={{
             cursor: "pointer",
+            filter:
+              typeof window !== "undefined" && location.pathname !== "/"
+                ? ""
+                : "brightness(0) invert(1)",
           }}
           onClick={() => setOpen(!open)}
           className={styles.burger}
