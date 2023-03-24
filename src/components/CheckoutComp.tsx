@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import styles from "@/styles/Checkout.module.css";
-import Image from "next/image";
 import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js";
 import { useRouter } from "next/router";
 import { env } from "../env.mjs";
-import { useForm, SubmitHandler } from "react-hook-form";
-import { api, RouterInputs, Formater } from "@/utils";
-import {useCart} from "./Store";
+import { useForm, type SubmitHandler } from "react-hook-form";
+import { api, type RouterInputs, Formater } from "@/utils";
+import { useCart } from "./Store";
+
+import "@/styles/Checkout.module.css";
 
 //import { CreateOrderSchema} from "@/utils/Schema";
 //import { zodResolver } from '@hookform/resolvers/zod';
@@ -23,7 +24,6 @@ const IsLegal = (Birthdate?: Date) => {
     ).getTime() >= date.getTime()
   );
 };
-
 
 type CreatePayemtnTYpe = RouterInputs["Payment"]["create"];
 
@@ -70,7 +70,7 @@ const CheckoutComp = () => {
     }
   };
   const { data: items, isLoading } = api.Competition.getAll.useQuery({
-    ids: competitions.map((comp) => comp.compID)
+    ids: competitions.map((comp) => comp.compID),
   });
 
   return (
@@ -150,8 +150,7 @@ const CheckoutComp = () => {
                         style={{
                           color: "red",
                           display: IsLegal(getValues("date")) ? "none" : "flex",
-                        }}
-                      >
+                        }}>
                         Age must be higher than 18years
                       </p>
                     </div>
@@ -174,8 +173,7 @@ const CheckoutComp = () => {
                           getValues("paymentMethod") === "PAYPAL"
                             ? "#987358"
                             : "rgba(30, 30, 30, 0.6)",
-                      }}
-                    >
+                      }}>
                       PayPal
                     </p>
                   </div>
@@ -187,8 +185,7 @@ const CheckoutComp = () => {
                           getValues("paymentMethod") === "STRIPE"
                             ? "#987358"
                             : "rgba(30, 30, 30, 0.6)",
-                      }}
-                    >
+                      }}>
                       Stripe
                     </p>
                   </div>
@@ -310,8 +307,7 @@ const CheckoutComp = () => {
                     <PayPalScriptProvider
                       options={{
                         "client-id": `${env.NEXT_PUBLIC_PAYPAL_ID}`,
-                      }}
-                    >
+                      }}>
                       <PayPalButtons
                         forceReRender={[totalCost]}
                         createOrder={(data, actions) => {
