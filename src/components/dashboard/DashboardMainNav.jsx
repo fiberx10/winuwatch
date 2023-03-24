@@ -8,11 +8,10 @@ import {
   UsergroupAddOutlined,
 } from "@ant-design/icons/lib/icons";
 import Image from "next/image";
-import useStore from "@/components/Store";
+import {useStore} from "@/components/Store";
 
 const DashboardMainNav = () => {
-  const Menu = useStore((state) => state.Menu);
-  const selectMenu = useStore((state) => state.selectMenu);
+  const { Menu, selectMenu } = useStore();
 
   const Dashmenus = ["Vue d'ensemble", "Concours", "Prix"];
   const secMenus = ["Participants", "Communication", "Paramètres"];
