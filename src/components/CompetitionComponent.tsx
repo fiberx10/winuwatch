@@ -1,59 +1,34 @@
 import Image from "next/image";
 import { useState } from "react";
 import styles from "@/styles/CompetitionPage.module.css";
-import useStore from "./Store";
-import { BackendLink } from "./Backend";
+import {useCart} from "./Store";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
+import { Competition, Watches } from "@prisma/client";
 
-const CompetitionComponent = ({ data }) => {
+const CompetitionComponent = ({
+  data,
+}: {
+  data: Competition & {
+    Watches: Watches;
+  };
+}) => {
   const [counter, setCounter] = useState(1);
   const [borderStyles, setBorderStyles] = useState(1);
-  const increasePopulation = useStore((state) => state.increasePopulation);
   const Arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25];
-  function SetItem() {
-    const items = {
-      compID: data.id,
-      number_tickets: counter,
-    };
-    if (typeof window !== "undefined") {
-      var a = [];
-      // Parse the serialized data back into an aray of objects
-      a = JSON.parse(localStorage.getItem("cartItems")) || [];
-      // Push the new data (whether it be an object or anything else) onto the array
-
-      if (
-        a.map((u) => u.compID === items.compID)[0] === true ||
-        a.map((u) => u.compID === items.compID)[1] === true
-      ) {
-        const newa = a.map((u) => (u.compID !== items.compID ? u : items));
-        a = newa;
-      } else {
-        a.push(items);
-      }
-
-      // Alert the array value
-      // Re-serialize the array back into a string and store it in localStorage
-      localStorage.setItem("cartItems", JSON.stringify(a));
-      increasePopulation(a.length);
-    }
-  }
-  const myLoader = ({ src }) => {
-    return `${BackendLink}/watch1.jpeg`;
-  };
-  console.log(borderStyles);
+  const {updateOrder, addComp, removeComp} = useCart()
   return (
     <div className={styles.CompetitionMain}>
       <Image
-        loader={myLoader}
+
         width={440}
         height={440}
         alt="watchImage"
-        src={`${BackendLink}/watch1.jpeg`}
+        src={data.Watches.imageURL[0] || "/images/watch1.jpeg"}
       />
       <div className={styles.CompRight}>
         <div className={styles.CompTit}>
-          <h1>Win the {data.Watch.name}</h1>
+          <h1>Win the {data.Watches.name}</h1>
           <p>market value £19,000</p>
         </div>
         <div className={styles.CompTicketSelec}>
@@ -65,7 +40,8 @@ const CompetitionComponent = ({ data }) => {
                   size="small"
                   exclusive
                   key={i}
-                  onChange={(e) => setBorderStyles(e.target.value)}
+                  //TODO: fix this
+                  //onChange={(e) => setBorderStyles(e.target.value as number)}
                   aria-label="text alignment"
                 >
                   <ToggleButton
@@ -96,7 +72,6 @@ const CompetitionComponent = ({ data }) => {
             className={styles.CounterSelec}
           >
             <Image width={13} height={1} src="/images/Minus.png" alt="minus" />
-
           </div>
           <div className={styles.counterValue}>{counter}</div>
           <div
@@ -105,12 +80,16 @@ const CompetitionComponent = ({ data }) => {
             }
             className={styles.CounterSelec}
           >
-
             <Image width={11} height={11} src="/images/plus.png" alt="plus" />
-
           </div>
         </div>
-        <button onClick={SetItem}>ADD TO CART</button>
+        <button onClick={() => {
+          addComp({
+            compID : data.id,
+            number_tickets : counter,
+            price_per_ticket : data.price
+          })
+        }} >ADD TO CART</button>
       </div>
     </div>
   );

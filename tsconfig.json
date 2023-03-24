@@ -28,7 +28,7 @@
     "**/*.tsx",
     "**/*.cjs",
     "**/*.mjs",
-    "src/components/Store.js"
-  ],
+    "src/components/Store.ts"
+, "src/components/NavBar.jsx"  ],
   "exclude": ["node_modules"]
 }

@@ -3,20 +3,17 @@ import { useEffect, useState } from "react";
 import { Drawer } from "@mui/material";
 import Image from "next/image";
 import Link from "next/link";
-import useStore from "./Store";
+import {useCart} from "./Store";
 import { useRouter } from "next/router";
 
 export default function NavBar() {
   const [open, setOpen] = useState(false);
   const router = useRouter();
-  const bears = useStore((state) => state.bears);
-  const [number, setNumber] = useState();
-  useEffect(() => {
-    setNumber(typeof window !== "undefined" ? bears : 0);
-  }, [bears]);
-  let howTo =
+  const { cardDetails } = useCart();
+
+  const howTo =
     typeof window !== "undefined" && document.getElementById("Howtoplay");
-  let theComp =
+  const theComp =
     typeof window !== "undefined" && document.getElementById("theComp");
   return (
     <div
@@ -63,10 +60,8 @@ export default function NavBar() {
           onClick={() => setOpen(!open)}
           className={styles.burger}
           alt="menu"
-
           width={38}
           height={7}
-
           src="/images/burgerMenu.svg"
         />
         <Drawer className={styles.Drawer} anchor="left" open={open}>
@@ -165,7 +160,7 @@ export default function NavBar() {
           }}
           onClick={() => router.push("/Cart")}
         >
-          cart ({number})
+          {`Cart (${cardDetails().Number_of_item})`}
         </span>
 
         <Image
@@ -175,7 +170,6 @@ export default function NavBar() {
           alt="global"
           src="/images/global.png"
         />
-
       </div>
     </div>
   );

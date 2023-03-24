@@ -2,10 +2,43 @@ import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { CompetitionStatus } from "@prisma/client";
-
+import {CreateOrderSchema} from "@/utils/Schema"
 export const CompetitionRouter = createTRPCRouter({
-  getAll: publicProcedure.query(({ ctx }) => {
-    return ctx.prisma.competition.findMany();
+  getAll: publicProcedure
+    .input(
+      z.object({
+        ids: z.array(z.string()),
+        status: z
+          .enum([
+            CompetitionStatus.ACTIVE,
+            CompetitionStatus.NOT_ACTIVE,
+            CompetitionStatus.COMPLETED,
+          ])
+          .optional(),
+      })
+    )
+    .query(({ ctx, input }) => {
+      return ctx.prisma.competition.findMany({
+        where: {
+          id: {
+            in: input.ids,
+          },
+          status: input.status,
+        },
+        include: {
+          Watches: true,
+        },
+      });
+    }),
+  getActives: publicProcedure.query(({ ctx }) => {
+    return ctx.prisma.competition.findMany({
+      where: {
+        status: CompetitionStatus.ACTIVE,
+      },
+      include: {
+        Watches: true,
+      },
+    });
   }),
   byID: publicProcedure
     .input(z.object({ id: z.string() }))
@@ -13,6 +46,9 @@ export const CompetitionRouter = createTRPCRouter({
       return ctx.prisma.competition.findUnique({
         where: {
           id: input.id,
+        },
+        include: {
+          Watches: true,
         },
       });
     }),
@@ -23,26 +59,27 @@ export const CompetitionRouter = createTRPCRouter({
         name: z.string(),
         start_date: z.date(),
         end_date: z.date(),
-        drawing_date : z.date(),
-        remaining_tickets : z.number(),
-        total_tickets : z.number(),
-        ticket_price : z.number(),
-        location : z.string(),
-        second_reward : z.string(),
-        price : z.number(),
-        status : z.enum([CompetitionStatus.ACTIVE, CompetitionStatus.NOT_ACTIVE, CompetitionStatus.COMPLETED]),
-        winner : z.string().optional(),
-        watchesId : z.string(),
+        drawing_date: z.date(),
+        remaining_tickets: z.number(),
+        total_tickets: z.number(),
+        ticket_price: z.number(),
+        location: z.string(),
+        second_reward: z.string(),
+        price: z.number(),
+        status: z.enum([
+          CompetitionStatus.ACTIVE,
+          CompetitionStatus.NOT_ACTIVE,
+          CompetitionStatus.COMPLETED,
+        ]),
+        winner: z.string().optional(),
+        watchesId: z.string(),
       })
     )
     .mutation(({ ctx, input }) => {
       return ctx.prisma.competition.create({
         data: input,
       });
-    }
-  ),
-
-
+    }),
 });
 
 export const WatchesRouter = createTRPCRouter({
@@ -120,30 +157,38 @@ export const WatchesRouter = createTRPCRouter({
         },
       });
     }),
-
 });
+
 
 
 export const PaymentRouter = createTRPCRouter({
   getAll: publicProcedure.query(({ ctx }) => {
     return ctx.prisma.order.findMany();
   }),
-  /*
-  create : publicProcedure
-    .input(z.object({
-      name : z.string(),
 
-    }))
-    .mutation(({ ctx, input }) => {
-      /*return ctx.prisma.order.create({
-        data: {
-          name: input.name,
-        },
-      });
+  create : publicProcedure
+  .input(CreateOrderSchema)
+  .mutation(({ ctx, input }) => {
+    const {watchids, ...data} = input;
+
+    //TODO: Create Order 
+    console.log(input)
+
+    return{
+      sucess : true,
+      error : "no error"
+    }
+
+    /*return ctx.prisma.order.create({
+      data: {
+        name: input.name,
+      },
+    });
       return {
         status : "success",
         error : null
       }
     }
-  ),*/
-})
+    ),*/
+  })
+});
