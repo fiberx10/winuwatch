@@ -6,7 +6,7 @@ import {useStore} from "@/components/Store";
 import DashboardNav from "../../components/dashboard/DashboardNav";
 
 const index = () => {
-  const Menu = useStore((state) => state.Menu);
+  const {Menu} = useStore();
 
   return (
     <div className={styles.MainCon}>

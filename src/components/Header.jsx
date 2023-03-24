@@ -1,13 +1,10 @@
 import NavBar from "./NavBar";
 import styles from "@/styles/Home.module.css";
-import { useState } from "react";
 import Image from "next/image";
 
 export default function Header() {
   const theComp =
     typeof window !== "undefined" && document.getElementById("theComp");
-  const [muted] = useState(true);
-
   return (
     <div className={styles.HomeHeader}>
       <NavBar />
@@ -22,7 +19,7 @@ export default function Header() {
           autoPlay
           loop
           playsInline
-          muted={muted}
+          muted={true}
         >
           <source
             src="/images/professional-watches-cosmograph-daytona-cover-video_portrait.webm"
