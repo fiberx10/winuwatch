@@ -28,7 +28,7 @@
 .alice-carousel__dots {
   display: flex;
   align-items: flex-start;
-  padding: 0px 10px !important;
+  margin: 30px 0px 0px 0px !important;
 }
 .alice-carousel__prev-btn {
   position: absolute;
