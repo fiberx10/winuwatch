@@ -13,6 +13,7 @@
   justify-content: space-between;
   overflow-y: hidden;
 }
+
 .vid {
   width: 100%;
   filter: invert(100%) grayscale(1) brightness(70%);
