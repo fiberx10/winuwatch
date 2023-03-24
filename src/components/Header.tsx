@@ -1,10 +1,23 @@
 import NavBar from "./NavBar";
 import styles from "@/styles/Home.module.css";
 import Image from "next/image";
+import { useEffect } from "react";
 
 export default function Header() {
   const theComp =
     typeof window !== "undefined" && document.getElementById("theComp");
+  useEffect(() => {
+    const handleScroll = () => {
+      const background = document.querySelector(
+        `.${styles.background ?? "undefined"}`
+      ) as HTMLElement & { style: CSSStyleDeclaration };
+      if (background) {
+        background.style.backgroundPositionY = `${-window.scrollY}px`;
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
   return (
     <div className={styles.HomeHeader}>
       <NavBar />
@@ -28,8 +41,7 @@ export default function Header() {
         </video>
       </div>
       <div className={styles.HeaderTit}>
-        <h2>winuwatch</h2>
-
+        <h2 className={styles.background}>winuwatch</h2>
         <h1>win your dream watch</h1>
       </div>
       <div className={styles.HeaderDesc}>

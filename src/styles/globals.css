@@ -2,6 +2,9 @@
   margin: 0;
   font-family: "Kanit", sans-serif;
 }
+html {
+  background-attachment: fixed;
+}
 @media only screen and (max-width: 930px) {
   .alice-carousel__next-btn {
     display: none !important;

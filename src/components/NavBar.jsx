@@ -1,8 +1,7 @@
 import styles from "../styles/Home.module.css";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Drawer } from "@mui/material";
 import Image from "next/image";
-import Link from "next/link";
 import { useCart } from "./Store";
 import { useRouter } from "next/router";
 
