@@ -14,6 +14,7 @@
   position: relative;
   overflow: hidden;
 }
+
 .vid {
   width: 100%;
   z-index: -999;
@@ -764,6 +765,9 @@
   }
   .Comp {
     text-align: center;
+  }
+  .watchConSkelet {
+    width: 100% !important;
   }
   .burger {
     display: flex;
