@@ -1,25 +1,25 @@
-import  { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "../styles/Home.module.css";
 import Timer from "./Timer";
 import { Skeleton } from "@mui/material";
 import Link from "next/link";
 import { BackendLink } from "./Backend";
-import {api} from "@/utils/api";
+import { api } from "@/utils/api";
 
 const TheCompetition = () => {
-  const {
-    data,
-    isLoading,
-    isFetching,
-    error
-  } = api.Competition.getActives.useQuery();
-  //TODO: Loading 
-  if (isLoading) return <p>loading ...</p>
+  const { data, isLoading, isFetching, error } =
+    api.Competition.getActives.useQuery();
+  //TODO: Loading
+  if (isLoading) return <p>loading ...</p>;
   return (
     <div id="theComp" style={{ marginBottom: "250px" }} className={styles.Comp}>
+      <p className={styles.CompP}>
+        “Necessarily a winner who will realize his dream or simply that of his
+        wife”
+      </p>
       <h1>The Competition</h1>
       <div className={styles.compWatches}>
-        {(data && data.length > 0) ? (
+        {data && data.length > 0 ? (
           data.map((watch) => {
             return (
               <div className={styles.watches} key={watch.id}>

@@ -1,16 +1,25 @@
 .HomeHeader {
-  height: 400px;
+  height: 460px;
   background: linear-gradient(
-      180deg,
-      rgba(255, 255, 255, 0.8) 0%,
-      rgba(104, 83, 67, 0.8) 100%
-    ),
-    url(../../public/images/main\ image.png);
+    180deg,
+    rgba(0, 0, 0, 0.12) 26.56%,
+    rgba(0, 0, 0, 0.584) 100%
+  );
   background-size: cover;
   background-position: center;
   display: flex;
+  position: relative;
   flex-direction: column;
   justify-content: space-between;
+  overflow-y: hidden;
+}
+.vid {
+  width: 100%;
+  filter: invert(100%) grayscale(1);
+  z-index: -999;
+  height: 100%;
+  position: absolute;
+  object-fit: cover;
 }
 .NavBarContainer {
   display: flex;
@@ -25,7 +34,7 @@
 }
 .NavBarContainer span {
   cursor: pointer;
-  color: #927c66;
+  color: #fff;
 }
 .Logo {
   object-fit: contain;
@@ -38,7 +47,7 @@
   text-transform: uppercase;
   justify-content: flex-start;
   gap: 4rem;
-  border-bottom: 1px solid #927c66;
+  border-bottom: 1px solid #fff;
   padding-bottom: 15px;
 }
 
@@ -49,7 +58,7 @@
   justify-content: flex-end;
   text-transform: uppercase;
   gap: 4rem;
-  border-bottom: 1px solid #927c66;
+  border-bottom: 1px solid #fff;
   padding-bottom: 15px;
 }
 .flexEnd img {
@@ -59,11 +68,23 @@
   display: flex;
   justify-content: center;
   position: relative;
+  margin-top: -50px;
 }
-.HeaderTit img {
-  object-fit: contain;
-  width: 872px;
-  height: 99px;
+.HeaderTit h2 {
+  font-weight: 600;
+  font-size: 120px;
+  font-family: "Montserrat", sans-serif;
+  text-transform: uppercase;
+  background: linear-gradient(
+    90.48deg,
+    #ad9565 0.24%,
+    #c09859 49.17%,
+    #372f24 104.89%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-fill-color: transparent;
 }
 @font-face {
   font-family: Iskry;
@@ -73,10 +94,10 @@
   position: absolute;
   color: white;
   text-transform: uppercase;
-  font-weight: 400;
   font-family: "Iskry", sans-serif;
-  font-size: 72px;
-  top: 10px;
+  font-weight: 400;
+  font-size: 60px;
+  bottom: -50px;
 }
 .HeaderDesc {
   display: flex;
@@ -98,6 +119,7 @@
 }
 .burger {
   display: none;
+  filter: brightness(0) invert(1);
 }
 .DrawerCon {
   display: flex;
@@ -148,12 +170,32 @@
   flex-direction: column;
   align-items: center;
 }
+.CompP {
+  font-weight: 300;
+  font-size: 15px;
+  color: #987358;
+  padding-top: 50px;
+}
 .Comp h1 {
-  font-weight: 400;
-  font-family: "Iskry", sans-serif;
+  font-family: "Montserrat", sans-serif;
   text-transform: uppercase;
   margin: 30px 0px;
+  font-weight: 600;
   font-size: 45px;
+  background: linear-gradient(
+    90.48deg,
+    #ad9565 0.24%,
+    #c09859 49.17%,
+    #372f24 104.89%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-fill-color: transparent;
+}
+.timerItem p {
+  font-family: "Montserrat", sans-serif !important;
+  font-weight: 400;
 }
 .watches {
   display: flex;
@@ -227,6 +269,9 @@
   font-family: "Iskry", sans-serif;
   text-transform: uppercase;
   text-align: center;
+  min-height: 100px;
+  display: grid;
+  place-items: center;
 }
 .watchCon p {
   font-weight: 400;
@@ -337,18 +382,26 @@
 .howtoContainer {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   padding: 0px 80px;
   margin-bottom: 100px;
 }
 .howtoContainer h1 {
-  font-weight: 400;
+  font-weight: 600;
   font-size: 45px;
-  font-family: "Iskry", sans-serif;
+  font-family: "Montserrat", sans-serif;
   text-transform: uppercase;
-  width: 100%;
-  text-align: left;
   padding-bottom: 20px;
+  background: linear-gradient(
+    90.48deg,
+    #ad9565 0.24%,
+    #c09859 49.17%,
+    #372f24 104.89%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-fill-color: transparent;
 }
 .howtoText {
   width: 100%;
@@ -533,10 +586,20 @@
   gap: 5rem;
 }
 .RevTop h1 {
-  font-weight: 400;
+  font-weight: 600;
   font-size: 45px;
-  font-family: "Iskry", sans-serif;
+  font-family: "Montserrat", sans-serif;
   text-transform: uppercase;
+  background: linear-gradient(
+    90.48deg,
+    #ad9565 0.24%,
+    #c09859 49.17%,
+    #372f24 104.89%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-fill-color: transparent;
 }
 .Rating {
   margin-top: 10px;
@@ -583,7 +646,8 @@
 .Footer {
   width: 100%;
   height: 262px;
-  background: #cbb9ac;
+  background: #a8957e;
+  color: white;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -604,7 +668,7 @@
 }
 .menusGrid a {
   text-decoration: none;
-  color: black;
+  color: white;
   text-transform: uppercase;
   font-weight: 400;
   font-size: 10px;
@@ -616,7 +680,7 @@
   justify-content: space-between;
   width: 359px;
   padding: 15px 0px;
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid white;
 }
 .emails p {
   font-weight: 300;
@@ -625,7 +689,7 @@
 .emails a {
   font-weight: 300;
   font-size: 14px;
-  color: #8e6e57;
+  color: white;
 }
 .FooterTopRight {
   margin-top: -20px;
@@ -636,7 +700,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 15px 0px;
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid white;
 }
 .payment p {
   font-weight: 300;
@@ -647,24 +711,29 @@
   align-items: center;
   gap: 1rem;
 }
-.visaicons {
-  display: flex;
-  align-items: center;
-}
+
 .visa {
   display: flex;
   align-items: center;
   justify-content: center;
+  border: 1px solid white;
+  border-radius: 3px;
+  font-weight: 500;
+  font-size: 14px;
+  font-style: italic;
+  padding: 1px 7px;
 }
-.visa img {
-  border: 1px solid #8e6e57;
-  padding: 5px;
-  border-radius: 5px;
-}
+
 .visaicons {
-  border: 1px solid #8e6e57;
-  padding: 5px;
-  border-radius: 5px;
+  display: flex;
+  align-items: center;
+
+  border: 1px solid white;
+  padding: 4.5px 8px;
+  border-radius: 3px;
+}
+.visaicons img {
+  filter: brightness(0) invert(1);
 }
 
 .FooterBot h3 {
@@ -685,6 +754,9 @@
 @media only screen and (min-width: 320px) and (max-width: 930px) {
   .mobile {
     display: none;
+  }
+  .Comp {
+    text-align: center;
   }
   .burger {
     display: flex;
@@ -715,12 +787,10 @@
   }
   .HomeHeader {
     background-position: 23% 50%;
+    overflow-x: hidden;
   }
   .HeaderTit {
     margin-bottom: -60px;
-  }
-  .HeaderTit img {
-    width: 100%;
   }
 
   .HeaderTit h1 {
@@ -729,7 +799,10 @@
     top: -5px;
     line-height: 3.2rem;
   }
-
+  .HeaderTit h2 {
+    width: 100%;
+    font-size: 60px;
+  }
   .HeaderDesc p {
     width: 80%;
   }
@@ -740,6 +813,7 @@
   .watches {
     flex-direction: column-reverse;
     align-items: center;
+    width: 100%;
   }
   .watchCon {
     width: 100%;
@@ -868,6 +942,7 @@
   }
   .RevTop {
     gap: 0;
+    flex-direction: column;
   }
   .RevTop h1 {
     padding: 0px 15px 15px 0px;
@@ -969,7 +1044,7 @@
   .howtoText p {
     font-size: 14px;
   }
-  .Comp h1 {
+  .Comp {
     text-align: center;
   }
 }

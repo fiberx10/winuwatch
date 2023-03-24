@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Drawer } from "@mui/material";
 import Image from "next/image";
 import Link from "next/link";
-import {useCart} from "./Store";
+import { useCart } from "./Store";
 import { useRouter } from "next/router";
 
 export default function NavBar() {
@@ -66,16 +66,15 @@ export default function NavBar() {
         />
         <Drawer className={styles.Drawer} anchor="left" open={open}>
           <div className={styles.DrawerCon}>
-            <Link
+            <span
               className={styles.DrawerMenu}
               style={{
                 fontSize: "20px",
                 fontWeight: "500",
               }}
-              href="/"
             >
               Menu
-            </Link>
+            </span>
             <hr />
             <span onClick={() => router.push("/")}>Home</span>
             <span
@@ -116,11 +115,11 @@ export default function NavBar() {
         </Drawer>
       </div>
       <Image
-        width={150}
-        height={108.42}
+        width={200}
+        height={105.42}
         className={styles.Logo}
         alt="logo"
-        src="/images/logo.png"
+        src="/images/newLogo.png"
       />
 
       <div className={styles.flexEnd}>
