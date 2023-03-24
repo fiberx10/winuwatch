@@ -15,12 +15,27 @@ export default function NavBar() {
     typeof window !== "undefined" && document.getElementById("Howtoplay");
   const theComp =
     typeof window !== "undefined" && document.getElementById("theComp");
+  console.log(typeof window !== "undefined" && location.pathname === "/");
   return (
     <div
       onClick={() => open && setOpen(false)}
       className={styles.NavBarContainer}
+      style={{
+        color:
+          typeof window !== "undefined" && location.pathname !== "/"
+            ? "#927C66"
+            : "white",
+      }}
     >
-      <div className={styles.flexStart}>
+      <div
+        style={{
+          borderBottom:
+            typeof window !== "undefined" && location.pathname !== "/"
+              ? "1px solid #927C66"
+              : "1px solid white",
+        }}
+        className={styles.flexStart}
+      >
         <span
           onClick={() =>
             typeof window !== "undefined" && location.pathname !== "/"
@@ -114,15 +129,28 @@ export default function NavBar() {
           </div>
         </Drawer>
       </div>
+
       <Image
         width={200}
         height={105.42}
         className={styles.Logo}
         alt="logo"
-        src="/images/newLogo.png"
+        src={`/images/${
+          typeof window !== "undefined" && location.pathname !== "/"
+            ? "logo.png"
+            : "newLogo.png"
+        }`}
       />
 
-      <div className={styles.flexEnd}>
+      <div
+        style={{
+          borderBottom:
+            typeof window !== "undefined" && location.pathname !== "/"
+              ? "1px solid #927C66"
+              : "1px solid white",
+        }}
+        className={styles.flexEnd}
+      >
         <span
           style={{
             fontWeight:

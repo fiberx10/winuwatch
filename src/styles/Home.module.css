@@ -15,7 +15,7 @@
 }
 .vid {
   width: 100%;
-  filter: invert(100%) grayscale(1);
+  filter: invert(100%) grayscale(1) brightness(70%);
   z-index: -999;
   height: 100%;
   position: absolute;
@@ -28,13 +28,9 @@
   font-size: 15px;
   gap: 3rem;
 }
-.NavBarContainer a {
-  text-decoration: none;
-  color: #927c66;
-}
+
 .NavBarContainer span {
   cursor: pointer;
-  color: #fff;
 }
 .Logo {
   object-fit: contain;
@@ -47,7 +43,7 @@
   text-transform: uppercase;
   justify-content: flex-start;
   gap: 4rem;
-  border-bottom: 1px solid #fff;
+
   padding-bottom: 15px;
 }
 
@@ -58,7 +54,7 @@
   justify-content: flex-end;
   text-transform: uppercase;
   gap: 4rem;
-  border-bottom: 1px solid #fff;
+
   padding-bottom: 15px;
 }
 .flexEnd img {
