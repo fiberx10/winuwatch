@@ -5,9 +5,10 @@ import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js";
 import { useRouter } from "next/router";
 import { env } from "../env.mjs";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { api, RouterInputs } from "@/utils/api";
-import { z } from "zod";
-import { OrderStore, useCart, Formater } from "./Store";
+import { api, RouterInputs, Formater } from "@/utils";
+
+import { OrderStore, useCart} from "./Store";
+
 //import { CreateOrderSchema} from "@/utils/Schema";
 //import { zodResolver } from '@hookform/resolvers/zod';
 
@@ -26,7 +27,7 @@ const IsLegal = (Birthdate?: Date) => {
 
 const CheckoutComp = () => {
   const router = useRouter();
-  const { order, cardDetails, reset, addComp, removeComp, updateComp } =
+  const { competitions, cardDetails, reset, addComp, removeComp, updateComp } =
     useCart();
   const { totalCost, Number_of_item } = cardDetails();
   const [error, setError] = useState<string | undefined>();
@@ -42,7 +43,7 @@ const CheckoutComp = () => {
       paymentMethod: "STRIPE",
       checkedEmail: false,
       checkedSMS: false,
-      watchids: order?.comps.map((comp) => comp.compID) || [],
+      watchids: competitions.map((comp) => comp.compID) || [],
     },
   });
   const onSubmit: SubmitHandler<RouterInputs["Payment"]["create"]> = async (
@@ -69,16 +70,14 @@ const CheckoutComp = () => {
     }
   };
   const { data: items, isLoading } = api.Competition.getAll.useQuery({
-    ids: order?.comps.map((comp) => comp.compID) || [],
+    ids: competitions.map((comp) => comp.compID)
   });
 
   return (
     <div className={styles.CheckoutMain}>
       {items && (
         <div className={styles.formMain}>
-          <form
-            
-          >
+          <form>
             <div className={styles.CheckoutLeft}>
               <div className={styles.leftFormItem}>
                 <h1>Billing Information</h1>

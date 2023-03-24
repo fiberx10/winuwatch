@@ -1,11 +1,11 @@
 import DashboardComp from "@/components/dashboard/DashboardComp";
 import styles from "@/styles/Dashboard.module.css";
 import DashboardMainNav from "@/components/dashboard/DashboardMainNav";
-import {useStore as UseStore} from "@/components/Store";
+import { useStore as UseStore } from "@/components/Store";
 import DashboardNav from "@/components/dashboard/DashboardNav";
 
 const index = () => {
-  const {Menu} = UseStore();
+  const { Menu } = UseStore();
 
   return (
     <div className={styles.MainCon}>

@@ -10,34 +10,26 @@ export interface OrderStore extends Order {
   comps: Comp[];
 }
 
-export const Formater = (value: number | bigint) =>
-  new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-  }).format(value);
-
 interface RootState {
-  order:
-    | OrderStore
-    | undefined
-    | {
-        comps: Comp[];
-      };
-  updateOrder: (NewOrder: OrderStore) => void;
+  competitions: Comp[];
   addComp: ({ compID, number_tickets, price_per_ticket }: Comp) => void;
   removeComp: (compID: string) => void;
   cardDetails: () => {
     totalCost: number;
     Number_of_item: number;
   };
-  updateComp: ({ compID, number_tickets }: Comp) => void;
-  updateTotal: (total: number) => void;
+  updateComp: ({
+    compID,
+    number_tickets,
+    price_per_ticket,
+  }: Comp & { price_per_ticket: number | undefined }) => void;
   reset: () => void;
 }
 
 type Pages = "Vue d'ensemble" | "Concours" | "Prix";
+
 export const useStore = create<{
-  menu: Pages, 
+  menu: Pages;
   selectMenu: (params: "Vue d'ensemble" | "Concours" | "Prix") => void;
 }>((set, get) => ({
   menu: "Vue d'ensemble",
@@ -45,62 +37,33 @@ export const useStore = create<{
 }));
 
 export const useCart = create<RootState>((set, get) => ({
-  order: undefined,
-  reset: () => set({ order: undefined }),
-  updateOrder: (NewOrder) =>
-    set(({ order }) => ({
-      order: order ? { ...order, ...NewOrder } : NewOrder,
-    })),
+  competitions: [],
+  reset: () =>
+    set({
+      competitions: [],
+    }),
   cardDetails: () => {
-    const { order } = get();
-
-    return order
-      ? {
-          totalCost: order.comps.reduce((acc, c) => {
-            return acc + c.number_tickets * c.price_per_ticket;
-          }, 0),
-          Number_of_item: order.comps.length,
-        }
-      : {
-          totalCost: 0,
-          Number_of_item: 0,
-        };
+    const { competitions } = get();
+    return {
+      totalCost: competitions.reduce(
+        (acc, c) => acc + c.number_tickets * c.price_per_ticket,
+        0
+      ),
+      Number_of_item: competitions.length,
+    };
   },
-  updateTotal: (total) =>
-    set(({ order }) => ({
-      order: order && {
-        ...order,
-        total,
-      },
-    })),
-
   addComp: (comp) =>
-    set(({ order }) => ({
-      order: order
-        ? {
-            ...order,
-            comps: [...order.comps, comp],
-          }
-        : { comps: [comp] },
+    set(({ competitions }) => ({
+      competitions: [...competitions, comp],
     })),
   removeComp: (compID) =>
-    set(({ order }) => ({
-      order: order
-        ? {
-            ...order,
-            comps: order.comps.filter((c) => c.compID !== compID),
-          }
-        : { comps: [] },
+    set(({ competitions }) => ({
+      competitions: competitions.filter((c) => c.compID !== compID),
     })),
   updateComp: (comp) =>
-    set(({ order }) => ({
-      order: order
-        ? {
-            ...order,
-            comps: order.comps.map((c) =>
-              c.compID === comp.compID ? comp : c
-            ),
-          }
-        : { comps: [] },
+    set(({ competitions }) => ({
+      competitions: competitions.map((c) =>
+        c.compID === comp.compID ? { ...c, ...comp } : c
+      ),
     })),
 }));
