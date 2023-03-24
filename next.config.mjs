@@ -17,8 +17,8 @@ const config = {
   images: {
     remotePatterns: [
       {
-        hostname :"loremflickr.com",
-        protocol : "https"
+        hostname: "loremflickr.com",
+        protocol: "https",
       },
     ],
   },

@@ -168,7 +168,6 @@
   flex-direction: column;
 
   justify-content: flex-end;
-
 }
 .splide__track--nav > .splide__list > .splide__slide.is-active {
   border: 0 !important;

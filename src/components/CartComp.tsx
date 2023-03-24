@@ -1,29 +1,25 @@
-import React, { useEffect, useState } from "react";
 import styles from "@/styles/Cart.module.css";
 import Image from "next/image";
-import { Formater,useCart } from "./Store";
+import { useCart } from "./Store";
 import { useRouter } from "next/router";
-import { BackendLink } from "./Backend";
-import { api } from "@/utils/api";
+import { Formater, api } from "@/utils";
 import Link from "next/link";
 const CartComp = () => {
-  const { cardDetails, order, addComp, updateComp, removeComp } = useCart();
-  const {
-    data: items,
-    isLoading,
-    error,
-  } = api.Competition.getAll.useQuery({
-    ids: order?.comps.map((comp) => comp.compID) || [],
+  const { cardDetails, addComp, updateComp, removeComp, competitions } =
+    useCart();
+  const { data } = api.Competition.getAll.useQuery({
+    ids: competitions.map(({ compID }) => compID),
   });
   const router = useRouter();
   const { totalCost, Number_of_item } = cardDetails();
   //TODO: Loading
-  if (isLoading) return <p>loading ...</p>;
   return (
     <div className={styles.CartMain}>
-      {order?.comps && order.comps.length > 0 ? (
-        order.comps.map((comp, index) => {
-          const ComptetionData = items?.find((item) => item.id === comp.compID);
+      {data && competitions.length > 0 ? (
+        competitions.map((comp, index) => {
+          const ComptetionData = data.find(
+            (compData) => compData.id === comp.compID
+          );
           if (!ComptetionData) return null;
           return (
             <div className={styles.Watch} key={index}>
@@ -33,13 +29,13 @@ const CartComp = () => {
                   height={195}
                   alt="watchImage"
                   src={
-                    ComptetionData.Watches.imageURL[0] || "/images/watch1.jpeg"
+                    ComptetionData.Watches.images_url[0] || "/images/watch.png"
                   }
                 />
                 <div className={styles.watchleftDesc}>
-                  <h1>{ComptetionData.Watches.name}</h1>
-                  <h4>{ComptetionData.Watches.bracelet_material}</h4>
-                  <p>{ComptetionData.Watches.owner_ref}</p>
+                  <h1>{ComptetionData.Watches.brand}</h1>
+                  <h4>{ComptetionData.Watches.Bracelet_material}</h4>
+                  <p>{ComptetionData.Watches.model}</p>
                 </div>
               </div>
               <div className={styles.CartRight}>
