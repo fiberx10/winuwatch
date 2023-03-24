@@ -2,8 +2,8 @@
   height: 460px;
   background: linear-gradient(
     180deg,
-    rgba(255, 255, 255, 0.8) 0%,
-    rgba(104, 83, 67, 0.8) 100%
+    rgba(0, 0, 0, 0.12) 26.56%,
+    rgba(0, 0, 0, 0.584) 100%
   );
   background-size: cover;
   background-position: center;
@@ -12,6 +12,7 @@
   flex-direction: column;
   justify-content: space-between;
   position: relative;
+  overflow: hidden;
 }
 .vid {
   width: 100%;
@@ -19,6 +20,7 @@
   height: 100%;
   position: absolute;
   object-fit: cover;
+  filter: brightness(50%);
 }
 .NavBarContainer {
   display: flex;
@@ -64,21 +66,21 @@
   justify-content: center;
   position: relative;
   margin-top: -50px;
+  text-align: center;
 }
 .HeaderTit h2 {
   font-weight: 600;
   font-size: 120px;
   font-family: "Montserrat", sans-serif;
   text-transform: uppercase;
-  background: linear-gradient(
-    90.48deg,
-    #ad9565 0.24%,
-    #c09859 49.17%,
-    #372f24 104.89%
-  );
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  background-image: url(https://content.rolex.com/dam/watches/family-pages/datejust/2023/a-date-with-destiny/classic-watches-datejust-a-date-with-destiny-yellow-cut-out.jpg);
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
   background-clip: text;
+  background-size: 100% 100vh;
+  color: transparent;
+  -webkit-background-clip: text;
 }
 @font-face {
   font-family: Iskry;
@@ -175,15 +177,14 @@
   margin: 30px 0px;
   font-weight: 600;
   font-size: 45px;
-  background: linear-gradient(
-    90.48deg,
-    #ad9565 0.24%,
-    #c09859 49.17%,
-    #372f24 104.89%
-  );
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  background-image: url(https://content.rolex.com/dam/watches/family-pages/datejust/2023/a-date-with-destiny/classic-watches-datejust-a-date-with-destiny-yellow-cut-out.jpg);
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
   background-clip: text;
+  background-size: 100% 100vh;
+  color: transparent;
+  -webkit-background-clip: text;
 }
 .timerItem p {
   font-family: "Montserrat", sans-serif !important;
@@ -234,11 +235,10 @@
   justify-content: flex-end;
 }
 .watchContent {
-  margin-bottom: -150px;
+  margin-bottom: -120px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.5rem;
 }
 .watchCon a {
   width: 12rem;
@@ -385,15 +385,14 @@
   font-family: "Montserrat", sans-serif;
   text-transform: uppercase;
   padding-bottom: 20px;
-  background: linear-gradient(
-    90.48deg,
-    #ad9565 0.24%,
-    #c09859 49.17%,
-    #372f24 104.89%
-  );
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  background-image: url(https://content.rolex.com/dam/watches/family-pages/datejust/2023/a-date-with-destiny/classic-watches-datejust-a-date-with-destiny-yellow-cut-out.jpg);
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
   background-clip: text;
+  background-size: 100% 100vh;
+  color: transparent;
+  -webkit-background-clip: text;
 }
 .howtoText {
   width: 100%;
@@ -522,7 +521,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: space-evenly;
   position: relative;
 }
 .certifContainer h1 {
@@ -533,30 +532,38 @@
 }
 .certifContainer h2 {
   font-weight: 400;
-  font-size: 27px;
-  padding: 10px 0px;
+  font-size: 28px;
+  color: #ffffff;
   width: 100%;
-  color: white;
-  text-transform: uppercase;
   text-align: center;
-  border-top: 2px solid white;
-  border-bottom: 2px solid white;
+  text-transform: uppercase;
+  border-top: 1px solid white;
+  border-bottom: 1px solid white;
   position: absolute;
-  bottom: 7rem;
+  bottom: 10%;
 }
 .certifBox {
-  background: url(../../public/images/cover.png);
-  background-repeat: no-repeat;
   display: flex;
   align-items: center;
+  background-image: url(../../public/images/cover.png);
+  background-repeat: no-repeat;
+  background-position: -25% 20%;
+  flex-direction: column;
+  text-align: center;
   justify-content: center;
-  background-size: cover;
-  background-position: -300%;
   width: 419px;
   height: 532px;
-  margin-top: 50px;
 }
-
+.certifBox img {
+  width: 238px;
+  height: 363px;
+}
+.certifBox a {
+  font-weight: 700;
+  font-size: 20px;
+  font-family: "Montserrat", sans-serif;
+  color: #ffffff;
+}
 .ReviewsContainer {
   display: flex;
   align-items: center;
@@ -582,15 +589,14 @@
   font-size: 45px;
   font-family: "Montserrat", sans-serif;
   text-transform: uppercase;
-  background: linear-gradient(
-    90.48deg,
-    #ad9565 0.24%,
-    #c09859 49.17%,
-    #372f24 104.89%
-  );
+  background-image: url(https://content.rolex.com/dam/watches/family-pages/datejust/2023/a-date-with-destiny/classic-watches-datejust-a-date-with-destiny-yellow-cut-out.jpg);
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-clip: text !important;
+  background-size: 100% 100vh;
+  color: transparent;
   -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
 }
 .Rating {
   margin-top: 10px;
@@ -737,12 +743,22 @@
     font-size: 45px !important;
   }
 }
+@media only screen and (max-width: 425px) {
+  .certifBox p {
+    font-size: 10px;
+    height: 250px;
+    overflow: hidden;
+  }
+}
 @media only screen and (max-width: 334px) {
   .HeaderTit h1 {
     font-size: 40px !important;
   }
 }
 @media only screen and (min-width: 320px) and (max-width: 930px) {
+  .certifBox p {
+    font-size: 16px;
+  }
   .mobile {
     display: none;
   }
@@ -784,21 +800,30 @@
     overflow: hidden;
   }
   .HeaderTit {
-    margin-bottom: -60px;
+    margin-bottom: -80px;
+    flex-direction: column;
+    padding: 0px 10px;
   }
 
   .HeaderTit h1 {
-    font-size: 56px;
+    font-size: 45px;
     text-align: center;
-    top: -5px;
+    position: initial;
     line-height: 3.2rem;
   }
   .HeaderTit h2 {
     width: 100%;
-    font-size: 60px;
+    font-size: 58px;
   }
   .HeaderDesc p {
     width: 80%;
+  }
+  .CompP {
+    font-weight: 300;
+    font-size: 12px;
+  }
+  .Comp h1 {
+    font-size: 35px;
   }
   .compWatches {
     flex-direction: column;
@@ -810,10 +835,10 @@
     width: 100%;
   }
   .watchCon {
-    width: 100%;
+    width: 90%;
     background-repeat: no-repeat;
     background-position: center;
-    background-size: cov;
+    background-size: cover;
   }
   .timer {
     flex-direction: row;
@@ -867,6 +892,7 @@
   }
   .howtoContainer {
     padding: 0 20px;
+    align-items: center;
   }
   .howtoLine {
     position: absolute;
@@ -922,6 +948,7 @@
     width: 345px;
     height: 438px;
     background-size: cover;
+    background-position: -300%;
   }
   .certifBox img {
     width: 196px;
@@ -1025,7 +1052,7 @@
     width: 90%;
   }
   .certifBox {
-    width: 100%;
+    width: 90%;
     background-position: 0;
   }
   .RevTop {

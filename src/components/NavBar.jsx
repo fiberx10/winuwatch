@@ -196,7 +196,12 @@ export default function NavBar() {
 
         <Image
           width={15}
-          style={{ objectFit: "contain" }}
+          style={{
+            filter:
+              typeof window !== "undefined" && location.pathname !== "/"
+                ? ""
+                : "brightness(0) invert(1)",
+          }}
           height={15}
           alt="global"
           src="/images/global.png"

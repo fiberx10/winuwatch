@@ -65,7 +65,7 @@ const HowToPlay = () => {
         <div className={styles.howtoTxt4}>
           <h2>Win your dream watch!</h2>
           <p>
-            And that&apos;s it! You could walk away with a new £10,000 watch –
+            And that&apos;s it! You could walk away with a new £20,000 watch –
             for as little as £25.
           </p>
         </div>

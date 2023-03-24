@@ -9,6 +9,9 @@
   .alice-carousel__prev-btn {
     display: none !important;
   }
+  .alice-carousel__dots {
+    padding: 0px 10px !important;
+  }
 }
 .MuiRating-icon {
   color: #987358;
