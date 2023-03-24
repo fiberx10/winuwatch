@@ -52,8 +52,6 @@ const CheckoutComp = () => {
     data
   ) => {
     //check if the date is more than 16 years
-    const LegalAge = 18;
-    const now = new Date();
 
     if (data.date && IsLegal(data.date)) {
       const { sucess, error: trpcError } = await api.Payment.create
