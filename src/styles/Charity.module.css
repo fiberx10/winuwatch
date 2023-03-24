@@ -4,8 +4,8 @@
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  gap: 5rem;
-  padding: 5rem 0;
+  gap: 4rem;
+  padding: 2rem 0;
 }
 .CharityHeader {
   display: flex;
@@ -14,7 +14,8 @@
   justify-content: center;
 }
 .CharityHeader h3 {
-  font-weight: 700;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
   font-size: 60px;
   line-height: 68px;
   text-align: center;
@@ -33,12 +34,12 @@
   line-height: 68px;
   text-align: center;
   text-transform: uppercase;
-
+  font-family: "Iskry", sans-serif;
   color: #1e1e1e;
 }
 .charityTop {
   display: flex;
-  width: 100%;
+
   align-items: center;
   justify-content: space-evenly;
 }
@@ -53,60 +54,69 @@
   display: flex;
   flex-direction: column;
   padding: 0px 20px;
+  margin-top: 20px;
+  height: 100%;
+  gap: 0.5rem;
+  position: relative;
 }
 .charity {
-  width: 308px;
+  width: 80%;
   height: 355px;
   background: #ffffff;
   box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.03);
   border-radius: 13px;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: space-evenly;
+  justify-content: space-between;
 }
 .charity button {
-  width: 140px;
+  width: 186.09px;
   height: 46px;
   background: #cbb9ac;
   border: 0;
   cursor: pointer;
   font-weight: 700;
-  font-size: 14px;
-  line-height: 18px;
+  font-size: 20px;
   text-align: center;
   text-transform: uppercase;
   color: white;
-  font-family: "Orbitron", sans-serif;
+  font-family: "Montserrat", sans-serif;
+  position: absolute;
+  bottom: 10%;
+  right: 5%;
 }
 .charity h4 {
   text-transform: uppercase;
 
   color: #1e1e1e;
-  font-weight: 600;
+  font-weight: 300;
   font-size: 24px;
 }
-.charityTop p {
-  font-weight: 600;
-  font-size: 24px;
+.amount {
+  font-weight: 500 !important;
+  font-size: 45px !important;
+  font-family: "Montserrat", sans-serif;
   text-transform: uppercase;
-
-  color: #987358;
+  color: #987358 !important;
 }
+
 .CharityBot h3 {
   font-weight: 600;
   font-size: 24px;
+  color: #1e1e1e;
   text-transform: uppercase;
 }
 .CharityBot p {
   font-weight: 400;
   font-size: 16px;
   text-transform: uppercase;
-
+  width: 90%;
   color: rgba(30, 30, 30, 0.68);
 }
 .CharityGrid {
   display: flex;
+  width: 100%;
+  flex-direction: column;
   flex-wrap: wrap;
   gap: 1rem;
   align-items: center;
@@ -130,7 +140,23 @@
   .CharityMain {
     margin-top: 3rem;
   }
-
+  .CharityGrid {
+    flex-direction: column;
+  }
+  .charity {
+    flex-direction: column;
+    height: fit-content;
+    width: 84%;
+    padding-bottom: 20px;
+  }
+  .charity button {
+    position: initial;
+    margin-top: 50px;
+  }
+  .CharityBot {
+    align-items: center;
+    text-align: center;
+  }
   .CharityH1 h1 {
     font-size: 25px;
   }

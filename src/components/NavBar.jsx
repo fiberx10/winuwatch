@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Drawer } from "@mui/material";
 import Image from "next/image";
 import Link from "next/link";
-import {useCart} from "./Store";
+import { useCart } from "./Store";
 import { useRouter } from "next/router";
 
 export default function NavBar() {
@@ -15,12 +15,27 @@ export default function NavBar() {
     typeof window !== "undefined" && document.getElementById("Howtoplay");
   const theComp =
     typeof window !== "undefined" && document.getElementById("theComp");
+  console.log(typeof window !== "undefined" && location.pathname === "/");
   return (
     <div
       onClick={() => open && setOpen(false)}
       className={styles.NavBarContainer}
+      style={{
+        color:
+          typeof window !== "undefined" && location.pathname !== "/"
+            ? "#927C66"
+            : "white",
+      }}
     >
-      <div className={styles.flexStart}>
+      <div
+        style={{
+          borderBottom:
+            typeof window !== "undefined" && location.pathname !== "/"
+              ? "1px solid #927C66"
+              : "1px solid white",
+        }}
+        className={styles.flexStart}
+      >
         <span
           onClick={() =>
             typeof window !== "undefined" && location.pathname !== "/"
@@ -56,6 +71,10 @@ export default function NavBar() {
         <Image
           style={{
             cursor: "pointer",
+            filter:
+              typeof window !== "undefined" && location.pathname !== "/"
+                ? ""
+                : "brightness(0) invert(1)",
           }}
           onClick={() => setOpen(!open)}
           className={styles.burger}
@@ -66,16 +85,15 @@ export default function NavBar() {
         />
         <Drawer className={styles.Drawer} anchor="left" open={open}>
           <div className={styles.DrawerCon}>
-            <Link
+            <span
               className={styles.DrawerMenu}
               style={{
                 fontSize: "20px",
                 fontWeight: "500",
               }}
-              href="/"
             >
               Menu
-            </Link>
+            </span>
             <hr />
             <span onClick={() => router.push("/")}>Home</span>
             <span
@@ -115,15 +133,28 @@ export default function NavBar() {
           </div>
         </Drawer>
       </div>
+
       <Image
-        width={150}
-        height={108.42}
+        width={200}
+        height={105.42}
         className={styles.Logo}
         alt="logo"
-        src="/images/logo.png"
+        src={`/images/${
+          typeof window !== "undefined" && location.pathname !== "/"
+            ? "logo.png"
+            : "newLogo.png"
+        }`}
       />
 
-      <div className={styles.flexEnd}>
+      <div
+        style={{
+          borderBottom:
+            typeof window !== "undefined" && location.pathname !== "/"
+              ? "1px solid #927C66"
+              : "1px solid white",
+        }}
+        className={styles.flexEnd}
+      >
         <span
           style={{
             fontWeight:
