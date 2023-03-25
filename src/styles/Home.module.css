@@ -412,6 +412,7 @@
   position: relative;
 }
 .howtoText button {
+  font-family: "Montserrat", sans-serif;
   position: absolute;
   bottom: 0;
   right: 10rem;

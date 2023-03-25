@@ -8,25 +8,28 @@ import { Backdrop, Box, Fade, Modal } from "@mui/material";
 import { CloseOutlined } from "@ant-design/icons";
 const CartComp = () => {
   const [open, setOpen] = useState(false);
+  const [wrong, setWrong] = useState(false);
+
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const { cardDetails, addComp, updateComp, removeComp, competitions } =
-    useCart();
+  const { cardDetails, updateComp, removeComp, competitions } = useCart();
 
   const { data } = api.Competition.getAll.useQuery({
     ids: competitions.map(({ compID }) => compID),
   });
+  const { data: question } = api.Question.getOneRandom.useQuery();
 
   const router = useRouter();
+  console.log(question);
 
-  const { totalCost, Number_of_item } = cardDetails();
+  const { totalCost } = cardDetails();
   const style = {
     position: "absolute",
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
-    width: 400,
+    width: "70%",
     bgcolor: "background.paper",
     border: "1px solid #CBB9AC",
     boxShadow: 24,
@@ -34,7 +37,6 @@ const CartComp = () => {
     borderRadius: "10px",
   };
   //TODO: Loading
-  console.log(totalCost);
 
   return (
     <div className={styles.CartMain}>
@@ -140,16 +142,55 @@ const CartComp = () => {
         >
           <Fade in={open}>
             <Box className={styles.ModalBox} sx={style}>
-              <div>
-                <h2 id="spring-modal-title">Text in a modal</h2>
-                <span onClick={handleClose}>
-                  <CloseOutlined />
-                </span>
-              </div>
-              <p id="spring-modal-description">
-                In Order to continue to the checkout page you must answer this
-                question:
-              </p>
+              {competitions.length === 0 ? (
+                <div>
+                  <p id="spring-modal-description">Cart is empty</p>
+                  <span onClick={handleClose}>
+                    <CloseOutlined />
+                  </span>
+                </div>
+              ) : (
+                <>
+                  <div>
+                    <p id="spring-modal-description">
+                      In Order to continue to the checkout page you must answer
+                      this question:
+                    </p>
+                    <span onClick={handleClose}>
+                      <CloseOutlined />
+                    </span>
+                  </div>
+                  <h1>{question?.question}</h1>
+                  <h2
+                    style={{ display: wrong ? "flex" : "none", color: "red" }}
+                  >
+                    Wrong Answer
+                  </h2>
+                  <div className={styles.questionsCon}>
+                    {question?.answers.map((quest, i) => {
+                      return (
+                        <button
+                          onClick={() => {
+                            quest === question?.correctAnswer
+                              ? router
+                                  .push("/CheckoutPage")
+                                  .then(() => {
+                                    return null;
+                                  })
+                                  .catch(() => {
+                                    return null;
+                                  })
+                              : setWrong(true);
+                          }}
+                          key={i}
+                        >
+                          {quest}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </>
+              )}
             </Box>
           </Fade>
         </Modal>
