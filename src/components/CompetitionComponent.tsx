@@ -14,10 +14,13 @@ const CompetitionComponent = ({
   };
 }) => {
   const [counter, setCounter] = useState(1);
+  const [filter, setFilter] = useState(5);
   const [image, setImage] = useState<string>(
     String(data.Watches.images_url[0])
   );
   const { addComp } = useCart();
+  console.log(data);
+
   return (
     <div className={styles.CompetitionMain}>
       <div className={styles.images}>
@@ -57,16 +60,12 @@ const CompetitionComponent = ({
         <div className={styles.CompTicketSelec}>
           <h3>How many tickets would you like?</h3>
           <div className={styles.tickets}>
-            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25].map((item, i) => (
-              <ToggleButtonGroup
-                size="small"
-                exclusive
-                key={i}
-                //TODO: fix this
-                //onChange={(e) => setBorderStyles(e.target.value as number)}
-                aria-label="text alignment"
-              >
+            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25]
+              .filter((bird, index) => index < filter)
+              .map((item, i) => (
                 <ToggleButton
+                  key={i}
+                  onClick={() => setCounter(item)}
                   sx={{
                     cursor:
                       item > data.remaining_tickets ? "not-allowed" : "pointer",
@@ -81,56 +80,57 @@ const CompetitionComponent = ({
                   </span>
                   <p className={styles.sold}>{item >= 15 ? "20% off" : ""}</p>
                 </ToggleButton>
-              </ToggleButtonGroup>
-            ))}
+              ))}
+            <button
+              style={{
+                display: filter === 15 ? "none" : "flex",
+              }}
+              onClick={() => setFilter(15)}
+              className={styles.showMore}
+            >
+              +
+            </button>
           </div>
         </div>
-        <div className={styles.donations}>
-          <p>A part of the money is donated to the following associations</p>
-          <div>
-            <Image
-              width={130}
-              height={50}
-              alt="donation"
-              src="/images/cancerRes.png"
-            />
-            <Image
-              width={130}
-              height={50}
-              style={{ objectFit: "contain" }}
-              alt="donation"
-              src="/images/woodlandLogo.png"
-            />
+        <div className={styles.CompBot}>
+          <div className={styles.donations}>
+            <p>A part of the money is donated to the following associations</p>
+            <div>
+              <Image
+                width={130}
+                height={50}
+                alt="donation"
+                src="/images/cancerRes.png"
+              />
+              <Image
+                width={130}
+                height={50}
+                style={{ objectFit: "contain" }}
+                alt="donation"
+                src="/images/woodlandLogo.png"
+              />
+            </div>
+          </div>
+          <div className={styles.addtoCart}>
+            <div className={styles.prices}>
+              <p>
+                Tickets: {counter} x £{data.ticket_price.toFixed(1)}
+              </p>
+              <span>£{(counter * data.ticket_price).toFixed(1)}</span>
+            </div>
+            <button
+              onClick={() => {
+                addComp({
+                  compID: data.id,
+                  number_tickets: counter,
+                  price_per_ticket: data.price,
+                });
+              }}
+            >
+              ADD TO CART
+            </button>
           </div>
         </div>
-        <div className={styles.Counter}>
-          <div
-            onClick={() => counter > 1 && setCounter(counter - 1)}
-            className={styles.CounterSelec}
-          >
-            <Image width={13} height={1} src="/images/Minus.png" alt="minus" />
-          </div>
-          <div className={styles.counterValue}>{counter}</div>
-          <div
-            onClick={() =>
-              counter < data.remaining_tickets && setCounter(counter + 1)
-            }
-            className={styles.CounterSelec}
-          >
-            <Image width={11} height={11} src="/images/plus.png" alt="plus" />
-          </div>
-        </div>
-        <button
-          onClick={() => {
-            addComp({
-              compID: data.id,
-              number_tickets: counter,
-              price_per_ticket: data.price,
-            });
-          }}
-        >
-          ADD TO CART
-        </button>
       </div>
     </div>
   );

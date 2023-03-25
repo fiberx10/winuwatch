@@ -43,7 +43,8 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  justify-content: space-between;
+  justify-content: flex-start;
+  gap: 3rem;
 }
 .CompTit {
   display: flex;
@@ -70,7 +71,6 @@
   display: flex;
   gap: 0.5rem;
   align-items: center;
-  max-width: 80%;
   flex-wrap: wrap;
 }
 .tickets button {
@@ -85,13 +85,20 @@
   font-weight: 300;
   padding: 0;
 }
-
+.showMore {
+  width: 55px;
+  height: 55px;
+  background-color: transparent;
+  font-size: 30px;
+  cursor: pointer;
+}
 .tickets p {
   font-size: 11px;
 }
 .CompTicketSelec {
   display: flex;
   flex-direction: column;
+  width: 90%;
   gap: 1rem;
 }
 .CompTicketSelec h3 {
@@ -109,4 +116,41 @@
   font-weight: 300;
   font-size: 18px;
   color: rgba(0, 0, 0, 0.6);
+}
+.CompBot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+.prices {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+.prices p {
+  font-weight: 300;
+  font-size: 20px;
+  color: rgba(0, 0, 0, 0.6);
+}
+.prices span {
+  font-weight: 300;
+  font-size: 40px;
+  color: rgba(0, 0, 0, 0.6);
+}
+.addtoCart {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+.addtoCart button {
+  width: 202px;
+  height: 48px;
+  background: #cbb9ac;
+  font-weight: 400;
+  font-size: 20px;
+  text-transform: uppercase;
+  font-family: "Orbitron", sans-serif;
+  color: white;
+  border: 0;
 }

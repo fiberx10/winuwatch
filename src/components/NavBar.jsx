@@ -20,7 +20,6 @@ export default function NavBar() {
       ? setNavColor("#927C66")
       : setNavColor("white");
   }, []);
-  console.log(navColor);
   return (
     <div
       onClick={() => open && setOpen(false)}
@@ -70,10 +69,7 @@ export default function NavBar() {
         <Image
           style={{
             cursor: "pointer",
-            filter:
-              typeof window !== "undefined" && location.pathname !== "/"
-                ? ""
-                : "brightness(0) invert(1)",
+            filter: navColor === "white" ? "brightness(0) invert(1)" : "",
           }}
           onClick={() => setOpen(!open)}
           className={styles.burger}
@@ -127,8 +123,8 @@ export default function NavBar() {
             </span>
             <hr />
 
-            <span onClick={() => router.push("/philosophy")}>philosophy</span>
-            <span onClick={() => router.push("/charity")}>Charity</span>
+            <span onClick={() => router.push("/Philosophy")}>philosophy</span>
+            <span onClick={() => router.push("/Charity")}>Charity</span>
           </div>
         </Drawer>
       </div>
