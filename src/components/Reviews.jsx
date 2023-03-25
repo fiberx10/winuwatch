@@ -42,6 +42,7 @@ const Reviews = () => {
       time: "TIME",
     },
   ];
+
   return (
     <div className={styles.ReviewsContainer}>
       <div className={styles.AliceContainer}>
@@ -56,7 +57,7 @@ const Reviews = () => {
               <div className={styles.Rev} key={i}>
                 <div className={styles.RevTop}>
                   <div>
-                    <h1>{rev.name}</h1>
+                    <h1 className={styles.background4}>{rev.name}</h1>
                     <div className={styles.RevTopTxt}>
                       <p>/ TrustScore {rev.score}</p>
                       <p>
