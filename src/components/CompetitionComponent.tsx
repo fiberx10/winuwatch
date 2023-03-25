@@ -3,8 +3,7 @@ import { useState } from "react";
 import styles from "@/styles/CompetitionPage.module.css";
 import { useCart } from "./Store";
 import ToggleButton from "@mui/material/ToggleButton";
-import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
-import { Competition, Watches } from "@prisma/client";
+import type { Competition, Watches } from "@prisma/client";
 
 const CompetitionComponent = ({
   data,
@@ -71,6 +70,11 @@ const CompetitionComponent = ({
                       item > data.remaining_tickets ? "not-allowed" : "pointer",
                     width: item >= 15 ? "68px" : "55px",
                     height: item >= 15 ? "68px" : "55px",
+                    color: counter === item ? "black !important" : "initial",
+                    border:
+                      counter === item
+                        ? "2px solid black !important"
+                        : "initial",
                   }}
                   value={item}
                   aria-label="left aligned"

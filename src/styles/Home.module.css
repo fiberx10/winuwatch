@@ -20,7 +20,7 @@
   height: 100%;
   position: absolute;
   object-fit: cover;
-  filter: brightness(50%);
+  filter: brightness(45%);
 }
 .NavBarContainer {
   display: flex;
