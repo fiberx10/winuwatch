@@ -1,24 +1,16 @@
-/* eslint-disable @typescript-eslint/no-misused-promises */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import React from "react";
-import { env } from "@/env.mjs";
-import { Formater, api } from "@/utils";
-import { loadStripe } from "@stripe/stripe-js";
-import { Elements } from "@stripe/react-stripe-js";
 import { useRouter } from "next/router";
-
-const stripePromise = loadStripe(env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
-
-const testData = {
-  amount: 100,
-  currency: "usd",
-};
+import { api } from "@/utils";
 
 export default function Stripe() {
+  const testData = {
+    amount: 100,
+    currency: "usd",
+  };
+
   const {
     query: { payment },
   } = useRouter();
-
   // if payment is success or cancel show the message
   if (payment === "success") {
     return <h1>Payment success</h1>;
@@ -26,42 +18,37 @@ export default function Stripe() {
   if (payment === "cancel") {
     return <h1>Payment cancel</h1>;
   }
-
-  // create the checkout session fron the api
-
-  const handlePayClick = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    const stripe = await stripePromise;
-    if (!stripe) {
-      console.error("Stripe.js hasn't loaded yet");
-      return;
-    }
-    const { mutateAsync } = api.Stripe.createCheckoutSession.useMutation(); // this like the way tanstack declares a mutation hook, but we want the mutateAsync function of it, btw there's two, mutate and mutateAsync, we want the async one
-    const sessionId = await mutateAsync(testData);
-    console.log(sessionId);
-
-    const result = await stripe.redirectToCheckout({ sessionId: sessionId });
-    if (result.error) {
-      console.error(result.error.message);
-    }
-  };
+  if (payment === "error") {
+    return <h1>Payment error</h1>;
+  }
+  // create the checkout session from the api
+  const { mutate: createCheckoutSession, isLoading } =
+    api.Stripe.createCheckoutSession.useMutation({
+      onSuccess: ({ url }) => {
+        console.log(url);
+        // redirect to the stripe checkout page url
+        window.location.href = url;
+      },
+    });
 
   return (
-    <Elements stripe={stripePromise}>
+    <>
       <h1>Stripe</h1>
-      <form onSubmit={(e) => handlePayClick(e)}>
-        <br />
-        <button
-          type="submit"
-          style={{
-            width: "200px",
-            padding: "12px 24px",
-          }}
-        >
-          Pay
-        </button>
-      </form>
-    </Elements>
+      <br />
+      <button
+        type="submit"
+        style={{
+          width: "200px",
+          padding: "12px 24px",
+        }}
+        onClick={() =>
+          createCheckoutSession({
+            amount: testData.amount,
+            currency: testData.currency,
+          })
+        }>
+        {isLoading ? "Loading..." : "Pay"}
+      </button>
+    </>
   );
 }

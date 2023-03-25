@@ -2,22 +2,45 @@ import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { CompetitionStatus } from "@prisma/client";
-import { CreateOrderSchema } from "@/utils";
-import { createCheckoutSession } from "../stripe";
+import { CreateOrderSchema, getBaseUrl } from "@/utils";
 
-/*
-interface CreateOrderInput {
-  amount: number;
-  currency: string;
-}*/
+import _stripe from "stripe";
+import { env } from "@/env.mjs";
+
+const stripe = new _stripe(env.STRIPE_SECRET_KEY, {
+  apiVersion: "2022-11-15",
+});
+
 export const StripeRouter = createTRPCRouter({
   createCheckoutSession: publicProcedure
-    .input(z.object({ amount: z.number(), currency: z.string() }))
-    // you don't need to force the typing here, it gets inferred from the line above
-    //.mutation(async ({ input }: { input: CreateOrderInput }) => {
-    .mutation(async ({ input }) => {
-      const sessionId = await createCheckoutSession(input);
-      return sessionId;
+    .input(
+      z.object({
+        amount: z.number(),
+        currency: z.string(),
+      })
+    )
+    .mutation(async ({ input: { amount, currency } }) => {
+      const session = await stripe.checkout.sessions.create({
+        payment_method_types: ["card"],
+        mode: "payment",
+        line_items: [
+          {
+            price_data: {
+              currency: currency,
+              product_data: {
+                name: "Product Name",
+              },
+              unit_amount: amount * 100, // in cents
+            },
+            quantity: 1,
+          },
+        ],
+        success_url: `${getBaseUrl()}/stripe?payment=success`,
+        cancel_url: `${getBaseUrl()}/stripe?payment=cancel`,
+      });
+      return {
+        url: session.url || `${getBaseUrl()}/stripe?payment=error`,
+      };
     }),
 });
 
