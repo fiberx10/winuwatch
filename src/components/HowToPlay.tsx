@@ -10,9 +10,7 @@ const HowToPlay = () => {
         `.${styles.background3 ?? "undefined"}`
       ) as HTMLElement & { style: CSSStyleDeclaration };
       if (background) {
-        background.style.backgroundPositionY = `${
-          window.scrollY === -50 ? 0 : -window.scrollY / 10 + 90
-        }px`;
+        background.style.backgroundPositionY = `${-window.scrollY / 10}px`;
       }
     };
     window.addEventListener("scroll", handleScroll);

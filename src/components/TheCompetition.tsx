@@ -12,7 +12,8 @@ const TheCompetition = () => {
         `.${styles.background2 ?? "undefined"}`
       ) as HTMLElement & { style: CSSStyleDeclaration };
       if (background) {
-        background.style.backgroundPositionY = `${-window.scrollY}px`;
+        background.style.backgroundPositionY =
+          window.scrollY === 0 ? "center" : `${-window.scrollY}px`;
       }
     };
     window.addEventListener("scroll", handleScroll);

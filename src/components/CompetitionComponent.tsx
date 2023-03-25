@@ -17,8 +17,8 @@ const CompetitionComponent = ({
   const [image, setImage] = useState<string>(
     String(data.Watches.images_url[0])
   );
-  const { addComp } = useCart();
-  console.log(data);
+  const { addComp, updateComp, competitions } = useCart();
+  console.log(competitions);
 
   return (
     <div className={styles.compWrapper}>
@@ -131,11 +131,21 @@ const CompetitionComponent = ({
               </div>
               <button
                 onClick={() => {
-                  addComp({
-                    compID: data.id,
-                    number_tickets: counter,
-                    price_per_ticket: data.price,
-                  });
+                  competitions.length > 0
+                    ? competitions.filter(
+                        (comp) =>
+                          comp.compID === data.id &&
+                          updateComp({
+                            compID: data.id,
+                            number_tickets: counter,
+                            price_per_ticket: data.ticket_price,
+                          })
+                      )
+                    : addComp({
+                        compID: data.id,
+                        number_tickets: counter,
+                        price_per_ticket: data.price,
+                      });
                 }}
               >
                 ADD TO CART

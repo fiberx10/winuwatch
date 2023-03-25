@@ -3,16 +3,39 @@ import Image from "next/image";
 import { useCart } from "./Store";
 import { useRouter } from "next/router";
 import { Formater, api } from "@/utils";
-import Link from "next/link";
+import { useState } from "react";
+import { Backdrop, Box, Fade, Modal } from "@mui/material";
+import { CloseOutlined } from "@ant-design/icons";
 const CartComp = () => {
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
   const { cardDetails, addComp, updateComp, removeComp, competitions } =
     useCart();
+
   const { data } = api.Competition.getAll.useQuery({
     ids: competitions.map(({ compID }) => compID),
   });
+
   const router = useRouter();
+
   const { totalCost, Number_of_item } = cardDetails();
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 400,
+    bgcolor: "background.paper",
+    border: "1px solid #CBB9AC",
+    boxShadow: 24,
+    p: 4,
+    borderRadius: "10px",
+  };
   //TODO: Loading
+  console.log(totalCost);
+
   return (
     <div className={styles.CartMain}>
       {data && competitions.length > 0 ? (
@@ -45,7 +68,7 @@ const CartComp = () => {
                       updateComp({
                         compID: comp.compID,
                         number_tickets: comp.number_tickets - 1,
-                        price_per_ticket: ComptetionData.price,
+                        price_per_ticket: ComptetionData.ticket_price,
                       })
                     }
                     className={styles.CounterSelec}
@@ -65,7 +88,7 @@ const CartComp = () => {
                       updateComp({
                         compID: comp.compID,
                         number_tickets: comp.number_tickets + 1,
-                        price_per_ticket: ComptetionData.price,
+                        price_per_ticket: ComptetionData.ticket_price,
                       })
                     }
                     className={styles.CounterSelec}
@@ -80,7 +103,9 @@ const CartComp = () => {
                 </div>
                 <div className={styles.CartPriceCon}>
                   <h2>
-                    {Formater(comp.number_tickets * comp.price_per_ticket)}
+                    {Formater(
+                      comp.number_tickets * ComptetionData.ticket_price
+                    )}
                   </h2>
                   <p onClick={() => removeComp(comp.compID)}>REMOVE</p>
                 </div>
@@ -100,9 +125,34 @@ const CartComp = () => {
         <span>{Formater(totalCost * 1.02)}</span>
       </div>
       <div className={styles.cartCheckoutCon}>
-        <Link href="/CheckoutPage">
-          <button>Check Out</button>
-        </Link>
+        <button onClick={handleOpen}>Check Out</button>
+        <Modal
+          aria-labelledby="spring-modal-title"
+          aria-describedby="spring-modal-description"
+          open={open}
+          closeAfterTransition
+          slots={{ backdrop: Backdrop }}
+          slotProps={{
+            backdrop: {
+              TransitionComponent: Fade,
+            },
+          }}
+        >
+          <Fade in={open}>
+            <Box className={styles.ModalBox} sx={style}>
+              <div>
+                <h2 id="spring-modal-title">Text in a modal</h2>
+                <span onClick={handleClose}>
+                  <CloseOutlined />
+                </span>
+              </div>
+              <p id="spring-modal-description">
+                In Order to continue to the checkout page you must answer this
+                question:
+              </p>
+            </Box>
+          </Fade>
+        </Modal>
       </div>
     </div>
   );
