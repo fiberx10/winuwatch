@@ -5,14 +5,17 @@ import { CompetitionStatus } from "@prisma/client";
 import { CreateOrderSchema } from "@/utils";
 import { createCheckoutSession } from "../stripe";
 
+/*
 interface CreateOrderInput {
   amount: number;
   currency: string;
-}
+}*/
 export const StripeRouter = createTRPCRouter({
   createCheckoutSession: publicProcedure
     .input(z.object({ amount: z.number(), currency: z.string() }))
-    .mutation(async ({ input }: { input: CreateOrderInput }) => {
+    // you don't need to force the typing here, it gets inferred from the line above
+    //.mutation(async ({ input }: { input: CreateOrderInput }) => {
+    .mutation(async ({ input }) => {
       const sessionId = await createCheckoutSession(input);
       return sessionId;
     }),

@@ -37,10 +37,8 @@ export default function Stripe() {
       console.error("Stripe.js hasn't loaded yet");
       return;
     }
-
-    const sessionId = await api.Stripe.createCheckoutSession({
-      input: testData,
-    });
+    const { mutateAsync } = api.Stripe.createCheckoutSession.useMutation(); // this like the way tanstack declares a mutation hook, but we want the mutateAsync function of it, btw there's two, mutate and mutateAsync, we want the async one
+    const sessionId = await mutateAsync(testData);
     console.log(sessionId);
 
     const result = await stripe.redirectToCheckout({ sessionId: sessionId });
@@ -59,7 +57,8 @@ export default function Stripe() {
           style={{
             width: "200px",
             padding: "12px 24px",
-          }}>
+          }}
+        >
           Pay
         </button>
       </form>
