@@ -22,7 +22,7 @@ const TheCompetition = () => {
     status: "ACTIVE",
   });
   return (
-    <div id="theComp" style={{ marginBottom: "250px" }} className={styles.Comp}>
+    <div id="theComp" style={{ marginBottom: "200px" }} className={styles.Comp}>
       <p className={styles.CompP}>
         “Necessarily a winner who will realize his dream or simply that of his
         wife”

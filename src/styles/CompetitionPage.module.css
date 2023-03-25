@@ -1,7 +1,76 @@
+.compWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
 .CompetitionMain {
-  padding: 20px 50px;
   display: flex;
   gap: 2.5rem;
+  padding: 20px 50px 70px 50px;
+}
+.compDesc {
+  background: #f8f6f4;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: 50px 0px;
+}
+.compDesc h1 {
+  font-weight: 400;
+  font-size: 35px;
+  font-family: "Iskry", sans-serif;
+  text-transform: uppercase;
+  color: #000000;
+}
+.compDet {
+  padding: 20px 50px;
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+.compDetails {
+  padding: 0px 100px;
+  border-left: 2px solid #987358;
+  border-right: 2px solid #987358;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+.watchInfo {
+  padding: 0px 100px;
+  border-left: 2px solid #987358;
+  border-right: 2px solid #987358;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+}
+.left {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  align-items: flex-start;
+}
+.left span {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 1rem;
+  height: 50px;
+  flex-wrap: wrap;
+}
+.left b {
+  font-weight: 500;
+  font-size: 24px;
+  color: rgba(30, 30, 30, 0.77);
+  flex: 1;
+}
+.compDet p {
+  font-weight: 300;
+  font-size: 24px;
+  color: rgba(30, 30, 30, 0.77);
+  flex: 1;
 }
 .images {
   width: 50%;
@@ -72,6 +141,7 @@
   gap: 0.5rem;
   align-items: center;
   flex-wrap: wrap;
+  transition: all 0.5s ease;
 }
 .tickets button {
   border: 2px solid #b3b3b3;
@@ -84,6 +154,12 @@
   justify-content: center;
   font-weight: 300;
   padding: 0;
+}
+.tickets button:hover {
+  background-color: rgb(146, 124, 102, 0.3) !important;
+  border: 2px solid rgb(146, 124, 102);
+  color: white;
+  transition: all 0.5s ease;
 }
 .showMore {
   width: 55px;
@@ -153,4 +229,60 @@
   font-family: "Orbitron", sans-serif;
   color: white;
   border: 0;
+}
+@media only screen and (max-width: 930px) {
+  .compWrapper {
+    align-items: center;
+  }
+  .CompetitionMain {
+    flex-direction: column;
+    padding: 20px 10px 70px 10px;
+    width: 95%;
+  }
+  .CompTit {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .CompTit h1 {
+    width: 100%;
+  }
+  .CompTit p {
+    width: 100%;
+    text-align: left;
+  }
+  .CompBot {
+    flex-direction: column;
+  }
+  .tickets {
+    width: 100%;
+    gap: 0.3rem;
+  }
+  .donations {
+    width: 100%;
+  }
+  .addtoCart {
+    width: 100%;
+  }
+  .images {
+    width: 100%;
+  }
+  .images div {
+    display: none;
+  }
+  .images img {
+    width: 100%;
+    height: 100%;
+  }
+  .compDet {
+    padding: 20px 25px;
+  }
+  .watchInfo {
+    padding: 0px 50px;
+  }
+  .compDetails {
+    padding: 0px 50px;
+  }
+  .watchInfo span {
+    height: fit-content;
+  }
 }
