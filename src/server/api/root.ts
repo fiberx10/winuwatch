@@ -3,6 +3,7 @@ import {
   WatchesRouter,
   CompetitionRouter,
   PaymentRouter,
+  StripeRouter,
 } from "@/server/api/routers";
 
 /**
@@ -14,6 +15,7 @@ export const appRouter = createTRPCRouter({
   Competition: CompetitionRouter,
   Watches: WatchesRouter,
   Payment: PaymentRouter,
+  Stripe: StripeRouter,
 });
 
 // export type definition of API

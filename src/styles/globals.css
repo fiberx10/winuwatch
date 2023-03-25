@@ -1,5 +1,22 @@
+/* some resets */
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+
 * {
   margin: 0;
+  padding: 0;
+  box-sizing: border-box;
   font-family: "Kanit", sans-serif;
 }
 @media only screen and (max-width: 930px) {

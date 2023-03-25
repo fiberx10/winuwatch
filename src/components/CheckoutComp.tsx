@@ -1,39 +1,52 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 import React, { useState } from "react";
 import styles from "@/styles/Checkout.module.css";
 import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js";
 import { useRouter } from "next/router";
-import { env } from "../env.mjs";
+
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { api, type RouterInputs, Formater } from "@/utils";
 import { useCart } from "./Store";
 
-import "@/styles/Checkout.module.css";
+import { env } from "@/env.mjs";
+import { loadStripe } from "@stripe/stripe-js";
+import { Elements } from "@stripe/react-stripe-js";
 
-//import { CreateOrderSchema} from "@/utils/Schema";
+const stripePromise = loadStripe(env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
+
+// import { CreateOrderSchema } from "@/utils/Schema";
 //import { zodResolver } from '@hookform/resolvers/zod';
 
-const IsLegal = (Birthdate?: Date) => {
-  const LegalAge = 18;
-  const now = new Date();
-  const date = Birthdate || new Date();
-  return (
-    new Date(
-      now.getFullYear() - LegalAge,
-      now.getMonth(),
-      now.getDate()
-    ).getTime() >= date.getTime()
-  );
-};
+import "@/styles/Checkout.module.css";
 
 type CreatePayemtnTYpe = RouterInputs["Payment"]["create"];
 
 const CheckoutComp = () => {
+  //
   const router = useRouter();
+
   const { competitions, cardDetails, reset, addComp, removeComp, updateComp } =
     useCart();
+
+  const IsLegal = (Birthdate?: Date) => {
+    const LegalAge = 18;
+    const now = new Date();
+    const date = Birthdate || new Date();
+    return (
+      new Date(
+        now.getFullYear() - LegalAge,
+        now.getMonth(),
+        now.getDate()
+      ).getTime() >= date.getTime()
+    );
+  };
+
   const { totalCost, Number_of_item } = cardDetails();
+
   const [error, setError] = useState<string | undefined>();
+
   const VAT = 0.2;
+
   const {
     register,
     handleSubmit,
@@ -48,6 +61,7 @@ const CheckoutComp = () => {
       watchids: competitions.map((comp) => comp.compID) || [],
     },
   });
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const onSubmit: SubmitHandler<RouterInputs["Payment"]["create"]> = async (
     data
   ) => {
@@ -69,15 +83,27 @@ const CheckoutComp = () => {
       setError("You must be 18 years or older to purchase ");
     }
   };
-  const { data: items, isLoading } = api.Competition.getAll.useQuery({
+  const { data: items } = api.Competition.getAll.useQuery({
     ids: competitions.map((comp) => comp.compID),
   });
+
+  // handle stripe payment
+
+  const handleForm = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    console.log("Form submitted");
+    const paymentData = { amount: totalCost * 100, currency: "eur" };
+    try {
+    } catch (error) {
+      console.log("Error:", error);
+    }
+  };
 
   return (
     <div className={styles.CheckoutMain}>
       {items && (
         <div className={styles.formMain}>
-          <form>
+          <form onSubmit={handleForm}>
             <div className={styles.CheckoutLeft}>
               <div className={styles.leftFormItem}>
                 <h1>Billing Information</h1>
@@ -129,7 +155,13 @@ const CheckoutComp = () => {
                     </div>
                     <div className={styles.formField}>
                       <label htmlFor="lastName">ZIP</label>
-                      <input required id="Zip" name="Zip" type={"number"} />
+                      <input
+                        required
+                        id="Zip"
+                        name="Zip"
+                        type={"number"}
+                        min={0}
+                      />
                     </div>
                   </div>
                   <div className={styles.formRow}>
@@ -179,7 +211,8 @@ const CheckoutComp = () => {
                   </div>
                   <div className={styles.method}>
                     <input type="radio" name="payment" value="Stripe" />
-                    <p
+                    <label
+                      htmlFor="Stripe"
                       style={{
                         color:
                           getValues("paymentMethod") === "STRIPE"
@@ -187,7 +220,7 @@ const CheckoutComp = () => {
                             : "rgba(30, 30, 30, 0.6)",
                       }}>
                       Stripe
-                    </p>
+                    </label>
                   </div>
                 </div>
                 <div className={styles.SignMeUp}>

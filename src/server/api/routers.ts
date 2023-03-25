@@ -3,8 +3,22 @@ import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { CompetitionStatus } from "@prisma/client";
 import { CreateOrderSchema } from "@/utils";
-export const CompetitionRouter = createTRPCRouter({
+import { createCheckoutSession } from "../stripe";
 
+interface CreateOrderInput {
+  amount: number;
+  currency: string;
+}
+export const StripeRouter = createTRPCRouter({
+  createCheckoutSession: publicProcedure
+    .input(z.object({ amount: z.number(), currency: z.string() }))
+    .mutation(async ({ input }: { input: CreateOrderInput }) => {
+      const sessionId = await createCheckoutSession(input);
+      return sessionId;
+    }),
+});
+
+export const CompetitionRouter = createTRPCRouter({
   getAll: publicProcedure
     .input(
       z.object({
@@ -31,19 +45,17 @@ export const CompetitionRouter = createTRPCRouter({
         },
       });
     }),
-  byID: publicProcedure
-    .input(z.string())
-    .query(({ ctx, input }) => {
-      return ctx.prisma.competition.findUnique({
-        where: {
-          id: input,
-        },
-        include: {
-          Watches: true,
-        },
-      });
-    }),
-  updateOne : publicProcedure
+  byID: publicProcedure.input(z.string()).query(({ ctx, input }) => {
+    return ctx.prisma.competition.findUnique({
+      where: {
+        id: input,
+      },
+      include: {
+        Watches: true,
+      },
+    });
+  }),
+  updateOne: publicProcedure
     .input(
       z.object({
         id: z.string(),
@@ -60,13 +72,13 @@ export const CompetitionRouter = createTRPCRouter({
       const { id, ...data } = input;
       return await ctx.prisma.competition.update({
         data: {
-          ...data
+          ...data,
         },
         where: {
           id,
         },
       });
-    })
+    }),
 });
 
 export const WatchesRouter = createTRPCRouter({
@@ -179,3 +191,5 @@ export const PaymentRouter = createTRPCRouter({
     ),*/
     }),
 });
+
+// Unsafe assignment of an `any` value.eslint@typescript-eslint/no-unsafe-assignment
