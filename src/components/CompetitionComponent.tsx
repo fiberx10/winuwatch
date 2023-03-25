@@ -137,14 +137,14 @@ const CompetitionComponent = ({
                           comp.compID === data.id &&
                           updateComp({
                             compID: data.id,
-                            number_tickets: counter,
+                            number_tickets: counter + comp.number_tickets,
                             price_per_ticket: data.ticket_price,
                           })
                       )
                     : addComp({
                         compID: data.id,
                         number_tickets: counter,
-                        price_per_ticket: data.price,
+                        price_per_ticket: data.ticket_price,
                       });
                 }}
               >
