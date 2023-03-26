@@ -1,4 +1,6 @@
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-argument  */
+/* eslint-disable @typescript-eslint/no-floating-promises */
+/*  eslint-disable @typescript-eslint/no-misused-promises */
 import React, { useState } from "react";
 import styles from "@/styles/Checkout.module.css";
 import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js";
@@ -19,17 +21,7 @@ const CheckoutComp = () => {
   //
   const router = useRouter();
 
-  // handle stripe payment
-  // create the checkout session from the api
-  const { mutate: createCheckoutSession, isLoading } =
-    api.Stripe.createCheckoutSession.useMutation({
-      onSuccess: ({ url }) => {
-        reset(); // here we reset the cart
-        // redirect to the stripe checkout page url
-        window.location.href = url;
-      },
-    });
-
+  const Hook = api.Stripe.createCheckoutSession.useMutation();
   const { competitions, cardDetails, reset, addComp, removeComp, updateComp } =
     useCart();
 
@@ -69,30 +61,16 @@ const CheckoutComp = () => {
     },
   });
 
-  const onSubmit: SubmitHandler = async (data: CreatePayemtnTYpe) => {
-    // if the player is less than 18 years old
-    if (!IsLegal(data.date)) {
-      setError("You must be 18 years or older to purchase ");
-      return;
-    }
-    // ! THIS SHOILD BE INSIDE THE CONDITION
-    createCheckoutSession({ totalPrice: Formater(totalCost * 1.02) }); // tmp fix the passes datas
-
-    // send the player to the stripe checkout page
-    if (data.paymentMethod === "STRIPE") {
-      createCheckoutSession(data);
-    }
-    // send the player to the paypal checkout page
-    if (data.paymentMethod === "PAYPAL") {
-      // createPaypalSession(data);
-    }
-  };
 
   return (
     <div className={styles.CheckoutMain}>
       {items && (
         <div className={styles.formMain}>
-          <form onSubmit={handleSubmit(onSubmit)}>
+          <form onSubmit={(e)=> {
+            console.log("here")
+          }}>
+
+
             <div className={styles.CheckoutLeft}>
               <div className={styles.leftFormItem}>
                 <h1>Billing Information</h1>
@@ -171,7 +149,8 @@ const CheckoutComp = () => {
                         style={{
                           color: "red",
                           display: IsLegal(getValues("date")) ? "none" : "flex",
-                        }}>
+                        }}
+                      >
                         Age must be higher than 18years
                       </p>
                     </div>
@@ -194,7 +173,8 @@ const CheckoutComp = () => {
                           getValues("paymentMethod") === "PAYPAL"
                             ? "#987358"
                             : "rgba(30, 30, 30, 0.6)",
-                      }}>
+                      }}
+                    >
                       PayPal
                     </p>
                   </div>
@@ -207,7 +187,8 @@ const CheckoutComp = () => {
                           getValues("paymentMethod") === "STRIPE"
                             ? "#987358"
                             : "rgba(30, 30, 30, 0.6)",
-                      }}>
+                      }}
+                    >
                       Stripe
                     </label>
                   </div>
@@ -329,7 +310,8 @@ const CheckoutComp = () => {
                     <PayPalScriptProvider
                       options={{
                         "client-id": `${env.NEXT_PUBLIC_PAYPAL_ID}`,
-                      }}>
+                      }}
+                    >
                       <PayPalButtons
                         forceReRender={[totalCost]}
                         createOrder={(data, actions) => {
@@ -385,8 +367,26 @@ const CheckoutComp = () => {
                       />
                     </PayPalScriptProvider>
                   ) : (
-                    <button type="submit">
-                      {isLoading ? "Loading .." : "Confirm Order "}
+
+                    <button
+                      onClick={async (e) => {
+                        e.preventDefault();
+                        const {url} = await Hook.mutateAsync({
+                          email : "test@email.com",
+                          address : "hay ahahha",
+                          comps: competitions.map((comp) => ({
+                            compID: comp.compID,
+                            quantity: comp.number_tickets,
+                          })),
+                        })
+                        if (url) {
+                          router.push(url)
+                        }
+
+                      }}
+                    >
+                      Confirm Order
+
                     </button>
                   )}
                 </div>

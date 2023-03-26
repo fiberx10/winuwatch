@@ -32,32 +32,55 @@ const orderInput = z.object({
 
 export const StripeRouter = createTRPCRouter({
   createCheckoutSession: publicProcedure
-    .input(orderInput)
-    .mutation(async (input) => {
-      const session = await stripe.checkout.sessions.create({
+
+    .input(
+      z.object({
+        email : z.string().email(),
+        address : z.string(),
+        comps : z.array(
+          z.object({
+            compID: z.string(),
+            quantity: z.number().min(1),
+          })
+        )
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      return await stripe.checkout.sessions.create({
+
         payment_method_types: ["card"],
         mode: "payment",
-        line_items: [
-          {
-            price_data: {
-              currency: "usd",
-              product_data: {
-                name: "Rolex",
-              },
-              unit_amount: input.input.totalPrice * 100,
+        line_items: (
+          await ctx.prisma.competition.findMany({
+            include: {
+              Watches: true,
             },
-            quantity: 1,
-          },
-        ],
+          })
+        )
+          .filter((comp) => input.comps.some((item) => item.compID === comp.id))
+          .map((comp) => ({
+            //customer_email : input.email,
+            
+            price_data: {
+              //automatic_tax : true,
+              currency: "gbp",
+              product_data: {
+                name: comp.Watches.model + comp.Watches.movement,
+                //images: [`${getBaseUrl()+comp.Watches.images_url[0]}`],
+              },
+              unit_amount : Math.floor(comp.ticket_price * 100), // in cents
+
+            },
+            quantity: input.comps.find((item) => item.compID === comp.id)?.quantity || 0,
+          })),
         success_url: `${getBaseUrl()}/stripe?payment=success`,
-        cancel_url: `${getBaseUrl()}/stripe?payment=cancel`,
+        cancel_url: `${getBaseUrl()}/CheckoutPage`,
       });
+
       // if the session was created successfully
       // insert the info in the database
       // await prisma...
-      return {
-        url: session.url || `${getBaseUrl()}/stripe?payment=error`,
-      };
+
     }),
 });
 
@@ -125,9 +148,7 @@ export const CompetitionRouter = createTRPCRouter({
 });
 
 export const WatchesRouter = createTRPCRouter({
-  getAll: publicProcedure.query(({ ctx }) => {
-    return ctx.prisma.watches.findMany();
-  }),
+  getAll: publicProcedure.query(({ ctx }) => ctx.prisma.watches.findMany()),
   byID: publicProcedure
     .input(z.object({ id: z.string() }))
     .query(({ ctx, input }) => {
