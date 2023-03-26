@@ -80,9 +80,6 @@ export const StripeRouter = createTRPCRouter({
       // if the session was created successfully
       // insert the info in the database
       // await prisma...
-      return {
-        url: session.url || `${getBaseUrl()}/stripe?payment=error`,
-      };
 
     }),
 });

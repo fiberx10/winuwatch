@@ -371,14 +371,14 @@ const CheckoutComp = () => {
                     <button
                       onClick={async (e) => {
                         e.preventDefault();
-                        const url = (await Hook.mutateAsync({
+                        const {url} = await Hook.mutateAsync({
                           email : "test@email.com",
                           address : "hay ahahha",
                           comps: competitions.map((comp) => ({
                             compID: comp.compID,
                             quantity: comp.number_tickets,
                           })),
-                        })).url
+                        })
                         if (url) {
                           router.push(url)
                         }
