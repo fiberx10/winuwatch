@@ -15,32 +15,45 @@ export const StripeRouter = createTRPCRouter({
   createCheckoutSession: publicProcedure
     .input(
       z.object({
-        amount: z.number(),
-        currency: z.string(),
+        email : z.string().email(),
+        address : z.string(),
+        comps : z.array(
+          z.object({
+            compID: z.string(),
+            quantity: z.number().min(1),
+          })
+        )
       })
     )
-    .mutation(async ({ input: { amount, currency } }) => {
-      const session = await stripe.checkout.sessions.create({
+    .mutation(async ({ input, ctx }) => {
+      return await stripe.checkout.sessions.create({
         payment_method_types: ["card"],
         mode: "payment",
-        line_items: [
-          {
-            price_data: {
-              currency: currency,
-              product_data: {
-                name: "Product Name",
-              },
-              unit_amount: amount * 100, // in cents
+        line_items: (
+          await ctx.prisma.competition.findMany({
+            include: {
+              Watches: true,
             },
-            quantity: 1,
-          },
-        ],
+          })
+        )
+          .filter((comp) => input.comps.some((item) => item.compID === comp.id))
+          .map((comp) => ({
+            //customer_email : input.email,
+            
+            price_data: {
+              //automatic_tax : true,
+              currency: "gbp",
+              product_data: {
+                name: comp.Watches.model + comp.Watches.movement,
+                //images: [`${getBaseUrl()+comp.Watches.images_url[0]}`],
+              },
+              unit_amount : Math.floor(comp.ticket_price * 100), // in cents
+            },
+            quantity: input.comps.find((item) => item.compID === comp.id)?.quantity || 0,
+          })),
         success_url: `${getBaseUrl()}/stripe?payment=success`,
-        cancel_url: `${getBaseUrl()}/stripe?payment=cancel`,
+        cancel_url: `${getBaseUrl()}/CheckoutPage`,
       });
-      return {
-        url: session.url || `${getBaseUrl()}/stripe?payment=error`,
-      };
     }),
 });
 
@@ -108,8 +121,7 @@ export const CompetitionRouter = createTRPCRouter({
 });
 
 export const WatchesRouter = createTRPCRouter({
-  getAll: publicProcedure.query(({ ctx }) =>  ctx.prisma.watches.findMany()
-  ),
+  getAll: publicProcedure.query(({ ctx }) => ctx.prisma.watches.findMany()),
   byID: publicProcedure
     .input(z.object({ id: z.string() }))
     .query(({ ctx, input }) => {

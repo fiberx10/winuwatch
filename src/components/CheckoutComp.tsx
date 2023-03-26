@@ -1,4 +1,6 @@
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-argument  */
+/* eslint-disable @typescript-eslint/no-floating-promises */
+/*  eslint-disable @typescript-eslint/no-misused-promises */
 import React, { useState } from "react";
 import styles from "@/styles/Checkout.module.css";
 import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js";
@@ -24,7 +26,7 @@ type CreatePayemtnTYpe = RouterInputs["Payment"]["create"];
 const CheckoutComp = () => {
   //
   const router = useRouter();
-
+  const Hook = api.Stripe.createCheckoutSession.useMutation();
   const { competitions, cardDetails, reset, addComp, removeComp, updateComp } =
     useCart();
 
@@ -89,21 +91,15 @@ const CheckoutComp = () => {
 
   // handle stripe payment
 
-  const handleForm =  (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log("Form submitted");
-    const paymentData = { amount: totalCost * 100, currency: "eur" };
-    try {
-    } catch (error) {
-      console.log("Error:", error);
-    }
-  };
-
+  
+  
   return (
     <div className={styles.CheckoutMain}>
       {items && (
         <div className={styles.formMain}>
-          <form onSubmit={handleForm}>
+          <form onSubmit={(e)=> {
+            console.log("here")
+          }}>
             <div className={styles.CheckoutLeft}>
               <div className={styles.leftFormItem}>
                 <h1>Billing Information</h1>
@@ -182,7 +178,8 @@ const CheckoutComp = () => {
                         style={{
                           color: "red",
                           display: IsLegal(getValues("date")) ? "none" : "flex",
-                        }}>
+                        }}
+                      >
                         Age must be higher than 18years
                       </p>
                     </div>
@@ -205,7 +202,8 @@ const CheckoutComp = () => {
                           getValues("paymentMethod") === "PAYPAL"
                             ? "#987358"
                             : "rgba(30, 30, 30, 0.6)",
-                      }}>
+                      }}
+                    >
                       PayPal
                     </p>
                   </div>
@@ -218,7 +216,8 @@ const CheckoutComp = () => {
                           getValues("paymentMethod") === "STRIPE"
                             ? "#987358"
                             : "rgba(30, 30, 30, 0.6)",
-                      }}>
+                      }}
+                    >
                       Stripe
                     </label>
                   </div>
@@ -340,7 +339,8 @@ const CheckoutComp = () => {
                     <PayPalScriptProvider
                       options={{
                         "client-id": `${env.NEXT_PUBLIC_PAYPAL_ID}`,
-                      }}>
+                      }}
+                    >
                       <PayPalButtons
                         forceReRender={[totalCost]}
                         createOrder={(data, actions) => {
@@ -396,7 +396,25 @@ const CheckoutComp = () => {
                       />
                     </PayPalScriptProvider>
                   ) : (
-                    <button type="submit">Confirm Order</button>
+                    <button
+                      onClick={async (e) => {
+                        e.preventDefault();
+                        const url = (await Hook.mutateAsync({
+                          email : "test@email.com",
+                          address : "hay ahahha",
+                          comps: competitions.map((comp) => ({
+                            compID: comp.compID,
+                            quantity: comp.number_tickets,
+                          })),
+                        })).url
+                        if (url) {
+                          router.push(url)
+                        }
+
+                      }}
+                    >
+                      Confirm Order
+                    </button>
                   )}
                 </div>
               </div>
