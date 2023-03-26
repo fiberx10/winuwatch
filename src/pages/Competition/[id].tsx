@@ -5,7 +5,10 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { api } from "@/utils/api";
 import { z } from "zod";
-import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
+import type {
+  GetServerSidePropsContext,
+  InferGetServerSidePropsType,
+} from "next";
 
 export const getServerSideProps = (context: GetServerSidePropsContext) => {
   try {
@@ -32,8 +35,7 @@ export default function Competition({
   const router = useRouter();
   const { data, isLoading, error } = api.Competition.byID.useQuery(compID);
   //TODO: competition data is either a watch or an error, need to handle both cases
-  const images_db = "image1.png, image2.png";
-  const images = images_db.split(", ");
+
   return (
     <div>
       <Head>

@@ -5,6 +5,7 @@ const prisma = new PrismaClient({
   log: ["query", "info", "warn"],
 });
 
+/*
 (async () => {
   for (let i = 0; i < 1; i++) {
     const total_tickets = faker.datatype.number({
@@ -68,4 +69,97 @@ const prisma = new PrismaClient({
     });
     console.log(COmp.id);
   }
+})();
+*/
+
+(async () => {
+  await prisma.question.createMany({
+    data: [
+      {
+        question: "What is a chronograph watch?",
+        answers: [
+          "A watch that can measure time intervals with a stopwatch function",
+          "A watch that tells time using only a digital display",
+          "A watch that measures atmospheric pressure",
+          "A watch that measures altitude",
+        ],
+        correctAnswer:
+          "A watch that can measure time intervals with a stopwatch function",
+      },
+      {
+        question: "What is a mechanical watch?",
+        answers: [
+          "A watch that is powered by a mainspring",
+          "A watch that is powered by a battery",
+          "A watch that is powered by solar energy",
+          "A watch that is powered by kinetic energy",
+        ],
+        correctAnswer: "A watch that is powered by a mainspring",
+      },
+      {
+        question: "What is a quartz watch?",
+        answers: [
+          "A watch that is powered by a battery and regulated by a quartz crystal oscillator",
+          "A watch that is powered by a wind-up mechanism",
+          "A watch that is powered by body heat",
+          "A watch that is powered by light",
+        ],
+        correctAnswer:
+          "A watch that is powered by a battery and regulated by a quartz crystal oscillator",
+      },
+      {
+        question: "What is a dive watch?",
+        answers: [
+          "A watch designed for underwater diving",
+          "A watch designed for mountain climbing",
+          "A watch designed for skydiving",
+          "A watch designed for space exploration",
+        ],
+        correctAnswer: "A watch designed for underwater diving",
+      },
+      {
+        question: "What is a GMT watch?",
+        answers: [
+          "A watch that can display two or more time zones simultaneously",
+          "A watch that can only display one time zone",
+          "A watch that displays the date",
+          "A watch that displays the day of the week",
+        ],
+        correctAnswer:
+          "A watch that can display two or more time zones simultaneously",
+      },
+      {
+        question: "What is a moon phase watch?",
+        answers: [
+          "A watch that tracks the phases of the moon",
+          "A watch that displays the date",
+          "A watch that displays the time in 24-hour format",
+          "A watch that displays the current weather conditions",
+        ],
+        correctAnswer: "A watch that tracks the phases of the moon",
+      },
+      {
+        question: "What is a perpetual calendar watch?",
+        answers: [
+          "A watch that can display the correct date for any year without requiring manual adjustment",
+          "A watch that can only display the current year",
+          "A watch that displays the time in multiple time zones",
+          "A watch that measures heart rate",
+        ],
+        correctAnswer:
+          "A watch that can display the correct date for any year without requiring manual adjustment",
+      },
+      {
+        question: "What is a skeleton watch?",
+        answers: [
+          "A watch with a transparent dial and/or caseback that allows the movement to be seen",
+          "A watch with a solid dial and caseback",
+          "A watch with a built-in compass",
+          "A watch with a built-in GPS",
+        ],
+        correctAnswer:
+          "A watch with a transparent dial and/or caseback that allows the movement to be seen",
+      },
+    ],
+  });
 })();

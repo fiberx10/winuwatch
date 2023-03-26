@@ -11,7 +11,6 @@
   position: relative;
   flex-direction: column;
   justify-content: space-between;
-  position: relative;
   overflow: hidden;
 }
 
@@ -74,14 +73,6 @@
   font-size: 120px;
   font-family: "Montserrat", sans-serif;
   text-transform: uppercase;
-  background-image: url(https://content.rolex.com/dam/watches/family-pages/datejust/2023/a-date-with-destiny/classic-watches-datejust-a-date-with-destiny-yellow-cut-out.jpg);
-  background-attachment: fixed;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-clip: text;
-  background-size: 100% 100vh;
-  color: transparent;
-  -webkit-background-clip: text;
 }
 @font-face {
   font-family: Iskry;
@@ -165,6 +156,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
 }
 .CompP {
   font-weight: 300;
@@ -172,20 +164,46 @@
   color: #987358;
   padding-top: 50px;
 }
-.Comp h1 {
-  font-family: "Montserrat", sans-serif;
-  text-transform: uppercase;
-  margin: 30px 0px;
-  font-weight: 600;
-  font-size: 45px;
+.background {
   background-image: url(https://content.rolex.com/dam/watches/family-pages/datejust/2023/a-date-with-destiny/classic-watches-datejust-a-date-with-destiny-yellow-cut-out.jpg);
-  background-attachment: fixed;
+  background-position-y: -124px;
+  background-repeat: no-repeat;
+  background-clip: text;
+  background-size: 100% 100vh;
+  color: transparent;
+  -webkit-background-clip: text;
+}
+.background2 {
+  background-image: url(https://content.rolex.com/dam/watches/family-pages/datejust/2023/a-date-with-destiny/classic-watches-datejust-a-date-with-destiny-yellow-cut-out.jpg);
   background-position: center;
   background-repeat: no-repeat;
   background-clip: text;
   background-size: 100% 100vh;
   color: transparent;
   -webkit-background-clip: text;
+}
+.background3 {
+  background-image: url(https://content.rolex.com/dam/watches/family-pages/datejust/2023/a-date-with-destiny/classic-watches-datejust-a-date-with-destiny-yellow-cut-out.jpg);
+  background-repeat: no-repeat;
+  background-clip: text;
+  background-size: 100% 100vh;
+  color: transparent;
+  -webkit-background-clip: text;
+}
+.background4 {
+  background-image: url(https://content.rolex.com/dam/watches/family-pages/datejust/2023/a-date-with-destiny/classic-watches-datejust-a-date-with-destiny-yellow-cut-out.jpg);
+  background-repeat: no-repeat;
+  background-clip: text;
+  background-size: 100% 100vh;
+  color: transparent;
+  -webkit-background-clip: text;
+}
+.Comp h1 {
+  font-family: "Montserrat", sans-serif;
+  text-transform: uppercase;
+  margin: 30px 0px;
+  font-weight: 600;
+  font-size: 45px;
 }
 .timerItem p {
   font-family: "Montserrat", sans-serif !important;
@@ -386,14 +404,6 @@
   font-family: "Montserrat", sans-serif;
   text-transform: uppercase;
   padding-bottom: 20px;
-  background-image: url(https://content.rolex.com/dam/watches/family-pages/datejust/2023/a-date-with-destiny/classic-watches-datejust-a-date-with-destiny-yellow-cut-out.jpg);
-  background-attachment: fixed;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-clip: text;
-  background-size: 100% 100vh;
-  color: transparent;
-  -webkit-background-clip: text;
 }
 .howtoText {
   width: 100%;
@@ -402,6 +412,7 @@
   position: relative;
 }
 .howtoText button {
+  font-family: "Montserrat", sans-serif;
   position: absolute;
   bottom: 0;
   right: 10rem;
@@ -590,14 +601,6 @@
   font-size: 45px;
   font-family: "Montserrat", sans-serif;
   text-transform: uppercase;
-  background-image: url(https://content.rolex.com/dam/watches/family-pages/datejust/2023/a-date-with-destiny/classic-watches-datejust-a-date-with-destiny-yellow-cut-out.jpg);
-  background-attachment: fixed;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-clip: text !important;
-  background-size: 100% 100vh;
-  color: transparent;
-  -webkit-background-clip: text;
 }
 .Rating {
   margin-top: 10px;

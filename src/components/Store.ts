@@ -24,6 +24,7 @@ interface RootState {
     totalCost: number;
     Number_of_item: number;
   };
+  
   updateComp: ({
     compID,
     number_tickets,

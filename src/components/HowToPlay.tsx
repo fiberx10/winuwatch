@@ -1,14 +1,26 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styles from "../styles/Home.module.css";
 
 import Image from "next/image";
 
 const HowToPlay = () => {
+  useEffect(() => {
+    const handleScroll = () => {
+      const background = document.querySelector(
+        `.${styles.background3 ?? "undefined"}`
+      ) as HTMLElement & { style: CSSStyleDeclaration };
+      if (background) {
+        background.style.backgroundPositionY = `${-window.scrollY / 10}px`;
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
   const theComp =
     typeof window !== "undefined" && document.getElementById("theComp");
   return (
     <div id="Howtoplay" className={styles.howtoContainer}>
-      <h1>how to play</h1>
+      <h1 className={styles.background3}>how to play</h1>
       <div className={styles.howtoText}>
         <div className={styles.howtoTxt1}>
           <h2>Choose your tickets</h2>

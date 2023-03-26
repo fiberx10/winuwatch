@@ -1,49 +1,7 @@
 import { z } from "zod";
-
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { CompetitionStatus } from "@prisma/client";
-import { CreateOrderSchema, getBaseUrl } from "@/utils";
-
-import _stripe from "stripe";
-import { env } from "@/env.mjs";
-
-const stripe = new _stripe(env.STRIPE_SECRET_KEY, {
-  apiVersion: "2022-11-15",
-});
-
-export const StripeRouter = createTRPCRouter({
-  createCheckoutSession: publicProcedure
-    .input(
-      z.object({
-        amount: z.number(),
-        currency: z.string(),
-      })
-    )
-    .mutation(async ({ input: { amount, currency } }) => {
-      const session = await stripe.checkout.sessions.create({
-        payment_method_types: ["card"],
-        mode: "payment",
-        line_items: [
-          {
-            price_data: {
-              currency: currency,
-              product_data: {
-                name: "Product Name",
-              },
-              unit_amount: amount * 100, // in cents
-            },
-            quantity: 1,
-          },
-        ],
-        success_url: `${getBaseUrl()}/stripe?payment=success`,
-        cancel_url: `${getBaseUrl()}/stripe?payment=cancel`,
-      });
-      return {
-        url: session.url || `${getBaseUrl()}/stripe?payment=error`,
-      };
-    }),
-});
-
+import { CreateOrderSchema } from "@/utils";
 export const CompetitionRouter = createTRPCRouter({
   getAll: publicProcedure
     .input(
@@ -218,4 +176,13 @@ export const PaymentRouter = createTRPCRouter({
     }),
 });
 
-// Unsafe assignment of an `any` value.eslint@typescript-eslint/no-unsafe-assignment
+export const QuestionRouter = createTRPCRouter({
+  getOneRandom: publicProcedure.query(async ({ ctx }) => {
+    const Questions = await ctx.prisma.question.findMany();
+    const randomIndex = Math.floor(Math.random() * Questions.length);
+    if (randomIndex < Questions.length && randomIndex >= 0) {
+      return Questions[randomIndex];
+    }
+    return Questions[0];
+  }),
+});

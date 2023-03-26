@@ -50,11 +50,11 @@ model Competition {
   price                    Float
   status                   CompetitionStatus
   winner                   String?
-  second_reward String?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  watchesId     String   @unique @db.ObjectId
-  Watches       Watches  @relation(fields: [watchesId], references: [id])
+  second_reward            String?
+  createdAt                DateTime          @default(now())
+  updatedAt                DateTime          @updatedAt
+  watchesId                String            @unique @db.ObjectId
+  Watches                  Watches           @relation(fields: [watchesId], references: [id])
 
   @@map("competition")
 }
@@ -90,6 +90,17 @@ model Order {
   Watches       Watches[]
 
   @@map("order")
+}
+
+model Question {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  question      String
+  answers       String[]
+  correctAnswer String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@map("question")
 }
 
 enum CompetitionStatus {
