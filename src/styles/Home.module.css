@@ -527,7 +527,8 @@
 
 .certifContainer {
   min-height: 769px;
-  background: url(../../public/images/certifcover.png);
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+    url(../../public/images/newCover.png);
   background-size: cover;
   background-repeat: no-repeat;
   display: flex;
@@ -664,15 +665,17 @@
 .menusGrid {
   display: grid;
   grid-template-columns: repeat(4, auto);
-  column-gap: 5rem;
+  column-gap: 0rem;
   row-gap: 0.4rem;
+  place-items: center;
 }
 .menusGrid a {
   text-decoration: none;
   color: white;
+  width: 150px;
   text-transform: uppercase;
-  font-weight: 400;
-  font-size: 10px;
+  font-weight: 300;
+  font-size: 14px;
   letter-spacing: 0.05em;
 }
 .emails {
@@ -718,7 +721,6 @@
   align-items: center;
   justify-content: center;
   border: 1px solid white;
-  border-radius: 3px;
   font-weight: 500;
   font-size: 14px;
   font-style: italic;
@@ -731,7 +733,6 @@
 
   border: 1px solid white;
   padding: 4.5px 8px;
-  border-radius: 3px;
 }
 .visaicons img {
   filter: brightness(0) invert(1);

@@ -5,10 +5,10 @@ import Link from "next/link";
 
 const Footer = () => {
   const data = [
-    { names: ["introducing", "how to play", "contact"] },
-    { names: ["competitions", "winners", "account"] },
-    { names: ["charity", "press", "faq"] },
-    { names: ["return", "terms & conditions", "privacy"] },
+    { names: ["COMPETITIONS", "how to play", "contact"] },
+    { names: ["PHILOSOPHY", "winners", "Charity"] },
+    { names: ["Acceptable Use Policy", "faq"] },
+    { names: ["Return Policy", "terms & conditions", "Privacy Policy"] },
   ];
   return (
     <div className={styles.Footer}>
@@ -36,8 +36,8 @@ const Footer = () => {
         <div className={styles.FooterTopRight}>
           <div className={styles.emails}>
             <p>For enquiries, please email</p>
-            <a href="mailto:info@winuwatch.com">
-              <u>info@winuwatch.com</u>
+            <a href="mailto:info@winuwatch.uk">
+              <u>info@winuwatch.uk</u>
             </a>
           </div>
           <div className={styles.payment}>

@@ -49,6 +49,12 @@ const Charit = () => {
           );
         })}
       </div>
+      <div className={styles.Join}>
+        <h1>You are an association ?</h1>
+        <h1>
+          Want to be in this list - <u>Contact us</u>
+        </h1>
+      </div>
     </div>
   );
 };

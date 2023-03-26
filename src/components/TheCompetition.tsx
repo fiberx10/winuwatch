@@ -25,8 +25,8 @@ const TheCompetition = () => {
   return (
     <div id="theComp" style={{ marginBottom: "200px" }} className={styles.Comp}>
       <p className={styles.CompP}>
-        “Necessarily a winner who will realize his dream or simply that of his
-        wife”
+        “An assured winner who will achieve his dream or simply that of his
+        partner”
       </p>
       <h1 className={styles.background2}>The Competition</h1>
       <div className={styles.compWatches}>
