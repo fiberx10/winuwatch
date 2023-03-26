@@ -5,7 +5,7 @@ import { useStore as UseStore } from "@/components/Store";
 import DashboardNav from "@/components/dashboard/DashboardNav";
 
 const index = () => {
-  const { Menu } = UseStore();
+  const { menu } = UseStore();
 
   return (
     <div className={styles.MainCon}>
@@ -13,7 +13,7 @@ const index = () => {
       <div className={styles.dashBody}>
         <DashboardNav />
         <div className={styles.Body}>
-          {Menu === "Vue d'ensemble" ? (
+          {menu === "Vue d'ensemble" ? (
             <DashboardComp />
           ) : (
             <h1>Competitions</h1>

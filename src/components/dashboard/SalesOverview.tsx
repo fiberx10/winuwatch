@@ -120,7 +120,7 @@ const SalesOverview = () => {
         options={optionscolumnchart}
         series={seriescolumnchart}
         type="bar"
-        height="370px"
+        height="417px"
       />
     </DashboardCard>
   );
