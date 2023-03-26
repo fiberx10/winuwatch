@@ -1,7 +1,88 @@
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { CompetitionStatus } from "@prisma/client";
-import { CreateOrderSchema } from "@/utils";
+import { CreateOrderSchema, getBaseUrl } from "@/utils";
+
+import _stripe from "stripe";
+import { env } from "@/env.mjs";
+
+const stripe = new _stripe(env.STRIPE_SECRET_KEY, {
+  apiVersion: "2022-11-15",
+});
+
+// zode input validation
+const orderInput = z.object({
+  // first_name: z.string(),
+  // last_name: z.string(),
+  // country: z.string(),
+  // address: z.string(),
+  // town: z.string(),
+  // zip: z.string(),
+  // phone: z.string(),
+  // email: z.string(),
+  // paymentMethod: z.enum(["PAYPAL", "STRIPE"]),
+  totalPrice: z.number(),
+  // watchids: z.array(z.string()),
+  // date: z.date().optional(),
+  // checkedEmail: z.boolean().optional(),
+  // checkedPhone: z.boolean().optional(),
+  // checkedSMS: z.boolean().optional(),
+});
+
+export const StripeRouter = createTRPCRouter({
+  createCheckoutSession: publicProcedure
+
+    .input(
+      z.object({
+        email : z.string().email(),
+        address : z.string(),
+        comps : z.array(
+          z.object({
+            compID: z.string(),
+            quantity: z.number().min(1),
+          })
+        )
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      return await stripe.checkout.sessions.create({
+
+        payment_method_types: ["card"],
+        mode: "payment",
+        line_items: (
+          await ctx.prisma.competition.findMany({
+            include: {
+              Watches: true,
+            },
+          })
+        )
+          .filter((comp) => input.comps.some((item) => item.compID === comp.id))
+          .map((comp) => ({
+            //customer_email : input.email,
+            
+            price_data: {
+              //automatic_tax : true,
+              currency: "gbp",
+              product_data: {
+                name: comp.Watches.model + comp.Watches.movement,
+                //images: [`${getBaseUrl()+comp.Watches.images_url[0]}`],
+              },
+              unit_amount : Math.floor(comp.ticket_price * 100), // in cents
+
+            },
+            quantity: input.comps.find((item) => item.compID === comp.id)?.quantity || 0,
+          })),
+        success_url: `${getBaseUrl()}/stripe?payment=success`,
+        cancel_url: `${getBaseUrl()}/CheckoutPage`,
+      });
+
+      // if the session was created successfully
+      // insert the info in the database
+      // await prisma...
+
+    }),
+});
+
 export const CompetitionRouter = createTRPCRouter({
   getAll: publicProcedure
     .input(
@@ -66,9 +147,7 @@ export const CompetitionRouter = createTRPCRouter({
 });
 
 export const WatchesRouter = createTRPCRouter({
-  getAll: publicProcedure.query(({ ctx }) => {
-    return ctx.prisma.watches.findMany();
-  }),
+  getAll: publicProcedure.query(({ ctx }) => ctx.prisma.watches.findMany()),
   byID: publicProcedure
     .input(z.object({ id: z.string() }))
     .query(({ ctx, input }) => {
