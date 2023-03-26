@@ -851,7 +851,7 @@
     width: 100%;
   }
   .watchCon {
-    width: 90%;
+    width: 100%;
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
@@ -860,6 +860,12 @@
     flex-direction: row;
     width: 100%;
     justify-content: space-evenly;
+  }
+  .timer p {
+    font-size: 40px;
+  }
+  .background2 {
+    background-position: top;
   }
   .timerItem {
     display: flex;
@@ -1177,5 +1183,16 @@
     align-items: center;
     justify-content: center;
     gap: 2rem;
+  }
+}
+@media only screen and (min-width: 1440px) and (max-width: 2560px) {
+  .flexEnd {
+    width: 42.3%;
+  }
+  .flexStart {
+    width: 42.3%;
+  }
+  .menusGrid {
+    gap: 7rem;
   }
 }
