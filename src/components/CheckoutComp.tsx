@@ -61,14 +61,6 @@ const CheckoutComp = () => {
     },
   });
 
-  const onSubmit: SubmitHandler = async (data: CreatePayemtnTYpe) => {
-    // if the player is less than 18 years old
-    if (!IsLegal(data.date)) {
-      setError("You must be 18 years or older to purchase ");
-      return;
-    }
-    // ! THIS SHOILD BE INSIDE THE CONDITION
-    createCheckoutSession({ totalPrice: Formater(totalCost * 1.02) }); // tmp fix the passes datas
 
   return (
     <div className={styles.CheckoutMain}>
