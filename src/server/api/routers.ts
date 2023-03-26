@@ -11,26 +11,40 @@ const stripe = new _stripe(env.STRIPE_SECRET_KEY, {
   apiVersion: "2022-11-15",
 });
 
+// zode input validation
+const orderInput = z.object({
+  // first_name: z.string(),
+  // last_name: z.string(),
+  // country: z.string(),
+  // address: z.string(),
+  // town: z.string(),
+  // zip: z.string(),
+  // phone: z.string(),
+  // email: z.string(),
+  // paymentMethod: z.enum(["PAYPAL", "STRIPE"]),
+  totalPrice: z.number(),
+  // watchids: z.array(z.string()),
+  // date: z.date().optional(),
+  // checkedEmail: z.boolean().optional(),
+  // checkedPhone: z.boolean().optional(),
+  // checkedSMS: z.boolean().optional(),
+});
+
 export const StripeRouter = createTRPCRouter({
   createCheckoutSession: publicProcedure
-    .input(
-      z.object({
-        amount: z.number(),
-        currency: z.string(),
-      })
-    )
-    .mutation(async ({ input: { amount, currency } }) => {
+    .input(orderInput)
+    .mutation(async (input) => {
       const session = await stripe.checkout.sessions.create({
         payment_method_types: ["card"],
         mode: "payment",
         line_items: [
           {
             price_data: {
-              currency: currency,
+              currency: "usd",
               product_data: {
-                name: "Product Name",
+                name: "Rolex",
               },
-              unit_amount: amount * 100, // in cents
+              unit_amount: input.input.totalPrice * 100,
             },
             quantity: 1,
           },
@@ -38,6 +52,9 @@ export const StripeRouter = createTRPCRouter({
         success_url: `${getBaseUrl()}/stripe?payment=success`,
         cancel_url: `${getBaseUrl()}/stripe?payment=cancel`,
       });
+      // if the session was created successfully
+      // insert the info in the database
+      // await prisma...
       return {
         url: session.url || `${getBaseUrl()}/stripe?payment=error`,
       };
