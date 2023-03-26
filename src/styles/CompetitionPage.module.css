@@ -189,6 +189,10 @@
   flex-direction: column;
   gap: 1rem;
 }
+.donations div {
+  display: flex;
+  align-items: center;
+}
 .donations p {
   font-weight: 300;
   font-size: 18px;
