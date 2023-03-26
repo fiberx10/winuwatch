@@ -743,9 +743,17 @@
   font-size: 18px;
   text-align: center;
 }
-@media only screen and (max-width: 372px) {
+@media only screen and (max-width: 375px) {
   .HeaderTit h1 {
     font-size: 45px !important;
+  }
+  .HeaderTit h2 {
+    font-size: 48px !important;
+  }
+}
+@media only screen and (max-width: 320px) {
+  .HeaderTit h2 {
+    font-size: 43px !important;
   }
 }
 @media only screen and (max-width: 425px) {
