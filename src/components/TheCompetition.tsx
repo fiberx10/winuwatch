@@ -12,7 +12,8 @@ const TheCompetition = () => {
         `.${styles.background2 ?? "undefined"}`
       ) as HTMLElement & { style: CSSStyleDeclaration };
       if (background) {
-        background.style.backgroundPositionY = `${-window.scrollY}px`;
+        background.style.backgroundPositionY =
+          window.scrollY === 0 ? "center" : `${-window.scrollY}px`;
       }
     };
     window.addEventListener("scroll", handleScroll);
@@ -22,7 +23,7 @@ const TheCompetition = () => {
     status: "ACTIVE",
   });
   return (
-    <div id="theComp" style={{ marginBottom: "250px" }} className={styles.Comp}>
+    <div id="theComp" style={{ marginBottom: "200px" }} className={styles.Comp}>
       <p className={styles.CompP}>
         “Necessarily a winner who will realize his dream or simply that of his
         wife”

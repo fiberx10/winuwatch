@@ -131,6 +131,7 @@
   align-items: center;
   justify-content: center;
   text-decoration: none;
+  transition: 0.5s all ease-in-out;
 }
 
 .cartCheckoutCon button {
@@ -142,13 +143,65 @@
   font-size: 20px;
   text-transform: uppercase;
   color: #ffffff;
-  font-family: "Orbitron", sans-serif;
+  font-family: "Montserrat", sans-serif;
+
   cursor: pointer;
 }
 .CartRight {
   display: flex;
   align-items: flex-start;
   gap: 5rem;
+}
+.ModalBox p {
+  font-weight: 300;
+  font-size: 20px;
+  text-transform: uppercase;
+  text-transform: uppercase;
+  color: #000000;
+  width: 70%;
+}
+.ModalBox div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.ModalBox span {
+  cursor: pointer;
+  font-size: 20px;
+}
+.ModalBox {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.ModalBox h1 {
+  font-weight: 400;
+  font-size: 45px;
+  font-family: "Iskry", sans-serif;
+  text-transform: uppercase;
+  color: #000000;
+}
+.questionsCon {
+  display: flex;
+  flex-wrap: wrap;
+  row-gap: 2rem;
+  transition: 0.5s all ease-in-out;
+}
+.questionsCon button {
+  width: 452px;
+  height: 93px;
+  background: #ffffff;
+  border: 1px solid #987358;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 18px;
+  font-family: "Montserrat", sans-serif;
+  text-transform: uppercase;
+  color: #000000;
+}
+.questionsCon button:hover {
+  background: #cbb9ac;
+  color: white;
 }
 @media only screen and (max-width: 768px) {
   .CartMain {

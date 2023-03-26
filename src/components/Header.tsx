@@ -12,12 +12,14 @@ export default function Header() {
         `.${styles.background ?? "undefined"}`
       ) as HTMLElement & { style: CSSStyleDeclaration };
       if (background) {
-        background.style.backgroundPositionY = `${-window.scrollY}px`;
+        background.style.backgroundPositionY =
+          window.scrollY === 0 ? "-124px" : `${-window.scrollY}px`;
       }
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
   return (
     <div className={styles.HomeHeader}>
       <NavBar />

@@ -1,10 +1,8 @@
 import { z } from "zod";
-
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { CompetitionStatus } from "@prisma/client";
 import { CreateOrderSchema } from "@/utils";
 export const CompetitionRouter = createTRPCRouter({
-
   getAll: publicProcedure
     .input(
       z.object({
@@ -31,19 +29,17 @@ export const CompetitionRouter = createTRPCRouter({
         },
       });
     }),
-  byID: publicProcedure
-    .input(z.string())
-    .query(({ ctx, input }) => {
-      return ctx.prisma.competition.findUnique({
-        where: {
-          id: input,
-        },
-        include: {
-          Watches: true,
-        },
-      });
-    }),
-  updateOne : publicProcedure
+  byID: publicProcedure.input(z.string()).query(({ ctx, input }) => {
+    return ctx.prisma.competition.findUnique({
+      where: {
+        id: input,
+      },
+      include: {
+        Watches: true,
+      },
+    });
+  }),
+  updateOne: publicProcedure
     .input(
       z.object({
         id: z.string(),
@@ -60,13 +56,13 @@ export const CompetitionRouter = createTRPCRouter({
       const { id, ...data } = input;
       return await ctx.prisma.competition.update({
         data: {
-          ...data
+          ...data,
         },
         where: {
           id,
         },
       });
-    })
+    }),
 });
 
 export const WatchesRouter = createTRPCRouter({
@@ -178,4 +174,15 @@ export const PaymentRouter = createTRPCRouter({
     }
     ),*/
     }),
+});
+
+export const QuestionRouter = createTRPCRouter({
+  getOneRandom: publicProcedure.query(async ({ ctx }) => {
+    const Questions = await ctx.prisma.question.findMany();
+    const randomIndex = Math.floor(Math.random() * Questions.length);
+    if (randomIndex < Questions.length && randomIndex >= 0) {
+      return Questions[randomIndex];
+    }
+    return Questions[0];
+  }),
 });

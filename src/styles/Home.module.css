@@ -20,7 +20,7 @@
   height: 100%;
   position: absolute;
   object-fit: cover;
-  filter: brightness(45%);
+  filter: brightness(50%);
 }
 .NavBarContainer {
   display: flex;
@@ -166,7 +166,7 @@
 }
 .background {
   background-image: url(https://content.rolex.com/dam/watches/family-pages/datejust/2023/a-date-with-destiny/classic-watches-datejust-a-date-with-destiny-yellow-cut-out.jpg);
-  background-position: center;
+  background-position-y: -124px;
   background-repeat: no-repeat;
   background-clip: text;
   background-size: 100% 100vh;
@@ -412,6 +412,7 @@
   position: relative;
 }
 .howtoText button {
+  font-family: "Montserrat", sans-serif;
   position: absolute;
   bottom: 0;
   right: 10rem;
