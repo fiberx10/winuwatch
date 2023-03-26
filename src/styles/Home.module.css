@@ -167,7 +167,7 @@
 .background {
   background-image: url(https://content.rolex.com/dam/watches/family-pages/datejust/2023/a-date-with-destiny/classic-watches-datejust-a-date-with-destiny-yellow-cut-out.jpg);
   background-position-y: -124px;
-  background-repeat: no-repeat;
+  background-repeat: repeat-y;
   background-clip: text;
   background-size: 100% 100vh;
   color: transparent;
@@ -176,7 +176,8 @@
 .background2 {
   background-image: url(https://content.rolex.com/dam/watches/family-pages/datejust/2023/a-date-with-destiny/classic-watches-datejust-a-date-with-destiny-yellow-cut-out.jpg);
   background-position: center;
-  background-repeat: no-repeat;
+  background-repeat: repeat-y;
+
   background-clip: text;
   background-size: 100% 100vh;
   color: transparent;
@@ -184,7 +185,8 @@
 }
 .background3 {
   background-image: url(https://content.rolex.com/dam/watches/family-pages/datejust/2023/a-date-with-destiny/classic-watches-datejust-a-date-with-destiny-yellow-cut-out.jpg);
-  background-repeat: no-repeat;
+  background-repeat: repeat-y;
+
   background-clip: text;
   background-size: 100% 100vh;
   color: transparent;
@@ -192,7 +194,8 @@
 }
 .background4 {
   background-image: url(https://content.rolex.com/dam/watches/family-pages/datejust/2023/a-date-with-destiny/classic-watches-datejust-a-date-with-destiny-yellow-cut-out.jpg);
-  background-repeat: no-repeat;
+  background-repeat: repeat-y;
+
   background-clip: text;
   background-size: 100% 100vh;
   color: transparent;
@@ -787,6 +790,7 @@
   .watchConSkelet {
     width: 100% !important;
   }
+
   .Logo {
     position: absolute;
     left: 39%;
@@ -864,9 +868,7 @@
   .timer p {
     font-size: 40px;
   }
-  .background2 {
-    background-position: top;
-  }
+
   .timerItem {
     display: flex;
     flex-direction: column;
@@ -1010,16 +1012,15 @@
     text-align: center;
   }
 }
-@media only screen and (min-width: 930px) and (max-width: 1242px) {
-  .flexEnd {
-    min-width: 250px;
-    width: 370px;
-    gap: 2.5rem;
-  }
-
+@media only screen and (min-width: 930px) and (max-width: 1440px) {
   .flexStart {
-    min-width: 250px;
-    width: 370px;
+    min-width: 28%;
+    width: 34%;
+  }
+  .flexEnd {
+    gap: 2.5rem;
+    width: 34%;
+    min-width: 28%;
   }
   .compWatches {
     justify-content: center;
@@ -1143,18 +1144,18 @@
   }
 }
 @media only screen and (min-width: 930px) and (max-width: 1210px) {
-  .flexEnd {
+  /* .flexEnd {
     min-width: 250px;
     width: 370px;
     gap: 2.5rem;
-  }
+  } */
   .watches {
     margin-left: 70px;
   }
-  .flexStart {
+  /* .flexStart {
     min-width: 250px;
     width: 370px;
-  }
+  } */
   .compWatches {
     flex-direction: column;
     justify-content: center;
@@ -1172,20 +1173,26 @@
     gap: 0.2rem;
   }
 }
-@media only screen and (min-width: 768px) and (max-width: 980px) {
+@media only screen and (min-width: 768px) and (max-width: 1116px) {
   .Footer {
     height: fit-content;
     gap: 2rem;
   }
 
   .FooterTop {
+    gap: 2rem;
     flex-wrap: wrap;
     align-items: center;
-    justify-content: center;
-    gap: 2rem;
+    justify-content: space-evenly;
+  }
+  .FooterTopRight {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 }
-@media only screen and (min-width: 1440px) and (max-width: 2560px) {
+@media only screen and (min-width: 1441px) and (max-width: 2560px) {
   .flexEnd {
     width: 42.3%;
   }
