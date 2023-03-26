@@ -108,9 +108,8 @@ export const CompetitionRouter = createTRPCRouter({
 });
 
 export const WatchesRouter = createTRPCRouter({
-  getAll: publicProcedure.query(({ ctx }) => {
-    return ctx.prisma.watches.findMany();
-  }),
+  getAll: publicProcedure.query(({ ctx }) =>  ctx.prisma.watches.findMany()
+  ),
   byID: publicProcedure
     .input(z.object({ id: z.string() }))
     .query(({ ctx, input }) => {

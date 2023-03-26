@@ -89,7 +89,7 @@ const CheckoutComp = () => {
 
   // handle stripe payment
 
-  const handleForm = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleForm =  (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log("Form submitted");
     const paymentData = { amount: totalCost * 100, currency: "eur" };
