@@ -7,6 +7,9 @@ import DashboardNav from "@/components/dashboard/DashboardNav";
 const index = () => {
   const { Menu } = UseStore();
 
+  // list of vues in the dashboard
+  const views = ["Vue d'ensemble", "Compétitions", "Équipes", "Joueurs"];
+
   return (
     <div className={styles.MainCon}>
       <DashboardMainNav />

@@ -5,16 +5,10 @@ import React, { useState } from "react";
 import styles from "@/styles/Checkout.module.css";
 import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js";
 import { useRouter } from "next/router";
-
+import { env } from "@/env.mjs";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { api, type RouterInputs, Formater } from "@/utils";
 import { useCart } from "./Store";
-
-import { env } from "@/env.mjs";
-import { loadStripe } from "@stripe/stripe-js";
-import { Elements } from "@stripe/react-stripe-js";
-
-const stripePromise = loadStripe(env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
 
 // import { CreateOrderSchema } from "@/utils/Schema";
 //import { zodResolver } from '@hookform/resolvers/zod';
@@ -26,9 +20,14 @@ type CreatePayemtnTYpe = RouterInputs["Payment"]["create"];
 const CheckoutComp = () => {
   //
   const router = useRouter();
+
   const Hook = api.Stripe.createCheckoutSession.useMutation();
   const { competitions, cardDetails, reset, addComp, removeComp, updateComp } =
     useCart();
+
+  const { data: items } = api.Competition.getAll.useQuery({
+    ids: competitions.map((comp) => comp.compID),
+  });
 
   const IsLegal = (Birthdate?: Date) => {
     const LegalAge = 18;
@@ -44,9 +43,7 @@ const CheckoutComp = () => {
   };
 
   const { totalCost, Number_of_item } = cardDetails();
-
   const [error, setError] = useState<string | undefined>();
-
   const VAT = 0.2;
 
   const {
@@ -63,36 +60,16 @@ const CheckoutComp = () => {
       watchids: competitions.map((comp) => comp.compID) || [],
     },
   });
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const onSubmit: SubmitHandler<RouterInputs["Payment"]["create"]> = async (
-    data
-  ) => {
-    //check if the date is more than 16 years
 
-    if (data.date && IsLegal(data.date)) {
-      const { sucess, error: trpcError } = await api.Payment.create
-        .useMutation()
-        .mutateAsync({ ...data });
-      if (sucess && !trpcError) {
-        reset(); // here we reset the cart
-        await router.push("/payment"); // push soemwher
-      } else {
-        // handle error
-        setError(trpcError);
-        //do something with error
-      }
-    } else {
+  const onSubmit: SubmitHandler = async (data: CreatePayemtnTYpe) => {
+    // if the player is less than 18 years old
+    if (!IsLegal(data.date)) {
       setError("You must be 18 years or older to purchase ");
+      return;
     }
-  };
-  const { data: items } = api.Competition.getAll.useQuery({
-    ids: competitions.map((comp) => comp.compID),
-  });
+    // ! THIS SHOILD BE INSIDE THE CONDITION
+    createCheckoutSession({ totalPrice: Formater(totalCost * 1.02) }); // tmp fix the passes datas
 
-  // handle stripe payment
-
-  
-  
   return (
     <div className={styles.CheckoutMain}>
       {items && (
@@ -100,6 +77,8 @@ const CheckoutComp = () => {
           <form onSubmit={(e)=> {
             console.log("here")
           }}>
+
+
             <div className={styles.CheckoutLeft}>
               <div className={styles.leftFormItem}>
                 <h1>Billing Information</h1>
@@ -110,7 +89,7 @@ const CheckoutComp = () => {
                       <input
                         required
                         id="firstName"
-                        type={"text"}
+                        type="text"
                         name="firstName"
                       />
                     </div>
@@ -396,6 +375,7 @@ const CheckoutComp = () => {
                       />
                     </PayPalScriptProvider>
                   ) : (
+
                     <button
                       onClick={async (e) => {
                         e.preventDefault();
@@ -414,6 +394,7 @@ const CheckoutComp = () => {
                       }}
                     >
                       Confirm Order
+
                     </button>
                   )}
                 </div>

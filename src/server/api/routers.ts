@@ -11,8 +11,28 @@ const stripe = new _stripe(env.STRIPE_SECRET_KEY, {
   apiVersion: "2022-11-15",
 });
 
+// zode input validation
+const orderInput = z.object({
+  // first_name: z.string(),
+  // last_name: z.string(),
+  // country: z.string(),
+  // address: z.string(),
+  // town: z.string(),
+  // zip: z.string(),
+  // phone: z.string(),
+  // email: z.string(),
+  // paymentMethod: z.enum(["PAYPAL", "STRIPE"]),
+  totalPrice: z.number(),
+  // watchids: z.array(z.string()),
+  // date: z.date().optional(),
+  // checkedEmail: z.boolean().optional(),
+  // checkedPhone: z.boolean().optional(),
+  // checkedSMS: z.boolean().optional(),
+});
+
 export const StripeRouter = createTRPCRouter({
   createCheckoutSession: publicProcedure
+
     .input(
       z.object({
         email : z.string().email(),
@@ -27,6 +47,7 @@ export const StripeRouter = createTRPCRouter({
     )
     .mutation(async ({ input, ctx }) => {
       return await stripe.checkout.sessions.create({
+
         payment_method_types: ["card"],
         mode: "payment",
         line_items: (
@@ -48,12 +69,21 @@ export const StripeRouter = createTRPCRouter({
                 //images: [`${getBaseUrl()+comp.Watches.images_url[0]}`],
               },
               unit_amount : Math.floor(comp.ticket_price * 100), // in cents
+
             },
             quantity: input.comps.find((item) => item.compID === comp.id)?.quantity || 0,
           })),
         success_url: `${getBaseUrl()}/stripe?payment=success`,
         cancel_url: `${getBaseUrl()}/CheckoutPage`,
       });
+
+      // if the session was created successfully
+      // insert the info in the database
+      // await prisma...
+      return {
+        url: session.url || `${getBaseUrl()}/stripe?payment=error`,
+      };
+
     }),
 });
 
