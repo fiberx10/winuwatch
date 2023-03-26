@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import styles from "@/styles/Cart.module.css";
 import Image from "next/image";
 import { useCart } from "./Store";
