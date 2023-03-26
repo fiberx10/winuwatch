@@ -233,8 +233,8 @@
   flex-wrap: wrap;
   align-items: center;
   width: 100%;
-  row-gap: 10rem;
-  justify-content: space-evenly;
+  row-gap: 10rem !important;
+  justify-content: space-evenly !important;
 }
 .timer {
   display: flex;
@@ -846,11 +846,12 @@
     font-size: 35px;
   }
   .compWatches {
-    flex-direction: column;
     gap: 13rem;
+    flex-direction: column;
   }
   .watches {
     flex-direction: column-reverse;
+    scroll-snap-align: center;
     align-items: center;
     width: 100%;
   }
