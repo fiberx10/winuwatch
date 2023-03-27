@@ -8,12 +8,32 @@ import Modal from "react-bootstrap/Modal";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
-
+interface FormState {
+  [key: string]: string | number;
+}
 const DashboardCompetitions = () => {
+  //ADD
+  const [add, setAdd] = useState(false);
+  const [addComp, setAddComp] = useState<FormState>({});
+
+  const handleAddNewComp = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormState((prevState) => ({
+      ...prevState,
+      [name]: isNaN(Number(value)) ? value : Number(value),
+    }));
+  };
+  const submitNewComp = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault(); // prevent the form from submitting normally
+    console.log("Form submitted:", addComp);
+  };
+
+  // UPDATE
   const [show, setShow] = useState({ modal: false, data: 0 });
   const [changed, setIsChanged] = useState(true);
   const [formState, setFormState] = useState<object>();
 
+  // HANDLE UPDATE MODAL FORM
   const handleClose = () => {
     setShow({ modal: false, data: 0 });
     setIsChanged(true);
@@ -25,7 +45,6 @@ const DashboardCompetitions = () => {
     });
     setFormState(comp);
   };
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setIsChanged(false);
     const { name, value } = e.target;
@@ -37,6 +56,7 @@ const DashboardCompetitions = () => {
     console.log("Form submitted:", formState);
   };
 
+  //DATA FROM BACKEND
   const { data, isLoading } = api.Competition.getEverything.useQuery();
   const { data: watches } = api.Watches.getAll.useQuery();
 
@@ -44,7 +64,7 @@ const DashboardCompetitions = () => {
     <div className={styles.DashCompsMain}>
       <div className={styles.dashCompsTopHeader}>
         <h1>Your Competitions</h1>
-        <Button variant="primary">
+        <Button onClick={() => setAdd(true)} variant="primary">
           <PlusOutlined /> Add
         </Button>
       </div>
@@ -260,6 +280,149 @@ const DashboardCompetitions = () => {
           })}
         </div>
       )}
+      <Modal show={add} onHide={() => setAdd(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Modal heading</Modal.Title>
+        </Modal.Header>
+        <Form onSubmit={handleSubmit}>
+          <Modal.Body>
+            <Row className="mb-3">
+              <Form.Group className="mb-3">
+                <Form.Label>Name of Competition</Form.Label>
+                <Form.Control
+                  name="name"
+                  onChange={handleAddNewComp}
+                  placeholder="Enter Name"
+                />
+              </Form.Group>
+              <Form.Group className="mb-3">
+                <Form.Label>Start Date Competition</Form.Label>
+                <Form.Control
+                  placeholder="Enter Date"
+                  name="start_date"
+                  onChange={handleAddNewComp}
+                />
+              </Form.Group>
+              <Form.Group className="mb-3">
+                <Form.Label>End Date Competition</Form.Label>
+                <Form.Control
+                  placeholder="Enter Date"
+                  name="end_date"
+                  onChange={handleAddNewComp}
+                />
+              </Form.Group>
+              <Form.Group as={Col}>
+                <Form.Label>Location</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="1234 Main St"
+                  name="location"
+                  onChange={handleAddNewComp}
+                />
+              </Form.Group>
+
+              <Form.Group as={Col} controlId="formGridPassword">
+                <Form.Label>Overall Price</Form.Label>
+                <Form.Control
+                  type="number"
+                  placeholder="Price"
+                  name="price"
+                  onChange={handleAddNewComp}
+                />
+              </Form.Group>
+            </Row>
+            <Row classa="mb-3">
+              <Form.Group as={Col}>
+                <Form.Label>Final Draw Spaces</Form.Label>
+                <Form.Control
+                  type="number"
+                  onChange={handleAddNewComp}
+                  placeholder="Number of Spaces"
+                  name="max_space_in_final_draw"
+                />
+              </Form.Group>
+
+              <Form.Group as={Col} controlId="formGridState">
+                <Form.Label>Max Watch Number</Form.Label>
+                <Form.Control
+                  type="number"
+                  onChange={handleAddNewComp}
+                  placeholder="Number of Watches"
+                  name="max_watch_number"
+                />
+              </Form.Group>
+            </Row>
+            <Form.Group className="mb-3">
+              <Form.Label>Run up Prize</Form.Label>
+              <Form.Control
+                onChange={handleAddNewComp}
+                type="text"
+                placeholder="Run up Prize"
+                name="run_up_prize"
+              />
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Watch of The Competition</Form.Label>
+              <Form.Control
+                as="select"
+                name="Watch"
+                onChange={handleAddNewComp}
+              >
+                {watches?.map((watch, i) => {
+                  return (
+                    <option key={i} value={watch.id}>
+                      {watch.brand} {watch.model}
+                    </option>
+                  );
+                })}
+              </Form.Control>
+            </Form.Group>
+
+            <Row className="mb-3">
+              <Form.Group as={Col}>
+                <Form.Label>Total Tickets</Form.Label>
+                <Form.Control
+                  onChange={handleAddNewComp}
+                  name="total_tickets"
+                  type="number"
+                  placeholder="Total Tickets"
+                />
+              </Form.Group>
+
+              <Form.Group as={Col}>
+                <Form.Label>Ticket Price</Form.Label>
+                <Form.Control
+                  onChange={handleAddNewComp}
+                  type="number"
+                  placeholder="Price Per Ticket"
+                  name="ticket_price"
+                />
+              </Form.Group>
+
+              <Form.Group as={Col} controlId="formGridZip">
+                <Form.Label>Status</Form.Label>
+                <Form.Control
+                  as="select"
+                  onChange={handleAddNewComp}
+                  name="status"
+                >
+                  <option value="ACTIVE">ACTIVE</option>
+                  <option value="NOT_ACTIVE">NOT ACTIVE</option>
+                  <option value="COMPLETED">COMPLETED</option>
+                </Form.Control>
+              </Form.Group>
+            </Row>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={() => setAdd(false)}>
+              Close
+            </Button>
+            <Button variant="primary" type="submit">
+              Save Changes
+            </Button>
+          </Modal.Footer>
+        </Form>
+      </Modal>
     </div>
   );
 };
