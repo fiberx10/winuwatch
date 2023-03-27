@@ -6,6 +6,7 @@ import {
   SettingOutlined,
   TrophyOutlined,
   UsergroupAddOutlined,
+  BookOutlined,
 } from "@ant-design/icons/lib/icons";
 import Image from "next/image";
 import { useStore } from "@/components/Store";
@@ -13,8 +14,8 @@ import { useStore } from "@/components/Store";
 const DashboardMainNav = () => {
   const { menu: Menu, selectMenu } = useStore();
 
-  const Dashmenus = ["Vue d'ensemble", "Concours", "Prix"];
-  const secMenus = ["Participants", "Communication", "Paramètres"];
+  const Dashmenus = ["Dashboard", "Competitions", "Watches", "Orders"];
+  const secMenus = ["Participants", "Communication", "Settings"];
   return (
     <div className={styles.Dashboard}>
       <div className={styles.menusWrap}>
@@ -34,8 +35,10 @@ const DashboardMainNav = () => {
                   <HomeOutlined />
                 ) : i === 1 ? (
                   <ReconciliationOutlined />
-                ) : (
+                ) : i === 2 ? (
                   <TrophyOutlined />
+                ) : (
+                  <BookOutlined />
                 )}
                 <p>{menu}</p>
               </div>

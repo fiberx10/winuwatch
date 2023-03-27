@@ -29,6 +29,13 @@ export const CompetitionRouter = createTRPCRouter({
         },
       });
     }),
+  getEverything: publicProcedure.query(async ({ ctx }) => {
+    return await ctx.prisma.competition.findMany({
+      include: {
+        Watches: true,
+      },
+    });
+  }),
   byID: publicProcedure.input(z.string()).query(({ ctx, input }) => {
     return ctx.prisma.competition.findUnique({
       where: {

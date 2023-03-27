@@ -3,6 +3,7 @@
   align-items: flex-start;
   background-color: #fff;
 }
+
 .Dashboard {
   width: 181px;
   height: 100vh;
@@ -13,6 +14,9 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+}
+.Dashboard p {
+  margin-bottom: 0 !important;
 }
 .logo {
   display: grid;
@@ -74,4 +78,76 @@
 }
 .Body {
   padding: 0px 20px 20px 20px;
+  width: 100%;
+}
+.DashCompsMain {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+.dashCompsGrid {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+}
+.dashGridItem {
+  width: 49%;
+  height: fit-content;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  padding: 20px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.dashGridItemTop {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+.dashGridItemBot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.dashGridItemBot div {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.dashGridItemTop p {
+  width: 45%;
+  color: grey;
+  font-weight: 400;
+  margin-bottom: 0 !important;
+}
+.dashGridItem h2 {
+  font-size: 20px;
+  text-transform: uppercase;
+  font-weight: 400;
+  margin-bottom: 0 !important;
+}
+.dashCompsTopHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.dashCompsTopHeader button {
+  display: flex;
+  align-items: center;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  gap: 0.5rem;
+  padding: 5px 15px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.dashCompsTopHeader h1 {
+  font-family: "Iskry", sans-serif;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+@font-face {
+  font-family: Iskry;
+  src: url(../../public/images/Iskry-Regular.otf);
 }

@@ -1,12 +1,11 @@
 import { create } from "zustand";
 import { Order } from "@prisma/client";
 
-interface Comp  {
+interface Comp {
   compID: string;
   number_tickets: number;
   price_per_ticket: number;
 }
-
 
 interface RootState {
   competitions: {
@@ -14,7 +13,11 @@ interface RootState {
     number_tickets: number;
     price_per_ticket: number;
   }[];
-  addComp: ({ compID, number_tickets, price_per_ticket }: {
+  addComp: ({
+    compID,
+    number_tickets,
+    price_per_ticket,
+  }: {
     compID: string;
     number_tickets: number;
     price_per_ticket: number;
@@ -24,7 +27,7 @@ interface RootState {
     totalCost: number;
     Number_of_item: number;
   };
-  
+
   updateComp: ({
     compID,
     number_tickets,
@@ -33,13 +36,13 @@ interface RootState {
   reset: () => void;
 }
 
-type Pages = "Vue d'ensemble" | "Concours" | "Prix";
+type Pages = "Dashboard" | "Competitions" | "Watches";
 
 export const useStore = create<{
   menu: Pages;
-  selectMenu: (params: "Vue d'ensemble" | "Concours" | "Prix") => void;
+  selectMenu: (params: "Dashboard" | "Competitions" | "Watches") => void;
 }>((set, get) => ({
-  menu: "Vue d'ensemble",
+  menu: "Dashboard",
   selectMenu: (params) => set({ menu: params }),
 }));
 
