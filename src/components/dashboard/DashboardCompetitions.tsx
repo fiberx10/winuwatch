@@ -12,13 +12,15 @@ interface FormState {
   [key: string]: string | number;
 }
 const DashboardCompetitions = () => {
+  //REMOVE COMPETITION
+  const [remove, setRemove] = useState(false);
   //ADD
   const [add, setAdd] = useState(false);
   const [addComp, setAddComp] = useState<FormState>({});
 
   const handleAddNewComp = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormState((prevState) => ({
+    setAddComp((prevState) => ({
       ...prevState,
       [name]: isNaN(Number(value)) ? value : Number(value),
     }));
@@ -88,7 +90,9 @@ const DashboardCompetitions = () => {
                 </div>
                 <div className={styles.dashGridItemBot}>
                   <div>
-                    <Button variant="danger">Remove</Button>
+                    <Button onClick={() => setRemove(true)} variant="danger">
+                      Remove
+                    </Button>
                     <Button
                       variant="secondary"
                       onClick={() => handleShow(i, comp)}
@@ -280,11 +284,11 @@ const DashboardCompetitions = () => {
           })}
         </div>
       )}
-      <Modal show={add} onHide={() => setAdd(false)}>
+      <Modal show={add}>
         <Modal.Header closeButton>
           <Modal.Title>Modal heading</Modal.Title>
         </Modal.Header>
-        <Form onSubmit={handleSubmit}>
+        <Form onSubmit={submitNewComp}>
           <Modal.Body>
             <Row className="mb-3">
               <Form.Group className="mb-3">
@@ -422,6 +426,20 @@ const DashboardCompetitions = () => {
             </Button>
           </Modal.Footer>
         </Form>
+      </Modal>
+      <Modal show={remove} onHide={() => setRemove(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Confirmation</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Do you wish to delete this competition ?</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setRemove(false)}>
+            Cancel
+          </Button>
+          <Button variant="danger" onClick={() => setRemove(false)}>
+            Remove
+          </Button>
+        </Modal.Footer>
       </Modal>
     </div>
   );
