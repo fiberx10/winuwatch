@@ -3,9 +3,9 @@ import styles from "@/styles/Checkout.module.css";
 import Image from "next/image";
 import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js";
 import { useRouter } from "next/router";
-import { env } from "../env.mjs";
-import { useForm, SubmitHandler } from "react-hook-form";
-import { api, RouterInputs, Formater } from "@/utils";
+import { env } from "@/env.mjs";
+import { useForm, type SubmitHandler } from "react-hook-form";
+import { api, type RouterInputs, Formater } from "@/utils";
 import { useCart } from "./Store";
 
 //import { CreateOrderSchema} from "@/utils/Schema";
