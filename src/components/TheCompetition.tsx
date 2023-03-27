@@ -31,7 +31,7 @@ const TheCompetition = () => {
       <h1 className={styles.background2}>The Competition</h1>
       <div className={styles.compWatches}>
         {data && data.length > 0 ? (
-          [...data, ...data, ...data, ...data].map((watch) => {
+          data.map((watch) => {
             return (
               <div className={styles.watches} key={watch.id}>
                 <div className={styles.watchCon}>

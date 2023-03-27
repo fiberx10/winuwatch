@@ -55,6 +55,9 @@ const DashboardCompetitions = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault(); // prevent the form from submitting normally
     setIsChanged(true);
+    // const {  data: update } = await api.Competition.updateOne
+    // .useMutation()
+    // .mutateAsync({ id: formState.id });
     console.log("Form submitted:", formState);
   };
 
@@ -71,7 +74,7 @@ const DashboardCompetitions = () => {
         </Button>
       </div>
       {isLoading ? (
-        <p>isLoading...</p>
+        <p>Loading...</p>
       ) : (
         <div className={styles.dashCompsGrid}>
           {data?.map((comp, i) => {
@@ -294,6 +297,7 @@ const DashboardCompetitions = () => {
               <Form.Group className="mb-3">
                 <Form.Label>Name of Competition</Form.Label>
                 <Form.Control
+                  required
                   name="name"
                   onChange={handleAddNewComp}
                   placeholder="Enter Name"
@@ -302,6 +306,7 @@ const DashboardCompetitions = () => {
               <Form.Group className="mb-3">
                 <Form.Label>Start Date Competition</Form.Label>
                 <Form.Control
+                  required
                   placeholder="Enter Date"
                   name="start_date"
                   onChange={handleAddNewComp}
@@ -310,6 +315,7 @@ const DashboardCompetitions = () => {
               <Form.Group className="mb-3">
                 <Form.Label>End Date Competition</Form.Label>
                 <Form.Control
+                  required
                   placeholder="Enter Date"
                   name="end_date"
                   onChange={handleAddNewComp}
@@ -368,6 +374,7 @@ const DashboardCompetitions = () => {
             <Form.Group className="mb-3">
               <Form.Label>Watch of The Competition</Form.Label>
               <Form.Control
+                required
                 as="select"
                 name="Watch"
                 onChange={handleAddNewComp}
@@ -386,6 +393,7 @@ const DashboardCompetitions = () => {
               <Form.Group as={Col}>
                 <Form.Label>Total Tickets</Form.Label>
                 <Form.Control
+                  required
                   onChange={handleAddNewComp}
                   name="total_tickets"
                   type="number"
@@ -396,6 +404,7 @@ const DashboardCompetitions = () => {
               <Form.Group as={Col}>
                 <Form.Label>Ticket Price</Form.Label>
                 <Form.Control
+                  required
                   onChange={handleAddNewComp}
                   type="number"
                   placeholder="Price Per Ticket"
@@ -406,6 +415,7 @@ const DashboardCompetitions = () => {
               <Form.Group as={Col} controlId="formGridZip">
                 <Form.Label>Status</Form.Label>
                 <Form.Control
+                  required
                   as="select"
                   onChange={handleAddNewComp}
                   name="status"
@@ -427,6 +437,7 @@ const DashboardCompetitions = () => {
           </Modal.Footer>
         </Form>
       </Modal>
+
       <Modal show={remove} onHide={() => setRemove(false)}>
         <Modal.Header closeButton>
           <Modal.Title>Confirmation</Modal.Title>
