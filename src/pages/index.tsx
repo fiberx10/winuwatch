@@ -1,13 +1,14 @@
 import { type NextPage } from "next";
+
+import "react-alice-carousel/lib/alice-carousel.css";
+
 import Head from "next/head";
 import Header from "@/components/Header";
 import TheCompetition from "@/components/TheCompetition";
-import Winners from "@/components/Winners";
 import HowToPlay from "@/components/HowToPlay";
 import Certificate from "@/components/Certificate";
 import Reviews from "@/components/Reviews";
 import Footer from "@/components/Footer";
-import "react-alice-carousel/lib/alice-carousel.css";
 
 import { api } from "@/utils/api";
 

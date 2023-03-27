@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from "react";
+/* eslint-disable @typescript-eslint/no-unsafe-argument  */
+/* eslint-disable @typescript-eslint/no-floating-promises */
+/*  eslint-disable @typescript-eslint/no-misused-promises */
+import React, { useState } from "react";
 import styles from "@/styles/Checkout.module.css";
-import Image from "next/image";
 import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js";
 import { useRouter } from "next/router";
 import { env } from "@/env.mjs";
@@ -8,7 +10,7 @@ import { useForm, type SubmitHandler } from "react-hook-form";
 import { api, type RouterInputs, Formater } from "@/utils";
 import { useCart } from "./Store";
 
-//import { CreateOrderSchema} from "@/utils/Schema";
+// import { CreateOrderSchema } from "@/utils/Schema";
 //import { zodResolver } from '@hookform/resolvers/zod';
 
 const IsLegal = (Birthdate?: Date) => {
@@ -23,16 +25,39 @@ const IsLegal = (Birthdate?: Date) => {
     ).getTime() >= date.getTime()
   );
 };
+import "@/styles/Checkout.module.css";
 
 type CreatePayemtnTYpe = RouterInputs["Payment"]["create"];
 
 const CheckoutComp = () => {
+  //
   const router = useRouter();
+
+  const Hook = api.Stripe.createCheckoutSession.useMutation();
   const { competitions, cardDetails, reset, addComp, removeComp, updateComp } =
     useCart();
+
+  const { data: items } = api.Competition.getAll.useQuery({
+    ids: competitions.map((comp) => comp.compID),
+  });
+
+  const IsLegal = (Birthdate?: Date) => {
+    const LegalAge = 18;
+    const now = new Date();
+    const date = Birthdate || new Date();
+    return (
+      new Date(
+        now.getFullYear() - LegalAge,
+        now.getMonth(),
+        now.getDate()
+      ).getTime() >= date.getTime()
+    );
+  };
+
   const { totalCost, Number_of_item } = cardDetails();
   const [error, setError] = useState<string | undefined>();
   const VAT = 0.2;
+
   const {
     register,
     handleSubmit,
@@ -47,36 +72,17 @@ const CheckoutComp = () => {
       watchids: competitions.map((comp) => comp.compID) || [],
     },
   });
-  const onSubmit: SubmitHandler<RouterInputs["Payment"]["create"]> = async (
-    data
-  ) => {
-    //check if the date is more than 16 years
 
-    if (data.date && IsLegal(data.date)) {
-      const { sucess, error: trpcError } = await api.Payment.create
-        .useMutation()
-        .mutateAsync({ ...data });
-      if (sucess && !trpcError) {
-        reset(); // here we reset the cart
-        await router.push("/payment"); // push soemwher
-      } else {
-        // handle error
-        setError(trpcError);
-        //do something with error
-      }
-    } else {
-      setError("You must be 18 years or older to purchase ");
-    }
-  };
-  const { data: items, isLoading } = api.Competition.getAll.useQuery({
-    ids: competitions.map((comp) => comp.compID),
-  });
 
   return (
     <div className={styles.CheckoutMain}>
       {items && (
         <div className={styles.formMain}>
-          <form>
+          <form onSubmit={(e)=> {
+            console.log("here")
+          }}>
+
+
             <div className={styles.CheckoutLeft}>
               <div className={styles.leftFormItem}>
                 <h1>Billing Information</h1>
@@ -87,7 +93,7 @@ const CheckoutComp = () => {
                       <input
                         required
                         id="firstName"
-                        type={"text"}
+                        type="text"
                         name="firstName"
                       />
                     </div>
@@ -128,7 +134,13 @@ const CheckoutComp = () => {
                     </div>
                     <div className={styles.formField}>
                       <label htmlFor="lastName">ZIP</label>
-                      <input required id="Zip" name="Zip" type={"number"} />
+                      <input
+                        required
+                        id="Zip"
+                        name="Zip"
+                        type={"number"}
+                        min={0}
+                      />
                     </div>
                   </div>
                   <div className={styles.formRow}>
@@ -203,6 +215,20 @@ const CheckoutComp = () => {
                     >
                       PayPal
                     </p>
+                  </div>
+                  <div className={styles.method}>
+                    <input type="radio" name="payment" value="Stripe" />
+                    <label
+                      htmlFor="Stripe"
+                      style={{
+                        color:
+                          getValues("paymentMethod") === "STRIPE"
+                            ? "#987358"
+                            : "rgba(30, 30, 30, 0.6)",
+                      }}
+                    >
+                      Credit card
+                    </label>
                   </div>
                 </div>
                 <div className={styles.SignMeUp}>
@@ -376,7 +402,27 @@ const CheckoutComp = () => {
                       />
                     </PayPalScriptProvider>
                   ) : (
-                    <button type="submit">Confirm Order</button>
+
+                    <button
+                      onClick={async (e) => {
+                        e.preventDefault();
+                        const {url} = await Hook.mutateAsync({
+                          email : "test@email.com",
+                          address : "hay ahahha",
+                          comps: competitions.map((comp) => ({
+                            compID: comp.compID,
+                            quantity: comp.number_tickets,
+                          })),
+                        })
+                        if (url) {
+                          router.push(url)
+                        }
+
+                      }}
+                    >
+                      Confirm Order
+
+                    </button>
                   )}
                 </div>
               </div>
