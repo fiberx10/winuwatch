@@ -133,6 +133,7 @@ export default function NavBar() {
         width={200}
         height={105.42}
         className={styles.Logo}
+        onClick={() => router.push("/")}
         alt="logo"
         src={`/images/${navColor === "white" ? "newLogo.png" : "logo.png"}`}
       />

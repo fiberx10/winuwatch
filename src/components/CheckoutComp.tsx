@@ -6,7 +6,7 @@ import { useRouter } from "next/router";
 import { env } from "../env.mjs";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { api, RouterInputs, Formater } from "@/utils";
-import {useCart} from "./Store";
+import { useCart } from "./Store";
 
 //import { CreateOrderSchema} from "@/utils/Schema";
 //import { zodResolver } from '@hookform/resolvers/zod';
@@ -23,7 +23,6 @@ const IsLegal = (Birthdate?: Date) => {
     ).getTime() >= date.getTime()
   );
 };
-
 
 type CreatePayemtnTYpe = RouterInputs["Payment"]["create"];
 
@@ -70,7 +69,7 @@ const CheckoutComp = () => {
     }
   };
   const { data: items, isLoading } = api.Competition.getAll.useQuery({
-    ids: competitions.map((comp) => comp.compID)
+    ids: competitions.map((comp) => comp.compID),
   });
 
   return (
@@ -162,6 +161,32 @@ const CheckoutComp = () => {
                 <h1>Payment Method</h1>
                 <div className={styles.PaymentMethod}>
                   <div className={styles.method}>
+                    <input type="radio" name="payment" value="Stripe" />
+                    <p
+                      style={{
+                        color:
+                          getValues("paymentMethod") === "STRIPE"
+                            ? "#987358"
+                            : "rgba(30, 30, 30, 0.6)",
+                      }}
+                    >
+                      Debit card
+                    </p>
+                  </div>
+                  <div className={styles.method}>
+                    <input type="radio" name="payment" value="Stripe" />
+                    <p
+                      style={{
+                        color:
+                          getValues("paymentMethod") === "STRIPE"
+                            ? "#987358"
+                            : "rgba(30, 30, 30, 0.6)",
+                      }}
+                    >
+                      credit card
+                    </p>
+                  </div>
+                  <div className={styles.method}>
                     <input
                       type="radio"
                       name="payment"
@@ -179,39 +204,23 @@ const CheckoutComp = () => {
                       PayPal
                     </p>
                   </div>
-                  <div className={styles.method}>
-                    <input type="radio" name="payment" value="Stripe" />
-                    <p
-                      style={{
-                        color:
-                          getValues("paymentMethod") === "STRIPE"
-                            ? "#987358"
-                            : "rgba(30, 30, 30, 0.6)",
-                      }}
-                    >
-                      Stripe
-                    </p>
-                  </div>
                 </div>
                 <div className={styles.SignMeUp}>
                   <label>
                     <input type="checkbox" />
-                    <p>Sign me up to recieve email updates and news</p>
+                    <p>
+                      I have read the <u>Terms & Conditions</u> and{" "}
+                      <u>privacy policy</u>
+                    </p>
                   </label>
                   <label>
                     <input type="checkbox" />
-                    <p>Sign me up to recieve SMS updates and news</p>
+                    <p>
+                      I agree to the <u>Terms & Conditions</u> and{" "}
+                      <u>privacy policy</u>
+                    </p>
                   </label>
                 </div>
-                <p className={styles.paymDesc}>
-                  It is a long established fact that a reader will be distracted
-                  by the readable content of a page when looking at its layout.
-                  The point of using Lorem Ipsum is that it has a more-or-less
-                  normal distribution It is a long established fact that a
-                  reader will be distracted by the readable content of a page
-                  when looking at its layout. The point of using Lorem Ipsum is
-                  that it has a more-or-less normal distribution
-                </p>
               </div>
             </div>
             <div className={styles.CheckoutRight}>
