@@ -11,6 +11,9 @@ import Head from "next/head";
 const index = () => {
   const { menu } = UseStore();
 
+  // list of vues in the dashboard
+  const views = ["Vue d'ensemble", "Compétitions", "Équipes", "Joueurs"];
+
   return (
     <div className={styles.MainCon}>
       <Head>

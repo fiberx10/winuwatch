@@ -41,3 +41,11 @@ yarn-error.log*
 
 # typescript
 *.tsbuildinfo
+
+
+# pnpm ignore
+.pnpm-debug.log*
+.pnpm-debug.log.*
+.pnpm-debug.log
+pnpm-lock.yaml
+pnpm-debug.log
