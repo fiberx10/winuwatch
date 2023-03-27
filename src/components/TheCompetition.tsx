@@ -66,6 +66,7 @@ const TheCompetition = () => {
 };
 
 export default TheCompetition;
+/*
 import styles from "../styles/Home.module.css";
 import Timer from "./Timer";
 import { Skeleton } from "@mui/material";
@@ -134,3 +135,4 @@ const TheCompetition = () => {
 };
 
 export default TheCompetition;
+*/

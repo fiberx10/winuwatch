@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import dynamic from "next/dynamic";
 const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 import { useTheme } from "@mui/material/styles";
@@ -16,53 +13,8 @@ const YearlyBreakup = () => {
   const primarylight = "rgba(168, 149, 126, 0.3)";
   const successlight = "rgba(3, 201, 169, 0.2)";
 
-  // chart
-  const optionscolumnchart: any = {
-    chart: {
-      type: "donut",
-      fontFamily: "'Plus Jakarta Sans', sans-serif;",
-      foreColor: "#adb0bb",
-      toolbar: {
-        show: false,
-      },
-      height: 155,
-    },
-    colors: [primary, primarylight, "#F9F9FD"],
-    plotOptions: {
-      pie: {
-        startAngle: 0,
-        endAngle: 360,
-        donut: {
-          size: "75%",
-          background: "transparent",
-        },
-      },
-    },
-    tooltip: {
-      theme: theme.palette.mode === "dark" ? "dark" : "light",
-      fillSeriesColor: false,
-    },
-    stroke: {
-      show: false,
-    },
-    dataLabels: {
-      enabled: false,
-    },
-    legend: {
-      show: false,
-    },
-    responsive: [
-      {
-        breakpoint: 991,
-        options: {
-          chart: {
-            width: 120,
-          },
-        },
-      },
-    ],
-  };
-  const seriescolumnchart: any = [38, 40, 25];
+  
+  const seriescolumnchart = [38, 40, 25];
 
   return (
     <DashboardCard title="Yearly Breakup">
@@ -115,7 +67,51 @@ const YearlyBreakup = () => {
         {/* column */}
         <Grid item xs={5} sm={5}>
           <Chart
-            options={optionscolumnchart}
+            options={{
+              chart: {
+                type: "donut",
+                fontFamily: "'Plus Jakarta Sans', sans-serif;",
+                foreColor: "#adb0bb",
+                toolbar: {
+                  show: false,
+                },
+                height: 155,
+              },
+              colors: [primary, primarylight, "#F9F9FD"],
+              plotOptions: {
+                pie: {
+                  startAngle: 0,
+                  endAngle: 360,
+                  donut: {
+                    size: "75%",
+                    background: "transparent",
+                  },
+                },
+              },
+              tooltip: {
+                theme: theme.palette.mode === "dark" ? "dark" : "light",
+                fillSeriesColor: false,
+              },
+              stroke: {
+                show: false,
+              },
+              dataLabels: {
+                enabled: false,
+              },
+              legend: {
+                show: false,
+              },
+              responsive: [
+                {
+                  breakpoint: 991,
+                  options: {
+                    chart: {
+                      width: 120,
+                    },
+                  },
+                },
+              ],
+            }}
             series={seriescolumnchart}
             type="donut"
             height="150px"
