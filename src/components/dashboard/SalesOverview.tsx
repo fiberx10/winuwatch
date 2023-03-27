@@ -32,7 +32,7 @@ const SalesOverview = () => {
       },
       height: 370,
     },
-    colors: [primary, secondary],
+    colors: ["#A8957E", "rgba(0,0,0, 0.4)"],
     plotOptions: {
       bar: {
         horizontal: false,
@@ -120,7 +120,7 @@ const SalesOverview = () => {
         options={optionscolumnchart}
         series={seriescolumnchart}
         type="bar"
-        height="370px"
+        height="417px"
       />
     </DashboardCard>
   );

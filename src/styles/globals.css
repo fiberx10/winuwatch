@@ -224,3 +224,6 @@ html {
 .bm-menu-wrap {
   background-color: white;
 }
+.form-control {
+  color: grey !important;
+}

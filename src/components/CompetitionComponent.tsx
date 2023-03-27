@@ -29,9 +29,10 @@ const CompetitionComponent = ({
             height={440}
             style={{ objectFit: "cover" }}
             alt="watchImage"
+            className={styles.MainImage}
             src={image || "/images/watch1.jpeg"}
           />
-          <div>
+          <div className={styles.innerImages}>
             {
               // new array of image besides the first one
               data.Watches.images_url.slice(1).map((item, i) => (

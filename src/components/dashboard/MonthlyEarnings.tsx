@@ -10,8 +10,8 @@ import DashboardCard from "@/components/shared/DashboardCard";
 const MonthlyEarnings = () => {
   // chart color
   const theme = useTheme();
-  const secondary = theme.palette.secondary.main;
-  const secondarylight = "#f5fcff";
+  const secondary = "rgba(168, 149, 126, 0.7)";
+  const secondarylight = "rgba(168, 149, 126, 0.1)";
   const errorlight = "#fdede8";
 
   // chart
@@ -19,7 +19,7 @@ const MonthlyEarnings = () => {
     chart: {
       type: "area",
       fontFamily: "'Plus Jakarta Sans', sans-serif;",
-      foreColor: "#adb0bb",
+      foreColor: "rgba(168, 149, 126, 0.3)",
       toolbar: {
         show: false,
       },
@@ -34,7 +34,7 @@ const MonthlyEarnings = () => {
       width: 2,
     },
     fill: {
-      colors: [secondarylight],
+      colors: ["#fff"],
       type: "solid",
       opacity: 0.05,
     },
@@ -57,7 +57,11 @@ const MonthlyEarnings = () => {
     <DashboardCard
       title="Monthly Earnings"
       action={
-        <Fab color="secondary" size="medium" sx={{ color: "#ffffff" }}>
+        <Fab
+          color="secondary"
+          size="medium"
+          sx={{ color: "#ffffff", backgroundColor: "rgba(0, 0, 0, 0.5)" }}
+        >
           <IconCurrencyDollar width={24} />
         </Fab>
       }

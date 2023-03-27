@@ -36,6 +36,7 @@
 .Logo {
   object-fit: contain;
   margin-top: 10px;
+  cursor: pointer;
 }
 .flexStart {
   min-width: 500px;
@@ -167,7 +168,7 @@
 .background {
   background-image: url(https://content.rolex.com/dam/watches/family-pages/datejust/2023/a-date-with-destiny/classic-watches-datejust-a-date-with-destiny-yellow-cut-out.jpg);
   background-position-y: -124px;
-  background-repeat: no-repeat;
+  background-repeat: repeat-y;
   background-clip: text;
   background-size: 100% 100vh;
   color: transparent;
@@ -176,7 +177,8 @@
 .background2 {
   background-image: url(https://content.rolex.com/dam/watches/family-pages/datejust/2023/a-date-with-destiny/classic-watches-datejust-a-date-with-destiny-yellow-cut-out.jpg);
   background-position: center;
-  background-repeat: no-repeat;
+  background-repeat: repeat-y;
+
   background-clip: text;
   background-size: 100% 100vh;
   color: transparent;
@@ -184,7 +186,8 @@
 }
 .background3 {
   background-image: url(https://content.rolex.com/dam/watches/family-pages/datejust/2023/a-date-with-destiny/classic-watches-datejust-a-date-with-destiny-yellow-cut-out.jpg);
-  background-repeat: no-repeat;
+  background-repeat: repeat-y;
+
   background-clip: text;
   background-size: 100% 100vh;
   color: transparent;
@@ -192,7 +195,8 @@
 }
 .background4 {
   background-image: url(https://content.rolex.com/dam/watches/family-pages/datejust/2023/a-date-with-destiny/classic-watches-datejust-a-date-with-destiny-yellow-cut-out.jpg);
-  background-repeat: no-repeat;
+  background-repeat: repeat-y;
+
   background-clip: text;
   background-size: 100% 100vh;
   color: transparent;
@@ -230,8 +234,8 @@
   flex-wrap: wrap;
   align-items: center;
   width: 100%;
-  row-gap: 10rem;
-  justify-content: space-evenly;
+  row-gap: 10rem !important;
+  justify-content: space-evenly !important;
 }
 .timer {
   display: flex;
@@ -527,7 +531,8 @@
 
 .certifContainer {
   min-height: 769px;
-  background: url(../../public/images/certifcover.png);
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+    url(../../public/images/newCover.png);
   background-size: cover;
   background-repeat: no-repeat;
   display: flex;
@@ -664,15 +669,17 @@
 .menusGrid {
   display: grid;
   grid-template-columns: repeat(4, auto);
-  column-gap: 5rem;
+  column-gap: 0rem;
   row-gap: 0.4rem;
+  place-items: center;
 }
 .menusGrid a {
   text-decoration: none;
   color: white;
+  width: 150px;
   text-transform: uppercase;
-  font-weight: 400;
-  font-size: 10px;
+  font-weight: 300;
+  font-size: 14px;
   letter-spacing: 0.05em;
 }
 .emails {
@@ -718,7 +725,6 @@
   align-items: center;
   justify-content: center;
   border: 1px solid white;
-  border-radius: 3px;
   font-weight: 500;
   font-size: 14px;
   font-style: italic;
@@ -731,7 +737,6 @@
 
   border: 1px solid white;
   padding: 4.5px 8px;
-  border-radius: 3px;
 }
 .visaicons img {
   filter: brightness(0) invert(1);
@@ -742,9 +747,32 @@
   font-size: 18px;
   text-align: center;
 }
-@media only screen and (max-width: 372px) {
+@media only screen and (max-width: 375px) {
   .HeaderTit h1 {
     font-size: 45px !important;
+  }
+  .HeaderTit h2 {
+    font-size: 48px !important;
+  }
+  .Footer {
+    height: fit-content !important;
+    padding-bottom: 50px;
+    gap: 2rem;
+  }
+  .emails {
+    width: 100%;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .payment {
+    width: 100%;
+    flex-direction: column;
+    gap: 1rem;
+  }
+}
+@media only screen and (max-width: 320px) {
+  .HeaderTit h2 {
+    font-size: 43px !important;
   }
 }
 @media only screen and (max-width: 425px) {
@@ -757,6 +785,11 @@
 @media only screen and (max-width: 334px) {
   .HeaderTit h1 {
     font-size: 40px !important;
+  }
+}
+@media only screen and (max-width: 351px) {
+  .certifContainer h2 {
+    font-size: 14px;
   }
 }
 @media only screen and (min-width: 320px) and (max-width: 930px) {
@@ -778,6 +811,7 @@
   .watchConSkelet {
     width: 100% !important;
   }
+
   .Logo {
     position: absolute;
     left: 39%;
@@ -833,16 +867,17 @@
     font-size: 35px;
   }
   .compWatches {
-    flex-direction: column;
     gap: 13rem;
+    flex-direction: column;
   }
   .watches {
     flex-direction: column-reverse;
+    scroll-snap-align: center;
     align-items: center;
     width: 100%;
   }
   .watchCon {
-    width: 90%;
+    width: 100%;
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
@@ -852,6 +887,10 @@
     width: 100%;
     justify-content: space-evenly;
   }
+  .timer p {
+    font-size: 40px;
+  }
+
   .timerItem {
     display: flex;
     flex-direction: column;
@@ -947,7 +986,6 @@
     text-align: center;
   }
   .certifContainer h2 {
-    font-size: 16px;
     text-align: center;
     bottom: 5rem;
   }
@@ -995,16 +1033,15 @@
     text-align: center;
   }
 }
-@media only screen and (min-width: 930px) and (max-width: 1242px) {
-  .flexEnd {
-    min-width: 250px;
-    width: 370px;
-    gap: 2.5rem;
-  }
-
+@media only screen and (min-width: 930px) and (max-width: 1950px) {
   .flexStart {
-    min-width: 250px;
-    width: 370px;
+    min-width: 28%;
+    width: 34%;
+  }
+  .flexEnd {
+    gap: 2.5rem;
+    width: 34%;
+    min-width: 28%;
   }
   .compWatches {
     justify-content: center;
@@ -1053,10 +1090,10 @@
     flex-direction: column;
   }
   .emails {
-    width: 90%;
+    width: 100%;
   }
   .payment {
-    width: 90%;
+    width: 100%;
   }
   .certifBox {
     width: 90%;
@@ -1128,18 +1165,18 @@
   }
 }
 @media only screen and (min-width: 930px) and (max-width: 1210px) {
-  .flexEnd {
+  /* .flexEnd {
     min-width: 250px;
     width: 370px;
     gap: 2.5rem;
-  }
+  } */
   .watches {
     margin-left: 70px;
   }
-  .flexStart {
+  /* .flexStart {
     min-width: 250px;
     width: 370px;
-  }
+  } */
   .compWatches {
     flex-direction: column;
     justify-content: center;
@@ -1157,16 +1194,41 @@
     gap: 0.2rem;
   }
 }
-@media only screen and (min-width: 768px) and (max-width: 980px) {
+@media only screen and (min-width: 768px) and (max-width: 1116px) {
   .Footer {
     height: fit-content;
     gap: 2rem;
   }
 
   .FooterTop {
+    gap: 2rem;
     flex-wrap: wrap;
     align-items: center;
+    justify-content: space-evenly;
+  }
+  .FooterTopRight {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+}
+@media only screen and (min-width: 1441px) and (max-width: 2560px) {
+  .flexEnd {
+    min-width: none;
+    width: 35.3%;
+  }
+  .flexStart {
+    min-width: none;
+
+    width: 35.3%;
+  }
+  .FooterTop {
+    width: 100%;
+    gap: 1rem;
     justify-content: center;
-    gap: 2rem;
+  }
+  .menusGrid {
+    gap: 7rem;
   }
 }

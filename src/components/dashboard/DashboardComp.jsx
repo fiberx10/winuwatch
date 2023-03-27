@@ -9,10 +9,10 @@ const DashboardComp = () => {
   return (
     <Box>
       <Grid container spacing={2}>
-        <Grid item xs={12} lg={8}>
+        <Grid item xs={12} lg={7.7}>
           <SalesOverview />
         </Grid>
-        <Grid item xs={12} lg={4}>
+        <Grid item xs={12} lg={4.3}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <YearlyBreakup />
@@ -22,7 +22,7 @@ const DashboardComp = () => {
             </Grid>
           </Grid>
         </Grid>
-        <Grid item xs={12} lg={8}>
+        <Grid item xs={12} lg={12}>
           <ProductPerformance />
         </Grid>
       </Grid>

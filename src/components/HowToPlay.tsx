@@ -25,7 +25,7 @@ const HowToPlay = () => {
         <div className={styles.howtoTxt1}>
           <h2>Choose your tickets</h2>
           <p>
-            Choose how many tickets you want - up to 50 per person - and
+            Choose how many tickets you want - up to 25 per person - and
             you&apos;re on the way to winning the luxury timepiece.
           </p>
         </div>
