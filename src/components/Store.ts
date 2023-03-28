@@ -36,14 +36,15 @@ interface RootState {
   reset: () => void;
 }
 
-type Pages = "Dashboard" | "Competitions" | "Watches";
+export const Dashmenus = ["Dashboard", "Competitions", "Watches", "Orders"] as const;
+
 
 export const useStore = create<{
-  menu: Pages;
-  selectMenu: (params: "Dashboard" | "Competitions" | "Watches") => void;
+  menu: typeof Dashmenus[number];
+  selectMenu: (menu: typeof Dashmenus[number]) => void;
 }>((set, get) => ({
   menu: "Dashboard",
-  selectMenu: (params) => set({ menu: params }),
+  selectMenu: (menu) => set({ menu }),
 }));
 
 export const useCart = create<RootState>((set, get) => ({

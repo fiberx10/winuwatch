@@ -9,13 +9,10 @@ import {
   BookOutlined,
 } from "@ant-design/icons/lib/icons";
 import Image from "next/image";
-import { useStore } from "@/components/Store";
+import { useStore, Dashmenus } from "@/components/Store";
 
 const DashboardMainNav = () => {
   const { menu: Menu, selectMenu } = useStore();
-
-  const Dashmenus = ["Dashboard", "Competitions", "Watches", "Orders"];
-  const secMenus = ["Participants", "Communication", "Settings"];
   return (
     <div className={styles.Dashboard}>
       <div className={styles.menusWrap}>
@@ -48,13 +45,13 @@ const DashboardMainNav = () => {
         <div className={styles.Dashmenus}>
           <span>Other</span>
 
-          {secMenus.map((menu, i) => {
+          {["Participants", "Communication", "Settings"].map((menu, i) => {
             return (
               <div
                 style={{
                   color: Menu === menu ? "white" : "hsla(0, 0%, 100%, 0.4)",
                 }}
-                onClick={() => selectMenu(menu)}
+                //onClick={() => {}}
                 className={styles.Menu}
                 key={i}
               >
