@@ -16,9 +16,7 @@ import { useCart } from "./Store";
 import "@/styles/Checkout.module.css";
 
 type CreatePayemtnTYpe = RouterInputs["Payment"]["create"];
-interface FormState {
-  [key: string]: string | number | Date;
-}
+
 const CheckoutComp = () => {
   //
   const router = useRouter();
@@ -62,7 +60,9 @@ const CheckoutComp = () => {
   //     watchids: competitions.map((comp) => comp.compID) || [],
   //   },
   // });
-  const [formState, setFormState] = useState<FormState>({ payment: "PAYPAL" });
+  const [formState, setFormState] = useState<{
+    [key: string]: string | number | Date;
+  }>({ payment: "PAYPAL" });
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
