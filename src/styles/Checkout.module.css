@@ -78,8 +78,8 @@
   background: #ffffff;
   border: 1px solid rgba(0, 0, 0, 0.1);
   padding: 20px;
-  min-height: 40rem;
   display: flex;
+  height: fit-content;
   flex-direction: column;
   justify-content: space-between;
 }
@@ -87,7 +87,6 @@
   display: flex;
   flex-direction: column;
   gap: 2rem;
-  min-height: 20rem;
 }
 .orderImg {
   width: 106px;
@@ -198,12 +197,9 @@
   align-items: center;
   gap: 1rem;
 }
-.paymDesc {
-  font-weight: 400;
-  font-size: 12px;
-  text-transform: uppercase;
-  color: rgba(30, 30, 30, 0.78);
-  margin-top: 20px;
+.SignMeUp u {
+  color: #987358;
+  cursor: pointer;
 }
 .orderTit {
   width: 13rem;

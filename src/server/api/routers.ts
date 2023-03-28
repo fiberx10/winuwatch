@@ -98,7 +98,7 @@ export const CompetitionRouter = createTRPCRouter({
       })
     )
     .query(async ({ ctx, input }) => {
-      return await ctx.prisma.competition.findMany({
+      return (await ctx.prisma.competition.findMany({
         where: {
           status: input.status,
           id: {
@@ -108,8 +108,18 @@ export const CompetitionRouter = createTRPCRouter({
         include: {
           Watches: true,
         },
-      });
+      })).map((comp) => ({
+        ...comp.Watches,
+        ...comp,
+      }));
     }),
+  getEverything: publicProcedure.query(async ({ ctx }) => {
+    return await ctx.prisma.competition.findMany({
+      include: {
+        Watches: true,
+      },
+    });
+  }),
   byID: publicProcedure.input(z.string()).query(({ ctx, input }) => {
     return ctx.prisma.competition.findUnique({
       where: {

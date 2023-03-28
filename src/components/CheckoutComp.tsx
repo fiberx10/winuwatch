@@ -13,6 +13,18 @@ import { useCart } from "./Store";
 // import { CreateOrderSchema } from "@/utils/Schema";
 //import { zodResolver } from '@hookform/resolvers/zod';
 
+const IsLegal = (Birthdate?: Date) => {
+  const LegalAge = 18;
+  const now = new Date();
+  const date = Birthdate || new Date();
+  return (
+    new Date(
+      now.getFullYear() - LegalAge,
+      now.getMonth(),
+      now.getDate()
+    ).getTime() >= date.getTime()
+  );
+};
 import "@/styles/Checkout.module.css";
 
 type CreatePayemtnTYpe = RouterInputs["Payment"]["create"];
@@ -220,6 +232,32 @@ const CheckoutComp = () => {
                 <h1>Payment Method</h1>
                 <div className={styles.PaymentMethod}>
                   <div className={styles.method}>
+                    <input type="radio" name="payment" value="Stripe" />
+                    <p
+                      style={{
+                        color:
+                          formState.payment === "STRIPE"
+                            ? "#987358"
+                            : "rgba(30, 30, 30, 0.6)",
+                      }}
+                    >
+                      Debit card
+                    </p>
+                  </div>
+                  <div className={styles.method}>
+                    <input type="radio" name="payment" value="Stripe" />
+                    <p
+                      style={{
+                        color:
+                        formState.payment === "STRIPE"
+                            ? "#987358"
+                            : "rgba(30, 30, 30, 0.6)",
+                      }}
+                    >
+                      credit card
+                    </p>
+                  </div>
+                  <div className={styles.method}>
                     <input
                       type="radio"
                       onChange={handleChange}
@@ -254,37 +292,26 @@ const CheckoutComp = () => {
                             : "rgba(30, 30, 30, 0.6)",
                       }}
                     >
-                      Stripe
+                      Credit card
                     </label>
                   </div>
                 </div>
                 <div className={styles.SignMeUp}>
                   <label>
-                    <input
-                      name="viewed_terms"
-                      onChange={handleChange}
-                      type="checkbox"
-                    />
-                    <p>Sign me up to recieve email updates and news</p>
+                    <input type="checkbox" />
+                    <p>
+                      I have read the <u>Terms & Conditions</u> and{" "}
+                      <u>privacy policy</u>
+                    </p>
                   </label>
                   <label>
-                    <input
-                      name="read_terms"
-                      onChange={handleChange}
-                      type="checkbox"
-                    />
-                    <p>Sign me up to recieve SMS updates and news</p>
+                  <input type="checkbox" />
+                    <p>
+                      I agree to the <u>Terms & Conditions</u> and{" "}
+                      <u>privacy policy</u>
+                    </p>
                   </label>
                 </div>
-                <p className={styles.paymDesc}>
-                  It is a long established fact that a reader will be distracted
-                  by the readable content of a page when looking at its layout.
-                  The point of using Lorem Ipsum is that it has a more-or-less
-                  normal distribution It is a long established fact that a
-                  reader will be distracted by the readable content of a page
-                  when looking at its layout. The point of using Lorem Ipsum is
-                  that it has a more-or-less normal distribution
-                </p>
               </div>
             </div>
             <div className={styles.CheckoutRight}>
