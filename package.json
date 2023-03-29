@@ -35,6 +35,7 @@
     "bootstrap": "^5.2.3",
     "cloudinary": "^1.35.0",
     "cross-env": "^7.0.3",
+    "dayjs": "^1.11.7",
     "next": "^13.2.4",
     "prettier": "^2.8.6",
     "react": "18.2.0",
@@ -54,6 +55,7 @@
     "stripe-client": "^1.1.5",
     "superjson": "1.9.1",
     "zod": "^3.20.6",
+    "react-router-dom": "^6.4.2",
     "zustand": "^4.3.6"
   },
   "devDependencies": {
@@ -61,6 +63,7 @@
     "@types/eslint": "^8.21.1",
     "@types/node": "^18.14.0",
     "@types/react": "^18.0.28",
+    "@types/react-datepicker": "^4.10.0",
     "@types/react-dom": "^18.0.11",
     "@typescript-eslint/eslint-plugin": "^5.53.0",
     "@typescript-eslint/parser": "^5.53.0",

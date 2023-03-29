@@ -1226,7 +1226,7 @@
   .FooterTop {
     width: 100%;
     gap: 1rem;
-    justify-content: center;
+    justify-content: space-evenly;
   }
   .menusGrid {
     gap: 7rem;

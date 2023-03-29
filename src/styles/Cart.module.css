@@ -160,11 +160,7 @@
   color: #000000;
   width: 70%;
 }
-.ModalBox div {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
+
 .ModalBox span {
   cursor: pointer;
   font-size: 20px;
@@ -182,10 +178,15 @@
   color: #000000;
 }
 .questionsCon {
-  display: flex;
-  flex-wrap: wrap;
-  row-gap: 2rem;
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  gap: 2rem;
   transition: 0.5s all ease-in-out;
+}
+.ModalBoxTopFlex {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 .questionsCon button {
   width: 452px;
@@ -203,7 +204,7 @@
   background: #cbb9ac;
   color: white;
 }
-@media only screen and (max-width: 768px) {
+@media only screen and (max-width: 1000px) {
   .CartMain {
     margin-top: 30px;
     padding: 20px;
@@ -264,3 +265,23 @@
     justify-content: center;
   }
 }
+@media only screen and (max-width: 1024px) {
+  .questionsCon {
+    grid-template-columns: repeat(1, auto);
+    place-items: center;
+  }
+  .ModalBox {
+    width: 90%;
+  }
+  .ModalBox p {
+    font-size: 16px;
+  }
+  .ModalBox h1 {
+    font-size: 30px;
+  }
+  .questionsCon button {
+    width: 80%;
+    font-size: 16px;
+  }
+}
+
