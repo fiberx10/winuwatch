@@ -2,12 +2,10 @@ import type { ReactNode } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import type { EmblaOptionsType } from "embla-carousel-react";
 
-type PropType = {
+export const EmblaCarousel = (props: {
   options?: EmblaOptionsType;
   slides: ReactNode[];
-};
-
-export const EmblaCarousel = (props: PropType) => {
+}) => {
   const { options, slides } = props;
   const [emblaRef] = useEmblaCarousel(options);
 
