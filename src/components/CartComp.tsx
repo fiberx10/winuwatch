@@ -70,7 +70,10 @@ const CartComp = () => {
                     onClick={() =>
                       updateComp({
                         compID: comp.compID,
-                        number_tickets: comp.number_tickets - 1,
+                        number_tickets:
+                          comp.number_tickets > 1
+                            ? comp.number_tickets - 1
+                            : comp.number_tickets,
                         price_per_ticket: ComptetionData.ticket_price,
                       })
                     }
@@ -90,7 +93,10 @@ const CartComp = () => {
                     onClick={() =>
                       updateComp({
                         compID: comp.compID,
-                        number_tickets: comp.number_tickets + 1,
+                        number_tickets:
+                          comp.number_tickets < ComptetionData.remaining_tickets
+                            ? comp.number_tickets + 1
+                            : comp.number_tickets,
                         price_per_ticket: ComptetionData.ticket_price,
                       })
                     }

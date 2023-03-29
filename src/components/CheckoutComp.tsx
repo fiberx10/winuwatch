@@ -108,6 +108,20 @@ const CheckoutComp = () => {
     checkedPhone: false,
     checkedSMS: false,
   };
+  async function stripeSubmit(e: React.FormEvent<MouseEvent>) {
+    e.preventDefault();
+    const { url } = await Hook.mutateAsync({
+      email: "test@email.com",
+      address: "hay ahahha",
+      comps: competitions.map((comp) => ({
+        compID: comp.compID,
+        quantity: comp.number_tickets,
+      })),
+    });
+    if (url) {
+      await router.push(url);
+    }
+  }
   return (
     <div className={styles.CheckoutMain}>
       {items && (
@@ -292,6 +306,7 @@ const CheckoutComp = () => {
                       const ComptetionData = items.find(
                         (compData) => compData.id === order.compID
                       );
+                      if (!ComptetionData) return null;
 
                       return (
                         <div className={styles.orderItem} key={i}>
@@ -369,7 +384,7 @@ const CheckoutComp = () => {
                                   compID: order.compID,
                                   number_tickets:
                                     order.number_tickets <
-                                    ComptetionData?.remaining_tickets
+                                    ComptetionData.remaining_tickets
                                       ? order.number_tickets + 1
                                       : order.number_tickets,
                                   price_per_ticket: order.price_per_ticket,
@@ -458,19 +473,9 @@ const CheckoutComp = () => {
                       </PayPalScriptProvider>
                     ) : (
                       <button
+                        // eslint-disable-next-line @typescript-eslint/no-misused-promises
                         onClick={async (e) => {
-                          e.preventDefault();
-                          const { url } = await Hook.mutateAsync({
-                            email: "test@email.com",
-                            address: "hay ahahha",
-                            comps: competitions.map((comp) => ({
-                              compID: comp.compID,
-                              quantity: comp.number_tickets,
-                            })),
-                          });
-                          if (url) {
-                            router.push(url);
-                          }
+                          await stripeSubmit(e);
                         }}
                       >
                         Confirm Order
