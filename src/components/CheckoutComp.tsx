@@ -2,48 +2,19 @@ import React, { useState } from "react";
 import styles from "@/styles/Checkout.module.css";
 import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js";
 import { useRouter } from "next/router";
-import { env } from "@/env.mjs";
-// import { useForm, type SubmitHandler } from "react-hook-form";
-import { api, type RouterInputs, Formater, CreateOrderSchema } from "@/utils";
+import { api, Formater, CreateOrderSchema } from "@/utils";
 import { useCart } from "./Store";
-import { toFormikValidationSchema } from "zod-formik-adapter";
 
-// import { CreateOrderSchema } from "@/utils/Schema";
-//import { zodResolver } from '@hookform/resolvers/zod';
-
-// const IsLegal = (Birthdate?: Date) => {
-//   const LegalAge = 18;
-//   const now = new Date();
-//   const date = Birthdate || new Date();
-//   return (
-//     new Date(
-//       now.getFullYear() - LegalAge,
-//       now.getMonth(),
-//       now.getDate()
-//     ).getTime() >= date.getTime()
-//   );
-// };
 import "@/styles/Checkout.module.css";
 import Image from "next/image";
-import {
-  Formik,
-  FormikHelpers,
-  FormikProps,
-  Form,
-  Field,
-  FieldProps,
-} from "formik";
-import { set } from "react-hook-form";
-
-type CreatePayemtnTYpe = RouterInputs["Payment"]["create"];
+import { Formik, Form, Field } from "formik";
 
 const CheckoutComp = () => {
-  //
   const router = useRouter();
 
-  const {mutateAsync : stripeCheckout} = api.Stripe.createCheckoutSession.useMutation();
-  const { competitions, cardDetails, reset, addComp, removeComp, updateComp } =
-    useCart();
+  const { mutateAsync: stripeCheckout } =
+    api.Stripe.createCheckoutSession.useMutation();
+  const { competitions, cardDetails } = useCart();
   const { mutateAsync: createOrder } = api.Payment.create.useMutation();
 
   const { data: items } = api.Competition.getAll.useQuery({
@@ -62,36 +33,22 @@ const CheckoutComp = () => {
     );
   };
   const [error, setError] = useState<string | undefined>();
-  const { totalCost, Number_of_item } = cardDetails();
+  const { totalCost } = cardDetails();
 
-  // const {
-  //   register,
-  //   handleSubmit,
-  //   formState: { errors },
-  //   getValues,
-  // } = useForm<CreatePayemtnTYpe>({
-  //   defaultValues: {
-  //     date: new Date(),
-  //     paymentMethod: "STRIPE",
-  //     checkedEmail: false,
-  //     checkedSMS: false,
-  //     watchids: competitions.map((comp) => comp.compID) || [],
-  //   },
-  // });
   return (
     <div className={styles.CheckoutMain}>
       {items && (
         <div className={styles.formMain}>
           <Formik
             initialValues={{
-              first_name: undefined,
-              last_name: undefined,
-              country: undefined,
-              address: undefined,
-              town: undefined,
+              first_name: "",
+              last_name: "",
+              country: "",
+              address: "",
+              town: "",
               zip: undefined,
               phone: undefined,
-              email: undefined,
+              email: "",
               paymentMethod: "STRIPE",
               totalPrice: totalCost,
               comp: competitions,
@@ -111,18 +68,21 @@ const CheckoutComp = () => {
                   const Prooo = await Promise.all([
                     await createOrder(res.data),
                     await stripeCheckout({
-                      
-                    })
+                      email: values.email,
+                      address: values.address,
+                      comps: values.comp.map((comp) => ({
+                        compID: comp.compID,
+                        quantity: comp.number_tickets,
+                      })),
+                    }),
                   ]);
                   const [success, error] = Prooo;
 
-                  if (!success) setError(error);
+                  if (!success) setError(error.payment_status);
                   else {
                     setError(undefined);
-                    router.push("/success");
+                    await router.push("/success");
                   }
-
-                  
                 }
               }
               actions.setSubmitting(false);
@@ -214,24 +174,7 @@ const CheckoutComp = () => {
                             type={"date"}
                             name="date"
                           />
-                          {/* <Field
-                        
-                        required
-                        id="Date"
-                        name="Date"
-                        type={"date"}
-                      /> */}
-                          {/* <p
-                        style={{
-                          color: "red",
-                          display:
-                            (formState.Date as string) < "2005/01/01"
-                              ? "none"
-                              : "flex",
-                        }}
-                      >
-                        Age must be higher than 18years
-                      </p> */}
+                          {error ? <p style={{ color: "red" }}>{error}</p> : ""}
                         </div>
                       </div>
                     </div>
@@ -266,7 +209,7 @@ const CheckoutComp = () => {
                         <p
                           style={{
                             color:
-                              (values.paymentMethod as string) === "PAYPAL"
+                              values.paymentMethod === "PAYPAL"
                                 ? "#987358"
                                 : "rgba(30, 30, 30, 0.6)",
                           }}
@@ -331,31 +274,34 @@ const CheckoutComp = () => {
                               </span>
                               <h3>
                                 Remaining Tickets:{" "}
-                                {
-                                  //TODO:
-                                  values.comp.map((comp) => {
-                                    return (
-                                      ComptetionData.remaining_tickets &&
-                                      ComptetionData.remaining_tickets -
-                                        comp.number_tickets
-                                    );
-                                  })
-                                }
+                                {values.comp.map((comp) => {
+                                  return (
+                                    ComptetionData.remaining_tickets &&
+                                    ComptetionData.remaining_tickets -
+                                      comp.number_tickets
+                                  );
+                                })}
                               </h3>
                             </div>
                             <div className={styles.Counter}>
                               <div
-                                /*
-                                onClick={() =>
-                                  updateComp({
-                                    compID: order.compID,
-                                    number_tickets:
-                                      order.number_tickets > 1
-                                        ? order.number_tickets - 1
-                                        : order.number_tickets,
-                                    price_per_ticket: order.price_per_ticket,
-                                  })
-                                }*/
+                                onClick={() => {
+                                  setValues({
+                                    ...values,
+                                    comp: values.comp.map((comp) => {
+                                      if (comp.compID === order.compID) {
+                                        return {
+                                          ...comp,
+                                          number_tickets:
+                                            comp.number_tickets > 1
+                                              ? comp.number_tickets - 1
+                                              : comp.number_tickets,
+                                        };
+                                      }
+                                      return comp;
+                                    }),
+                                  });
+                                }}
                                 className={styles.CounterSelec}
                               >
                                 <Image
@@ -366,10 +312,7 @@ const CheckoutComp = () => {
                                 />
                               </div>
                               <div className={styles.counterValue}>
-                                {
-                                  //TODO:
-                                  values.comp.map((comp) => comp.number_tickets)
-                                }
+                                {values.comp.map((comp) => comp.number_tickets)}
                               </div>
                               <div
                                 onClick={() => {
@@ -390,17 +333,6 @@ const CheckoutComp = () => {
                                     }),
                                   });
                                 }}
-                                /*
-                                  updateComp({
-                                    compID: order.compID,
-                                    number_tickets:
-                                      order.number_tickets <
-                                      ComptetionData.remaining_tickets
-                                        ? order.number_tickets + 1
-                                        : order.number_tickets,
-                                    price_per_ticket: order.price_per_ticket,
-                                  })
-                                  */
                                 className={styles.CounterSelec}
                               >
                                 <Image
@@ -437,6 +369,19 @@ const CheckoutComp = () => {
                           }}
                         >
                           <PayPalButtons
+                            onClick={async () => {
+                              const res = CreateOrderSchema.safeParse(values);
+
+                              if (res.success) {
+                                if (!IsLegal(values.date)) {
+                                  setError(
+                                    "You must be 18 years old to purchase a ticket"
+                                  );
+                                } else {
+                                  await createOrder(res.data);
+                                }
+                              }
+                            }}
                             forceReRender={[
                               values.comp.reduce(
                                 (a, b) =>
@@ -445,63 +390,22 @@ const CheckoutComp = () => {
                               ),
                             ]}
                             createOrder={(data, actions) => {
-                              return actions.order
-                                .create({
-                                  purchase_units: [
-                                    {
-                                      amount: {
-                                        currency_code: "USD",
-                                        value: totalCost.toString(),
-                                      },
+                              return actions.order.create({
+                                purchase_units: [
+                                  {
+                                    amount: {
+                                      currency_code: "USD",
+                                      value: totalCost.toString(),
                                     },
-                                  ],
-                                })
-                                .then((orderId) => {
-                                  // Your code here after create the order
-                                  return orderId;
-                                });
+                                  },
+                                ],
+                              });
                             }}
-                            /*
-                        onApprove={function (data, actions) {
-                          
-                          return actions?.order?
-                            .capture()
-                            .then(function (details) {
-                              details.status === "COMPLETED" &&
-                                router.push(`/CheckoutPage/${details.id}`);
-                              // Your code here after capture the order
-                              alert(
-                                // "data.orderID:" +
-                                //   data.orderID +
-                                //   "  " +
-                                //   "data.billingToken:" +
-                                //   data.billingToken +
-                                //   "  " +
-                                //   "data.paymentID:" +
-                                //   data.paymentID +
-                                details.id
-                                // "  " +
-                                // "data.payerID:" +
-                                // data.payerID +
-                                // "  " +
-                                // "details.payer.name:" +
-                                // details.payer.name.given_name +
-                                // "  " +
-                                // "details.status:" +
-                                // details.status
-                              );
-                            });
-                          }}
-                          */
                             style={{ layout: "horizontal" }}
                           />
                         </PayPalScriptProvider>
                       ) : (
-                        <button
-                          type="submit"
-                        >
-                          Confirm Order
-                        </button>
+                        <button type="submit">Confirm Order</button>
                       )}
                     </div>
                   </div>
