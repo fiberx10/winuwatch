@@ -1,10 +1,4 @@
 .CharityMain {
-  background: linear-gradient(
-    180deg,
-    #ffffff 0%,
-    rgba(248, 245, 243, 0.47) 50.83%,
-    rgba(248, 245, 243, 0.517708) 100%
-  );
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -121,6 +115,7 @@
   display: flex;
   flex-wrap: wrap;
   width: 100%;
+  flex-wrap: wrap;
   gap: 2rem;
   align-items: center;
   justify-content: center;
@@ -144,13 +139,11 @@
   .CharityMain {
     margin-top: 3rem;
   }
-  .CharityGrid {
-    flex-direction: column;
-  }
+
   .charity {
     flex-direction: column;
     height: fit-content;
-    width: 84%;
+    width: 355px;
     padding-bottom: 20px;
   }
   .charity button {

@@ -6,27 +6,27 @@ import styles from "@/styles/Checkout.module.css";
 import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js";
 import { useRouter } from "next/router";
 import { env } from "@/env.mjs";
-import { useForm, type SubmitHandler } from "react-hook-form";
+// import { useForm, type SubmitHandler } from "react-hook-form";
 import { api, type RouterInputs, Formater } from "@/utils";
 import { useCart } from "./Store";
-import Image from "next/image";
 
 // import { CreateOrderSchema } from "@/utils/Schema";
 //import { zodResolver } from '@hookform/resolvers/zod';
 
-const IsLegal = (Birthdate?: Date) => {
-  const LegalAge = 18;
-  const now = new Date();
-  const date = Birthdate || new Date();
-  return (
-    new Date(
-      now.getFullYear() - LegalAge,
-      now.getMonth(),
-      now.getDate()
-    ).getTime() >= date.getTime()
-  );
-};
+// const IsLegal = (Birthdate?: Date) => {
+//   const LegalAge = 18;
+//   const now = new Date();
+//   const date = Birthdate || new Date();
+//   return (
+//     new Date(
+//       now.getFullYear() - LegalAge,
+//       now.getMonth(),
+//       now.getDate()
+//     ).getTime() >= date.getTime()
+//   );
+// };
 import "@/styles/Checkout.module.css";
+import Image from "next/image";
 
 type CreatePayemtnTYpe = RouterInputs["Payment"]["create"];
 
@@ -37,6 +37,9 @@ const CheckoutComp = () => {
   const Hook = api.Stripe.createCheckoutSession.useMutation();
   const { competitions, cardDetails, reset, addComp, removeComp, updateComp } =
     useCart();
+  const [OrderData, setORderData] = useState<CreatePayemtnTYpe | undefined>();
+  const { mutateAsync: createOrder } = api.Payment.create.useMutation();
+
   const { data } = api.Competition.getAll.useQuery({
     ids: competitions.map(({ compID }) => compID),
   });
@@ -56,9 +59,19 @@ const CheckoutComp = () => {
       ).getTime() >= date.getTime()
     );
   };
-
-  const { totalCost, Number_of_item } = cardDetails();
   const [error, setError] = useState<string | undefined>();
+  const { totalCost, Number_of_item } = cardDetails();
+  const handleSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault(); // prevent the form from submitting normally
+    console.log("Form submitted:", formState);
+    if (OrderData){
+      const {success, error} = await createOrder(OrderData)
+      if (!success) setError(error)
+    
+    }
+
+
+  };
   const VAT = 0.2;
 
   // const {
@@ -93,10 +106,6 @@ const CheckoutComp = () => {
       ...prevState,
       [name]: date,
     }));
-  };
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault(); // prevent the form from submitting normally
-    console.log("Form submitted:", formState);
   };
 
   return (
@@ -201,9 +210,7 @@ const CheckoutComp = () => {
                     <div className={styles.formField}>
                       <label htmlFor="Date">Date of birth</label>
                       <input
-                        // onChange={(date: Date) =>
-                        //   handleDateChange(date, "date")
-                        // }
+                        onChange={handleChange}
                         max="2005-01-01"
                         required
                         type={"date"}
@@ -284,6 +291,13 @@ const CheckoutComp = () => {
                       <u>privacy policy</u>
                     </p>
                   </label>
+                  <label>
+                    <input type="checkbox" />
+                    <p>
+                      I agree to the <u>Terms & Conditions</u> and{" "}
+                      <u>privacy policy</u>
+                    </p>
+                  </label>
                 </div>
               </div>
             </div>
@@ -291,33 +305,89 @@ const CheckoutComp = () => {
               <h1> Order Summary</h1>
               <div className={styles.RightCon}>
                 <div className={styles.OrdersFlex}>
-                  {data &&
-                    competitions.map((comp, i) => {
-                      const ComptetionData = data.find(
-                        (compData) => compData.id === comp.compID
-                      );
-                      return (
-                        <div className={styles.orderItem} key={i}>
-                          <Image
-                            width={196}
-                            height={195}
-                            alt="watchImage"
-                            src={
-                              ComptetionData?.Watches.images_url[0] ||
-                              "/images/watch.png"
+                  {competitions.map((order, i) => {
+                    const ComptetionData = items.find(
+                      (compData) => compData.id === order.compID
+                    );
+                    return (
+                      <div className={styles.orderItem} key={i}>
+                        <Image
+                          width={106}
+                          height={105}
+                          className={styles.orderImg}
+                          src="/images/tester.png"
+                          alt="watching"
+                        />
+                        <div className={styles.orderTit}>
+                          <h3>
+                            {/* {ComptetionData.Watches.brand} {ComptetionData.Watches.model} */}
+                          </h3>
+                          <span>
+                            {competitions.map((comp, i) => {
+                              return (
+                                <p key={i}>
+                                  $
+                                  {(
+                                    comp.number_tickets * comp.price_per_ticket
+                                  ).toFixed(2)}
+                                </p>
+                              );
+                            })}
+                          </span>
+                          <h3>
+                            Remaining Tickets:{" "}
+                            {
+                              //TODO:
+                              competitions.map((comp) => {
+                                return (
+                                  ComptetionData?.remaining_tickets &&
+                                  ComptetionData?.remaining_tickets -
+                                    comp.number_tickets
+                                );
+                              })
                             }
-                          />
-                          <div className={styles.orderTit}>
-                            <h3>{ComptetionData?.Watches.brand}</h3>
-                            <span>
-                              $
-                              {comp.number_tickets *
-                                Number(ComptetionData?.ticket_price)}
-                            </span>
+                          </h3>
+                        </div>
+                        <div className={styles.Counter}>
+                          <div className={styles.CounterSelec}>
+                            <Image
+                              width={13}
+                              height={1}
+                              src="/images/Minus.png"
+                              alt="minus"
+                            />
+                          </div>
+                          <div className={styles.counterValue}>
+                            {
+                              //TODO:
+                              competitions.map((comp) => {
+                                return comp.number_tickets;
+                              })
+                            }
+                          </div>
+                          <div
+                            // onClick={() =>
+                            //   updateComp({
+                            //     number_tickets: ...comp.number_tickets + 1,
+                            //   })
+                            // }
+                            // onClick={() =>
+                            //   counter < item.remaining_tickets &&
+                            //   setCounter(counter + 1)
+                            // }
+                            className={styles.CounterSelec}
+                          >
+                            <Image
+                              width={11}
+                              height={11}
+                              src="/images/plus.png"
+                              alt="plus"
+                            />
                           </div>
                         </div>
-                      );
-                    })}
+                      </div>
+                    );
+                  })}
                 </div>
                 <div className={styles.orderSumBot}>
                   <div className={styles.orderSum}>

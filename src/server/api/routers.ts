@@ -294,7 +294,7 @@ export const PaymentRouter = createTRPCRouter({
       console.log(input);
 
       return {
-        sucess: true,
+        success: true,
         error: "no error",
       };
 

@@ -20,6 +20,7 @@ input[type="number"] {
 }
 html {
   background-attachment: fixed;
+  background: #faf8f6;
 }
 @media only screen and (max-width: 930px) {
   .alice-carousel__next-btn {
@@ -34,6 +35,9 @@ html {
 }
 .MuiRating-icon {
   color: #987358;
+}
+.css-4t3x6l-MuiPaper-root-MuiDrawer-paper {
+  background: transparent !important;
 }
 .alice-carousel__dots-item {
   width: 150px !important;

@@ -4,6 +4,7 @@ import styles from "@/styles/CompetitionPage.module.css";
 import { useCart } from "./Store";
 import ToggleButton from "@mui/material/ToggleButton";
 import type { Competition, Watches } from "@prisma/client";
+import { useRouter } from "next/router";
 
 const CompetitionComponent = ({
   data,
@@ -18,7 +19,7 @@ const CompetitionComponent = ({
     String(data.Watches.images_url[0])
   );
   const { addComp, updateComp, competitions } = useCart();
-  console.log(competitions);
+  const router = useRouter();
 
   return (
     <div className={styles.compWrapper}>
@@ -147,6 +148,7 @@ const CompetitionComponent = ({
                         number_tickets: counter,
                         price_per_ticket: data.ticket_price,
                       });
+                  void router.push("/Cart");
                 }}
               >
                 ADD TO CART
