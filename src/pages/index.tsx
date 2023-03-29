@@ -9,7 +9,7 @@ import HowToPlay from "@/components/HowToPlay";
 import Certificate from "@/components/Certificate";
 import Reviews from "@/components/Reviews";
 import Footer from "@/components/Footer";
-
+import OurWinner from "@/components/OurWinner";
 import { api } from "@/utils/api";
 
 const Home: NextPage = () => {
@@ -35,6 +35,7 @@ const Home: NextPage = () => {
       <Header />
       <TheCompetition />
       {/* <Winners /> */}
+        <OurWinner/>
       <HowToPlay />
       <Certificate />
       <Reviews />
