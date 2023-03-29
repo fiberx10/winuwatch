@@ -65,6 +65,10 @@ const Footer = () => {
       </div>
       <div className={styles.FooterBot}>
         <h3>Win U Watch © 2023</h3>
+        <p>
+          Lisam Watch Ltd is registered at 63-66 Hatton Gardens, London, EC1N
+          8LE, UK
+        </p>
       </div>
     </div>
   );
