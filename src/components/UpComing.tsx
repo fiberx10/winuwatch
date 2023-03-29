@@ -9,6 +9,7 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 import { useRef } from "react";
+import { BsArrowRight, BsArrowLeft } from "react-icons/bs";
 
 const UpComing: React.FC<{
   slides: {
@@ -61,20 +62,26 @@ const UpComing: React.FC<{
                   height={200}
                   style={{ objectFit: "contain" }}
                 />
-                <div>
-                  <div>
+                <div className={styles.upComDet}>
+                  <div className={styles.upComTextTop}>
                     <h4>{slide.brand}</h4>
                     <p>{slide.title}</p>
                   </div>
-                  <p>{slide.text}</p>
+                  <p className={styles.upComTextBot}>{slide.text}</p>
                 </div>
               </div>
             </SwiperSlide>
           );
         })}
       </Swiper>
-      <button onClick={() => swiperRef.current?.slidePrev()}>Prev</button>
-      <button onClick={() => swiperRef.current?.slideNext()}>Next</button>
+      <div className={styles.SwiperButt}>
+        <button onClick={() => swiperRef.current?.slidePrev()}>
+          <BsArrowLeft />
+        </button>
+        <button onClick={() => swiperRef.current?.slideNext()}>
+          <BsArrowRight />
+        </button>
+      </div>
     </div>
   );
 };
