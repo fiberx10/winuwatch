@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-argument  */
-/* eslint-disable @typescript-eslint/no-floating-promises */
-/*  eslint-disable @typescript-eslint/no-misused-promises */
 import React, { useState } from "react";
 import styles from "@/styles/Checkout.module.css";
 import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js";
@@ -27,6 +24,14 @@ import { useCart } from "./Store";
 // };
 import "@/styles/Checkout.module.css";
 import Image from "next/image";
+import {
+  Formik,
+  FormikHelpers,
+  FormikProps,
+  Form,
+  Field,
+  FieldProps,
+} from "formik";
 
 type CreatePayemtnTYpe = RouterInputs["Payment"]["create"];
 
@@ -40,9 +45,6 @@ const CheckoutComp = () => {
   const [OrderData, setORderData] = useState<CreatePayemtnTYpe | undefined>();
   const { mutateAsync: createOrder } = api.Payment.create.useMutation();
 
-  const { data } = api.Competition.getAll.useQuery({
-    ids: competitions.map(({ compID }) => compID),
-  });
   const { data: items } = api.Competition.getAll.useQuery({
     ids: competitions.map((comp) => comp.compID),
   });
@@ -61,16 +63,13 @@ const CheckoutComp = () => {
   };
   const [error, setError] = useState<string | undefined>();
   const { totalCost, Number_of_item } = cardDetails();
-  const handleSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault(); // prevent the form from submitting normally
     console.log("Form submitted:", formState);
-    if (OrderData){
-      const {success, error} = await createOrder(OrderData)
-      if (!success) setError(error)
-    
+    if (OrderData) {
+      const { success, error } = await createOrder(OrderData);
+      if (!success) setError(error);
     }
-
-
   };
   const VAT = 0.2;
 
@@ -92,138 +91,126 @@ const CheckoutComp = () => {
     [key: string]: string | number | Date;
   }>({ payment: "PAYPAL" });
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    const { name, value } = e.target as HTMLInputElement;
-    setFormState((prevState) => ({
-      ...prevState,
-      [name]: isNaN(Number(value)) ? value : Number(value),
-    }));
+  const initialValues: CreatePayemtnTYpe = {
+    first_name: "Test",
+    last_name: "",
+    country: "",
+    address: "",
+    town: "",
+    zip: "",
+    phone: "",
+    email: "",
+    paymentMethod: "STRIPE",
+    totalPrice: totalCost,
+    watchids: [""],
+    date: undefined,
+    checkedEmail: false,
+    checkedPhone: false,
+    checkedSMS: false,
   };
-  const handleDateChange = (date: Date, name: string) => {
-    setFormState((prevState) => ({
-      ...prevState,
-      [name]: date,
-    }));
-  };
-
   return (
     <div className={styles.CheckoutMain}>
       {items && (
         <div className={styles.formMain}>
-          <form onSubmit={handleSubmit}>
-            <div className={styles.CheckoutLeft}>
-              <div className={styles.leftFormItem}>
-                <h1>Billing Information</h1>
-                <div className={styles.CheckoutForm}>
-                  <div className={styles.formRow}>
-                    <div className={styles.formField}>
-                      <label htmlFor="firstName">First Name</label>
-                      <input
-                        onChange={handleChange}
-                        required
-                        id="firstName"
-                        type="text"
-                        name="firstName"
-                      />
+          <Formik
+            initialValues={initialValues}
+            onSubmit={async (values, actions) => {
+              console.log("Form submitted:", values);
+              if (OrderData) {
+                const { success, error } = await createOrder(OrderData);
+                if (!success) setError(error);
+              }
+              actions.setSubmitting(false);
+            }}
+          >
+            <Form>
+              <div className={styles.CheckoutLeft}>
+                <div className={styles.leftFormItem}>
+                  <h1>Billing Information</h1>
+                  <div className={styles.CheckoutForm}>
+                    <div className={styles.formRow}>
+                      <div className={styles.formField}>
+                        <label htmlFor="firstName">First Name</label>
+                        <Field
+                          required
+                          id="first_name"
+                          type="text"
+                          name="first_name"
+                        />
+                      </div>
+                      <div className={styles.formField}>
+                        <label htmlFor="lastName">Last Name</label>
+                        <Field
+                          required
+                          id="last_name"
+                          type={"text"}
+                          name="last_name"
+                        />
+                      </div>
                     </div>
-                    <div className={styles.formField}>
-                      <label htmlFor="lastName">Last Name</label>
-                      <input
-                        required
-                        onChange={handleChange}
-                        id="lastName"
-                        type={"text"}
-                        name="lastName"
-                      />
+                    <div className={styles.formRow}>
+                      <div className={styles.formField}>
+                        <label htmlFor="Country">Country/Region</label>
+                        <Field
+                          required
+                          id="country"
+                          type="text"
+                          name="country"
+                        />
+                      </div>
+                      <div className={styles.formField}>
+                        <label htmlFor="lastName">Address</label>
+                        <Field
+                          required
+                          id="address"
+                          type="text"
+                          name="address"
+                        />
+                      </div>
                     </div>
-                  </div>
-                  <div className={styles.formRow}>
-                    <div className={styles.formField}>
-                      <label htmlFor="Country">Country/Region</label>
-                      <input
-                        required
-                        onChange={handleChange}
-                        id="Country"
-                        type="text"
-                        name="Country"
-                      />
+                    <div className={styles.formRow}>
+                      <div className={styles.formField}>
+                        <label htmlFor="Town">Town/City</label>
+                        <Field required id="town" type="text" name="town" />
+                      </div>
+                      <div className={styles.formField}>
+                        <label htmlFor="lastName">ZIP</label>
+                        <Field
+                          required
+                          id="zip"
+                          name="zip"
+                          type="number"
+                          min={0}
+                        />
+                      </div>
                     </div>
-                    <div className={styles.formField}>
-                      <label htmlFor="lastName">Address</label>
-                      <input
-                        required
-                        id="Address"
-                        onChange={handleChange}
-                        type="text"
-                        name="Address"
-                      />
+                    <div className={styles.formRow}>
+                      <div className={styles.formField}>
+                        <label htmlFor="Phone">Phone</label>
+                        <Field required id="phone" type="text" name="phone" />
+                      </div>
+                      <div className={styles.formField}>
+                        <label htmlFor="Email">Email</label>
+                        <Field required id="email" name="email" type="Email" />
+                      </div>
                     </div>
-                  </div>
-                  <div className={styles.formRow}>
-                    <div className={styles.formField}>
-                      <label htmlFor="Town">Town/City</label>
-                      <input
-                        onChange={handleChange}
-                        required
-                        id="Town"
-                        type="text"
-                        name="Town"
-                      />
-                    </div>
-                    <div className={styles.formField}>
-                      <label htmlFor="lastName">ZIP</label>
-                      <input
-                        required
-                        onChange={handleChange}
-                        id="Zip"
-                        name="Zip"
-                        type="number"
-                        min={0}
-                      />
-                    </div>
-                  </div>
-                  <div className={styles.formRow}>
-                    <div className={styles.formField}>
-                      <label htmlFor="Phone">Phone</label>
-                      <input
-                        onChange={handleChange}
-                        required
-                        id="Phone"
-                        type="number"
-                        name="Phone"
-                      />
-                    </div>
-                    <div className={styles.formField}>
-                      <label htmlFor="Email">Email</label>
-                      <input
-                        onChange={handleChange}
-                        required
-                        id="Email"
-                        name="Email"
-                        type="Email"
-                      />
-                    </div>
-                  </div>
-                  <div className={styles.FinalRow}>
-                    <div className={styles.formField}>
-                      <label htmlFor="Date">Date of birth</label>
-                      <input
-                        onChange={handleChange}
-                        max="2005-01-01"
-                        required
-                        type={"date"}
-                        name="date"
-                      />
-                      {/* <input
-                        onChange={handleChange}
+                    <div className={styles.FinalRow}>
+                      <div className={styles.formField}>
+                        <label htmlFor="Date">Date of birth</label>
+                        <Field
+                          max="2005-01-01"
+                          required
+                          type={"date"}
+                          name="date"
+                        />
+                        {/* <Field
+                        
                         required
                         id="Date"
                         name="Date"
                         type={"date"}
                       /> */}
-                      {/* <p
+                        {/* <p
                         style={{
                           color: "red",
                           display:
@@ -234,196 +221,207 @@ const CheckoutComp = () => {
                       >
                         Age must be higher than 18years
                       </p> */}
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-              <div className={styles.leftFormItem}>
-                <h1>Payment Method</h1>
-                <div className={styles.PaymentMethod}>
-                  <div className={styles.method}>
-                    <input
-                      onClick={() => {
-                        setPayment("STRIPE");
-                      }}
-                      type="radio"
-                      name="payment"
-                      value="Stripe"
-                    />
-                    <p
-                      style={{
-                        color:
-                          formState.payment === "STRIPE"
-                            ? "#987358"
-                            : "rgba(30, 30, 30, 0.6)",
-                      }}
-                    >
-                      Credit card
-                    </p>
-                  </div>
-                  <div className={styles.method}>
-                    <input
-                      type="radio"
-                      onClick={() => {
-                        setPayment("PAYPAL");
-                      }}
-                      name="payment"
-                      value="PAYPAL"
-                      defaultChecked
-                    />
-                    <p
-                      style={{
-                        color:
-                          (formState.payment as string) === "PAYPAL"
-                            ? "#987358"
-                            : "rgba(30, 30, 30, 0.6)",
-                      }}
-                    >
-                      PayPal
-                    </p>
-                  </div>
-                </div>
-                <div className={styles.SignMeUp}>
-                  <label>
-                    <input type="checkbox" />
-                    <p>
-                      I have read the <u>Terms & Conditions</u> and{" "}
-                      <u>privacy policy</u>
-                    </p>
-                  </label>
-                  <label>
-                    <input type="checkbox" />
-                    <p>
-                      I agree to the <u>Terms & Conditions</u> and{" "}
-                      <u>privacy policy</u>
-                    </p>
-                  </label>
-                </div>
-              </div>
-            </div>
-            <div className={styles.CheckoutRight}>
-              <h1> Order Summary</h1>
-              <div className={styles.RightCon}>
-                <div className={styles.OrdersFlex}>
-                  {competitions.map((order, i) => {
-                    const ComptetionData = items.find(
-                      (compData) => compData.id === order.compID
-                    );
-                    return (
-                      <div className={styles.orderItem} key={i}>
-                        <Image
-                          width={106}
-                          height={105}
-                          className={styles.orderImg}
-                          src="/images/tester.png"
-                          alt="watching"
-                        />
-                        <div className={styles.orderTit}>
-                          <h3>
-                            {/* {ComptetionData.Watches.brand} {ComptetionData.Watches.model} */}
-                          </h3>
-                          <span>
-                            {competitions.map((comp, i) => {
-                              return (
-                                <p key={i}>
-                                  $
-                                  {(
-                                    comp.number_tickets * comp.price_per_ticket
-                                  ).toFixed(2)}
-                                </p>
-                              );
-                            })}
-                          </span>
-                          <h3>
-                            Remaining Tickets:{" "}
-                            {
-                              //TODO:
-                              competitions.map((comp) => {
-                                return (
-                                  ComptetionData?.remaining_tickets &&
-                                  ComptetionData?.remaining_tickets -
-                                    comp.number_tickets
-                                );
-                              })
-                            }
-                          </h3>
-                        </div>
-                        <div className={styles.Counter}>
-                          <div className={styles.CounterSelec}>
-                            <Image
-                              width={13}
-                              height={1}
-                              src="/images/Minus.png"
-                              alt="minus"
-                            />
-                          </div>
-                          <div className={styles.counterValue}>
-                            {
-                              //TODO:
-                              competitions.map((comp) => {
-                                return comp.number_tickets;
-                              })
-                            }
-                          </div>
-                          <div
-                            // onClick={() =>
-                            //   updateComp({
-                            //     number_tickets: ...comp.number_tickets + 1,
-                            //   })
-                            // }
-                            // onClick={() =>
-                            //   counter < item.remaining_tickets &&
-                            //   setCounter(counter + 1)
-                            // }
-                            className={styles.CounterSelec}
-                          >
-                            <Image
-                              width={11}
-                              height={11}
-                              src="/images/plus.png"
-                              alt="plus"
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-                <div className={styles.orderSumBot}>
-                  <div className={styles.orderSum}>
-                    <h2>Sub Total</h2>
-                    <span>{Formater(totalCost)}</span>
-                  </div>
-                  <div className={styles.orderSum}>
-                    <p>{`Total`}</p>
-                    <span>{Formater(totalCost)}</span>
-                  </div>
-                  {payment !== "STRIPE" ? (
-                    <PayPalScriptProvider
-                      options={{
-                        "client-id": `${"EKxArYG0wr8rILsU-fbTmKP9FVyIr-4jIGi9CIvsloZwOM4C26af92uhqSo1hpnnbUx3-5KUEJ9PwT_H"}`,
-                      }}
-                    >
-                      <PayPalButtons
-                        forceReRender={[totalCost]}
-                        createOrder={(data, actions) => {
-                          return actions.order
-                            .create({
-                              purchase_units: [
-                                {
-                                  amount: {
-                                    currency_code: "USD",
-                                    value: totalCost.toString(),
-                                  },
-                                },
-                              ],
-                            })
-                            .then((orderId) => {
-                              // Your code here after create the order
-                              return orderId;
-                            });
+                <div className={styles.leftFormItem}>
+                  <h1>Payment Method</h1>
+                  <div className={styles.PaymentMethod}>
+                    <div className={styles.method}>
+                      <Field
+                        defaultChecked
+                        onClick={() => setPayment("STRIPE")}
+                        type="radio"
+                        name="paymentMethod"
+                        value="STRIPE"
+                      />
+                      <p
+                        style={{
+                          color:
+                            formState.payment === "STRIPE"
+                              ? "#987358"
+                              : "rgba(30, 30, 30, 0.6)",
                         }}
-                        /*
+                      >
+                        Credit card
+                      </p>
+                    </div>
+                    <div className={styles.method}>
+                      <Field
+                        type="radio"
+                        name="paymentMethod"
+                        value="PAYPAL"
+                        onClick={() => setPayment("PAYPAL")}
+                      />
+                      <p
+                        style={{
+                          color:
+                            (formState.payment as string) === "PAYPAL"
+                              ? "#987358"
+                              : "rgba(30, 30, 30, 0.6)",
+                        }}
+                      >
+                        PayPal
+                      </p>
+                    </div>
+                  </div>
+                  <div className={styles.SignMeUp}>
+                    <label>
+                      <Field name="checkedSMS" type="checkbox" />
+                      <p>
+                        I hereby declare that I have thoroughly read, completely
+                        understood, and unconditionally accepted The{" "}
+                        <u>Terms & Conditions</u>, including the{" "}
+                        <u>Return Policy, FAQ, Acceptable Use Policy,</u> and{" "}
+                        <u>privacy policy.</u>
+                      </p>
+                    </label>
+                    <label>
+                      <Field name="checkedEmail" type="checkbox" />
+                      <p>I agree To Receive Email Updates And News</p>
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div className={styles.CheckoutRight}>
+                <h1> Order Summary</h1>
+                <div className={styles.RightCon}>
+                  <div className={styles.OrdersFlex}>
+                    {competitions.map((order, i) => {
+                      const ComptetionData = items.find(
+                        (compData) => compData.id === order.compID
+                      );
+
+                      return (
+                        <div className={styles.orderItem} key={i}>
+                          <Image
+                            width={106}
+                            height={105}
+                            className={styles.orderImg}
+                            src="/images/tester.png"
+                            alt="watching"
+                          />
+                          <div className={styles.orderTit}>
+                            <h3>
+                              {ComptetionData?.Watches.brand}{" "}
+                              {ComptetionData?.Watches.model}
+                            </h3>
+                            <span>
+                              {competitions.map((comp, i) => {
+                                return (
+                                  <p key={i}>
+                                    $
+                                    {(
+                                      comp.number_tickets *
+                                      comp.price_per_ticket
+                                    ).toFixed(2)}
+                                  </p>
+                                );
+                              })}
+                            </span>
+                            <h3>
+                              Remaining Tickets:{" "}
+                              {
+                                //TODO:
+                                competitions.map((comp) => {
+                                  return (
+                                    ComptetionData?.remaining_tickets &&
+                                    ComptetionData?.remaining_tickets -
+                                      comp.number_tickets
+                                  );
+                                })
+                              }
+                            </h3>
+                          </div>
+                          <div className={styles.Counter}>
+                            <div
+                              onClick={() =>
+                                updateComp({
+                                  compID: order.compID,
+                                  number_tickets:
+                                    order.number_tickets > 1
+                                      ? order.number_tickets - 1
+                                      : order.number_tickets,
+                                  price_per_ticket: order.price_per_ticket,
+                                })
+                              }
+                              className={styles.CounterSelec}
+                            >
+                              <Image
+                                width={13}
+                                height={1}
+                                src="/images/Minus.png"
+                                alt="minus"
+                              />
+                            </div>
+                            <div className={styles.counterValue}>
+                              {
+                                //TODO:
+                                competitions.map((comp) => {
+                                  return comp.number_tickets;
+                                })
+                              }
+                            </div>
+                            <div
+                              onClick={() =>
+                                updateComp({
+                                  compID: order.compID,
+                                  number_tickets:
+                                    order.number_tickets <
+                                    ComptetionData?.remaining_tickets
+                                      ? order.number_tickets + 1
+                                      : order.number_tickets,
+                                  price_per_ticket: order.price_per_ticket,
+                                })
+                              }
+                              className={styles.CounterSelec}
+                            >
+                              <Image
+                                width={11}
+                                height={11}
+                                src="/images/plus.png"
+                                alt="plus"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                  <div className={styles.orderSumBot}>
+                    <div className={styles.orderSum}>
+                      <p>{`Total`}</p>
+                      <span>{Formater(totalCost)}</span>
+                    </div>
+                    {payment === "PAYPAL" ? (
+                      <PayPalScriptProvider
+                        options={{
+                          "client-id": `${
+                            process.env.NEXT_PUBLIC_PAYPAL_ID as string
+                          }`,
+                        }}
+                      >
+                        <PayPalButtons
+                          forceReRender={[totalCost]}
+                          createOrder={(data, actions) => {
+                            return actions.order
+                              .create({
+                                purchase_units: [
+                                  {
+                                    amount: {
+                                      currency_code: "USD",
+                                      value: totalCost.toString(),
+                                    },
+                                  },
+                                ],
+                              })
+                              .then((orderId) => {
+                                // Your code here after create the order
+                                return orderId;
+                              });
+                          }}
+                          /*
                         onApprove={function (data, actions) {
                           
                           return actions?.order?
@@ -455,37 +453,36 @@ const CheckoutComp = () => {
                             });
                           }}
                           */
-                        style={{ layout: "horizontal" }}
-                      />
-                    </PayPalScriptProvider>
-                  ) : (
-                    <button
-                      onClick={async (e) => {
-                        e.preventDefault();
-                        const { url } = await Hook.mutateAsync({
-                          email: "test@email.com",
-                          address: "hay ahahha",
-                          comps: competitions.map((comp) => ({
-                            compID: comp.compID,
-                            quantity: comp.number_tickets,
-                          })),
-                        });
-                        if (url) {
-                          router.push(url);
-                        }
-                      }}
-                    >
-                      Confirm Order
-                    </button>
-                  )}
-                  {/*
+                          style={{ layout: "horizontal" }}
+                        />
+                      </PayPalScriptProvider>
+                    ) : (
+                      <button
+                        onClick={async (e) => {
+                          e.preventDefault();
+                          const { url } = await Hook.mutateAsync({
+                            email: "test@email.com",
+                            address: "hay ahahha",
+                            comps: competitions.map((comp) => ({
+                              compID: comp.compID,
+                              quantity: comp.number_tickets,
+                            })),
+                          });
+                          if (url) {
+                            router.push(url);
+                          }
+                        }}
+                      >
+                        Confirm Order
+                      </button>
+                    )}
 
-                      <button type="submit">Submit</button>
-                  */}
+                    <button type="submit">Submit</button>
+                  </div>
                 </div>
               </div>
-            </div>
-          </form>
+            </Form>
+          </Formik>
         </div>
       )}
     </div>

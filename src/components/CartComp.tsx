@@ -119,10 +119,7 @@ const CartComp = () => {
       ) : (
         <h1>No Items in the Cart</h1>
       )}
-      <div className={styles.CartSubTotal}>
-        <p>Sub Total</p>
-        <span>{Formater(totalCost)}</span>
-      </div>
+
       <div className={styles.CartTotal}>
         <p>{`Total + (20%) VAT`}</p>
         <span>{Formater(totalCost * 1.02)}</span>
