@@ -58,31 +58,49 @@ const CheckoutComp = () => {
   const [error, setError] = useState<string | undefined>();
   const VAT = 0.2;
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    getValues,
-  } = useForm<CreatePayemtnTYpe>({
-    defaultValues: {
-      date: new Date(),
-      paymentMethod: "STRIPE",
-      checkedEmail: false,
-      checkedSMS: false,
-      watchids: competitions.map((comp) => comp.compID) || [],
-    },
-  });
+  // const {
+  //   register,
+  //   handleSubmit,
+  //   formState: { errors },
+  //   getValues,
+  // } = useForm<CreatePayemtnTYpe>({
+  //   defaultValues: {
+  //     date: new Date(),
+  //     paymentMethod: "STRIPE",
+  //     checkedEmail: false,
+  //     checkedSMS: false,
+  //     watchids: competitions.map((comp) => comp.compID) || [],
+  //   },
+  // });
+  const [formState, setFormState] = useState<{
+    [key: string]: string | number | Date;
+  }>({ payment: "PAYPAL" });
 
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target as HTMLInputElement;
+    setFormState((prevState) => ({
+      ...prevState,
+      [name]: isNaN(Number(value)) ? value : Number(value),
+    }));
+  };
+  const handleDateChange = (date: Date, name: string) => {
+    setFormState((prevState) => ({
+      ...prevState,
+      [name]: date,
+    }));
+  };
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault(); // prevent the form from submitting normally
+    console.log("Form submitted:", formState);
+  };
 
   return (
     <div className={styles.CheckoutMain}>
       {items && (
         <div className={styles.formMain}>
-          <form onSubmit={(e)=> {
-            console.log("here")
-          }}>
-
-
+          <form onSubmit={handleSubmit}>
             <div className={styles.CheckoutLeft}>
               <div className={styles.leftFormItem}>
                 <h1>Billing Information</h1>
@@ -91,6 +109,7 @@ const CheckoutComp = () => {
                     <div className={styles.formField}>
                       <label htmlFor="firstName">First Name</label>
                       <input
+                        onChange={handleChange}
                         required
                         id="firstName"
                         type="text"
@@ -101,6 +120,7 @@ const CheckoutComp = () => {
                       <label htmlFor="lastName">Last Name</label>
                       <input
                         required
+                        onChange={handleChange}
                         id="lastName"
                         type={"text"}
                         name="lastName"
@@ -112,8 +132,9 @@ const CheckoutComp = () => {
                       <label htmlFor="Country">Country/Region</label>
                       <input
                         required
+                        onChange={handleChange}
                         id="Country"
-                        type={"text"}
+                        type="text"
                         name="Country"
                       />
                     </div>
@@ -122,7 +143,8 @@ const CheckoutComp = () => {
                       <input
                         required
                         id="Address"
-                        type={"text"}
+                        onChange={handleChange}
+                        type="text"
                         name="Address"
                       />
                     </div>
@@ -130,15 +152,22 @@ const CheckoutComp = () => {
                   <div className={styles.formRow}>
                     <div className={styles.formField}>
                       <label htmlFor="Town">Town/City</label>
-                      <input required id="Town" type={"text"} name="Town" />
+                      <input
+                        onChange={handleChange}
+                        required
+                        id="Town"
+                        type="text"
+                        name="Town"
+                      />
                     </div>
                     <div className={styles.formField}>
                       <label htmlFor="lastName">ZIP</label>
                       <input
                         required
+                        onChange={handleChange}
                         id="Zip"
                         name="Zip"
-                        type={"number"}
+                        type="number"
                         min={0}
                       />
                     </div>
@@ -146,25 +175,55 @@ const CheckoutComp = () => {
                   <div className={styles.formRow}>
                     <div className={styles.formField}>
                       <label htmlFor="Phone">Phone</label>
-                      <input required id="Phone" type={"number"} name="Phone" />
+                      <input
+                        onChange={handleChange}
+                        required
+                        id="Phone"
+                        type="number"
+                        name="Phone"
+                      />
                     </div>
                     <div className={styles.formField}>
                       <label htmlFor="Email">Email</label>
-                      <input required id="Email" name="Email" type="Email" />
+                      <input
+                        onChange={handleChange}
+                        required
+                        id="Email"
+                        name="Email"
+                        type="Email"
+                      />
                     </div>
                   </div>
                   <div className={styles.FinalRow}>
                     <div className={styles.formField}>
                       <label htmlFor="Date">Date of birth</label>
-                      <input required id="Date" name="Date" type={"date"} />
-                      <p
+                      <input
+                        // onChange={(date: Date) =>
+                        //   handleDateChange(date, "date")
+                        // }
+                        max="2005-01-01"
+                        required
+                        type={"date"}
+                        name="date"
+                      />
+                      {/* <input
+                        onChange={handleChange}
+                        required
+                        id="Date"
+                        name="Date"
+                        type={"date"}
+                      /> */}
+                      {/* <p
                         style={{
                           color: "red",
-                          display: IsLegal(getValues("date")) ? "none" : "flex",
+                          display:
+                            (formState.Date as string) < "2005/01/01"
+                              ? "none"
+                              : "flex",
                         }}
                       >
                         Age must be higher than 18years
-                      </p>
+                      </p> */}
                     </div>
                   </div>
                 </div>
@@ -177,7 +236,7 @@ const CheckoutComp = () => {
                     <p
                       style={{
                         color:
-                          getValues("paymentMethod") === "STRIPE"
+                          formState.payment === "STRIPE"
                             ? "#987358"
                             : "rgba(30, 30, 30, 0.6)",
                       }}
@@ -190,7 +249,7 @@ const CheckoutComp = () => {
                     <p
                       style={{
                         color:
-                          getValues("paymentMethod") === "STRIPE"
+                        formState.payment === "STRIPE"
                             ? "#987358"
                             : "rgba(30, 30, 30, 0.6)",
                       }}
@@ -201,14 +260,15 @@ const CheckoutComp = () => {
                   <div className={styles.method}>
                     <input
                       type="radio"
+                      onChange={handleChange}
                       name="payment"
-                      value="Paypal"
+                      value="PAYPAL"
                       defaultChecked
                     />
                     <p
                       style={{
                         color:
-                          getValues("paymentMethod") === "PAYPAL"
+                          (formState.payment as string) === "PAYPAL"
                             ? "#987358"
                             : "rgba(30, 30, 30, 0.6)",
                       }}
@@ -217,12 +277,17 @@ const CheckoutComp = () => {
                     </p>
                   </div>
                   <div className={styles.method}>
-                    <input type="radio" name="payment" value="Stripe" />
+                    <input
+                      onChange={handleChange}
+                      type="radio"
+                      name="payment"
+                      value="STRIPE"
+                    />
                     <label
                       htmlFor="Stripe"
                       style={{
                         color:
-                          getValues("paymentMethod") === "STRIPE"
+                          (formState.payment as string) === "STRIPE"
                             ? "#987358"
                             : "rgba(30, 30, 30, 0.6)",
                       }}
@@ -240,7 +305,7 @@ const CheckoutComp = () => {
                     </p>
                   </label>
                   <label>
-                    <input type="checkbox" />
+                  <input type="checkbox" />
                     <p>
                       I agree to the <u>Terms & Conditions</u> and{" "}
                       <u>privacy policy</u>
@@ -341,7 +406,8 @@ const CheckoutComp = () => {
                     <p>{`Total + (20%) VAT`}</p>
                     <span>{Formater(totalCost * 1.02)}</span>
                   </div>
-                  {getValues("paymentMethod") === "PAYPAL" ? (
+                  {formState.payment &&
+                  (formState.payment as string) === "PAYPAL" ? (
                     <PayPalScriptProvider
                       options={{
                         "client-id": `${env.NEXT_PUBLIC_PAYPAL_ID}`,
@@ -402,28 +468,26 @@ const CheckoutComp = () => {
                       />
                     </PayPalScriptProvider>
                   ) : (
-
                     <button
                       onClick={async (e) => {
                         e.preventDefault();
-                        const {url} = await Hook.mutateAsync({
-                          email : "test@email.com",
-                          address : "hay ahahha",
+                        const { url } = await Hook.mutateAsync({
+                          email: "test@email.com",
+                          address: "hay ahahha",
                           comps: competitions.map((comp) => ({
                             compID: comp.compID,
                             quantity: comp.number_tickets,
                           })),
-                        })
+                        });
                         if (url) {
-                          router.push(url)
+                          router.push(url);
                         }
-
                       }}
                     >
                       Confirm Order
-
                     </button>
                   )}
+                  <button type="submit">Submit</button>
                 </div>
               </div>
             </div>
