@@ -9,6 +9,7 @@ import { env } from "@/env.mjs";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { api, type RouterInputs, Formater } from "@/utils";
 import { useCart } from "./Store";
+import Image from "next/image";
 
 // import { CreateOrderSchema } from "@/utils/Schema";
 //import { zodResolver } from '@hookform/resolvers/zod';
@@ -36,11 +37,13 @@ const CheckoutComp = () => {
   const Hook = api.Stripe.createCheckoutSession.useMutation();
   const { competitions, cardDetails, reset, addComp, removeComp, updateComp } =
     useCart();
-
+  const { data } = api.Competition.getAll.useQuery({
+    ids: competitions.map(({ compID }) => compID),
+  });
   const { data: items } = api.Competition.getAll.useQuery({
     ids: competitions.map((comp) => comp.compID),
   });
-
+  const [payment, setPayment] = useState<"STRIPE" | "PAYPAL">("STRIPE");
   const IsLegal = (Birthdate?: Date) => {
     const LegalAge = 18;
     const now = new Date();
@@ -232,7 +235,14 @@ const CheckoutComp = () => {
                 <h1>Payment Method</h1>
                 <div className={styles.PaymentMethod}>
                   <div className={styles.method}>
-                    <input type="radio" name="payment" value="Stripe" />
+                    <input
+                      onClick={() => {
+                        setPayment("STRIPE");
+                      }}
+                      type="radio"
+                      name="payment"
+                      value="Stripe"
+                    />
                     <p
                       style={{
                         color:
@@ -241,26 +251,15 @@ const CheckoutComp = () => {
                             : "rgba(30, 30, 30, 0.6)",
                       }}
                     >
-                      Debit card
-                    </p>
-                  </div>
-                  <div className={styles.method}>
-                    <input type="radio" name="payment" value="Stripe" />
-                    <p
-                      style={{
-                        color:
-                        formState.payment === "STRIPE"
-                            ? "#987358"
-                            : "rgba(30, 30, 30, 0.6)",
-                      }}
-                    >
-                      credit card
+                      Credit card
                     </p>
                   </div>
                   <div className={styles.method}>
                     <input
                       type="radio"
-                      onChange={handleChange}
+                      onClick={() => {
+                        setPayment("PAYPAL");
+                      }}
                       name="payment"
                       value="PAYPAL"
                       defaultChecked
@@ -276,38 +275,12 @@ const CheckoutComp = () => {
                       PayPal
                     </p>
                   </div>
-                  <div className={styles.method}>
-                    <input
-                      onChange={handleChange}
-                      type="radio"
-                      name="payment"
-                      value="STRIPE"
-                    />
-                    <label
-                      htmlFor="Stripe"
-                      style={{
-                        color:
-                          (formState.payment as string) === "STRIPE"
-                            ? "#987358"
-                            : "rgba(30, 30, 30, 0.6)",
-                      }}
-                    >
-                      Credit card
-                    </label>
-                  </div>
                 </div>
                 <div className={styles.SignMeUp}>
                   <label>
                     <input type="checkbox" />
                     <p>
                       I have read the <u>Terms & Conditions</u> and{" "}
-                      <u>privacy policy</u>
-                    </p>
-                  </label>
-                  <label>
-                  <input type="checkbox" />
-                    <p>
-                      I agree to the <u>Terms & Conditions</u> and{" "}
                       <u>privacy policy</u>
                     </p>
                   </label>
@@ -318,84 +291,33 @@ const CheckoutComp = () => {
               <h1> Order Summary</h1>
               <div className={styles.RightCon}>
                 <div className={styles.OrdersFlex}>
-                  {/*checkData &&
-                    checkData.map((order, i) => {
-                      itemsForFetch &&
-                        itemsForFetch.map((ite) => {
-                          return (
-                            ite.compID === order.id &&
-                            total.push(
-                              ite.number_tickets * Number(order.ticket_price)
-                            )
-                          );
-                        });
+                  {data &&
+                    competitions.map((comp, i) => {
+                      const ComptetionData = data.find(
+                        (compData) => compData.id === comp.compID
+                      );
                       return (
                         <div className={styles.orderItem} key={i}>
                           <Image
-                            width={106}
-                            height={105}
-                            className={styles.orderImg}
-                            src="/images/tester.png"
-                            alt="watching"
+                            width={196}
+                            height={195}
+                            alt="watchImage"
+                            src={
+                              ComptetionData?.Watches.images_url[0] ||
+                              "/images/watch.png"
+                            }
                           />
                           <div className={styles.orderTit}>
-                            <h3>{order.Watch.name}</h3>
+                            <h3>{ComptetionData?.Watches.brand}</h3>
                             <span>
                               $
-                              {itemsForFetch &&
-                                itemsForFetch.map((ite) => {
-                                  return (
-                                    ite.compID === order.id &&
-                                    ite.number_tickets *
-                                      Number(order.ticket_price)
-                                  );
-                                })}
-                              .00
+                              {comp.number_tickets *
+                                Number(ComptetionData?.ticket_price)}
                             </span>
-                            <h3>
-                              Remaining Tickets:{" "}
-                              {
-                                //TODO:
-                              }
-                            </h3>
-                          </div>
-                          <div className={styles.Counter}>
-                            <div
-                              onClick={() => {}}
-                              className={styles.CounterSelec}
-                            >
-                              <Image
-                                width={13}
-                                height={1}
-                                src="/images/Minus.png"
-                                alt="minus"
-                              />
-                            </div>
-                            <div className={styles.counterValue}>
-                              {
-                                //TODO:
-                              }
-                              0
-                            </div>
-                            <div
-                              // onClick={() =>
-                              //   counter < item.remaining_tickets &&
-                              //   setCounter(counter + 1)
-                              // }
-                              onClick={() => {}}
-                              className={styles.CounterSelec}
-                            >
-                              <Image
-                                width={11}
-                                height={11}
-                                src="/images/plus.png"
-                                alt="plus"
-                              />
-                            </div>
                           </div>
                         </div>
                       );
-                            */}
+                    })}
                 </div>
                 <div className={styles.orderSumBot}>
                   <div className={styles.orderSum}>
@@ -403,14 +325,13 @@ const CheckoutComp = () => {
                     <span>{Formater(totalCost)}</span>
                   </div>
                   <div className={styles.orderSum}>
-                    <p>{`Total + (20%) VAT`}</p>
-                    <span>{Formater(totalCost * 1.02)}</span>
+                    <p>{`Total`}</p>
+                    <span>{Formater(totalCost)}</span>
                   </div>
-                  {formState.payment &&
-                  (formState.payment as string) === "PAYPAL" ? (
+                  {payment !== "STRIPE" ? (
                     <PayPalScriptProvider
                       options={{
-                        "client-id": `${env.NEXT_PUBLIC_PAYPAL_ID}`,
+                        "client-id": `${"EKxArYG0wr8rILsU-fbTmKP9FVyIr-4jIGi9CIvsloZwOM4C26af92uhqSo1hpnnbUx3-5KUEJ9PwT_H"}`,
                       }}
                     >
                       <PayPalButtons
@@ -422,7 +343,7 @@ const CheckoutComp = () => {
                                 {
                                   amount: {
                                     currency_code: "USD",
-                                    value: (totalCost * 1.02).toString(),
+                                    value: totalCost.toString(),
                                   },
                                 },
                               ],
@@ -487,7 +408,10 @@ const CheckoutComp = () => {
                       Confirm Order
                     </button>
                   )}
-                  <button type="submit">Submit</button>
+                  {/*
+
+                      <button type="submit">Submit</button>
+                  */}
                 </div>
               </div>
             </div>
