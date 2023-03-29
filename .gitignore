@@ -41,3 +41,22 @@ yarn-error.log*
 
 # typescript
 *.tsbuildinfo
+
+# editor
+.vscode
+
+# pnpm
+.pnpm-debug.log
+.pnpm-debug.log.*
+pnpm-lock.yaml
+
+# local files
+0xtz_*
+
+
+# pnpm ignore
+.pnpm-debug.log*
+.pnpm-debug.log.*
+.pnpm-debug.log
+pnpm-lock.yaml
+pnpm-debug.log

@@ -2,85 +2,109 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-    provider = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
-    provider = "mongodb"
-    url      = env("DATABASE_URL")
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
 }
 
 model Watches {
-    id                String       @id @default(auto()) @map("_id") @db.ObjectId
-    name              String
-    owner_ref         String?
-    condition         String
-    years             Int
-    movement          String
-    case_size         Int
-    dail              String
-    case_material     String
-    bracelet_material String
-    water_proof       String?
-    box               Boolean
-    papers            Boolean
-    imageURL          String[] // ID Backedn URL/public/[id].jpg
-    createdAt         DateTime     @default(now())
-    updatedAt         DateTime     @updatedAt
-    Competition       Competition?
-    Order Order?
-    @@map("watches")
+  id                  String       @id @default(auto()) @map("_id") @db.ObjectId
+  brand               String
+  model               String
+  reference_number    String
+  movement            String
+  Bracelet_material   String
+  year_of_manifacture Int
+  caliber_grear       Int
+  number_of_stones    Int
+  glass               String
+  bezel_material      String
+  has_box             Boolean      @default(false)
+  has_certificate     Boolean      @default(false)
+  images_url          String[]
+  condition           String
+  orderId             String?      @db.ObjectId
+  Order               Order?       @relation(fields: [orderId], references: [id])
+  Competition         Competition?
 
+  @@map("watches")
 }
 
 model Competition {
+  id                       String            @id @default(auto()) @map("_id") @db.ObjectId
+  name                     String
+  max_watch_number         Int
+  max_space_in_final_draw  Int
+  winner_announcement_date DateTime?
+  start_date               DateTime
+  end_date                 DateTime
+  run_up_prize             String?
+  drawing_date             DateTime
+  remaining_tickets        Int
+  ticket_price             Float
+  total_tickets            Int
+  location                 String
+  price                    Float
+  status                   CompetitionStatus
+  winner                   String?
+  second_reward            String?
+  createdAt                DateTime          @default(now())
+  updatedAt                DateTime          @updatedAt
+  watchesId                String            @unique @db.ObjectId
+  Watches                  Watches           @relation(fields: [watchesId], references: [id])
 
-    id                String            @id @default(auto()) @map("_id") @db.ObjectId
-    name              String
-    start_date        DateTime
-    remaining_tickets Int
-    drawing_date      DateTime
-    end_date          DateTime
-    total_tickets     Int
-    ticket_price      Float
-    location          String
-    second_reward     String
-    price            Float
-    status            CompetitionStatus
-    winner            String?
-    createdAt         DateTime          @default(now())
-    updatedAt         DateTime          @updatedAt
-    watchesId         String            @unique @db.ObjectId
-    Watches           Watches           @relation(fields: [watchesId], references: [id])
-
-    @@map("competition")
+  @@map("competition")
 }
 
 enum OrderStatus {
-    PENDING
-    CONFIRMED
-    CANCELLED
+  PENDING
+  CONFIRMED
+  CANCELLED
 }
 
 enum PaymentMethod {
-    PAYPAL
-    STRIPE
+  PAYPAL
+  STRIPE
 }
 
 model Order {
-    id        String   @id @default(auto()) @map("_id") @db.ObjectId
-    name      String
-    price     Int
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-    watchesId String   @unique @db.ObjectId
-    paymentMethod PaymentMethod
-    Watches   Watches  @relation(fields: [watchesId], references: [id])
-    @@map("order")
+  id            String        @id @default(auto()) @map("_id") @db.ObjectId
+  first_name    String
+  last_name     String
+  country       String
+  address       String
+  town          String
+  zip           String
+  phone         String
+  email         String
+  date          DateTime
+  paymentMethod PaymentMethod
+  checkedEmail  Boolean
+  checkedSMS    Boolean
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  totalPrice    Float
+  Watches       Watches[]
+
+  @@map("order")
+}
+
+model Question {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  question      String
+  answers       String[]
+  correctAnswer String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@map("question")
 }
 
 enum CompetitionStatus {
-    ACTIVE
-    NOT_ACTIVE
-    COMPLETED
+  ACTIVE
+  NOT_ACTIVE
+  COMPLETED
 }

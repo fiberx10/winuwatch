@@ -2,7 +2,6 @@ import CartComp from "@/components/CartComp";
 import Footer from "@/components/Footer";
 import NavBar from "@/components/NavBar";
 import Head from "next/head";
-import { useEffect, useState } from "react";
 
 export default function Cart() {
   return (

@@ -2,28 +2,38 @@ import styles from "../styles/Home.module.css";
 import { useEffect, useState } from "react";
 import { Drawer } from "@mui/material";
 import Image from "next/image";
-import Link from "next/link";
-import useStore from "./Store";
+import { useCart } from "./Store";
 import { useRouter } from "next/router";
 
 export default function NavBar() {
   const [open, setOpen] = useState(false);
+  const [navColor, setNavColor] = useState("");
   const router = useRouter();
-  const bears = useStore((state) => state.bears);
-  const [number, setNumber] = useState();
-  useEffect(() => {
-    setNumber(typeof window !== "undefined" ? bears : 0);
-  }, [bears]);
-  let howTo =
+  const { cardDetails } = useCart();
+
+  const howTo =
     typeof window !== "undefined" && document.getElementById("Howtoplay");
-  let theComp =
+  const theComp =
     typeof window !== "undefined" && document.getElementById("theComp");
+  useEffect(() => {
+    typeof window !== "undefined" && location.pathname !== "/"
+      ? setNavColor("#927C66")
+      : setNavColor("white");
+  }, []);
   return (
     <div
       onClick={() => open && setOpen(false)}
       className={styles.NavBarContainer}
+      style={{
+        color: navColor,
+      }}
     >
-      <div className={styles.flexStart}>
+      <div
+        style={{
+          borderBottom: `1px solid ${navColor}`,
+        }}
+        className={styles.flexStart}
+      >
         <span
           onClick={() =>
             typeof window !== "undefined" && location.pathname !== "/"
@@ -59,28 +69,26 @@ export default function NavBar() {
         <Image
           style={{
             cursor: "pointer",
+            filter: navColor === "white" ? "brightness(0) invert(1)" : "",
           }}
           onClick={() => setOpen(!open)}
           className={styles.burger}
           alt="menu"
-
           width={38}
           height={7}
-
           src="/images/burgerMenu.svg"
         />
         <Drawer className={styles.Drawer} anchor="left" open={open}>
           <div className={styles.DrawerCon}>
-            <Link
+            <span
               className={styles.DrawerMenu}
               style={{
                 fontSize: "20px",
                 fontWeight: "500",
               }}
-              href="/"
             >
               Menu
-            </Link>
+            </span>
             <hr />
             <span onClick={() => router.push("/")}>Home</span>
             <span
@@ -115,20 +123,27 @@ export default function NavBar() {
             </span>
             <hr />
 
-            <span onClick={() => router.push("/philosophy")}>philosophy</span>
-            <span onClick={() => router.push("/charity")}>Charity</span>
+            <span onClick={() => router.push("/Philosophy")}>philosophy</span>
+            <span onClick={() => router.push("/Charity")}>Charity</span>
           </div>
         </Drawer>
       </div>
+
       <Image
-        width={150}
-        height={108.42}
+        width={200}
+        height={105.42}
         className={styles.Logo}
+        onClick={() => router.push("/")}
         alt="logo"
-        src="/images/logo.png"
+        src={`/images/${navColor === "white" ? "newLogo.png" : "logo.png"}`}
       />
 
-      <div className={styles.flexEnd}>
+      <div
+        style={{
+          borderBottom: `1px solid ${navColor}`,
+        }}
+        className={styles.flexEnd}
+      >
         <span
           style={{
             fontWeight:
@@ -165,17 +180,18 @@ export default function NavBar() {
           }}
           onClick={() => router.push("/Cart")}
         >
-          cart ({number})
+          {`Cart (${cardDetails().Number_of_item})`}
         </span>
 
         <Image
           width={15}
-          style={{ objectFit: "contain" }}
+          style={{
+            filter: navColor === "white" ? "brightness(0) invert(1)" : "",
+          }}
           height={15}
           alt="global"
           src="/images/global.png"
         />
-
       </div>
     </div>
   );

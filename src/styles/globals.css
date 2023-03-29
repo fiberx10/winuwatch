@@ -1,6 +1,26 @@
+/* some resets */
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+
 * {
   margin: 0;
+  padding: 0;
+  box-sizing: border-box;
   font-family: "Kanit", sans-serif;
+}
+html {
+  background-attachment: fixed;
 }
 @media only screen and (max-width: 930px) {
   .alice-carousel__next-btn {
@@ -8,6 +28,9 @@
   }
   .alice-carousel__prev-btn {
     display: none !important;
+  }
+  .alice-carousel__dots {
+    padding: 0px 10px !important;
   }
 }
 .MuiRating-icon {
@@ -28,7 +51,7 @@
 .alice-carousel__dots {
   display: flex;
   align-items: flex-start;
-  padding: 0px 10px !important;
+  margin: 30px 0px 0px 0px !important;
 }
 .alice-carousel__prev-btn {
   position: absolute;
@@ -168,7 +191,6 @@
   flex-direction: column;
 
   justify-content: flex-end;
-
 }
 .splide__track--nav > .splide__list > .splide__slide.is-active {
   border: 0 !important;
@@ -193,4 +215,15 @@
 }
 .splide__arrow {
   background-color: transparent !important;
+}
+
+.bm-burger-button button {
+  width: 5rem !important;
+  height: 5rem !important;
+}
+.bm-menu-wrap {
+  background-color: white;
+}
+.form-control {
+  color: grey !important;
 }

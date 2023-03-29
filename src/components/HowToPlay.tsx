@@ -1,19 +1,31 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styles from "../styles/Home.module.css";
 
 import Image from "next/image";
 
 const HowToPlay = () => {
+  useEffect(() => {
+    const handleScroll = () => {
+      const background = document.querySelector(
+        `.${styles.background3 ?? "undefined"}`
+      ) as HTMLElement & { style: CSSStyleDeclaration };
+      if (background) {
+        background.style.backgroundPositionY = `${-window.scrollY / 10}px`;
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
   const theComp =
     typeof window !== "undefined" && document.getElementById("theComp");
   return (
     <div id="Howtoplay" className={styles.howtoContainer}>
-      <h1>how to play</h1>
+      <h1 className={styles.background3}>how to play</h1>
       <div className={styles.howtoText}>
         <div className={styles.howtoTxt1}>
           <h2>Choose your tickets</h2>
           <p>
-            Choose how many tickets you want - up to 50 per person - and
+            Choose how many tickets you want - up to 25 per person - and
             you&apos;re on the way to winning the luxury timepiece.
           </p>
         </div>
@@ -25,7 +37,6 @@ const HowToPlay = () => {
           </p>
         </div>
         <div className={styles.howtoLine}>
-
           <Image height={559} width={1} src="/images/Line.png" alt="line" />
           <Image
             width={10}
@@ -55,7 +66,6 @@ const HowToPlay = () => {
             src="/images/Dot.svg"
             alt="dot"
           />
-
         </div>
         <div className={styles.howtoTxt3}>
           <h2>Buy your tickets</h2>
@@ -67,7 +77,7 @@ const HowToPlay = () => {
         <div className={styles.howtoTxt4}>
           <h2>Win your dream watch!</h2>
           <p>
-            And that&apos;s it! You could walk away with a new £10,000 watch –
+            And that&apos;s it! You could walk away with a new £20,000 watch –
             for as little as £25.
           </p>
         </div>
