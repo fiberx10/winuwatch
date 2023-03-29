@@ -263,3 +263,11 @@
     font-size: 14.2133px;
   }
 }
+@media only screen and (min-width: 1441px) and (max-width: 2560px) {
+  .formMain {
+    width: 83%;
+  }
+  .CheckoutMain {
+    justify-content: center;
+  }
+}

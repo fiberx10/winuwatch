@@ -30,7 +30,7 @@ const CartComp = () => {
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
-    width: "70%",
+    width: "fit-content",
     bgcolor: "background.paper",
     border: "1px solid #CBB9AC",
     boxShadow: 24,
@@ -144,7 +144,7 @@ const CartComp = () => {
           <Fade in={open}>
             <Box className={styles.ModalBox} sx={style}>
               {competitions.length === 0 ? (
-                <div>
+                <div className={styles.ModalBoxTopFlex}>
                   <p id="spring-modal-description">Cart is empty</p>
                   <span onClick={handleClose}>
                     <CloseOutlined />
@@ -152,7 +152,7 @@ const CartComp = () => {
                 </div>
               ) : (
                 <>
-                  <div>
+                  <div className={styles.ModalBoxTopFlex}>
                     <p id="spring-modal-description">
                       In Order to continue to the checkout page you must answer
                       this question:

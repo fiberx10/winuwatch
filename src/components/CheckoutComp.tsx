@@ -6,26 +6,27 @@ import styles from "@/styles/Checkout.module.css";
 import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js";
 import { useRouter } from "next/router";
 import { env } from "@/env.mjs";
-import { useForm, type SubmitHandler } from "react-hook-form";
+// import { useForm, type SubmitHandler } from "react-hook-form";
 import { api, type RouterInputs, Formater } from "@/utils";
 import { useCart } from "./Store";
 
 // import { CreateOrderSchema } from "@/utils/Schema";
 //import { zodResolver } from '@hookform/resolvers/zod';
 
-const IsLegal = (Birthdate?: Date) => {
-  const LegalAge = 18;
-  const now = new Date();
-  const date = Birthdate || new Date();
-  return (
-    new Date(
-      now.getFullYear() - LegalAge,
-      now.getMonth(),
-      now.getDate()
-    ).getTime() >= date.getTime()
-  );
-};
+// const IsLegal = (Birthdate?: Date) => {
+//   const LegalAge = 18;
+//   const now = new Date();
+//   const date = Birthdate || new Date();
+//   return (
+//     new Date(
+//       now.getFullYear() - LegalAge,
+//       now.getMonth(),
+//       now.getDate()
+//     ).getTime() >= date.getTime()
+//   );
+// };
 import "@/styles/Checkout.module.css";
+import Image from "next/image";
 
 type CreatePayemtnTYpe = RouterInputs["Payment"]["create"];
 
@@ -36,26 +37,27 @@ const CheckoutComp = () => {
   const Hook = api.Stripe.createCheckoutSession.useMutation();
   const { competitions, cardDetails, reset, addComp, removeComp, updateComp } =
     useCart();
+  console.log(competitions);
 
   const { data: items } = api.Competition.getAll.useQuery({
     ids: competitions.map((comp) => comp.compID),
   });
 
-  const IsLegal = (Birthdate?: Date) => {
-    const LegalAge = 18;
-    const now = new Date();
-    const date = Birthdate || new Date();
-    return (
-      new Date(
-        now.getFullYear() - LegalAge,
-        now.getMonth(),
-        now.getDate()
-      ).getTime() >= date.getTime()
-    );
-  };
+  // const IsLegal = (Birthdate?: Date) => {
+  //   const LegalAge = 18;
+  //   const now = new Date();
+  //   const date = Birthdate || new Date();
+  //   return (
+  //     new Date(
+  //       now.getFullYear() - LegalAge,
+  //       now.getMonth(),
+  //       now.getDate()
+  //     ).getTime() >= date.getTime()
+  //   );
+  // };
 
   const { totalCost, Number_of_item } = cardDetails();
-  const [error, setError] = useState<string | undefined>();
+  // const [error, setError] = useState<string | undefined>();
   const VAT = 0.2;
 
   // const {
@@ -198,9 +200,7 @@ const CheckoutComp = () => {
                     <div className={styles.formField}>
                       <label htmlFor="Date">Date of birth</label>
                       <input
-                        // onChange={(date: Date) =>
-                        //   handleDateChange(date, "date")
-                        // }
+                        onChange={handleChange}
                         max="2005-01-01"
                         required
                         type={"date"}
@@ -232,7 +232,12 @@ const CheckoutComp = () => {
                 <h1>Payment Method</h1>
                 <div className={styles.PaymentMethod}>
                   <div className={styles.method}>
-                    <input type="radio" name="payment" value="Stripe" />
+                    <input
+                      onChange={handleChange}
+                      type="radio"
+                      name="payment"
+                      value="STRIPE"
+                    />
                     <p
                       style={{
                         color:
@@ -245,11 +250,16 @@ const CheckoutComp = () => {
                     </p>
                   </div>
                   <div className={styles.method}>
-                    <input type="radio" name="payment" value="Stripe" />
+                    <input
+                      onChange={handleChange}
+                      type="radio"
+                      name="payment"
+                      value="STRIPE"
+                    />
                     <p
                       style={{
                         color:
-                        formState.payment === "STRIPE"
+                          formState.payment === "STRIPE"
                             ? "#987358"
                             : "rgba(30, 30, 30, 0.6)",
                       }}
@@ -276,25 +286,6 @@ const CheckoutComp = () => {
                       PayPal
                     </p>
                   </div>
-                  <div className={styles.method}>
-                    <input
-                      onChange={handleChange}
-                      type="radio"
-                      name="payment"
-                      value="STRIPE"
-                    />
-                    <label
-                      htmlFor="Stripe"
-                      style={{
-                        color:
-                          (formState.payment as string) === "STRIPE"
-                            ? "#987358"
-                            : "rgba(30, 30, 30, 0.6)",
-                      }}
-                    >
-                      Credit card
-                    </label>
-                  </div>
                 </div>
                 <div className={styles.SignMeUp}>
                   <label>
@@ -305,7 +296,7 @@ const CheckoutComp = () => {
                     </p>
                   </label>
                   <label>
-                  <input type="checkbox" />
+                    <input type="checkbox" />
                     <p>
                       I agree to the <u>Terms & Conditions</u> and{" "}
                       <u>privacy policy</u>
@@ -318,84 +309,89 @@ const CheckoutComp = () => {
               <h1> Order Summary</h1>
               <div className={styles.RightCon}>
                 <div className={styles.OrdersFlex}>
-                  {/*checkData &&
-                    checkData.map((order, i) => {
-                      itemsForFetch &&
-                        itemsForFetch.map((ite) => {
-                          return (
-                            ite.compID === order.id &&
-                            total.push(
-                              ite.number_tickets * Number(order.ticket_price)
-                            )
-                          );
-                        });
-                      return (
-                        <div className={styles.orderItem} key={i}>
-                          <Image
-                            width={106}
-                            height={105}
-                            className={styles.orderImg}
-                            src="/images/tester.png"
-                            alt="watching"
-                          />
-                          <div className={styles.orderTit}>
-                            <h3>{order.Watch.name}</h3>
-                            <span>
-                              $
-                              {itemsForFetch &&
-                                itemsForFetch.map((ite) => {
-                                  return (
-                                    ite.compID === order.id &&
-                                    ite.number_tickets *
-                                      Number(order.ticket_price)
-                                  );
-                                })}
-                              .00
-                            </span>
-                            <h3>
-                              Remaining Tickets:{" "}
-                              {
-                                //TODO:
-                              }
-                            </h3>
+                  {competitions.map((order, i) => {
+                    const ComptetionData = items.find(
+                      (compData) => compData.id === order.compID
+                    );
+                    return (
+                      <div className={styles.orderItem} key={i}>
+                        <Image
+                          width={106}
+                          height={105}
+                          className={styles.orderImg}
+                          src="/images/tester.png"
+                          alt="watching"
+                        />
+                        <div className={styles.orderTit}>
+                          <h3>
+                            {/* {ComptetionData.Watches.brand} {ComptetionData.Watches.model} */}
+                          </h3>
+                          <span>
+                            {competitions.map((comp, i) => {
+                              return (
+                                <p key={i}>
+                                  $
+                                  {(
+                                    comp.number_tickets * comp.price_per_ticket
+                                  ).toFixed(2)}
+                                </p>
+                              );
+                            })}
+                          </span>
+                          <h3>
+                            Remaining Tickets:{" "}
+                            {
+                              //TODO:
+                              competitions.map((comp) => {
+                                return (
+                                  ComptetionData?.remaining_tickets &&
+                                  ComptetionData?.remaining_tickets -
+                                    comp.number_tickets
+                                );
+                              })
+                            }
+                          </h3>
+                        </div>
+                        <div className={styles.Counter}>
+                          <div className={styles.CounterSelec}>
+                            <Image
+                              width={13}
+                              height={1}
+                              src="/images/Minus.png"
+                              alt="minus"
+                            />
                           </div>
-                          <div className={styles.Counter}>
-                            <div
-                              onClick={() => {}}
-                              className={styles.CounterSelec}
-                            >
-                              <Image
-                                width={13}
-                                height={1}
-                                src="/images/Minus.png"
-                                alt="minus"
-                              />
-                            </div>
-                            <div className={styles.counterValue}>
-                              {
-                                //TODO:
-                              }
-                              0
-                            </div>
-                            <div
-                              // onClick={() =>
-                              //   counter < item.remaining_tickets &&
-                              //   setCounter(counter + 1)
-                              // }
-                              onClick={() => {}}
-                              className={styles.CounterSelec}
-                            >
-                              <Image
-                                width={11}
-                                height={11}
-                                src="/images/plus.png"
-                                alt="plus"
-                              />
-                            </div>
+                          <div className={styles.counterValue}>
+                            {
+                              //TODO:
+                              competitions.map((comp) => {
+                                return comp.number_tickets;
+                              })
+                            }
+                          </div>
+                          <div
+                            // onClick={() =>
+                            //   updateComp({
+                            //     number_tickets: ...comp.number_tickets + 1,
+                            //   })
+                            // }
+                            // onClick={() =>
+                            //   counter < item.remaining_tickets &&
+                            //   setCounter(counter + 1)
+                            // }
+                            className={styles.CounterSelec}
+                          >
+                            <Image
+                              width={11}
+                              height={11}
+                              src="/images/plus.png"
+                              alt="plus"
+                            />
                           </div>
                         </div>
-                      );
-                            */}
+                      </div>
+                    );
+                  })}
                 </div>
                 <div className={styles.orderSumBot}>
                   <div className={styles.orderSum}>
