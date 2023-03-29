@@ -182,20 +182,7 @@ const CheckoutComp = () => {
                             : "rgba(30, 30, 30, 0.6)",
                       }}
                     >
-                      Debit card
-                    </p>
-                  </div>
-                  <div className={styles.method}>
-                    <input type="radio" name="payment" value="Stripe" />
-                    <p
-                      style={{
-                        color:
-                          getValues("paymentMethod") === "STRIPE"
-                            ? "#987358"
-                            : "rgba(30, 30, 30, 0.6)",
-                      }}
-                    >
-                      credit card
+                      Credit card
                     </p>
                   </div>
                   <div className={styles.method}>
@@ -216,33 +203,12 @@ const CheckoutComp = () => {
                       PayPal
                     </p>
                   </div>
-                  <div className={styles.method}>
-                    <input type="radio" name="payment" value="Stripe" />
-                    <label
-                      htmlFor="Stripe"
-                      style={{
-                        color:
-                          getValues("paymentMethod") === "STRIPE"
-                            ? "#987358"
-                            : "rgba(30, 30, 30, 0.6)",
-                      }}
-                    >
-                      Credit card
-                    </label>
-                  </div>
                 </div>
                 <div className={styles.SignMeUp}>
                   <label>
                     <input type="checkbox" />
                     <p>
                       I have read the <u>Terms & Conditions</u> and{" "}
-                      <u>privacy policy</u>
-                    </p>
-                  </label>
-                  <label>
-                    <input type="checkbox" />
-                    <p>
-                      I agree to the <u>Terms & Conditions</u> and{" "}
                       <u>privacy policy</u>
                     </p>
                   </label>
