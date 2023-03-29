@@ -26,8 +26,6 @@ model Watches {
   has_certificate     Boolean      @default(false)
   images_url          String[]
   condition           String
-  orderId             String?      @db.ObjectId
-  Order               Order?       @relation(fields: [orderId], references: [id])
   Competition         Competition?
 
   @@map("watches")
@@ -50,11 +48,15 @@ model Competition {
   price                    Float
   status                   CompetitionStatus
   winner                   String?
-  second_reward            String?
-  createdAt                DateTime          @default(now())
-  updatedAt                DateTime          @updatedAt
-  watchesId                String            @unique @db.ObjectId
-  Watches                  Watches           @relation(fields: [watchesId], references: [id])
+  orderId                  String?           @db.ObjectId
+
+  second_reward String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  watchesId     String   @unique @db.ObjectId
+  Watches       Watches  @relation(fields: [watchesId], references: [id])
+  Order         Order?   @relation(fields: [orderId], references: [id])
+  Ticket        Ticket[]
 
   @@map("competition")
 }
@@ -87,9 +89,21 @@ model Order {
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
   totalPrice    Float
-  Watches       Watches[]
+  Competition   Competition[]
+  Ticket        Ticket[]
 
   @@map("order")
+}
+
+model Ticket {
+  id            String      @id @default(auto()) @map("_id") @db.ObjectId
+  orderId       String      @db.ObjectId
+  Order         Order       @relation(fields: [orderId], references: [id])
+  competitionId String      @db.ObjectId
+  Competition   Competition @relation(fields: [competitionId], references: [id])
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  @@map("ticket")
 }
 
 model Question {

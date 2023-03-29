@@ -37,27 +37,41 @@ const CheckoutComp = () => {
   const Hook = api.Stripe.createCheckoutSession.useMutation();
   const { competitions, cardDetails, reset, addComp, removeComp, updateComp } =
     useCart();
-  console.log(competitions);
+  const [OrderData, setORderData] = useState<CreatePayemtnTYpe | undefined>();
+  const { mutateAsync: createOrder } = api.Payment.create.useMutation();
 
+  const { data } = api.Competition.getAll.useQuery({
+    ids: competitions.map(({ compID }) => compID),
+  });
   const { data: items } = api.Competition.getAll.useQuery({
     ids: competitions.map((comp) => comp.compID),
   });
-
-  // const IsLegal = (Birthdate?: Date) => {
-  //   const LegalAge = 18;
-  //   const now = new Date();
-  //   const date = Birthdate || new Date();
-  //   return (
-  //     new Date(
-  //       now.getFullYear() - LegalAge,
-  //       now.getMonth(),
-  //       now.getDate()
-  //     ).getTime() >= date.getTime()
-  //   );
-  // };
-
+  const [payment, setPayment] = useState<"STRIPE" | "PAYPAL">("STRIPE");
+  const IsLegal = (Birthdate?: Date) => {
+    const LegalAge = 18;
+    const now = new Date();
+    const date = Birthdate || new Date();
+    return (
+      new Date(
+        now.getFullYear() - LegalAge,
+        now.getMonth(),
+        now.getDate()
+      ).getTime() >= date.getTime()
+    );
+  };
+  const [error, setError] = useState<string | undefined>();
   const { totalCost, Number_of_item } = cardDetails();
-  // const [error, setError] = useState<string | undefined>();
+  const handleSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault(); // prevent the form from submitting normally
+    console.log("Form submitted:", formState);
+    if (OrderData){
+      const {success, error} = await createOrder(OrderData)
+      if (!success) setError(error)
+    
+    }
+
+
+  };
   const VAT = 0.2;
 
   // const {
@@ -92,10 +106,6 @@ const CheckoutComp = () => {
       ...prevState,
       [name]: date,
     }));
-  };
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault(); // prevent the form from submitting normally
-    console.log("Form submitted:", formState);
   };
 
   return (
@@ -233,10 +243,12 @@ const CheckoutComp = () => {
                 <div className={styles.PaymentMethod}>
                   <div className={styles.method}>
                     <input
-                      onChange={handleChange}
+                      onClick={() => {
+                        setPayment("STRIPE");
+                      }}
                       type="radio"
                       name="payment"
-                      value="STRIPE"
+                      value="Stripe"
                     />
                     <p
                       style={{
@@ -246,13 +258,15 @@ const CheckoutComp = () => {
                             : "rgba(30, 30, 30, 0.6)",
                       }}
                     >
-                      credit card
+                      Credit card
                     </p>
                   </div>
                   <div className={styles.method}>
                     <input
                       type="radio"
-                      onChange={handleChange}
+                      onClick={() => {
+                        setPayment("PAYPAL");
+                      }}
                       name="payment"
                       value="PAYPAL"
                       defaultChecked
@@ -381,14 +395,13 @@ const CheckoutComp = () => {
                     <span>{Formater(totalCost)}</span>
                   </div>
                   <div className={styles.orderSum}>
-                    <p>{`Total + (20%) VAT`}</p>
-                    <span>{Formater(totalCost * 1.02)}</span>
+                    <p>{`Total`}</p>
+                    <span>{Formater(totalCost)}</span>
                   </div>
-                  {formState.payment &&
-                  (formState.payment as string) === "PAYPAL" ? (
+                  {payment !== "STRIPE" ? (
                     <PayPalScriptProvider
                       options={{
-                        "client-id": `${env.NEXT_PUBLIC_PAYPAL_ID}`,
+                        "client-id": `${"EKxArYG0wr8rILsU-fbTmKP9FVyIr-4jIGi9CIvsloZwOM4C26af92uhqSo1hpnnbUx3-5KUEJ9PwT_H"}`,
                       }}
                     >
                       <PayPalButtons
@@ -400,7 +413,7 @@ const CheckoutComp = () => {
                                 {
                                   amount: {
                                     currency_code: "USD",
-                                    value: (totalCost * 1.02).toString(),
+                                    value: totalCost.toString(),
                                   },
                                 },
                               ],
@@ -465,7 +478,10 @@ const CheckoutComp = () => {
                       Confirm Order
                     </button>
                   )}
-                  <button type="submit">Submit</button>
+                  {/*
+
+                      <button type="submit">Submit</button>
+                  */}
                 </div>
               </div>
             </div>
