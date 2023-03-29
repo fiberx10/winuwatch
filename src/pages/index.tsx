@@ -10,8 +10,8 @@ import Certificate from "@/components/Certificate";
 import Reviews from "@/components/Reviews";
 import Footer from "@/components/Footer";
 import OurWinner from "@/components/OurWinner";
+import UpComing from "@/components/UpComing";
 import { api } from "@/utils/api";
-import { EmblaCarousel } from "@/components/EmblaCarousel";
 
 const Home: NextPage = () => {
   const {
@@ -26,6 +26,68 @@ const Home: NextPage = () => {
       name: "Test",
     });
   };*/
+  const upComingWatchesCarou = [
+    {
+      img: "/images/upWatch9.webp",
+      brand: "Rolex",
+      title: "GMT-MASTER II",
+      text: "Oyster, 40 mm, acier Oystersteel et or Everose",
+    },
+    {
+      img: "/images/upWatch10.webp",
+      brand: "Rolex",
+      title: "GMT-MASTER II",
+      text: "Oyster, 40 mm, acier Oystersteel et or Everose",
+    },
+    {
+      img: "/images/upWatch3.webp",
+      brand: "Rolex",
+      title: "COSMOGRAPH DAYTONA",
+      text: "Oyster, 40 mm, acier Oystersteel",
+    },
+    {
+      img: "/images/upWatch4.webp",
+      brand: "Rolex",
+      title: "GMT-MASTER II",
+      text: "Oyster, 40 mm, acier Oystersteel et or Everose",
+    },
+    {
+      img: "/images/upWatch5.webp",
+      brand: "Rolex",
+      title: "GMT-MASTER II",
+      text: "Oyster, 40 mm, acier Oystersteel et or Everose",
+    },
+    {
+      img: "/images/upWatch6.png",
+      brand: "Rolex",
+      title: "GMT-MASTER II",
+      text: "Oyster, 40 mm, acier Oystersteel et or Everose",
+    },
+    {
+      img: "/images/upWatch7.png",
+      brand: "Rolex",
+      title: "GMT-MASTER II",
+      text: "Oyster, 40 mm, acier Oystersteel et or Everose",
+    },
+    {
+      img: "/images/upWatch8.png",
+      brand: "Rolex",
+      title: "GMT-MASTER II",
+      text: "Oyster, 40 mm, acier Oystersteel et or Everose",
+    },
+    {
+      img: "/images/upWatch1.png",
+      brand: "Rolex",
+      title: "GMT-MASTER II",
+      text: "Oyster, 40 mm, acier Oystersteel et or Everose",
+    },
+    {
+      img: "/images/upWatch2.png",
+      brand: "Rolex",
+      title: "SKY DWELLER",
+      text: "Oyster, 42 mm, or Everose",
+    },
+  ];
   return (
     <>
       <Head>
@@ -39,10 +101,10 @@ const Home: NextPage = () => {
               <OurWinner/>
 
       */}
-
       <HowToPlay />
       <Certificate />
       <Reviews />
+      <UpComing slides={upComingWatchesCarou} />
       <Footer />
     </>
   );

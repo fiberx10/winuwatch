@@ -612,6 +612,15 @@
 .AliceContainer {
   width: 907px;
   height: 314px;
+  position: relative;
+}
+.AliceContainer h1 {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 600;
+  font-size: 45px;
+  position: absolute;
+  top: 0;
+  text-transform: uppercase;
 }
 .Rev {
   display: flex;
@@ -780,6 +789,46 @@
   text-align: center;
   width: 60%;
 }
+.FooterInsta {
+  height: fit-content;
+  padding: 20px 0px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #cbb9ac;
+  gap: 1rem;
+}
+.FooterInsta h1 {
+  font-family: "Montserrat", sans-serif;
+  text-transform: uppercase;
+  font-weight: 600;
+  font-size: 45px;
+}
+.FooterInsta p {
+  font-weight: 400;
+  font-size: 20px;
+  width: 40%;
+  text-align: center;
+  color: #faf8f6;
+}
+.upComCarouItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1rem;
+}
+.upComingMain {
+  padding-bottom: 100px;
+}
+.upComingMain h1 {
+  width: 100%;
+  text-align: center;
+  text-transform: capitalize;
+  font-family: "Iskry", sans-serif;
+  font-weight: 500;
+  font-size: 45px;
+}
 @media only screen and (max-width: 375px) {
   .Footer {
     height: fit-content !important;
@@ -812,6 +861,9 @@
   }
 }
 @media only screen and (min-width: 320px) and (max-width: 930px) {
+  .AliceContainer h1 {
+    margin-left: 10px;
+  }
   .certifBox p {
     font-size: 16px;
   }
