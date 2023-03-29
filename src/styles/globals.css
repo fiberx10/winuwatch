@@ -36,6 +36,9 @@ html {
 .MuiRating-icon {
   color: #987358;
 }
+.css-4t3x6l-MuiPaper-root-MuiDrawer-paper {
+  background: transparent !important;
+}
 .alice-carousel__dots-item {
   width: 150px !important;
   height: 4px !important;

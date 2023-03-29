@@ -11,6 +11,7 @@ import Reviews from "@/components/Reviews";
 import Footer from "@/components/Footer";
 
 import { api } from "@/utils/api";
+import { EmblaCarousel } from "@/components/EmblaCarousel";
 
 const Home: NextPage = () => {
   const {

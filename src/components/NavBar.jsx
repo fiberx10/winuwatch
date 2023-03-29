@@ -4,6 +4,7 @@ import { Drawer } from "@mui/material";
 import Image from "next/image";
 import { useCart } from "./Store";
 import { useRouter } from "next/router";
+import { MdClose } from "react-icons/md";
 
 export default function NavBar() {
   const [open, setOpen] = useState(false);
@@ -80,17 +81,7 @@ export default function NavBar() {
         />
         <Drawer className={styles.Drawer} anchor="left" open={open}>
           <div className={styles.DrawerCon}>
-            <span
-              className={styles.DrawerMenu}
-              style={{
-                fontSize: "20px",
-                fontWeight: "500",
-              }}
-            >
-              Menu
-            </span>
-            <hr />
-            <span onClick={() => router.push("/")}>Home</span>
+            <MdClose className={styles.closeBut} />
             <span
               onClick={() =>
                 typeof window !== "undefined" && location.pathname !== "/"
@@ -106,6 +97,8 @@ export default function NavBar() {
             >
               The competition
             </span>
+            <span onClick={() => router.push("/Philosophy")}>philosophy</span>
+            <span onClick={() => router.push("/Charity")}>Charity</span>
             <span
               onClick={() =>
                 typeof window !== "undefined" && location.pathname !== "/"
@@ -121,10 +114,6 @@ export default function NavBar() {
             >
               How to play
             </span>
-            <hr />
-
-            <span onClick={() => router.push("/Philosophy")}>philosophy</span>
-            <span onClick={() => router.push("/Charity")}>Charity</span>
           </div>
         </Drawer>
       </div>
