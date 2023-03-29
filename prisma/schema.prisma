@@ -11,50 +11,47 @@ datasource db {
 }
 
 model Watches {
-    id          String       @id @default(auto()) @map("_id") @db.ObjectId
-    name        String
-    owner_ref   String
-    condition   String
-    years       Int
-    movement    String
-    case_size    Int
-    dail       String
-    case_material String
+    id                String       @id @default(auto()) @map("_id") @db.ObjectId
+    name              String
+    owner_ref         String?
+    condition         String
+    years             Int
+    movement          String
+    case_size         Int
+    dail              String
+    case_material     String
     bracelet_material String
-    water_proof String
-    box        String
-    papers     String
-    imageURL    String[] // ID Backedn URL/public/[id].jpg
-    createdAt   DateTime     @default(now())
-    updatedAt   DateTime     @updatedAt
-    Competition Competition?
-
-    Order       Order?
-
+    water_proof       String?
+    box               Boolean
+    papers            Boolean
+    imageURL          String[] // ID Backedn URL/public/[id].jpg
+    createdAt         DateTime     @default(now())
+    updatedAt         DateTime     @updatedAt
+    Competition       Competition?
+    Order Order?
     @@map("watches")
+
 }
-enum CompetitionStatus {
-    ACTIVE
-    NOT_ACTIVE
-    COMPLETED
-}
+
 model Competition {
-    id        String   @id @default(auto()) @map("_id") @db.ObjectId
-    name      String
-    start_date DateTime
+
+    id                String            @id @default(auto()) @map("_id") @db.ObjectId
+    name              String
+    start_date        DateTime
     remaining_tickets Int
-    drawing_date DateTime
-    end_date DateTime
-    total_tickets Int
-    ticket_price Float
-    location String
-    second_reward String
-    status CompetitionStatus
-    winner String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-    watchesId String   @unique @db.ObjectId
-    Watches   Watches  @relation(fields: [watchesId], references: [id])
+    drawing_date      DateTime
+    end_date          DateTime
+    total_tickets     Int
+    ticket_price      Float
+    location          String
+    second_reward     String
+    price            Float
+    status            CompetitionStatus
+    winner            String?
+    createdAt         DateTime          @default(now())
+    updatedAt         DateTime          @updatedAt
+    watchesId         String            @unique @db.ObjectId
+    Watches           Watches           @relation(fields: [watchesId], references: [id])
 
     @@map("competition")
 }
@@ -80,4 +77,10 @@ model Order {
     paymentMethod PaymentMethod
     Watches   Watches  @relation(fields: [watchesId], references: [id])
     @@map("order")
+}
+
+enum CompetitionStatus {
+    ACTIVE
+    NOT_ACTIVE
+    COMPLETED
 }

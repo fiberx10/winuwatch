@@ -63,6 +63,10 @@ export default function NavBar() {
           onClick={() => setOpen(!open)}
           className={styles.burger}
           alt="menu"
+
+          width={38}
+          height={7}
+
           src="/images/burgerMenu.svg"
         />
         <Drawer className={styles.Drawer} anchor="left" open={open}>
@@ -110,12 +114,20 @@ export default function NavBar() {
               How to play
             </span>
             <hr />
-            <span onClick={() => router.push("/Philosophy")}>philosophy</span>
-            <span onClick={() => router.push("/Charity")}>Charity</span>
+
+            <span onClick={() => router.push("/philosophy")}>philosophy</span>
+            <span onClick={() => router.push("/charity")}>Charity</span>
           </div>
         </Drawer>
       </div>
-      <Image className={styles.Logo} alt="logo" src="/images/logo.png" />
+      <Image
+        width={150}
+        height={108.42}
+        className={styles.Logo}
+        alt="logo"
+        src="/images/logo.png"
+      />
+
       <div className={styles.flexEnd}>
         <span
           style={{
@@ -155,7 +167,15 @@ export default function NavBar() {
         >
           cart ({number})
         </span>
-        <Image alt="global" src="/images/global.png" />
+
+        <Image
+          width={15}
+          style={{ objectFit: "contain" }}
+          height={15}
+          alt="global"
+          src="/images/global.png"
+        />
+
       </div>
     </div>
   );

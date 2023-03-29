@@ -13,7 +13,14 @@ const Footer = () => {
   return (
     <div className={styles.Footer}>
       <div className={styles.FooterTop}>
-        <Image src="/images/FooterLogo.png" alt="logo" />
+
+        <Image
+          width={144}
+          height={76}
+          src="/images/FooterLogo.png"
+          alt="logo"
+        />
+
         <div className={styles.menusGrid}>
           {data.map((menu, i) => {
             return (
@@ -43,11 +50,28 @@ const Footer = () => {
             <p>100% Secure payment</p>
             <div className={styles.paymentIcons}>
               <div className={styles.visa}>
-                <Image src="/images/visa.svg" alt="visa" />
+
+                <Image
+                  width={27}
+                  height={21}
+                  src="/images/visa.svg"
+                  alt="visa"
+                />
               </div>
               <div className={styles.visaicons}>
-                <Image src="/images/viacirclight.png" alt="visareclight" />
-                <Image src="/images/visacircdark.png" alt="visarecdark" />
+                <Image
+                  width={14}
+                  height={14}
+                  src="/images/viacirclight.png"
+                  alt="visareclight"
+                />
+                <Image
+                  width={14}
+                  height={14}
+                  src="/images/visacircdark.png"
+                  alt="visarecdark"
+                />
+
               </div>
             </div>
           </div>
