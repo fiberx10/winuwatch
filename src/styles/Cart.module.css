@@ -271,7 +271,7 @@
     place-items: center;
   }
   .ModalBox {
-    width: 90%;
+    width: 95%;
   }
   .ModalBox p {
     font-size: 16px;
@@ -280,7 +280,15 @@
     font-size: 30px;
   }
   .questionsCon button {
-    width: 80%;
+    width: 90%;
     font-size: 16px;
+  }
+}
+@media only screen and (max-height: 667px) {
+  .ModalBox {
+    height: fit-content;
+  }
+  .questionsCon {
+    gap: 0.2rem;
   }
 }

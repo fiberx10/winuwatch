@@ -1,5 +1,5 @@
 import { Rating } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 import AliceCarousel from "react-alice-carousel";
 import styles from "../styles/Home.module.css";
 
@@ -42,7 +42,19 @@ const Reviews = () => {
       time: "TIME",
     },
   ];
-
+  useEffect(() => {
+    const handleScroll = () => {
+      const background = document.querySelector(
+        `.${styles.background4 ?? "undefined"}`
+      ) as HTMLElement & { style: CSSStyleDeclaration };
+      if (background) {
+        background.style.backgroundPositionY =
+          window.scrollY === 0 ? "-124px" : `${-window.scrollY}px`;
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
   return (
     <div className={styles.ReviewsContainer}>
       <div className={styles.AliceContainer}>

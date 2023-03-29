@@ -133,9 +133,6 @@
 }
 
 @media only screen and (max-width: 414px) {
-  .HeaderTit h1 {
-    font-size: 50px !important;
-  }
   .flexEnd {
     min-width: 100px !important;
   }
@@ -194,6 +191,15 @@
   -webkit-background-clip: text;
 }
 .background4 {
+  background-image: url(https://content.rolex.com/dam/watches/family-pages/datejust/2023/a-date-with-destiny/classic-watches-datejust-a-date-with-destiny-yellow-cut-out.jpg);
+  background-repeat: repeat-y;
+
+  background-clip: text;
+  background-size: 100% 100vh;
+  color: transparent;
+  -webkit-background-clip: text;
+}
+.background5 {
   background-image: url(https://content.rolex.com/dam/watches/family-pages/datejust/2023/a-date-with-destiny/classic-watches-datejust-a-date-with-destiny-yellow-cut-out.jpg);
   background-repeat: repeat-y;
 
@@ -741,19 +747,51 @@
 .visaicons img {
   filter: brightness(0) invert(1);
 }
-
+.FooterBot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
 .FooterBot h3 {
   font-weight: 300;
   font-size: 18px;
   text-align: center;
 }
+.FooterBot p {
+  font-weight: 300;
+  font-size: 15px;
+  text-align: center;
+  width: 60%;
+}
+.FooterInsta {
+  width: 100%;
+  background: #cbb9ac;
+  color: white;
+  height: fit-content;
+  padding: 30px 0px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+.FooterInsta h1 {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 600;
+  font-size: 45px;
+  text-transform: uppercase;
+}
+.FooterInsta p {
+  font-weight: 400;
+  font-size: 20px;
+  text-align: center;
+  width: 40%;
+  color: #faf8f6;
+}
+.FooterInsta img {
+  cursor: pointer;
+}
 @media only screen and (max-width: 375px) {
-  .HeaderTit h1 {
-    font-size: 45px !important;
-  }
-  .HeaderTit h2 {
-    font-size: 48px !important;
-  }
   .Footer {
     height: fit-content !important;
     padding-bottom: 50px;
@@ -770,11 +808,7 @@
     gap: 1rem;
   }
 }
-@media only screen and (max-width: 320px) {
-  .HeaderTit h2 {
-    font-size: 43px !important;
-  }
-}
+
 @media only screen and (max-width: 425px) {
   .certifBox p {
     font-size: 10px;
@@ -782,11 +816,7 @@
     overflow: hidden;
   }
 }
-@media only screen and (max-width: 334px) {
-  .HeaderTit h1 {
-    font-size: 40px !important;
-  }
-}
+
 @media only screen and (max-width: 351px) {
   .certifContainer h2 {
     font-size: 14px;
@@ -795,6 +825,9 @@
 @media only screen and (min-width: 320px) and (max-width: 930px) {
   .certifBox p {
     font-size: 16px;
+  }
+  .FooterInsta p {
+    width: 80%;
   }
   .mobile {
     display: none;
@@ -847,15 +880,16 @@
   }
 
   .HeaderTit h1 {
-    font-size: 45px;
+    font-size: 9vw;
     text-align: center;
     position: initial;
-    line-height: 3.2rem;
+    line-height: 10vw;
   }
   .HeaderTit h2 {
     width: 100%;
-    font-size: 58px;
+    font-size: 12vw !important;
   }
+
   .HeaderDesc p {
     width: 80%;
   }
@@ -1020,7 +1054,9 @@
     height: 5px;
   }
   .Footer {
-    height: 604px;
+    height: fit-content;
+    padding: 20px 0px;
+    gap: 1rem;
   }
   .FooterTop {
     flex-direction: column;
@@ -1230,5 +1266,10 @@
   }
   .menusGrid {
     gap: 7rem;
+  }
+}
+@media only screen and (max-height: 667px) {
+  .howtoText {
+    height: fit-content;
   }
 }
