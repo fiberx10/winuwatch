@@ -288,7 +288,7 @@ export const PaymentRouter = createTRPCRouter({
   create: publicProcedure
     .input(CreateOrderSchema)
     .mutation(({ ctx, input }) => {
-      const { watchids, ...data } = input;
+      const { comp, ...data } = input;
 
       //TODO: Create Order
       console.log(input);

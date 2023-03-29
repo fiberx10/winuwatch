@@ -36,12 +36,16 @@ interface RootState {
   reset: () => void;
 }
 
-export const Dashmenus = ["Dashboard", "Competitions", "Watches", "Orders"] as const;
-
+export const Dashmenus = [
+  "Dashboard",
+  "Competitions",
+  "Watches",
+  "Orders",
+] as const;
 
 export const useStore = create<{
-  menu: typeof Dashmenus[number];
-  selectMenu: (menu: typeof Dashmenus[number]) => void;
+  menu: (typeof Dashmenus)[number];
+  selectMenu: (menu: (typeof Dashmenus)[number]) => void;
 }>((set, get) => ({
   menu: "Dashboard",
   selectMenu: (menu) => set({ menu }),
@@ -72,9 +76,15 @@ export const useCart = create<RootState>((set, get) => ({
       competitions: competitions.filter((c) => c.compID !== compID),
     })),
   updateComp: (comp) =>
-    set(({ competitions }) => ({
-      competitions: competitions.map((c) =>
-        c.compID === comp.compID ? { ...c, ...comp } : c
-      ),
-    })),
+    set(({ competitions }) =>
+      comp.number_tickets > 25 || comp.number_tickets < 1
+        ? {
+            competitions,
+          }
+        : {
+            competitions: competitions.map((c) =>
+              c.compID === comp.compID ? { ...c, ...comp } : c
+            ),
+          }
+    ),
 }));
