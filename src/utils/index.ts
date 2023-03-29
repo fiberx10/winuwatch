@@ -1,7 +1,7 @@
 import { PaymentMethod } from "@prisma/client";
 import { z } from "zod";
-
 export * from "./api";
+
 export const CreateOrderSchema = z.object({
   first_name: z.string(),
   last_name: z.string(),
@@ -15,8 +15,7 @@ export const CreateOrderSchema = z.object({
   paymentMethod: z.enum([PaymentMethod.PAYPAL, PaymentMethod.STRIPE]),
   totalPrice: z.number(),
   checkedEmail: z.boolean().default(false),
-  checkedPhone: z.boolean().default(false),
-  checkedSMS: z.boolean().default(false),
+  checkedTerms: z.boolean().default(false),
   watchids: z.array(z.string()),
 });
 
