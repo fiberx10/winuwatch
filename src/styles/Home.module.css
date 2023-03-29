@@ -147,7 +147,7 @@
     flex-direction: column;
   }
 }
-@media only screen and (max-width: 366px) {
+@media only screen and (max-width: 375px) {
   .howtoText {
     height: fit-content !important;
   }
