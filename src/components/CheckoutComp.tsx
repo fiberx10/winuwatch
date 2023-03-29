@@ -246,24 +246,6 @@ const CheckoutComp = () => {
                             : "rgba(30, 30, 30, 0.6)",
                       }}
                     >
-                      Debit card
-                    </p>
-                  </div>
-                  <div className={styles.method}>
-                    <input
-                      onChange={handleChange}
-                      type="radio"
-                      name="payment"
-                      value="STRIPE"
-                    />
-                    <p
-                      style={{
-                        color:
-                          formState.payment === "STRIPE"
-                            ? "#987358"
-                            : "rgba(30, 30, 30, 0.6)",
-                      }}
-                    >
                       credit card
                     </p>
                   </div>
