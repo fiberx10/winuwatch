@@ -34,7 +34,6 @@ const Home: NextPage = () => {
       </Head>
       <Header />
       <TheCompetition />
-      {/* <Winners /> */}
         <OurWinner/>
       <HowToPlay />
       <Certificate />
