@@ -15,6 +15,10 @@ interface FormState {
 }
 const DashboardWatches = () => {
   const { data, isLoading } = api.Watches.getAll.useQuery();
+  const {mutateAsync : removewatch} = api.Watches.remove.useMutation()
+  const {mutateAsync: addWatch} = api.Watches.add.useMutation()
+  const {mutateAsync: updateWatch} = api.Watches.update.useMutation()
+
 
   //REMOVE WATCH
   const [remove, setRemove] = useState(false);

@@ -34,19 +34,18 @@ export const StripeRouter = createTRPCRouter({
 
     .input(
       z.object({
-        email : z.string().email(),
-        address : z.string(),
-        comps : z.array(
+        email: z.string().email(),
+        address: z.string(),
+        comps: z.array(
           z.object({
             compID: z.string(),
             quantity: z.number().min(1),
           })
-        )
+        ),
       })
     )
     .mutation(async ({ input, ctx }) => {
       return await stripe.checkout.sessions.create({
-
         payment_method_types: ["card"],
         mode: "payment",
         line_items: (
@@ -59,7 +58,7 @@ export const StripeRouter = createTRPCRouter({
           .filter((comp) => input.comps.some((item) => item.compID === comp.id))
           .map((comp) => ({
             //customer_email : input.email,
-            
+
             price_data: {
               //automatic_tax : true,
               currency: "gbp",
@@ -67,10 +66,11 @@ export const StripeRouter = createTRPCRouter({
                 name: comp.Watches.model + comp.Watches.movement,
                 //images: [`${getBaseUrl()+comp.Watches.images_url[0]}`],
               },
-              unit_amount : Math.floor(comp.ticket_price * 100), // in cents
-
+              unit_amount: Math.floor(comp.ticket_price * 100), // in cents
             },
-            quantity: input.comps.find((item) => item.compID === comp.id)?.quantity || 0,
+            quantity:
+              input.comps.find((item) => item.compID === comp.id)?.quantity ||
+              0,
           })),
         success_url: `${getBaseUrl()}/stripe?payment=success`,
         cancel_url: `${getBaseUrl()}/CheckoutPage`,
@@ -79,7 +79,6 @@ export const StripeRouter = createTRPCRouter({
       // if the session was created successfully
       // insert the info in the database
       // await prisma...
-
     }),
 });
 
@@ -98,17 +97,19 @@ export const CompetitionRouter = createTRPCRouter({
       })
     )
     .query(async ({ ctx, input }) => {
-      return (await ctx.prisma.competition.findMany({
-        where: {
-          status: input.status,
-          id: {
-            in: input.ids,
+      return (
+        await ctx.prisma.competition.findMany({
+          where: {
+            status: input.status,
+            id: {
+              in: input.ids,
+            },
           },
-        },
-        include: {
-          Watches: true,
-        },
-      })).map((comp) => ({
+          include: {
+            Watches: true,
+          },
+        })
+      ).map((comp) => ({
         ...comp.Watches,
         ...comp,
       }));
@@ -156,6 +157,23 @@ export const CompetitionRouter = createTRPCRouter({
     }),
 });
 
+const MutateWatchSchema = z.object({
+  id: z.string(),
+  brand: z.string().optional(),
+  model: z.string().optional(),
+  reference_number: z.string().optional(),
+  movement: z.string().optional(),
+  Bracelet_material: z.string().optional(),
+  year_of_manifacture: z.number().optional(),
+  caliber_grear: z.number().optional(),
+  number_of_stones: z.number().optional(),
+  glass: z.string().optional(),
+  bezel_material: z.string().optional(),
+  has_box: z.boolean().optional(),
+  has_certificate: z.boolean().optional(),
+  condition: z.string().optional(),
+  images_url: z.array(z.string()).optional(),
+});
 export const WatchesRouter = createTRPCRouter({
   getAll: publicProcedure.query(({ ctx }) => ctx.prisma.watches.findMany()),
   byID: publicProcedure
@@ -167,6 +185,35 @@ export const WatchesRouter = createTRPCRouter({
         },
       });
     }),
+  remove: publicProcedure.input(z.string()).mutation(async ({ ctx, input }) => {
+    return await ctx.prisma.watches.delete({
+      where: {
+        id: input,
+      },
+    });
+  }),
+  add: publicProcedure
+    .input(MutateWatchSchema.omit({ id: true }).required())
+    .mutation(async ({ ctx, input }) => {
+      return await ctx.prisma.watches.create({
+        data: {
+          ...input,
+        },
+      });
+    }),
+
+  update: publicProcedure
+    .input(MutateWatchSchema)
+    .mutation(async ({ ctx, input }) => {
+      const { id, ...data } = input;
+      return await ctx.prisma.watches.update({
+        data,
+        where: {
+          id,
+        },
+      });
+    }),
+
   /*
   add: publicProcedure
     .input(

@@ -69,7 +69,7 @@ const OurWinner = () => {
                                         className={styles.carouItem}
                                     >
                                         <div className="carouImgCon">
-                                            <img src={item.img} alt="rec" width={200} height={200} />
+                                            <Image className={styles.active} src={item.img} alt="rec" width={200} height={200} />
                                         </div>
                                         <div
                                             style={{ transition: "all 1s ease" }}
