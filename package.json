@@ -45,6 +45,7 @@
     "react-bootstrap": "^2.7.2",
     "react-burger-menu": "^3.0.9",
     "react-copy-to-clipboard": "^5.1.0",
+    "react-datetime": "^3.2.0",
     "react-dom": "18.2.0",
     "react-element-to-jsx-string": "^15.0.0",
     "react-hook-form": "^7.43.7",
@@ -57,6 +58,7 @@
     "stripe-client": "^1.1.5",
     "superjson": "1.9.1",
     "swiper": "^9.1.1",
+    "yup": "^1.0.2",
     "zod": "^3.20.6",
     "zod-formik-adapter": "^1.2.0",
     "zustand": "^4.3.6"
