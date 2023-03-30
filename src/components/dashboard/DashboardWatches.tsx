@@ -98,9 +98,25 @@ const DashboardWatches = () => {
                       <Modal.Title>Manage your competition</Modal.Title>
                     </Modal.Header>
                     <Formik
-                      onSubmit={(values, actions) => {
+                      onSubmit={async (values, actions) => {
                         setShow({ modal: false, data: 0 });
-
+                        await updateWatch({
+                          id: watch.id,
+                          brand: values.brand,
+                          model: values.model,
+                          Bracelet_material: values.Bracelet_material,
+                          bezel_material: values.bezel_material,
+                          caliber_grear: values.caliber_grear,
+                          number_of_stones: values.number_of_stones,
+                          condition: values.condition,
+                          glass: values.glass,
+                          movement: values.movement,
+                          reference_number: values.reference_number,
+                          year_of_manifacture: values.year_of_manifacture,
+                          has_box: values.has_box,
+                          has_certificate: values.has_certificate,
+                          images_url: values.images_url,
+                        });
                         console.log("Form submitted:", values);
 
                         actions.setSubmitting(false);
@@ -118,8 +134,9 @@ const DashboardWatches = () => {
                         movement: watch.movement,
                         reference_number: watch.reference_number,
                         year_of_manifacture: watch.year_of_manifacture,
-                        has_box: true,
+                        has_box: watch.has_box,
                         has_certificate: watch.has_certificate,
+                        images_url: ["/images/tester.png"],
                       }}
                     >
                       {({ values, handleSubmit, handleChange }) => (
@@ -295,28 +312,44 @@ const DashboardWatches = () => {
           <Modal.Title>Add a Watch</Modal.Title>
         </Modal.Header>
         <Formik
-          onSubmit={(values, actions) => {
-            setShow({ modal: false, data: 0 });
-
+          validationSchema={schema}
+          onSubmit={async (values, actions) => {
+            setAdd(false);
+            await addWatch({
+              brand: values.brand,
+              model: values.model,
+              Bracelet_material: values.Bracelet_material,
+              bezel_material: values.bezel_material,
+              caliber_grear: values.caliber_grear,
+              number_of_stones: values.number_of_stones,
+              condition: values.condition,
+              glass: values.glass,
+              movement: values.movement,
+              reference_number: values.reference_number,
+              year_of_manifacture: values.year_of_manifacture,
+              has_box: values.has_box,
+              has_certificate: values.has_certificate,
+              images_url: values.images_url,
+            });
             console.log("Form submitted:", values);
 
             actions.setSubmitting(false);
           }}
-          validationSchema={schema}
           initialValues={{
             brand: "",
             model: "",
             Bracelet_material: "",
             bezel_material: "",
-            caliber_grear: "",
-            number_of_stones: "",
+            caliber_grear: 0,
+            number_of_stones: 0,
             condition: "",
             glass: "",
             movement: "",
             reference_number: "",
-            year_of_manifacture: "",
+            year_of_manifacture: 0,
             has_box: false,
             has_certificate: false,
+            images_url: ["/images/tester.png"],
           }}
         >
           {({ handleSubmit, handleChange }) => (
