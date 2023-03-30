@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
 import { api } from "@/utils/api";
 import styles from "@/styles/Dashboard.module.css";
 import { PlusOutlined } from "@ant-design/icons";
@@ -12,13 +13,24 @@ import { Formik } from "formik";
 import * as yup from "yup";
 
 const DashboardWatches = () => {
-  const { data, isLoading } = api.Watches.getAll.useQuery();
+  const { data, isLoading, refetch } = api.Watches.getAll.useQuery();
   const { mutateAsync: removewatch } = api.Watches.remove.useMutation();
   const { mutateAsync: addWatch } = api.Watches.add.useMutation();
   const { mutateAsync: updateWatch } = api.Watches.update.useMutation();
 
   //REMOVE WATCH
-  const [remove, setRemove] = useState(false);
+  const [remove, setRemove] = useState({ modal: false, id: "" });
+  // HANDLE REMOVE WATCH
+  const handleRemove = (id: string) => {
+    setRemove({
+      modal: true,
+      id: id,
+    });
+  };
+  const handleNoRemove = () => {
+    setRemove({ modal: false, id: "" });
+  };
+
   //ADD WATCH
   const [add, setAdd] = useState(false);
 
@@ -50,6 +62,7 @@ const DashboardWatches = () => {
     has_box: yup.bool().required(),
     has_certificate: yup.bool().required(),
   });
+
   return (
     <div className={styles.DashCompsMain}>
       <div className={styles.dashCompsTopHeader}>
@@ -83,7 +96,10 @@ const DashboardWatches = () => {
                   </div>
                   <div className={styles.dashGridItemBot}>
                     <div>
-                      <Button onClick={() => setRemove(true)} variant="danger">
+                      <Button
+                        onClick={() => handleRemove(watch.id)}
+                        variant="danger"
+                      >
                         Remove
                       </Button>
                       <Button variant="secondary" onClick={() => handleShow(i)}>
@@ -118,7 +134,7 @@ const DashboardWatches = () => {
                           images_url: values.images_url,
                         });
                         console.log("Form submitted:", values);
-
+                        await refetch();
                         actions.setSubmitting(false);
                       }}
                       validationSchema={schema}
@@ -500,16 +516,21 @@ const DashboardWatches = () => {
         </Formik>
       </Modal>
 
-      <Modal show={remove} onHide={() => setRemove(false)}>
+      <Modal show={remove.modal} onHide={handleNoRemove}>
         <Modal.Header closeButton>
           <Modal.Title>Confirmation</Modal.Title>
         </Modal.Header>
         <Modal.Body>Do you wish to delete this watch ?</Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={() => setRemove(false)}>
+          <Button variant="secondary" onClick={handleNoRemove}>
             Cancel
           </Button>
-          <Button variant="danger" onClick={() => setRemove(false)}>
+          <Button
+            variant="danger"
+            onClick={async () => {
+              await removewatch(remove.id);
+            }}
+          >
             Remove
           </Button>
         </Modal.Footer>
