@@ -4,7 +4,7 @@ import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js";
 import { useRouter } from "next/router";
 import { api, Formater, CreateOrderSchema } from "@/utils";
 import { useCart } from "./Store";
-
+import { countryList } from "./countries";
 import "@/styles/Checkout.module.css";
 import Image from "next/image";
 import { Formik, Form, Field } from "formik";
@@ -57,11 +57,11 @@ const CheckoutComp = () => {
               checkedTerms: false,
             }}
             onSubmit={async (values, actions) => {
-              console.log("Form submitted:", values);
               //if a value in the object values is undefined, it will not be sent to the server
               const res = CreateOrderSchema.safeParse(values);
 
               if (res.success) {
+                console.log("Form submitted:", res.data);
                 if (!IsLegal(values.date)) {
                   setError("You must be 18 years old to purchase a ticket");
                 } else {
@@ -81,7 +81,7 @@ const CheckoutComp = () => {
                   if (!success) setError(error.payment_status);
                   else {
                     setError(undefined);
-                    await router.push("/success");
+                    Prooo[1].url && (await router.push(Prooo[1].url));
                   }
                 }
               }
@@ -118,11 +118,18 @@ const CheckoutComp = () => {
                         <div className={styles.formField}>
                           <label htmlFor="Country">Country/Region</label>
                           <Field
+                            className={styles.countryList}
+                            as="select"
                             required
                             id="country"
-                            type="text"
                             name="country"
-                          />
+                          >
+                            {countryList.map((country, i) => (
+                              <option key={i} value={country}>
+                                {country}
+                              </option>
+                            ))}
+                          </Field>
                         </div>
                         <div className={styles.formField}>
                           <label htmlFor="lastName">Address</label>
@@ -174,7 +181,12 @@ const CheckoutComp = () => {
                             type={"date"}
                             name="date"
                           />
-                          {error ? <p style={{ color: "red" }}>{error}</p> : ""}
+                          {error ===
+                          "You must be 18 years old to purchase a ticket" ? (
+                            <p style={{ color: "red" }}>{error}</p>
+                          ) : (
+                            ""
+                          )}
                         </div>
                       </div>
                     </div>
@@ -220,7 +232,7 @@ const CheckoutComp = () => {
                     </div>
                     <div className={styles.SignMeUp}>
                       <label>
-                        <Field name="checkedSMS" type="checkbox" />
+                        <Field required name="checkedSMS" type="checkbox" />
                         <p>
                           I hereby declare that I have thoroughly read,
                           completely understood, and unconditionally accepted
@@ -244,6 +256,7 @@ const CheckoutComp = () => {
                         const ComptetionData = items.find(
                           (compData) => compData.id === order.compID
                         );
+
                         if (!ComptetionData) return null;
                         return (
                           <div className={styles.orderItem} key={i}>
@@ -260,7 +273,7 @@ const CheckoutComp = () => {
                                 {ComptetionData.Watches.model}
                               </h3>
                               <span>
-                                {competitions.map((comp, i) => {
+                                {values.comp.map((comp, i) => {
                                   return (
                                     <p key={i}>
                                       $
@@ -316,6 +329,15 @@ const CheckoutComp = () => {
                               </div>
                               <div
                                 onClick={() => {
+                                  console.log(
+                                    values.comp.reduce(
+                                      (a, b) =>
+                                        a +
+                                        b.number_tickets * b.price_per_ticket,
+                                      0
+                                    )
+                                  );
+
                                   setValues({
                                     ...values,
                                     comp: values.comp.map((comp) => {
@@ -370,6 +392,8 @@ const CheckoutComp = () => {
                         >
                           <PayPalButtons
                             onClick={async () => {
+                              console.log("Form submitted:", values);
+
                               const res = CreateOrderSchema.safeParse(values);
 
                               if (res.success) {
@@ -391,14 +415,17 @@ const CheckoutComp = () => {
                             ]}
                             createOrder={(data, actions) => {
                               return actions.order.create({
-                                purchase_units: [
-                                  {
-                                    amount: {
-                                      currency_code: "USD",
-                                      value: totalCost.toString(),
-                                    },
+                                purchase_units: values.comp.map((value) => ({
+                                  amount: {
+                                    currency_code: "USD",
+                                    value: (
+                                      value.number_tickets *
+                                      value.price_per_ticket
+                                    )
+                                      .toPrecision(2)
+                                      .toString(),
                                   },
-                                ],
+                                })),
                               });
                             }}
                             style={{ layout: "horizontal" }}

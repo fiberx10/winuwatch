@@ -22,6 +22,7 @@ html {
   background-attachment: fixed;
   background: #faf8f6;
 }
+
 @media only screen and (max-width: 930px) {
   .alice-carousel__next-btn {
     display: none !important;

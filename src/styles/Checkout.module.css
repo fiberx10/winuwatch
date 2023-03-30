@@ -221,6 +221,18 @@
   accent-color: #987358;
   cursor: pointer;
 }
+.countryList {
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.16);
+}
+
+.countryList:focus {
+  outline: none;
+}
+.countryList option:hover {
+  background-color: #987358;
+}
 @media only screen and (max-width: 768px) {
   .CheckoutMain {
     padding: 10px;
