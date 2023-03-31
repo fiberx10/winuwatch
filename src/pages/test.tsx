@@ -1,9 +1,7 @@
-
 import {
-
   ref,
   uploadBytes,
-  UploadResult,
+  type UploadResult,
   getDownloadURL,
 } from "firebase/storage";
 import { storage } from "@/utils/firebase";
@@ -34,8 +32,8 @@ export default function TestPage() {
             if (!file) return;
             const fileName = `test/${faker.datatype.uuid()}`;
             uploadBytes(ref(storage, fileName), file)
-              .then(async(snapshot: UploadResult) => {
-                const url = await getDownloadURL(snapshot.ref)
+              .then(async (snapshot: UploadResult) => {
+                const url = await getDownloadURL(snapshot.ref);
                 setUrl(url);
               })
               .catch((e) => {

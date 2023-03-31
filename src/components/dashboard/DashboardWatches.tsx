@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import { api } from "@/utils/api";
 import styles from "@/styles/Dashboard.module.css";
@@ -11,6 +14,29 @@ import Row from "react-bootstrap/Row";
 import Image from "next/image";
 import { Formik } from "formik";
 import * as yup from "yup";
+import {
+  ref,
+  uploadBytes,
+  type UploadResult,
+  getDownloadURL,
+} from "firebase/storage";
+import { storage } from "@/utils/firebase";
+import { faker } from "@faker-js/faker";
+// Import React FilePond
+import { FilePond, registerPlugin } from "react-filepond";
+
+// Import FilePond styles
+import "filepond/dist/filepond.min.css";
+
+// Import the Image EXIF Orientation and Image Preview plugins
+// Note: These need to be installed separately
+// `npm i filepond-plugin-image-preview filepond-plugin-image-exif-orientation --save`
+import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orientation";
+import FilePondPluginImagePreview from "filepond-plugin-image-preview";
+import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
+
+// Register the plugins
+registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
 
 const DashboardWatches = () => {
   const { data, isLoading, refetch } = api.Watches.getAll.useQuery();
@@ -62,6 +88,8 @@ const DashboardWatches = () => {
     has_box: yup.bool().required(),
     has_certificate: yup.bool().required(),
   });
+  const [file, setFile] = useState<File | undefined>();
+  const [url, setUrl] = useState<string | undefined>();
 
   return (
     <div className={styles.DashCompsMain}>
@@ -90,8 +118,8 @@ const DashboardWatches = () => {
                     {watch.brand} {watch.model}
                   </h2>
                   <div className={styles.dashGridItemTop}>
-                    <p>Reference number : {watch.reference_number}</p>
-                    <p>Year of Manifacture : {watch.year_of_manifacture}</p>
+                    <p>Reference Nº : {watch.reference_number}</p>
+                    <p>Manifacture Year : {watch.year_of_manifacture}</p>
                     <p>Condition : {watch.condition}</p>
                   </div>
                   <div className={styles.dashGridItemBot}>
@@ -347,6 +375,7 @@ const DashboardWatches = () => {
               has_certificate: values.has_certificate,
               images_url: values.images_url,
             });
+            await refetch();
             console.log("Form submitted:", values);
 
             actions.setSubmitting(false);
@@ -368,9 +397,73 @@ const DashboardWatches = () => {
             images_url: ["/images/tester.png"],
           }}
         >
-          {({ handleSubmit, handleChange }) => (
+          {({ handleSubmit, handleChange, setValues, values }) => (
             <Form onSubmit={handleSubmit}>
               <Modal.Body>
+                <Row className="mb-3">
+                  <Form.Group className="mb-3">
+                    <Form.Label>Watch Images</Form.Label>
+                    <FilePond
+                      server={{
+                        process: (
+                          fieldName,
+                          file,
+                          metadata,
+                          load,
+                          error,
+                          progress,
+                          abort,
+                          transfer,
+                          options
+                        ) => {
+                          /* store file somewhere and call `load` when done */
+                          if (!file) return;
+                          const fileName = `test/${faker.datatype.uuid()}`;
+                          uploadBytes(ref(storage, fileName), file)
+                            .then(async (snapshot: UploadResult) => {
+                              const url = await getDownloadURL(snapshot.ref);
+                              console.log(url);
+
+                              setValues({ ...values, images_url: [url] });
+                              setUrl(url);
+                              load(url);
+                            })
+                            .catch((e) => {
+                              console.log(e);
+                            });
+                        },
+                      }}
+                      //     server={{
+                      //       process: (fieldName, file, metadata, load, error, progress, abort, transfer, options) => {
+                      //
+                      //           console.log("Runing");
+
+                      //   if (!file) return;
+                      //   const fileName = `test/${faker.datatype.uuid()}`;
+                      //   uploadBytes(ref(storage, fileName), file)
+                      //     .then(async (snapshot: UploadResult) => {
+                      //       const url = await getDownloadURL(snapshot.ref);
+                      //       console.log(url);
+
+                      //       setValues({ ...values, images_url: [url] });
+                      //       setUrl(url);
+                      //     })
+                      //     .catch((e) => {
+                      //       console.log(e);
+                      //     });
+                      //       },
+                      //   }},
+                      // onprocessfile={() => {
+
+                      // }}
+
+                      allowMultiple={true}
+                      maxFiles={3}
+                      name="images_url" /* sets the file input name, it's filepond by default */
+                      labelIdle='Drag & Drop your files or <span class="filepond--label-action">Browse</span>'
+                    />
+                  </Form.Group>
+                </Row>
                 <Row className="mb-3">
                   <Form.Group as={Col}>
                     <Form.Label>Watch Brand</Form.Label>
@@ -529,6 +622,8 @@ const DashboardWatches = () => {
             variant="danger"
             onClick={async () => {
               await removewatch(remove.id);
+              await refetch();
+              setRemove({ modal: false, id: "" });
             }}
           >
             Remove
