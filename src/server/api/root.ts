@@ -4,7 +4,8 @@ import {
   CompetitionRouter,
   PaymentRouter,
   StripeRouter,
-  QuestionRouter
+  QuestionRouter,
+  OrdersRouter
 } from "@/server/api/routers";
 
 /**
@@ -17,6 +18,7 @@ export const appRouter = createTRPCRouter({
   Watches: WatchesRouter,
   Payment: PaymentRouter,
   Stripe: StripeRouter,
+  Order : OrdersRouter,
   Question : QuestionRouter
 });
 

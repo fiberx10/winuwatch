@@ -69,7 +69,9 @@ const Reviews = () => {
               <div className={styles.Rev} key={i}>
                 <div className={styles.RevTop}>
                   <div>
-                    <h1 className={styles.background4}>{rev.name}</h1>
+                    <div style={{ opacity: 0, marginBottom: "25px" }}>
+                      {rev.name}
+                    </div>
                     <div className={styles.RevTopTxt}>
                       <p>/ TrustScore {rev.score}</p>
                       <p>
@@ -92,6 +94,7 @@ const Reviews = () => {
             );
           })}
         />
+        <h1 className={styles.background4}>TRUSTPILOT</h1>
       </div>
     </div>
   );

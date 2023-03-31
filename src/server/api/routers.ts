@@ -81,7 +81,21 @@ export const StripeRouter = createTRPCRouter({
       // await prisma...
     }),
 });
-
+const MutateCompSchema = z.object({
+  id: z.string(),
+  name: z.string().optional(),
+  start_date: z.date().optional(),
+  end_date: z.date().optional(),
+  location: z.string().optional(),
+  price: z.number().optional(),
+  max_space_in_final_draw: z.number().optional(),
+  max_watch_number: z.number().optional(),
+  run_up_prize: z.string().optional(),
+  Watches: z.string().optional(),
+  total_tickets: z.number().optional(),
+  ticket_price: z.number().optional(),
+  status: z.string().optional(),
+});
 export const CompetitionRouter = createTRPCRouter({
   getAll: publicProcedure
     .input(
@@ -121,6 +135,13 @@ export const CompetitionRouter = createTRPCRouter({
       },
     });
   }),
+  remove: publicProcedure.input(z.string()).mutation(async ({ ctx, input }) => {
+    return await ctx.prisma.competition.delete({
+      where: {
+        id: input,
+      },
+    });
+  }),
   byID: publicProcedure.input(z.string()).query(({ ctx, input }) => {
     return ctx.prisma.competition.findUnique({
       where: {
@@ -155,6 +176,16 @@ export const CompetitionRouter = createTRPCRouter({
         },
       });
     }),
+  // !!
+  // add: publicProcedure
+  // .input(MutateCompSchema.omit({ id: true }).required())
+  // .mutation(async ({ ctx, input }) => {
+  //   return await ctx.prisma.competition.create({
+  //     data: {
+  //       ...input,
+  //     },
+  //   });
+  // }),
 });
 
 const MutateWatchSchema = z.object({
@@ -288,7 +319,7 @@ export const PaymentRouter = createTRPCRouter({
   create: publicProcedure
     .input(CreateOrderSchema)
     .mutation(({ ctx, input }) => {
-      const { watchids, ...data } = input;
+      const { comp, ...data } = input;
 
       //TODO: Create Order
       console.log(input);
@@ -320,5 +351,11 @@ export const QuestionRouter = createTRPCRouter({
       return Questions[randomIndex];
     }
     return Questions[0];
+  }),
+});
+
+export const OrdersRouter = createTRPCRouter({
+  getAll: publicProcedure.query(({ ctx }) => {
+    return ctx.prisma.order.findMany();
   }),
 });

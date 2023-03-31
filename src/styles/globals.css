@@ -22,6 +22,35 @@ html {
   background-attachment: fixed;
   background: #faf8f6;
 }
+.filepond--file {
+  flex-direction: column;
+  overflow-y: hidden;
+}
+.filepond--file-poster img {
+  object-fit: contain !important;
+  height: 100%;
+  width: 100%;
+}
+.filepond--file-poster {
+  height: 100%;
+  width: 415px;
+}
+.filepond--item {
+  flex: 1;
+}
+.filepond--file-info {
+  flex: none !important;
+  margin-bottom: 20px !important;
+}
+.filepond--file-poster-wrapper {
+  width: 100%;
+  position: relative;
+}
+.filepond--file-poster-wrapper canvas {
+  position: absolute;
+  width: 415px;
+  top: 0;
+}
 @media only screen and (max-width: 930px) {
   .alice-carousel__next-btn {
     display: none !important;

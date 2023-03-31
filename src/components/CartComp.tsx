@@ -70,7 +70,10 @@ const CartComp = () => {
                     onClick={() =>
                       updateComp({
                         compID: comp.compID,
-                        number_tickets: comp.number_tickets - 1,
+                        number_tickets:
+                          comp.number_tickets > 1
+                            ? comp.number_tickets - 1
+                            : comp.number_tickets,
                         price_per_ticket: ComptetionData.ticket_price,
                       })
                     }
@@ -90,7 +93,10 @@ const CartComp = () => {
                     onClick={() =>
                       updateComp({
                         compID: comp.compID,
-                        number_tickets: comp.number_tickets + 1,
+                        number_tickets:
+                          comp.number_tickets < ComptetionData.remaining_tickets
+                            ? comp.number_tickets + 1
+                            : comp.number_tickets,
                         price_per_ticket: ComptetionData.ticket_price,
                       })
                     }
@@ -119,10 +125,7 @@ const CartComp = () => {
       ) : (
         <h1>No Items in the Cart</h1>
       )}
-      <div className={styles.CartSubTotal}>
-        <p>Sub Total</p>
-        <span>{Formater(totalCost)}</span>
-      </div>
+
       <div className={styles.CartTotal}>
         <p>{`Total + (20%) VAT`}</p>
         <span>{Formater(totalCost * 1.02)}</span>

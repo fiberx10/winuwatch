@@ -1,7 +1,7 @@
 import { PaymentMethod } from "@prisma/client";
 import { z } from "zod";
-
 export * from "./api";
+
 export const CreateOrderSchema = z.object({
   first_name: z.string(),
   last_name: z.string(),
@@ -15,9 +15,12 @@ export const CreateOrderSchema = z.object({
   paymentMethod: z.enum([PaymentMethod.PAYPAL, PaymentMethod.STRIPE]),
   totalPrice: z.number(),
   checkedEmail: z.boolean().default(false),
-  checkedPhone: z.boolean().default(false),
-  checkedSMS: z.boolean().default(false),
-  watchids: z.array(z.string()),
+  checkedTerms: z.boolean().default(false),
+  comp: z.array(z.object({
+    compID: z.string(),
+    number_tickets: z.number(),
+    price_per_ticket: z.number(),
+  })),
 });
 
 export const Formater = (value: number | bigint) =>

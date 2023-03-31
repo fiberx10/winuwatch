@@ -5,9 +5,9 @@
   width: 100%;
   background: linear-gradient(
       180deg,
-      #ffffff 0%,
+      #faf8f6 0%,
       rgba(255, 255, 255, 0) 47.35%,
-      #ffffff 99.33%
+      #faf8f6 99.33%
     ),
     url(../../public/images/Philo.png);
   height: 1630px;
@@ -24,7 +24,7 @@
   height: 2072px;
   background: linear-gradient(
     180deg,
-    #ffffff 0%,
+    #faf8f6 0%,
     rgba(206, 198, 189, 0) 50.83%,
     #a8957e 100%
   );
