@@ -9,7 +9,7 @@ import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import { Formik } from "formik";
-import { Moment } from "moment";
+import type { Moment } from "moment";
 import Datetime from "react-datetime";
 import "react-datetime/css/react-datetime.css";
 
@@ -34,8 +34,11 @@ const DashboardCompetitions = () => {
   };
 
   //DATA FROM BACKEND
-  const { data, isLoading } = api.Competition.getEverything.useQuery();
+  const { data, isLoading, refetch } = api.Competition.getEverything.useQuery();
   const { data: watches } = api.Watches.getAll.useQuery();
+  const { mutateAsync: removeComp } = api.Competition.remove.useMutation();
+  // const { mutateAsync: addComp } = api.Competition.add.useMutation();
+  const { mutateAsync: updateComp } = api.Competition.updateOne.useMutation();
 
   return (
     <div className={styles.DashCompsMain}>
@@ -345,9 +348,7 @@ const DashboardCompetitions = () => {
                         placeholder: "Enter Date",
                         required: true,
                       }}
-                      onChange={(value) =>
-                        setFieldValue("start_date", value)
-                      }
+                      onChange={(value) => setFieldValue("start_date", value)}
                     />
                   </Form.Group>
                   <Form.Group className="mb-3">
@@ -360,9 +361,7 @@ const DashboardCompetitions = () => {
                         placeholder: "Enter Date",
                         required: true,
                       }}
-                      onChange={(value) =>
-                        setFieldValue("end_date", value)
-                      }
+                      onChange={(value) => setFieldValue("end_date", value)}
                     />
                   </Form.Group>
                   <Form.Group as={Col}>
