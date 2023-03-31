@@ -8,7 +8,7 @@ import Image from "next/image";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { BsArrowRight, BsArrowLeft } from "react-icons/bs";
 
 const UpComing: React.FC<{
@@ -39,12 +39,26 @@ const UpComing: React.FC<{
       spaceBetween: 30,
     },
   };
+  useEffect(() => {
+    const handleScroll = () => {
+      const background = document.querySelector(
+        `.${styles.background6 ?? "undefined"}`
+      ) as HTMLElement & { style: CSSStyleDeclaration };
+      if (background) {
+        background.style.backgroundPositionY =
+          window.scrollY === 0 ? "-124px" : `${-window.scrollY}px`;
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
   return (
     <div className={styles.upComingMain}>
-      <h1>the upcoming Competitions</h1>
+      <h1 className={styles.background6}>the upcoming Competitions</h1>
       <Swiper
         breakpoints={sliderSettings}
         slidesPerView={5}
+        loop={true}
         onSlideChange={() => console.log("slide change")}
         onSwiper={(swiper) => console.log(swiper)}
         onBeforeInit={(swiper) => {
@@ -58,9 +72,9 @@ const UpComing: React.FC<{
                 <Image
                   src={slide.img}
                   alt="slideImage"
-                  width={200}
-                  height={200}
-                  style={{ objectFit: "contain" }}
+                  width={170}
+                  height={170}
+                  style={{ objectFit: "cover" }}
                 />
                 <div className={styles.upComDet}>
                   <div className={styles.upComTextTop}>

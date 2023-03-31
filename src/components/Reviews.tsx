@@ -77,10 +77,15 @@ const Reviews = () => {
                       <p>
                         <u>/ {rev.numberOfRev} reviews</u>
                       </p>
+                      <div className={styles.Rating}>
+                        /
+                        <Rating
+                          defaultValue={rev.score}
+                          precision={0.5}
+                          readOnly
+                        />
+                      </div>
                     </div>
-                  </div>
-                  <div className={styles.Rating}>
-                    <Rating defaultValue={rev.score} precision={0.5} readOnly />
                   </div>
                 </div>
                 <div className={styles.RevBot}>
