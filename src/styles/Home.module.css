@@ -224,6 +224,15 @@
   color: transparent;
   -webkit-background-clip: text;
 }
+.background6 {
+  background-image: url(https://content.rolex.com/dam/watches/family-pages/datejust/2023/a-date-with-destiny/classic-watches-datejust-a-date-with-destiny-yellow-cut-out.jpg);
+  background-repeat: repeat-y;
+
+  background-clip: text;
+  background-size: 100% 100vh;
+  color: transparent;
+  -webkit-background-clip: text;
+}
 .Comp h1 {
   font-family: "Montserrat", sans-serif;
   text-transform: uppercase;
@@ -244,7 +253,7 @@
       180deg,
       rgba(255, 255, 255, 0) 0%,
       rgba(255, 255, 255, 0) 36.25%,
-      #ffffff 100%
+      #faf8f6 100%
     ),
     url(../../public/images/tester.png);
   width: 491px;
@@ -639,11 +648,15 @@
   text-transform: uppercase;
 }
 .Rating {
-  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  color: #987358;
 }
 .RevTopTxt {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 1rem;
   font-weight: 300;
   font-size: 20px;
@@ -795,7 +808,6 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: #cbb9ac;
   gap: 1rem;
 }
 .FooterInsta h1 {
@@ -824,10 +836,11 @@
 .upComingMain h1 {
   width: 100%;
   text-align: center;
-  text-transform: capitalize;
-  font-family: "Iskry", sans-serif;
-  font-weight: 500;
+  text-transform: uppercase;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 600;
   font-size: 45px;
+  margin-bottom: 20px;
 }
 .upComTextTop {
   display: flex;
@@ -1348,7 +1361,12 @@
     justify-content: space-evenly;
   }
   .menusGrid {
-    gap: 7rem;
+    gap: 1rem;
+  }
+}
+@media only screen and (min-width: 1600px) and (max-width: 2560px) {
+  .menusGrid {
+    gap: 6rem;
   }
 }
 @media only screen and (max-height: 667px) {

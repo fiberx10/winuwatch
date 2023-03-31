@@ -2,7 +2,6 @@ import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { CompetitionStatus } from "@prisma/client";
 import { CreateOrderSchema, getBaseUrl } from "@/utils";
-
 import _stripe from "stripe";
 import { env } from "@/env.mjs";
 
@@ -91,10 +90,16 @@ const MutateCompSchema = z.object({
   max_space_in_final_draw: z.number().optional(),
   max_watch_number: z.number().optional(),
   run_up_prize: z.string().optional(),
-  Watches: z.string().optional(),
+  watchesId: z.string().optional(),
   total_tickets: z.number().optional(),
   ticket_price: z.number().optional(),
-  status: z.string().optional(),
+  status: z.enum([
+    CompetitionStatus.ACTIVE,
+    CompetitionStatus.COMPLETED,
+    CompetitionStatus.NOT_ACTIVE,
+  ]),
+  drawing_date: z.date().optional(),
+  remaining_tickets: z.number().optional(),
 });
 export const CompetitionRouter = createTRPCRouter({
   getAll: publicProcedure
@@ -176,16 +181,16 @@ export const CompetitionRouter = createTRPCRouter({
         },
       });
     }),
-  // !!
-  // add: publicProcedure
-  // .input(MutateCompSchema.omit({ id: true }).required())
-  // .mutation(async ({ ctx, input }) => {
-  //   return await ctx.prisma.competition.create({
-  //     data: {
-  //       ...input,
-  //     },
-  //   });
-  // }),
+
+  add: publicProcedure
+    .input(MutateCompSchema.omit({ id: true }).required())
+    .mutation(async ({ ctx, input }) => {
+      return await ctx.prisma.competition.create({
+        data: {
+          ...input,
+        },
+      });
+    }),
 });
 
 const MutateWatchSchema = z.object({
@@ -355,7 +360,9 @@ export const QuestionRouter = createTRPCRouter({
 });
 
 export const OrdersRouter = createTRPCRouter({
-  getAll: publicProcedure.query(({ ctx }) => {
-    return ctx.prisma.order.findMany();
-  }),
+  getAll: publicProcedure
+    .input(z.array(z.string()).optional())
+    .query(({ ctx, input}) => {
+      return true
+    }),
 });

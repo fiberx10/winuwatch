@@ -40,7 +40,6 @@ const TheCompetition = () => {
                     <h3>
                       {watch.Watches.brand} {watch.Watches.model}
                     </h3>
-                    <h4>{watch.Watches.reference_number} </h4>
                     <p>Only {watch.remaining_tickets} tickets left!</p>
                   </div>
                 </div>

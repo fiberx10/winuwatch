@@ -64,7 +64,7 @@ const Home: NextPage = () => {
       text: "Oyster, 40 mm, acier Oystersteel et or Everose",
     },
     {
-      img: "/images/upWatch7.png",
+      img: "/images/upWatch11.png",
       brand: "Rolex",
       title: "GMT-MASTER II",
       text: "Oyster, 40 mm, acier Oystersteel et or Everose",

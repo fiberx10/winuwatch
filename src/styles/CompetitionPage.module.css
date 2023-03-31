@@ -30,7 +30,7 @@
   gap: 3rem;
 }
 .compDetails {
-  padding: 0px 100px;
+  padding: 0px 50px;
   border-left: 2px solid #987358;
   border-right: 2px solid #987358;
   display: flex;
@@ -38,7 +38,7 @@
   gap: 2rem;
 }
 .watchInfo {
-  padding: 0px 100px;
+  padding: 0px 50px;
   border-left: 2px solid #987358;
   border-right: 2px solid #987358;
   display: flex;
@@ -189,6 +189,9 @@
   flex-direction: column;
   gap: 1rem;
 }
+.donations img {
+  mix-blend-mode: multiply;
+}
 .donations div {
   display: flex;
   align-items: center;
@@ -303,13 +306,13 @@
 @media only screen and (min-width: 1440px) and (max-width: 2560px) {
   .CompetitionMain {
     align-self: center;
-    width: 83.5%;
+    width: 97%;
   }
   .compDesc {
     align-items: center;
   }
   .compDet {
-    width: 83%;
+    width: 97%;
   }
   .images {
     width: fit-content;
