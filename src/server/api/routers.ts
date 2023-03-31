@@ -95,6 +95,8 @@ const MutateCompSchema = z.object({
   total_tickets: z.number().optional(),
   ticket_price: z.number().optional(),
   status: z.string().optional(),
+  drawing_date:z.date().optional(),
+   remaining_tickets: z.number().optional()
 });
 export const CompetitionRouter = createTRPCRouter({
   getAll: publicProcedure
@@ -176,16 +178,16 @@ export const CompetitionRouter = createTRPCRouter({
         },
       });
     }),
-  // !!
-  // add: publicProcedure
-  // .input(MutateCompSchema.omit({ id: true }).required())
-  // .mutation(async ({ ctx, input }) => {
-  //   return await ctx.prisma.competition.create({
-  //     data: {
-  //       ...input,
-  //     },
-  //   });
-  // }),
+
+   add: publicProcedure
+   .input(MutateCompSchema.omit({ id: true }).required())
+   .mutation(async ({ ctx, input }) => {
+     return await ctx.prisma.competition.create({
+       data: {
+         ...input,
+       },
+     });
+   }),
 });
 
 const MutateWatchSchema = z.object({

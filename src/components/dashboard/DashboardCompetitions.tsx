@@ -37,7 +37,7 @@ const DashboardCompetitions = () => {
   const { data, isLoading, refetch } = api.Competition.getEverything.useQuery();
   const { data: watches } = api.Watches.getAll.useQuery();
   const { mutateAsync: removeComp } = api.Competition.remove.useMutation();
-  // const { mutateAsync: addComp } = api.Competition.add.useMutation();
+  const { mutateAsync: addComp } = api.Competition.add.useMutation();
   const { mutateAsync: updateComp } = api.Competition.updateOne.useMutation();
 
   return (
