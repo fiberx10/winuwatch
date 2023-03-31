@@ -32,11 +32,16 @@ import "filepond/dist/filepond.min.css";
 // Note: These need to be installed separately
 // `npm i filepond-plugin-image-preview filepond-plugin-image-exif-orientation --save`
 import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orientation";
+import FilePondPluginFilePoster from "filepond-plugin-file-poster";
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
 
 // Register the plugins
-registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
+registerPlugin(
+  FilePondPluginImageExifOrientation,
+  FilePondPluginImagePreview,
+  FilePondPluginFilePoster
+);
 
 const DashboardWatches = () => {
   const { data, isLoading, refetch } = api.Watches.getAll.useQuery();
@@ -66,6 +71,7 @@ const DashboardWatches = () => {
   // HANDLE UPDATE MODAL FORM
   const handleClose = () => {
     setShow({ modal: false, data: 0 });
+    newimgs.splice(0, newimgs.length);
   };
   const handleShow = (i: number) => {
     setShow({
@@ -88,8 +94,8 @@ const DashboardWatches = () => {
     has_box: yup.bool().required(),
     has_certificate: yup.bool().required(),
   });
-  const [file, setFile] = useState<File | undefined>();
-  const [url, setUrl] = useState<string | undefined>();
+  const imgs: string[] = [];
+  const newimgs: string[] = [];
 
   return (
     <div className={styles.DashCompsMain}>
@@ -110,7 +116,11 @@ const DashboardWatches = () => {
                   width={200}
                   height={200}
                   style={{ objectFit: "cover" }}
-                  src="/images/tester.png"
+                  src={
+                    watch.images_url[0]
+                      ? watch.images_url[0]
+                      : "/images/tester.png"
+                  }
                   alt="watchImage"
                 />
                 <div className={styles.dashWatchGridDet}>
@@ -139,7 +149,7 @@ const DashboardWatches = () => {
                 {show.data === i && (
                   <Modal show={show.modal} onHide={handleClose}>
                     <Modal.Header closeButton>
-                      <Modal.Title>Manage your competition</Modal.Title>
+                      <Modal.Title>Manage your Watch</Modal.Title>
                     </Modal.Header>
                     <Formik
                       onSubmit={async (values, actions) => {
@@ -180,12 +190,76 @@ const DashboardWatches = () => {
                         year_of_manifacture: watch.year_of_manifacture,
                         has_box: watch.has_box,
                         has_certificate: watch.has_certificate,
-                        images_url: ["/images/tester.png"],
+                        images_url: watch.images_url,
                       }}
                     >
-                      {({ values, handleSubmit, handleChange }) => (
+                      {({
+                        values,
+                        handleSubmit,
+                        handleChange,
+                        setFieldValue,
+                      }) => (
                         <Form onSubmit={handleSubmit}>
                           <Modal.Body>
+                            <Row className="mb-3">
+                              <Form.Group className="mb-3">
+                                <Form.Label>Watch Images</Form.Label>
+                                <FilePond
+                                  server={{
+                                    process: (
+                                      fieldName,
+                                      file,
+                                      files,
+                                      metadata,
+                                      load
+                                    ) => {
+                                      /* store file somewhere and call `load` when done */
+                                      if (!file) return;
+
+                                      const fileName = `test/${faker.datatype.uuid()}`;
+
+                                      uploadBytes(ref(storage, fileName), file)
+                                        .then(
+                                          async (snapshot: UploadResult) => {
+                                            const url = await getDownloadURL(
+                                              snapshot.ref
+                                            );
+
+                                            newimgs.length <= 3
+                                              ? newimgs.push(url)
+                                              : newimgs;
+                                            console.log(newimgs);
+                                            setFieldValue(
+                                              "images_url",
+                                              newimgs
+                                            );
+
+                                            load(url);
+                                          }
+                                        )
+                                        .catch((e) => {
+                                          console.log(e);
+                                        });
+                                    },
+                                  }}
+                                  files={values.images_url.map((img) => {
+                                    return {
+                                      source: img,
+                                      options: {
+                                        type: "local",
+                                        metadata: {
+                                          poster: img,
+                                        },
+                                      },
+                                    };
+                                  })}
+                                  allowMultiple={true}
+                                  maxFiles={3}
+                                  name="images_url" /* sets the file input name, it's filepond by default */
+                                  labelIdle='Drag & Drop your files or <span class="filepond--label-action">Browse</span>'
+                                />
+                              </Form.Group>
+                            </Row>
                             <Row className="mb-3">
                               <Form.Group as={Col}>
                                 <Form.Label>Watch Brand</Form.Label>
@@ -394,10 +468,10 @@ const DashboardWatches = () => {
             year_of_manifacture: 0,
             has_box: false,
             has_certificate: false,
-            images_url: ["/images/tester.png"],
+            images_url: [] as string[],
           }}
         >
-          {({ handleSubmit, handleChange, setValues, values }) => (
+          {({ handleSubmit, handleChange, setFieldValue }) => (
             <Form onSubmit={handleSubmit}>
               <Modal.Body>
                 <Row className="mb-3">
@@ -405,27 +479,17 @@ const DashboardWatches = () => {
                     <Form.Label>Watch Images</Form.Label>
                     <FilePond
                       server={{
-                        process: (
-                          fieldName,
-                          file,
-                          metadata,
-                          load,
-                          error,
-                          progress,
-                          abort,
-                          transfer,
-                          options
-                        ) => {
+                        process: (fieldName, file, metadata, load) => {
                           /* store file somewhere and call `load` when done */
                           if (!file) return;
                           const fileName = `test/${faker.datatype.uuid()}`;
                           uploadBytes(ref(storage, fileName), file)
                             .then(async (snapshot: UploadResult) => {
                               const url = await getDownloadURL(snapshot.ref);
-                              console.log(url);
 
-                              setValues({ ...values, images_url: [url] });
-                              setUrl(url);
+                              imgs.push(url);
+                              console.log(imgs);
+                              setFieldValue("images_url", imgs);
                               load(url);
                             })
                             .catch((e) => {
@@ -433,30 +497,6 @@ const DashboardWatches = () => {
                             });
                         },
                       }}
-                      //     server={{
-                      //       process: (fieldName, file, metadata, load, error, progress, abort, transfer, options) => {
-                      //
-                      //           console.log("Runing");
-
-                      //   if (!file) return;
-                      //   const fileName = `test/${faker.datatype.uuid()}`;
-                      //   uploadBytes(ref(storage, fileName), file)
-                      //     .then(async (snapshot: UploadResult) => {
-                      //       const url = await getDownloadURL(snapshot.ref);
-                      //       console.log(url);
-
-                      //       setValues({ ...values, images_url: [url] });
-                      //       setUrl(url);
-                      //     })
-                      //     .catch((e) => {
-                      //       console.log(e);
-                      //     });
-                      //       },
-                      //   }},
-                      // onprocessfile={() => {
-
-                      // }}
-
                       allowMultiple={true}
                       maxFiles={3}
                       name="images_url" /* sets the file input name, it's filepond by default */
@@ -597,7 +637,13 @@ const DashboardWatches = () => {
                 </Row>
               </Modal.Body>
               <Modal.Footer>
-                <Button variant="secondary" onClick={() => setAdd(false)}>
+                <Button
+                  variant="secondary"
+                  onClick={() => {
+                    setAdd(false);
+                    imgs.splice(0, imgs.length);
+                  }}
+                >
                   Close
                 </Button>
                 <Button variant="primary" type="submit">
