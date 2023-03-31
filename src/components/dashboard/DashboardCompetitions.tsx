@@ -15,6 +15,7 @@ import type { Moment } from "moment";
 import Datetime from "react-datetime";
 import "react-datetime/css/react-datetime.css";
 import moment from "moment-timezone";
+import UpcomingComps from "./UpcomingComps";
 
 const DashboardCompetitions = () => {
   //REMOVE COMPETITION
@@ -61,13 +62,17 @@ const DashboardCompetitions = () => {
     });
   const { data: watches } = api.Watches.getAll.useQuery();
   const { mutateAsync: removeComp } = api.Competition.remove.useMutation();
-  const { mutateAsync: addComp } = api.Competition.add.useMutation();
+  const { mutateAsync: addComp, isError } = api.Competition.add.useMutation();
   const { mutateAsync: updateComp } = api.Competition.updateOne.useMutation();
-
   return (
     <div className={styles.DashCompsMain}>
       <div className={styles.dashCompsTopHeader}>
         <h1>Your Competitions</h1>
+        {isError && (
+          <p style={{ color: "red" }}>
+            Cannot put the same watch on multiple competitions!
+          </p>
+        )}
         <Button onClick={() => setAdd(true)} variant="primary">
           <PlusOutlined /> Add
         </Button>
@@ -427,7 +432,7 @@ const DashboardCompetitions = () => {
           </Accordion.Item>
           <Accordion.Item eventKey="1">
             <Accordion.Header>
-              Not Active Competitions ({noActiveComps?.length})
+              Non Active Competitions ({noActiveComps?.length})
             </Accordion.Header>
             <Accordion.Body>
               <div className={styles.dashCompsGrid}>
@@ -1123,6 +1128,7 @@ const DashboardCompetitions = () => {
               </div>
             </Accordion.Body>
           </Accordion.Item>
+          <UpcomingComps />
         </Accordion>
       )}
       <Modal show={add}>
@@ -1167,7 +1173,7 @@ const DashboardCompetitions = () => {
             watchesId: "",
             total_tickets: 0,
             ticket_price: 0,
-            status: "",
+            status: "NOT_ACTIVE",
             drawing_date: "",
             remaining_tickets: 0,
           }}
@@ -1363,8 +1369,8 @@ const DashboardCompetitions = () => {
           <Button
             variant="danger"
             onClick={async () => {
-              await refetch();
               await removeComp(remove.id);
+              await refetch();
               await activeFetch();
               await noActiveFetch();
               await completedFetch();
