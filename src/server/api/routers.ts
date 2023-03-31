@@ -312,6 +312,8 @@ export const PaymentRouter = createTRPCRouter({
     }),
 });
 
+
+
 export const QuestionRouter = createTRPCRouter({
   getOneRandom: publicProcedure.query(async ({ ctx }) => {
     const Questions = await ctx.prisma.question.findMany();
@@ -322,3 +324,11 @@ export const QuestionRouter = createTRPCRouter({
     return Questions[0];
   }),
 });
+
+
+export const OrdersRouter = createTRPCRouter({
+  getAll: publicProcedure.query(({ ctx }) => {
+    return ctx.prisma.order.findMany();
+  }
+  )
+})

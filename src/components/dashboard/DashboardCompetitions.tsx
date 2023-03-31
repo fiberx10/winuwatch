@@ -9,6 +9,7 @@ import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import { Formik } from "formik";
+import { Moment } from "moment";
 import Datetime from "react-datetime";
 import "react-datetime/css/react-datetime.css";
 
@@ -146,7 +147,7 @@ const DashboardCompetitions = () => {
                                     required: true,
                                   }}
                                   value={values.start_date}
-                                  onChange={(value: string | moment.Moment) =>
+                                  onChange={(value: string | Moment) =>
                                     setFieldValue("start_date", value)
                                   }
                                 />
@@ -162,7 +163,7 @@ const DashboardCompetitions = () => {
                                     required: true,
                                   }}
                                   value={values.end_date}
-                                  onChange={(value: string | moment.Moment) =>
+                                  onChange={(value) =>
                                     setFieldValue("end_date", value)
                                   }
                                 />
@@ -344,7 +345,7 @@ const DashboardCompetitions = () => {
                         placeholder: "Enter Date",
                         required: true,
                       }}
-                      onChange={(value: string | moment.Moment) =>
+                      onChange={(value) =>
                         setFieldValue("start_date", value)
                       }
                     />
@@ -359,7 +360,7 @@ const DashboardCompetitions = () => {
                         placeholder: "Enter Date",
                         required: true,
                       }}
-                      onChange={(value: string | moment.Moment) =>
+                      onChange={(value) =>
                         setFieldValue("end_date", value)
                       }
                     />

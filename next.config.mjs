@@ -20,6 +20,10 @@ const config = {
         hostname: "loremflickr.com",
         protocol: "https",
       },
+      {
+        hostname: "firebasestorage.googleapis.com",
+        protocol: "https",
+      }
     ],
   },
 };
