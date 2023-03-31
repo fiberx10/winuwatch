@@ -146,7 +146,7 @@ const DashboardCompetitions = () => {
                                     required: true,
                                   }}
                                   value={values.start_date}
-                                  onChange={(value: string | moment.Moment) =>
+                                  onChange={(value: string | Date) =>
                                     setFieldValue("start_date", value)
                                   }
                                 />
@@ -162,7 +162,7 @@ const DashboardCompetitions = () => {
                                     required: true,
                                   }}
                                   value={values.end_date}
-                                  onChange={(value: string | moment.Moment) =>
+                                  onChange={(value: string | Date) =>
                                     setFieldValue("end_date", value)
                                   }
                                 />
@@ -344,7 +344,7 @@ const DashboardCompetitions = () => {
                         placeholder: "Enter Date",
                         required: true,
                       }}
-                      onChange={(value: string | moment.Moment) =>
+                      onChange={(value: string | Date) =>
                         setFieldValue("start_date", value)
                       }
                     />
@@ -359,7 +359,7 @@ const DashboardCompetitions = () => {
                         placeholder: "Enter Date",
                         required: true,
                       }}
-                      onChange={(value: string | moment.Moment) =>
+                      onChange={(value: string | Date) =>
                         setFieldValue("end_date", value)
                       }
                     />

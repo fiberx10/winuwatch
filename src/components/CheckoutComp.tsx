@@ -186,7 +186,7 @@ const CheckoutComp = () => {
                               required: true,
                               max: "2005-01-01",
                             }}
-                            onChange={(value: string | moment.Moment) =>
+                            onChange={(value: string | Date) =>
                               setFieldValue("date", value)
                             }
                           />
