@@ -62,13 +62,15 @@ const DashboardCompetitions = () => {
     });
   const { data: watches } = api.Watches.getAll.useQuery();
   const { mutateAsync: removeComp } = api.Competition.remove.useMutation();
-  const { mutateAsync: addComp, isError } = api.Competition.add.useMutation();
-  const { mutateAsync: updateComp } = api.Competition.updateOne.useMutation();
+  const { mutateAsync: addComp, isError: addError } =
+    api.Competition.add.useMutation();
+  const { mutateAsync: updateComp, isError: updateError } =
+    api.Competition.updateOne.useMutation();
   return (
     <div className={styles.DashCompsMain}>
       <div className={styles.dashCompsTopHeader}>
         <h1>Your Competitions</h1>
-        {isError && (
+        {(addError || updateError) && (
           <p style={{ color: "red" }}>
             Cannot put the same watch on multiple competitions!
           </p>
