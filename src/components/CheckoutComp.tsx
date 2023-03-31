@@ -10,7 +10,7 @@ import Image from "next/image";
 import { Formik, Form, Field } from "formik";
 import Datetime from "react-datetime";
 import "react-datetime/css/react-datetime.css";
-
+import { Moment } from "moment";
 const CheckoutComp = () => {
   const router = useRouter();
 
@@ -186,7 +186,7 @@ const CheckoutComp = () => {
                               required: true,
                               max: "2005-01-01",
                             }}
-                            onChange={(value: string | Date) =>
+                            onChange={(value: string | Moment) =>
                               setFieldValue("date", value)
                             }
                           />
