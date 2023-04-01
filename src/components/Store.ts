@@ -1,5 +1,4 @@
 import { create } from "zustand";
-import { Order } from "@prisma/client";
 
 interface Comp {
   compID: string;
@@ -46,7 +45,7 @@ export const Dashmenus = [
 export const useStore = create<{
   menu: (typeof Dashmenus)[number];
   selectMenu: (menu: (typeof Dashmenus)[number]) => void;
-}>((set, get) => ({
+}>((set) => ({
   menu: "Dashboard",
   selectMenu: (menu) => set({ menu }),
 }));

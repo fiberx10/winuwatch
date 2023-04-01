@@ -7,7 +7,7 @@ import { z } from "zod";
 const server = z.object({
   DATABASE_URL: z.string().url(),
   NODE_ENV: z.enum(["development", "test", "production"]),
-  STRIPE_SECRET_KEY: z.string().min(1)
+  STRIPE_SECRET_KEY: z.string().min(1),
 });
 
 /**
@@ -35,14 +35,14 @@ const processEnv = {
   // DATABASE :
   DATABASE_URL: process.env.DATABASE_URL,
   NODE_ENV: process.env.NODE_ENV,
-  
+
   NEXT_PUBLIC_PAYPAL_ID: process.env.NEXT_PUBLIC_PAYPAL_ID,
 
   // STRIPE KEYS
-  NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,
+  NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY:
+    process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,
   STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
 };
-
 
 // Don't touch the part below
 // --------------------------

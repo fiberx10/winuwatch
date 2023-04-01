@@ -1,17 +1,31 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
 
+generator erd {
+  provider = "prisma-erd-generator"
+  output   = "./erd.png"
+}
+
+
 datasource db {
-  provider = "mongodb"
-  url      = env("DATABASE_URL")
+  provider     = "mysql"
+  url          = "mysql://wdwuknnzs4f66zn9palj:pscale_pw_N75DyHGPirpB80uON4TnmpVEhZi6wRX5yG5em6jcbkY@aws.connect.psdb.cloud/win-u-wath?sslaccept=strict"
+  relationMode = "prisma"
+}
+
+model ImagesUrl {
+  id        String  @id @default(cuid())
+  url       String
+  WatchesId String
+  Watches   Watches @relation(fields: [WatchesId], references: [id])
+
+  @@index([WatchesId])
+  @@map("images_url")
 }
 
 model Watches {
-  id                  String       @id @default(auto()) @map("_id") @db.ObjectId
+  id                  String       @id @default(cuid())
   brand               String
   model               String
   reference_number    String
@@ -24,15 +38,15 @@ model Watches {
   bezel_material      String
   has_box             Boolean      @default(false)
   has_certificate     Boolean      @default(false)
-  images_url          String[]
   condition           String
+  images_url          ImagesUrl[]
   Competition         Competition?
 
   @@map("watches")
 }
 
 model Competition {
-  id                       String            @id @default(auto()) @map("_id") @db.ObjectId
+  id                       String            @id @default(cuid())
   name                     String
   max_watch_number         Int
   max_space_in_final_draw  Int
@@ -48,32 +62,21 @@ model Competition {
   price                    Float
   status                   CompetitionStatus
   winner                   String?
-  orderId                  String?           @db.ObjectId
+  orderId                  String?
+  second_reward            String?
+  createdAt                DateTime          @default(now())
+  updatedAt                DateTime          @updatedAt
+  watchesId                String            @unique
+  Watches                  Watches           @relation(fields: [watchesId], references: [id])
+  Order                    Order?            @relation(fields: [orderId], references: [id])
+  Ticket                   Ticket[]
 
-  second_reward String?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  watchesId     String   @unique @db.ObjectId
-  Watches       Watches  @relation(fields: [watchesId], references: [id])
-  Order         Order?   @relation(fields: [orderId], references: [id])
-  Ticket        Ticket[]
-
+  @@index([orderId])
   @@map("competition")
 }
 
-enum OrderStatus {
-  PENDING
-  CONFIRMED
-  CANCELLED
-}
-
-enum PaymentMethod {
-  PAYPAL
-  STRIPE
-}
-
 model Order {
-  id            String        @id @default(auto()) @map("_id") @db.ObjectId
+  id            String        @id @default(cuid())
   first_name    String
   last_name     String
   country       String
@@ -85,10 +88,11 @@ model Order {
   date          DateTime
   paymentMethod PaymentMethod
   checkedEmail  Boolean
-  checkedTerms   Boolean
+  checkedTerms  Boolean
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
   totalPrice    Float
+  status        OrderStatus
   Competition   Competition[]
   Ticket        Ticket[]
 
@@ -96,25 +100,49 @@ model Order {
 }
 
 model Ticket {
-  id            String      @id @default(auto()) @map("_id") @db.ObjectId
-  orderId       String      @db.ObjectId
-  Order         Order       @relation(fields: [orderId], references: [id])
-  competitionId String      @db.ObjectId
-  Competition   Competition @relation(fields: [competitionId], references: [id])
+  id            String      @id @default(cuid())
+  orderId       String
+  competitionId String
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
-  @@map("ticket")
+  Order         Order       @relation(fields: [orderId], references: [id])
+  Competition   Competition @relation(fields: [competitionId], references: [id])
+
+  @@index([competitionId])
+  @@index([orderId])
+  @@map("tickets")
 }
 
 model Question {
-  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  id            String   @id @default(cuid())
   question      String
-  answers       String[]
   correctAnswer String
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
+  answers       answer[]
 
   @@map("question")
+}
+
+model answer {
+  id         String   @id @default(cuid())
+  answer     String
+  questionId String
+  Question   Question @relation(fields: [questionId], references: [id])
+
+  @@index([questionId])
+  @@map("answers")
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+}
+
+enum PaymentMethod {
+  PAYPAL
+  STRIPE
 }
 
 enum CompetitionStatus {

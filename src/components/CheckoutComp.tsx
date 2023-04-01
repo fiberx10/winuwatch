@@ -10,7 +10,7 @@ import Image from "next/image";
 import { Formik, Form, Field } from "formik";
 import Datetime from "react-datetime";
 import "react-datetime/css/react-datetime.css";
-import { Moment } from "moment";
+import type { Moment } from "moment";
 const CheckoutComp = () => {
   const router = useRouter();
 

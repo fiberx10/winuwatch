@@ -2,6 +2,7 @@ import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { CompetitionStatus } from "@prisma/client";
 import { CreateOrderSchema, getBaseUrl } from "@/utils";
+import {} from "@/utils/zodSchemas";
 import _stripe from "stripe";
 import { env } from "@/env.mjs";
 
@@ -9,23 +10,16 @@ const stripe = new _stripe(env.STRIPE_SECRET_KEY, {
   apiVersion: "2022-11-15",
 });
 
-// zode input validation
-const orderInput = z.object({
-  // first_name: z.string(),
-  // last_name: z.string(),
-  // country: z.string(),
-  // address: z.string(),
-  // town: z.string(),
-  // zip: z.string(),
-  // phone: z.string(),
-  // email: z.string(),
-  // paymentMethod: z.enum(["PAYPAL", "STRIPE"]),
-  totalPrice: z.number(),
-  // watchids: z.array(z.string()),
-  // date: z.date().optional(),
-  // checkedEmail: z.boolean().optional(),
-  // checkedPhone: z.boolean().optional(),
-  // checkedSMS: z.boolean().optional(),
+export const OrderRouter = createTRPCRouter({
+  getAll: publicProcedure
+    .input(z.array(z.string()).optional())
+    .query(async ({ ctx, input }) => {
+      return await ctx.prisma.order.findMany({
+        where: {
+          id: input ? { in: input } : {},
+        },
+      });
+    }),
 });
 
 export const StripeRouter = createTRPCRouter({
@@ -50,7 +44,11 @@ export const StripeRouter = createTRPCRouter({
         line_items: (
           await ctx.prisma.competition.findMany({
             include: {
-              Watches: true,
+              Watches: {
+                include: {
+                  images_url: true,
+                },
+              },
             },
           })
         )
@@ -125,12 +123,19 @@ export const CompetitionRouter = createTRPCRouter({
             },
           },
           include: {
-            Watches: true,
+            Watches: {
+              include: {
+                images_url: true,
+              },
+            },
           },
         })
       ).map((comp) => ({
-        ...comp.Watches,
         ...comp,
+        Watches: {
+          ...comp.Watches,
+          images_url: comp.Watches.images_url.map((image) => image.url),
+        },
       }));
     }),
   getEverything: publicProcedure.query(async ({ ctx }) => {
@@ -140,22 +145,43 @@ export const CompetitionRouter = createTRPCRouter({
       },
     });
   }),
-  remove: publicProcedure.input(z.string()).mutation(async ({ ctx, input }) => {
-    return await ctx.prisma.competition.delete({
+  delete: publicProcedure.input(z.string()).mutation(async ({ ctx, input }) => {
+    return (await ctx.prisma.competition.delete({
       where: {
         id: input,
       },
-    });
+    }))
+      ? {
+          success: true,
+        }
+      : {
+          success: false,
+          error: "Competition not found",
+        };
   }),
-  byID: publicProcedure.input(z.string()).query(({ ctx, input }) => {
-    return ctx.prisma.competition.findUnique({
+  byID: publicProcedure.input(z.string()).query(async ({ ctx, input }) => {
+    const data = await ctx.prisma.competition.findUnique({
       where: {
         id: input,
       },
       include: {
-        Watches: true,
+        Watches: {
+          include: {
+            images_url: true,
+          },
+        },
       },
     });
+    if (!data) {
+      throw new Error("Competition not found");
+    }
+    return {
+      ...data,
+      Watches: {
+        ...data.Watches,
+        images_url: data.Watches.images_url.map((image) => image.url),
+      },
+    };
   }),
   updateOne: publicProcedure
     .input(MutateCompSchema)
@@ -200,13 +226,27 @@ const MutateWatchSchema = z.object({
   images_url: z.array(z.string()).optional(),
 });
 export const WatchesRouter = createTRPCRouter({
-  getAll: publicProcedure.query(({ ctx }) => ctx.prisma.watches.findMany()),
+  getAll: publicProcedure.query(async ({ ctx }) => {
+    return (
+      await ctx.prisma.watches.findMany({
+        include: {
+          images_url: true,
+        },
+      })
+    ).map((watch) => ({
+      ...watch,
+      images_url: watch.images_url.map((image) => image.url),
+    }));
+  }),
   byID: publicProcedure
     .input(z.object({ id: z.string() }))
     .query(({ ctx, input }) => {
       return ctx.prisma.watches.findUnique({
         where: {
           id: input.id,
+        },
+        include: {
+          images_url: true,
         },
       });
     }),
@@ -218,11 +258,19 @@ export const WatchesRouter = createTRPCRouter({
     });
   }),
   add: publicProcedure
-    .input(MutateWatchSchema.omit({ id: true }).required())
+    .input(
+      MutateWatchSchema.omit({
+        id: true,
+      }).required()
+    )
     .mutation(async ({ ctx, input }) => {
+      const { images_url, ...data } = input;
       return await ctx.prisma.watches.create({
         data: {
-          ...input,
+          ...data,
+          images_url: {
+            create: input.images_url.map((url) => ({ url })),
+          },
         },
       });
     }),
@@ -230,9 +278,14 @@ export const WatchesRouter = createTRPCRouter({
   update: publicProcedure
     .input(MutateWatchSchema)
     .mutation(async ({ ctx, input }) => {
-      const { id, ...data } = input;
+      const { id, images_url, ...data } = input;
       return await ctx.prisma.watches.update({
-        data,
+        data: {
+          ...data,
+          images_url: {
+            create: images_url?.map((url) => ({ url })),
+          },
+        },
         where: {
           id,
         },
@@ -339,19 +392,22 @@ export const PaymentRouter = createTRPCRouter({
 
 export const QuestionRouter = createTRPCRouter({
   getOneRandom: publicProcedure.query(async ({ ctx }) => {
-    const Questions = await ctx.prisma.question.findMany();
+    const Questions = await ctx.prisma.question.findMany({
+      include: {
+        answers: true,
+      },
+    });
     const randomIndex = Math.floor(Math.random() * Questions.length);
-    if (randomIndex < Questions.length && randomIndex >= 0) {
-      return Questions[randomIndex];
+    const Question =
+      randomIndex < Questions.length && randomIndex >= 0
+        ? Questions[randomIndex]
+        : Questions[0];
+    if (!Question) {
+      return null;
     }
-    return Questions[0];
+    return {
+      ...Question,
+      answers: Question.answers.map(({ answer }) => answer) || [],
+    };
   }),
-});
-
-export const OrdersRouter = createTRPCRouter({
-  getAll: publicProcedure
-    .input(z.array(z.string()).optional())
-    .query(({ ctx, input }) => {
-      return true;
-    }),
 });

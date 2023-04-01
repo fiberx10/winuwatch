@@ -23,7 +23,7 @@ const config = {
       {
         hostname: "firebasestorage.googleapis.com",
         protocol: "https",
-      }
+      },
     ],
   },
 };

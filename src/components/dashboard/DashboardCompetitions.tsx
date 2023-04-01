@@ -61,7 +61,7 @@ const DashboardCompetitions = () => {
       status: "COMPLETED",
     });
   const { data: watches } = api.Watches.getAll.useQuery();
-  const { mutateAsync: removeComp } = api.Competition.remove.useMutation();
+  const { mutateAsync: removeComp } = api.Competition.delete.useMutation();
   const { mutateAsync: addComp, isError: addError } =
     api.Competition.add.useMutation();
   const { mutateAsync: updateComp, isError: updateError } =

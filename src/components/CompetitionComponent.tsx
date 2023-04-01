@@ -3,21 +3,16 @@ import { useState } from "react";
 import styles from "@/styles/CompetitionPage.module.css";
 import { useCart } from "./Store";
 import ToggleButton from "@mui/material/ToggleButton";
-import type { Competition, Watches } from "@prisma/client";
 import { useRouter } from "next/router";
-
+import { RouterOutputs } from "@/utils/api";
 const CompetitionComponent = ({
   data,
 }: {
-  data: Competition & {
-    Watches: Watches;
-  };
+  data: RouterOutputs["Competition"]["byID"];
 }) => {
   const [counter, setCounter] = useState(1);
   const [filter, setFilter] = useState(5);
-  const [image, setImage] = useState<string>(
-    String(data.Watches.images_url[0])
-  );
+  const [image, setImage] = useState(data.Watches.images_url[0]);
   const { addComp, updateComp, competitions } = useCart();
   const router = useRouter();
 
@@ -36,19 +31,19 @@ const CompetitionComponent = ({
           <div className={styles.innerImages}>
             {
               // new array of image besides the first one
-              data.Watches.images_url.slice(1).map((item, i) => (
-                <Image
-                  onMouseEnter={() => setImage(item)}
-                  onMouseLeave={() =>
-                    setImage(String(data.Watches.images_url[0]))
-                  }
-                  width={150}
-                  height={130}
-                  alt="watchImage"
-                  src={item}
-                  key={i}
-                />
-              ))
+              data.Watches.images_url
+                .filter((item, i) => i !== 0)
+                .map((item, i) => (
+                  <Image
+                    onMouseEnter={() => setImage(item)}
+                    onMouseLeave={() => setImage(data.Watches.images_url[0])}
+                    width={150}
+                    height={130}
+                    alt="watchImage"
+                    src={item}
+                    key={i}
+                  />
+                ))
             }
           </div>
         </div>

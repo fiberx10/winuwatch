@@ -14,5 +14,4 @@ const app = initializeApp({
   appId: "1:651859942451:web:a1445d7cb0268b7a615746",
 });
 
-
 export const storage = getStorage(app);
