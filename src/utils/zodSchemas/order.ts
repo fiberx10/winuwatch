@@ -1,5 +1,5 @@
 import * as z from "zod"
-import { OrderStatus, PaymentMethod } from "@prisma/client"
+import { PaymentMethod, OrderStatus } from "@prisma/client"
 
 export const OrderSchema = z.object({
   id: z.string(),
@@ -12,11 +12,11 @@ export const OrderSchema = z.object({
   phone: z.string(),
   email: z.string(),
   date: z.date(),
-  status: z.nativeEnum(OrderStatus),
   paymentMethod: z.nativeEnum(PaymentMethod),
   checkedEmail: z.boolean(),
   checkedTerms: z.boolean(),
   createdAt: z.date(),
   updatedAt: z.date(),
   totalPrice: z.number(),
+  status: z.nativeEnum(OrderStatus),
 })

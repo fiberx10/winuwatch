@@ -10,23 +10,18 @@ const stripe = new _stripe(env.STRIPE_SECRET_KEY, {
   apiVersion: "2022-11-15",
 });
 
-// zode input validation
-const orderInput = z.object({
-  // first_name: z.string(),
-  // last_name: z.string(),
-  // country: z.string(),
-  // address: z.string(),
-  // town: z.string(),
-  // zip: z.string(),
-  // phone: z.string(),
-  // email: z.string(),
-  // paymentMethod: z.enum(["PAYPAL", "STRIPE"]),
-  totalPrice: z.number(),
-  // watchids: z.array(z.string()),
-  // date: z.date().optional(),
-  // checkedEmail: z.boolean().optional(),
-  // checkedPhone: z.boolean().optional(),
-  // checkedSMS: z.boolean().optional(),
+
+
+export const OrderRouter = createTRPCRouter({
+  getAll: publicProcedure
+    .input(z.array(z.string()).optional())
+    .query(async ({ ctx, input }) => {
+      return await ctx.prisma.order.findMany({
+        where: {
+          id: input ? { in: input } : {},
+        },
+      });
+    }),
 });
 
 export const StripeRouter = createTRPCRouter({
@@ -152,12 +147,19 @@ export const CompetitionRouter = createTRPCRouter({
       },
     });
   }),
-  remove: publicProcedure.input(z.string()).mutation(async ({ ctx, input }) => {
-    return await ctx.prisma.competition.delete({
+  delete: publicProcedure.input(z.string()).mutation(async ({ ctx, input }) => {
+    return (await ctx.prisma.competition.delete({
       where: {
         id: input,
       },
-    });
+    }))
+      ? {
+          success: true,
+        }
+      : {
+          success: false,
+          error: "Competition not found",
+        };
   }),
   byID: publicProcedure.input(z.string()).query(async ({ ctx, input }) => {
     const data = await ctx.prisma.competition.findUnique({
@@ -226,13 +228,25 @@ const MutateWatchSchema = z.object({
   images_url: z.array(z.string()).optional(),
 });
 export const WatchesRouter = createTRPCRouter({
-  getAll: publicProcedure.query(({ ctx }) => ctx.prisma.watches.findMany()),
+  getAll: publicProcedure.query(async ({ ctx }) => {
+    return (await ctx.prisma.watches.findMany({
+      include: {
+        images_url: true,
+      },
+    })).map((watch) => ({
+      ...watch,
+      images_url: watch.images_url.map((image) => image.url),
+    }));
+  }),
   byID: publicProcedure
     .input(z.object({ id: z.string() }))
     .query(({ ctx, input }) => {
       return ctx.prisma.watches.findUnique({
         where: {
           id: input.id,
+        },
+        include: {
+          images_url: true,
         },
       });
     }),
@@ -244,9 +258,11 @@ export const WatchesRouter = createTRPCRouter({
     });
   }),
   add: publicProcedure
-    .input(MutateWatchSchema.required())
+    .input(MutateWatchSchema.omit({
+      id: true,
+    }).required())
     .mutation(async ({ ctx, input }) => {
-      const { id, images_url, ...data } = input;
+      const {images_url, ...data } = input;
       return await ctx.prisma.watches.create({
         data: {
           ...input,
@@ -392,16 +408,4 @@ export const QuestionRouter = createTRPCRouter({
       answers: Question.answers.map(({ answer }) => answer) || [],
     };
   }),
-});
-
-export const OrdersRouter = createTRPCRouter({
-  getAll: publicProcedure
-    .input(z.array(z.string()).optional())
-    .query(async ({ ctx, input }) => {
-      return  await ctx.prisma.order.findMany({
-        where: {
-          id: input ? { in: input } : {},
-        },
-      })
-    }),
 });

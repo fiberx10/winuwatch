@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -13,9 +10,9 @@ generator erd {
 generator zod {
   provider      = "zod-prisma"
   output        = "../src/utils/zodSchemas"
+  relationModel = "false"
   modelSuffix   = "Schema"
   modelCase     = "PascalCase"
-  relationModel = "false"
 }
 
 datasource db {
@@ -73,28 +70,16 @@ model Competition {
   status                   CompetitionStatus
   winner                   String?
   orderId                  String?
-
-  second_reward String?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  watchesId     String   @unique
-  Watches       Watches  @relation(fields: [watchesId], references: [id])
-  Order         Order?   @relation(fields: [orderId], references: [id])
-  Ticket        Ticket[]
+  second_reward            String?
+  createdAt                DateTime          @default(now())
+  updatedAt                DateTime          @updatedAt
+  watchesId                String            @unique
+  Watches                  Watches           @relation(fields: [watchesId], references: [id])
+  Order                    Order?            @relation(fields: [orderId], references: [id])
+  Ticket                   Ticket[]
 
   @@index([orderId])
   @@map("competition")
-}
-
-enum OrderStatus {
-  PENDING
-  CONFIRMED
-  CANCELLED
-}
-
-enum PaymentMethod {
-  PAYPAL
-  STRIPE
 }
 
 model Order {
@@ -108,13 +93,13 @@ model Order {
   phone         String
   email         String
   date          DateTime
-  status        OrderStatus
   paymentMethod PaymentMethod
   checkedEmail  Boolean
   checkedTerms  Boolean
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
   totalPrice    Float
+  status        OrderStatus
   Competition   Competition[]
   Ticket        Ticket[]
 
@@ -124,11 +109,11 @@ model Order {
 model Ticket {
   id            String      @id @default(cuid())
   orderId       String
-  Order         Order       @relation(fields: [orderId], references: [id])
   competitionId String
-  Competition   Competition @relation(fields: [competitionId], references: [id])
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
+  Order         Order       @relation(fields: [orderId], references: [id])
+  Competition   Competition @relation(fields: [competitionId], references: [id])
 
   @@index([competitionId])
   @@index([orderId])
@@ -138,10 +123,10 @@ model Ticket {
 model Question {
   id            String   @id @default(cuid())
   question      String
-  answers       answer[]
   correctAnswer String
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
+  answers       answer[]
 
   @@map("question")
 }
@@ -154,6 +139,17 @@ model answer {
 
   @@index([questionId])
   @@map("answers")
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+}
+
+enum PaymentMethod {
+  PAYPAL
+  STRIPE
 }
 
 enum CompetitionStatus {
