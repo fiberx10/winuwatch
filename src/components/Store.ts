@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { devtools, persist } from "zustand/middleware";
+import { createJSONStorage, devtools, persist } from "zustand/middleware";
 
 interface Comp {
   compID: string;
@@ -55,7 +55,7 @@ export const useStore = create<{
       }),
       {
         name: "store",
-        getStorage: () => localStorage,
+        storage: createJSONStorage(() => sessionStorage)
       }
     )
   )
@@ -100,7 +100,7 @@ export const useCart = create<RootState>()(
       }),
       {
         name: "cart-store",
-        getStorage: () => localStorage,
+        storage: createJSONStorage(() => sessionStorage)
       }
     )
   )

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import styles from "@/styles/Checkout.module.css";
 import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js";
 import { useRouter } from "next/router";
@@ -25,13 +25,12 @@ const CheckoutComp = () => {
   const IsLegal = (Birthdate?: Date) => {
     const LegalAge = 18;
     const now = new Date();
-    const date = Birthdate || new Date();
     return (
       new Date(
         now.getFullYear() - LegalAge,
         now.getMonth(),
         now.getDate()
-      ).getTime() >= date.getTime()
+      ).getTime() >= (Birthdate || new Date()).getTime()
     );
   };
   const [error, setError] = useState<string | undefined>();
@@ -227,6 +226,7 @@ const CheckoutComp = () => {
                           type="radio"
                           name="paymentMethod"
                           value="PAYPAL"
+                          disabled
                         />
                         <p
                           style={{
