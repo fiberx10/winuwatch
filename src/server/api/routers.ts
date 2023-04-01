@@ -267,7 +267,7 @@ export const WatchesRouter = createTRPCRouter({
       const { images_url, ...data } = input;
       return await ctx.prisma.watches.create({
         data: {
-          ...input,
+          ...data,
           images_url: {
             create: input.images_url.map((url) => ({ url })),
           },
