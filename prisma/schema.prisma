@@ -87,6 +87,7 @@ model Order {
   email         String
   date          DateTime
   paymentMethod PaymentMethod
+  paymentId     String?
   checkedEmail  Boolean
   checkedTerms  Boolean
   createdAt     DateTime      @default(now())

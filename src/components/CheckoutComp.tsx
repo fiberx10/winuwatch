@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import styles from "@/styles/Checkout.module.css";
 import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js";
 import { useRouter } from "next/router";
@@ -14,10 +14,8 @@ import type { Moment } from "moment";
 const CheckoutComp = () => {
   const router = useRouter();
 
-  const { mutateAsync: stripeCheckout } =
-    api.Stripe.createCheckoutSession.useMutation();
+  const { mutateAsync: createOrder } = api.Order.create.useMutation();
   const { competitions, cardDetails } = useCart();
-  const { mutateAsync: createOrder } = api.Payment.create.useMutation();
 
   const { data: items } = api.Competition.getAll.useQuery({
     ids: competitions.map((comp) => comp.compID),
@@ -25,13 +23,12 @@ const CheckoutComp = () => {
   const IsLegal = (Birthdate?: Date) => {
     const LegalAge = 18;
     const now = new Date();
-    const date = Birthdate || new Date();
     return (
       new Date(
         now.getFullYear() - LegalAge,
         now.getMonth(),
         now.getDate()
-      ).getTime() >= date.getTime()
+      ).getTime() >= (Birthdate || new Date()).getTime()
     );
   };
   const [error, setError] = useState<string | undefined>();
@@ -67,24 +64,14 @@ const CheckoutComp = () => {
                 if (!IsLegal(values.date)) {
                   setError("You must be 18 years old to purchase a ticket");
                 } else {
-                  const Prooo = await Promise.all([
-                    await createOrder(res.data),
-                    await stripeCheckout({
-                      email: values.email,
-                      address: values.address,
-                      comps: values.comp.map((comp) => ({
-                        compID: comp.compID,
-                        quantity: comp.number_tickets,
-                      })),
-                    }),
-                  ]);
-                  const [success, error] = Prooo;
-
-                  if (!success) setError(error.payment_status);
-                  else {
-                    setError(undefined);
-                    Prooo[1].url && (await router.push(Prooo[1].url));
-                  }
+                    const {
+                      url,
+                      error
+                    }= await createOrder(res.data)
+                    if (url) {
+                      await router.push(url)
+                    }
+                    setError(error || "Error in the creating the order")
                 }
               }
               actions.setSubmitting(false);
@@ -227,6 +214,7 @@ const CheckoutComp = () => {
                           type="radio"
                           name="paymentMethod"
                           value="PAYPAL"
+                          disabled
                         />
                         <p
                           style={{
@@ -393,6 +381,7 @@ const CheckoutComp = () => {
                         </span>
                       </div>
                       {values.paymentMethod === "PAYPAL" ? (
+                        
                         <PayPalScriptProvider
                           options={{
                             "client-id": `${
@@ -423,6 +412,7 @@ const CheckoutComp = () => {
                                 0
                               ),
                             ]}
+                            /*
                             createOrder={(data, actions) => {
                               return actions.order.create({
                                 purchase_units: values.comp.map((value) => ({
@@ -438,6 +428,7 @@ const CheckoutComp = () => {
                                 })),
                               });
                             }}
+                            */
                             style={{ layout: "horizontal" }}
                           />
                         </PayPalScriptProvider>

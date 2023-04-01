@@ -1,32 +1,21 @@
-import { PaymentMethod } from "@prisma/client";
 import { z } from "zod";
+import {OrderSchema} from "./zodSchemas"
 export * from "./api";
 
-export const CreateOrderSchema = z.object({
-  first_name: z.string(),
-  last_name: z.string(),
-  country: z.string(),
-  address: z.string(),
-  town: z.string(),
-  zip: z.string(),
-  phone: z.string(),
-  email: z.string(),
-  date: z.date().default(new Date()),
-  paymentMethod: z.enum([PaymentMethod.PAYPAL, PaymentMethod.STRIPE]),
-  totalPrice: z.number(),
-  checkedEmail: z.boolean().default(false),
-  checkedTerms: z.boolean().default(false),
-  comp: z.array(
+export const CreateOrderSchema =  OrderSchema.extend({
+  comps: z.array(
     z.object({
       compID: z.string(),
-      number_tickets: z.number(),
-      price_per_ticket: z.number(),
+      quantity: z.number().min(1),
     })
   ),
-});
+}).omit({
+  status: true,
+  id: true,
+})
 
 export const Formater = (value: number | bigint) =>
-  new Intl.NumberFormat("en-US", {
+  new Intl.NumberFormat("en-UK", {
     style: "currency",
-    currency: "USD",
+    currency: "GBP",
   }).format(value);
