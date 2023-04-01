@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { devtools, persist } from "zustand/middleware";
 
 interface Comp {
   compID: string;
@@ -45,45 +46,62 @@ export const Dashmenus = [
 export const useStore = create<{
   menu: (typeof Dashmenus)[number];
   selectMenu: (menu: (typeof Dashmenus)[number]) => void;
-}>((set) => ({
-  menu: "Dashboard",
-  selectMenu: (menu) => set({ menu }),
-}));
+}>()(
+  devtools(
+    persist(
+      (set) => ({
+        menu: "Dashboard",
+        selectMenu: (menu) => set({ menu }),
+      }),
+      {
+        name: "store",
+        getStorage: () => localStorage,
+      }
+    )
+  )
+);
 
-export const useCart = create<RootState>((set, get) => ({
-  competitions: [],
-  reset: () =>
-    set({
-      competitions: [],
-    }),
-  cardDetails: () => {
-    const { competitions } = get();
-    return {
-      totalCost: competitions.reduce(
-        (acc, c) => acc + c.number_tickets * c.price_per_ticket,
-        0
-      ),
-      Number_of_item: competitions.length,
-    };
-  },
-  addComp: (comp) =>
-    set(({ competitions }) => ({
-      competitions: [...competitions, comp],
-    })),
-  removeComp: (compID) =>
-    set(({ competitions }) => ({
-      competitions: competitions.filter((c) => c.compID !== compID),
-    })),
-  updateComp: (comp) =>
-    set(({ competitions }) =>
-      comp.number_tickets > 25 || comp.number_tickets < 1
-        ? {
-            competitions,
-          }
-        : {
-            competitions: competitions.map((c) =>
-              c.compID === comp.compID ? { ...c, ...comp } : c
+export const useCart = create<RootState>()(
+  devtools(
+    persist(
+      (set, get) => ({
+        competitions: [],
+        cardDetails: () => {
+          const { competitions } = get();
+          return {
+            totalCost: competitions.reduce(
+              (acc, c) => acc + c.number_tickets * c.price_per_ticket,
+              0
             ),
-          }
-    ),
-}));
+            Number_of_item: competitions.length,
+          };
+        },
+        addComp: (comp) =>
+          set(({ competitions }) => ({
+            competitions: [...competitions, comp],
+          })),
+        removeComp: (compID) =>
+          set(({ competitions }) => ({
+            competitions: competitions.filter((c) => c.compID !== compID),
+          })),
+        updateComp: (comp) =>
+          set(({ competitions }) =>
+            comp.number_tickets > 25 || comp.number_tickets < 1
+              ? {
+                  competitions,
+                }
+              : {
+                  competitions: competitions.map((c) =>
+                    c.compID === comp.compID ? { ...c, ...comp } : c
+                  ),
+                }
+          ),
+        reset: () => set({ competitions: [] }),
+      }),
+      {
+        name: "cart-store",
+        getStorage: () => localStorage,
+      }
+    )
+  )
+);
