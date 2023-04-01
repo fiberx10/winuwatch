@@ -158,18 +158,7 @@ export const CompetitionRouter = createTRPCRouter({
     });
   }),
   updateOne: publicProcedure
-    .input(
-      z.object({
-        id: z.string(),
-        status: z
-          .enum([
-            CompetitionStatus.ACTIVE,
-            CompetitionStatus.NOT_ACTIVE,
-            CompetitionStatus.COMPLETED,
-          ])
-          .optional(),
-      })
-    )
+    .input(MutateCompSchema)
     .mutation(async ({ ctx, input }) => {
       const { id, ...data } = input;
       return await ctx.prisma.competition.update({
@@ -362,7 +351,7 @@ export const QuestionRouter = createTRPCRouter({
 export const OrdersRouter = createTRPCRouter({
   getAll: publicProcedure
     .input(z.array(z.string()).optional())
-    .query(({ ctx, input}) => {
-      return true
+    .query(({ ctx, input }) => {
+      return true;
     }),
 });

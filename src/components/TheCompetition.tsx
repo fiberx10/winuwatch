@@ -34,7 +34,26 @@ const TheCompetition = () => {
           data.map((watch) => {
             return (
               <div className={styles.watches} key={watch.id}>
-                <div className={styles.watchCon}>
+                <div
+                  style={{
+                    background: watch.Watches.images_url[0]
+                      ? `linear-gradient(
+                      180deg,
+                      rgba(255, 255, 255, 0) 0%,
+                      rgba(255, 255, 255, 0) 36.25%,
+                      #faf8f6 100%
+                    ),
+                    url(${watch.Watches.images_url[0]})`
+                      : `linear-gradient(
+                      180deg,
+                      rgba(255, 255, 255, 0) 0%,
+                      rgba(255, 255, 255, 0) 36.25%,
+                      #faf8f6 100%
+                    ),
+                    url(../../public/images/tester.png)`,
+                  }}
+                  className={styles.watchCon}
+                >
                   <div className={styles.watchContent}>
                     <Link href={`/Competition/${watch.id}`}>Start now</Link>
                     <h3>
