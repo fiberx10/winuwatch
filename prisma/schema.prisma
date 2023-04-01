@@ -7,13 +7,6 @@ generator erd {
   output   = "./erd.png"
 }
 
-generator zod {
-  provider      = "zod-prisma"
-  output        = "../src/utils/zodSchemas"
-  relationModel = "false"
-  modelSuffix   = "Schema"
-  modelCase     = "PascalCase"
-}
 
 datasource db {
   provider     = "mysql"
