@@ -55,7 +55,7 @@ export const useStore = create<{
       }),
       {
         name: "store",
-        storage: createJSONStorage(() => sessionStorage)
+        storage: createJSONStorage(() => sessionStorage),
       }
     )
   )
@@ -100,7 +100,7 @@ export const useCart = create<RootState>()(
       }),
       {
         name: "cart-store",
-        storage: createJSONStorage(() => sessionStorage)
+        storage: createJSONStorage(() => sessionStorage),
       }
     )
   )

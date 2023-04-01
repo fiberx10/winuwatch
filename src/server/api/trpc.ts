@@ -17,6 +17,7 @@
 import { type CreateNextContextOptions } from "@trpc/server/adapters/next";
 
 import { prisma } from "@/server/db";
+import stripe from "stripe";
 
 type CreateContextOptions = Record<string, never>;
 
@@ -33,6 +34,9 @@ type CreateContextOptions = Record<string, never>;
 const createInnerTRPCContext = (_opts: CreateContextOptions) => {
   return {
     prisma,
+    stripe: new stripe(env.STRIPE_SECRET_KEY, {
+      apiVersion: "2022-11-15",
+    }),
   };
 };
 
@@ -56,6 +60,7 @@ export const createTRPCContext = (_opts: CreateNextContextOptions) => {
 import { initTRPC } from "@trpc/server";
 import superjson from "superjson";
 import { ZodError } from "zod";
+import { env } from "@/env.mjs";
 
 const t = initTRPC.context<typeof createTRPCContext>().create({
   transformer: superjson,
