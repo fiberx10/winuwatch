@@ -1,9 +1,7 @@
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { CompetitionStatus, OrderStatus } from "@prisma/client";
-import { getBaseUrl,CreateOrderSchema } from "@/utils";
-
-
+import { getBaseUrl, CreateOrderSchema } from "@/utils";
 
 export const OrderRouter = createTRPCRouter({
   getAll: publicProcedure.input(z.array(z.string()).optional()).query(
@@ -15,13 +13,11 @@ export const OrderRouter = createTRPCRouter({
       })
   ),
   create: publicProcedure
-    .input(
-      CreateOrderSchema
-    )
+    .input(CreateOrderSchema)
     .mutation(async ({ ctx, input }) => {
-      try{
-        const { payment_intent, url } = await ctx.stripe.checkout.sessions.create(
-          {
+      try {
+        const { payment_intent, url } =
+          await ctx.stripe.checkout.sessions.create({
             payment_method_types: ["card"],
             mode: "payment",
             line_items: (
@@ -49,18 +45,18 @@ export const OrderRouter = createTRPCRouter({
                   unit_amount: Math.floor(comp.ticket_price * 100), // in cents
                 },
                 quantity:
-                  input.comps.find((item) => item.compID === comp.id)?.quantity ||
-                  0,
+                  input.comps.find((item) => item.compID === comp.id)
+                    ?.quantity || 0,
               })),
             success_url: `${getBaseUrl()}/stripe?payment=success`,
             cancel_url: `${getBaseUrl()}/CheckoutPage`,
-          }
-        );
+          });
         const { id } = await ctx.prisma.order.create({
           data: {
             ...input,
             status: OrderStatus.PENDING,
-            paymentId: typeof payment_intent === "string" ? payment_intent : undefined, 
+            paymentId:
+              typeof payment_intent === "string" ? payment_intent : undefined,
             Ticket: {
               createMany: {
                 data: input.comps.map((item) => ({
@@ -74,13 +70,13 @@ export const OrderRouter = createTRPCRouter({
           id,
           payment_intent,
           url,
-        }
+        };
       } catch (e) {
-        console.error(e)
+        console.error(e);
         return {
-          error : "Error in creating the order",
-          url : null
-        }
+          error: "Error in creating the order",
+          url: null,
+        };
       }
     }),
 });
@@ -125,9 +121,7 @@ export const CompetitionRouter = createTRPCRouter({
         await ctx.prisma.competition.findMany({
           where: {
             status: input.status,
-            id: {
-              in: input.ids,
-            },
+            id: input.ids ? { in: input.ids } : {},
           },
           include: {
             Watches: {

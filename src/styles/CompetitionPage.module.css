@@ -127,6 +127,7 @@
   text-transform: uppercase;
   color: #000000;
   width: 60%;
+  min-width: 434px;
 }
 .CompTit p {
   font-weight: 300;

@@ -5,7 +5,7 @@ import { useCart } from "./Store";
 import ToggleButton from "@mui/material/ToggleButton";
 import { useRouter } from "next/router";
 import type { RouterOutputs } from "@/utils/api";
-import {Formater} from "@/utils"
+import { Formater } from "@/utils";
 const CompetitionComponent = ({
   data,
 }: {
@@ -125,8 +125,7 @@ const CompetitionComponent = ({
                 <p>
                   Tickets: {counter} x {Formater(data.ticket_price)}
                 </p>
-                <span>
-                  {Formater(counter * data.ticket_price)}</span>
+                <span>{Formater(counter * data.ticket_price)}</span>
               </div>
               <button
                 onClick={() => {
