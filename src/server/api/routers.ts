@@ -2,7 +2,10 @@ import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { CompetitionStatus } from "@prisma/client";
 import { CreateOrderSchema, getBaseUrl } from "@/utils";
+import {
 
+
+} from "@/utils/zodSchemas"
 import _stripe from "stripe";
 import { env } from "@/env.mjs";
 
@@ -51,8 +54,13 @@ export const StripeRouter = createTRPCRouter({
         line_items: (
           await ctx.prisma.competition.findMany({
             include: {
-              Watches: true,
+              Watches: {
+                include: {
+                  images_url: true,
+              }
             },
+          },
+
           })
         )
           .filter((comp) => input.comps.some((item) => item.compID === comp.id))
@@ -106,13 +114,23 @@ export const CompetitionRouter = createTRPCRouter({
             },
           },
           include: {
-            Watches: true,
+            Watches: {
+              include: {
+                images_url: true,
+              },
+            }
           },
         })
-      ).map((comp) => ({
-        ...comp.Watches,
-        ...comp,
-      }));
+      ).map((comp) => {
+        return {
+          ...comp,
+          Watches: {
+            ...comp.Watches,
+            images_url: comp.Watches.images_url.map((image) => image.url)
+          },
+        };
+      
+      });
     }),
   getEverything: publicProcedure.query(async ({ ctx }) => {
     return await ctx.prisma.competition.findMany({
@@ -121,15 +139,29 @@ export const CompetitionRouter = createTRPCRouter({
       },
     });
   }),
-  byID: publicProcedure.input(z.string()).query(({ ctx, input }) => {
-    return ctx.prisma.competition.findUnique({
+  byID: publicProcedure.input(z.string()).query(async({ ctx, input }) => {
+    const data = await  ctx.prisma.competition.findUnique({
       where: {
         id: input,
       },
       include: {
-        Watches: true,
+        Watches: {
+          include: {
+            images_url: true,
+          },
+        }
       },
     });
+    if (!data) {
+      throw new Error("Competition not found");
+    }
+    return {
+      ...data,
+      Watches: {
+        ...data.Watches,
+        images_url: data.Watches.images_url.map((image) => image.url)
+      },
+    }
   }),
   updateOne: publicProcedure
     .input(
@@ -193,11 +225,15 @@ export const WatchesRouter = createTRPCRouter({
     });
   }),
   add: publicProcedure
-    .input(MutateWatchSchema.omit({ id: true }).required())
+    .input(MutateWatchSchema.required())
     .mutation(async ({ ctx, input }) => {
+      const { id,images_url, ...data } = input;
       return await ctx.prisma.watches.create({
         data: {
           ...input,
+          images_url: {
+            create: input.images_url.map((url) => ({ url })),
+          }
         },
       });
     }),
@@ -205,9 +241,14 @@ export const WatchesRouter = createTRPCRouter({
   update: publicProcedure
     .input(MutateWatchSchema)
     .mutation(async ({ ctx, input }) => {
-      const { id, ...data } = input;
+      const { id,images_url, ...data } = input;
       return await ctx.prisma.watches.update({
-        data,
+        data: {
+          ...data,
+          images_url: {
+            create: images_url?.map((url) => ({ url })),
+          }
+        },
         where: {
           id,
         },
@@ -314,11 +355,18 @@ export const PaymentRouter = createTRPCRouter({
 
 export const QuestionRouter = createTRPCRouter({
   getOneRandom: publicProcedure.query(async ({ ctx }) => {
-    const Questions = await ctx.prisma.question.findMany();
+    const Questions = await ctx.prisma.question.findMany({
+      include: {
+        answers: true,
+      },
+    });
     const randomIndex = Math.floor(Math.random() * Questions.length);
-    if (randomIndex < Questions.length && randomIndex >= 0) {
-      return Questions[randomIndex];
-    }
-    return Questions[0];
+    const Question = (randomIndex < Questions.length && randomIndex >= 0) 
+      ? Questions[randomIndex]
+      : Questions[0];
+    return {
+      ...Question,
+      answers: Question?.answers.map(({answer}) => answer) || [],
+    };
   }),
-});
+})

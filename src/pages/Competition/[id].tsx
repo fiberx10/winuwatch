@@ -32,7 +32,6 @@ export const getServerSideProps = (context: GetServerSidePropsContext) => {
 export default function Competition({
   compID,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const router = useRouter();
   const { data, isLoading, error } = api.Competition.byID.useQuery(compID);
   //TODO: competition data is either a watch or an error, need to handle both cases
 

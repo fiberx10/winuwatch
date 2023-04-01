@@ -21,6 +21,7 @@
     "@mui/material": "^5.11.14",
     "@paypal/react-paypal-js": "^7.8.2",
     "@prisma/client": "^4.12.0",
+    "@prisma/generator-helper": "^4.12.0",
     "@splidejs/react-splide": "^0.7.12",
     "@stripe/react-stripe-js": "^2.1.0",
     "@stripe/stripe-js": "^1.52.0",
@@ -63,6 +64,7 @@
   },
   "devDependencies": {
     "@faker-js/faker": "^7.6.0",
+    "@mermaid-js/mermaid-cli": "^10.0.2",
     "@types/eslint": "^8.21.1",
     "@types/node": "^18.14.0",
     "@types/react": "^18.0.28",
@@ -73,7 +75,9 @@
     "eslint": "^8.34.0",
     "eslint-config-next": "^13.2.1",
     "prisma": "^4.12.0",
-    "typescript": "^4.9.5"
+    "prisma-erd-generator": "^1.5.4",
+    "typescript": "^4.9.5",
+    "zod-prisma": "^0.5.4"
   },
   "ct3aMetadata": {
     "initVersion": "7.8.0"
