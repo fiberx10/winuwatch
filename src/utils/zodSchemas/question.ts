@@ -1,4 +1,4 @@
-import * as z from "zod"
+import * as z from "zod";
 
 export const QuestionSchema = z.object({
   id: z.string(),
@@ -6,4 +6,4 @@ export const QuestionSchema = z.object({
   correctAnswer: z.string(),
   createdAt: z.date(),
   updatedAt: z.date(),
-})
+});

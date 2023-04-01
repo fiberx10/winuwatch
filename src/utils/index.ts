@@ -16,11 +16,13 @@ export const CreateOrderSchema = z.object({
   totalPrice: z.number(),
   checkedEmail: z.boolean().default(false),
   checkedTerms: z.boolean().default(false),
-  comp: z.array(z.object({
-    compID: z.string(),
-    number_tickets: z.number(),
-    price_per_ticket: z.number(),
-  })),
+  comp: z.array(
+    z.object({
+      compID: z.string(),
+      number_tickets: z.number(),
+      price_per_ticket: z.number(),
+    })
+  ),
 });
 
 export const Formater = (value: number | bigint) =>

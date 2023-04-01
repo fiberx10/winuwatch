@@ -13,7 +13,6 @@ const YearlyBreakup = () => {
   const primarylight = "rgba(168, 149, 126, 0.3)";
   const successlight = "rgba(3, 201, 169, 0.2)";
 
-  
   const seriescolumnchart = [38, 40, 25];
 
   return (

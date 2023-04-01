@@ -1,5 +1,5 @@
-import * as z from "zod"
-import { PaymentMethod, OrderStatus } from "@prisma/client"
+import * as z from "zod";
+import { PaymentMethod, OrderStatus } from "@prisma/client";
 
 export const OrderSchema = z.object({
   id: z.string(),
@@ -19,4 +19,4 @@ export const OrderSchema = z.object({
   updatedAt: z.date(),
   totalPrice: z.number(),
   status: z.nativeEnum(OrderStatus),
-})
+});

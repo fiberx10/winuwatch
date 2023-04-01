@@ -10,8 +10,6 @@ const stripe = new _stripe(env.STRIPE_SECRET_KEY, {
   apiVersion: "2022-11-15",
 });
 
-
-
 export const OrderRouter = createTRPCRouter({
   getAll: publicProcedure
     .input(z.array(z.string()).optional())
@@ -229,11 +227,13 @@ const MutateWatchSchema = z.object({
 });
 export const WatchesRouter = createTRPCRouter({
   getAll: publicProcedure.query(async ({ ctx }) => {
-    return (await ctx.prisma.watches.findMany({
-      include: {
-        images_url: true,
-      },
-    })).map((watch) => ({
+    return (
+      await ctx.prisma.watches.findMany({
+        include: {
+          images_url: true,
+        },
+      })
+    ).map((watch) => ({
       ...watch,
       images_url: watch.images_url.map((image) => image.url),
     }));
@@ -258,11 +258,13 @@ export const WatchesRouter = createTRPCRouter({
     });
   }),
   add: publicProcedure
-    .input(MutateWatchSchema.omit({
-      id: true,
-    }).required())
+    .input(
+      MutateWatchSchema.omit({
+        id: true,
+      }).required()
+    )
     .mutation(async ({ ctx, input }) => {
-      const {images_url, ...data } = input;
+      const { images_url, ...data } = input;
       return await ctx.prisma.watches.create({
         data: {
           ...input,

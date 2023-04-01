@@ -1,5 +1,5 @@
-import * as z from "zod"
-import { CompetitionStatus } from "@prisma/client"
+import * as z from "zod";
+import { CompetitionStatus } from "@prisma/client";
 
 export const CompetitionSchema = z.object({
   id: z.string(),
@@ -23,4 +23,4 @@ export const CompetitionSchema = z.object({
   createdAt: z.date(),
   updatedAt: z.date(),
   watchesId: z.string(),
-})
+});

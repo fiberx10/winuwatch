@@ -308,52 +308,45 @@ const GenWatch = async () => {
 const order = async (CompID = "clfx6mr1o000amb7gx0fobsnx") => {
   return await prisma.order.create({
     data: {
-      first_name : faker.name.firstName(),
-      last_name : faker.name.lastName(),
-      country : faker.address.country(),
-      address : faker.address.streetAddress(),
-      town : faker.address.city(),
-      zip : faker.address.zipCode(),
-      email : faker.internet.email(),
-      phone : faker.phone.number(),
-      date : faker.date.past(),
-      status : faker.helpers.arrayElement([
+      first_name: faker.name.firstName(),
+      last_name: faker.name.lastName(),
+      country: faker.address.country(),
+      address: faker.address.streetAddress(),
+      town: faker.address.city(),
+      zip: faker.address.zipCode(),
+      email: faker.internet.email(),
+      phone: faker.phone.number(),
+      date: faker.date.past(),
+      status: faker.helpers.arrayElement([
         OrderStatus.PENDING,
         OrderStatus.CONFIRMED,
-        OrderStatus.CANCELLED
+        OrderStatus.CANCELLED,
       ]),
-      paymentMethod : faker.helpers.arrayElement([
+      paymentMethod: faker.helpers.arrayElement([
         PaymentMethod.PAYPAL,
-        PaymentMethod.STRIPE
+        PaymentMethod.STRIPE,
       ]),
-      checkedEmail : faker.datatype.boolean(),
-      checkedTerms : faker.datatype.boolean(),
-      totalPrice : faker.datatype.number(1000),
-      Competition : {
-        connect : {
-          id : CompID
-        }
+      checkedEmail: faker.datatype.boolean(),
+      checkedTerms: faker.datatype.boolean(),
+      totalPrice: faker.datatype.number(1000),
+      Competition: {
+        connect: {
+          id: CompID,
+        },
       },
-      Ticket : {
-        createMany : {
-          data : new Array(faker.datatype.number(100)).fill(0).map((_, i) => ({
-            competitionId : CompID,
-          }))
-        }
-      }
+      Ticket: {
+        createMany: {
+          data: new Array(faker.datatype.number(100)).fill(0).map((_, i) => ({
+            competitionId: CompID,
+          })),
+        },
+      },
     },
   });
 };
 
-
-
-
-
-      
-
-
 (async () => {
-  const CompID = "clfx6mr1o000amb7gx0fobsnx"; 
+  const CompID = "clfx6mr1o000amb7gx0fobsnx";
   for (let i = 0; i < 10; i++) {
     await order(CompID);
   }

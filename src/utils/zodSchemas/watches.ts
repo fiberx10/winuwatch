@@ -1,4 +1,4 @@
-import * as z from "zod"
+import * as z from "zod";
 
 export const WatchesSchema = z.object({
   id: z.string(),
@@ -15,4 +15,4 @@ export const WatchesSchema = z.object({
   has_box: z.boolean(),
   has_certificate: z.boolean(),
   condition: z.string(),
-})
+});
