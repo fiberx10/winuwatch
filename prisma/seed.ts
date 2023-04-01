@@ -70,7 +70,7 @@ const prisma = new PrismaClient({
     console.log(COmp.id);
   }
 })();
-*/
+
 
 const GenQuestion = async () =>
   await prisma.question.create({
@@ -336,7 +336,7 @@ const order = async (CompID = "clfx6mr1o000amb7gx0fobsnx") => {
       },
       Ticket: {
         createMany: {
-          data: new Array(faker.datatype.number(100)).fill(0).map((_, i) => ({
+          data: new Array(faker.datatype.number(100)).fill(0).map((_) => ({
             competitionId: CompID,
           })),
         },

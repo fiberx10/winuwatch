@@ -4,7 +4,8 @@ import styles from "@/styles/CompetitionPage.module.css";
 import { useCart } from "./Store";
 import ToggleButton from "@mui/material/ToggleButton";
 import { useRouter } from "next/router";
-import { RouterOutputs } from "@/utils/api";
+import type { RouterOutputs } from "@/utils/api";
+import {Formater} from "@/utils"
 const CompetitionComponent = ({
   data,
 }: {
@@ -32,7 +33,7 @@ const CompetitionComponent = ({
             {
               // new array of image besides the first one
               data.Watches.images_url
-                .filter((item, i) => i !== 0)
+                .filter((_, i) => i !== 0)
                 .map((item, i) => (
                   <Image
                     onMouseEnter={() => setImage(item)}
@@ -50,13 +51,13 @@ const CompetitionComponent = ({
         <div className={styles.CompRight}>
           <div className={styles.CompTit}>
             <h1>{data.name}</h1>
-            <p>market value £{data.price}</p>
+            <p>market value {Formater(data.price)}</p>
           </div>
           <div className={styles.CompTicketSelec}>
             <h3>How many tickets would you like?</h3>
             <div className={styles.tickets}>
               {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25]
-                .filter((bird, index) => index < filter)
+                .filter((_, index) => index < filter)
                 .map((item, i) => (
                   <ToggleButton
                     key={i}
@@ -122,9 +123,10 @@ const CompetitionComponent = ({
             <div className={styles.addtoCart}>
               <div className={styles.prices}>
                 <p>
-                  Tickets: {counter} x £{data.ticket_price.toFixed(1)}
+                  Tickets: {counter} x {Formater(data.ticket_price)}
                 </p>
-                <span>£{(counter * data.ticket_price).toFixed(1)}</span>
+                <span>
+                  {Formater(counter * data.ticket_price)}</span>
               </div>
               <button
                 onClick={() => {

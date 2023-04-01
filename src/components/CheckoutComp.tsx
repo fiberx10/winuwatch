@@ -381,6 +381,7 @@ const CheckoutComp = () => {
                         </span>
                       </div>
                       {values.paymentMethod === "PAYPAL" ? (
+                        
                         <PayPalScriptProvider
                           options={{
                             "client-id": `${
@@ -411,6 +412,7 @@ const CheckoutComp = () => {
                                 0
                               ),
                             ]}
+                            /*
                             createOrder={(data, actions) => {
                               return actions.order.create({
                                 purchase_units: values.comp.map((value) => ({
@@ -426,6 +428,7 @@ const CheckoutComp = () => {
                                 })),
                               });
                             }}
+                            */
                             style={{ layout: "horizontal" }}
                           />
                         </PayPalScriptProvider>

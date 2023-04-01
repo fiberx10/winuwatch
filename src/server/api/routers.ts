@@ -60,7 +60,7 @@ export const OrderRouter = createTRPCRouter({
           data: {
             ...input,
             status: OrderStatus.PENDING,
-            paymentId: z.string().optional().parse(payment_intent),
+            paymentId: typeof payment_intent === "string" ? payment_intent : undefined, 
             Ticket: {
               createMany: {
                 data: input.comps.map((item) => ({

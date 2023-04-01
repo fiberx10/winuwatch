@@ -1,4 +1,3 @@
-import { PaymentMethod } from "@prisma/client";
 import { z } from "zod";
 import {OrderSchema} from "./zodSchemas"
 export * from "./api";
@@ -16,7 +15,7 @@ export const CreateOrderSchema =  OrderSchema.extend({
 })
 
 export const Formater = (value: number | bigint) =>
-  new Intl.NumberFormat("en-US", {
+  new Intl.NumberFormat("en-UK", {
     style: "currency",
-    currency: "USD",
+    currency: "GBP",
   }).format(value);
