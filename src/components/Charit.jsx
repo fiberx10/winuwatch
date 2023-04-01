@@ -30,10 +30,11 @@ const Charit = () => {
             <div className={styles.charity} key={i}>
               <div className={styles.charityTop}>
                 <Image
-                  width={355}
-                  height={355}
+                  width={300}
+                  height={300}
                   alt="charity"
                   src={charity.img}
+                  style={{ objectFit: "cover" }}
                 />
               </div>
               <div className={styles.CharityBot}>

@@ -146,7 +146,7 @@ const CompetitionComponent = ({
                   void router.push("/Cart");
                 }}
               >
-                ADD TO CART
+                CONTINUE
               </button>
             </div>
           </div>

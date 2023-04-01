@@ -8,7 +8,9 @@ import { countryList } from "./countries";
 import "@/styles/Checkout.module.css";
 import Image from "next/image";
 import { Formik, Form, Field } from "formik";
-
+import Datetime from "react-datetime";
+import "react-datetime/css/react-datetime.css";
+import { Moment } from "moment";
 const CheckoutComp = () => {
   const router = useRouter();
 
@@ -88,7 +90,7 @@ const CheckoutComp = () => {
               actions.setSubmitting(false);
             }}
           >
-            {({ values, setValues }) => (
+            {({ values, setValues, setFieldValue }) => (
               <Form>
                 <div className={styles.CheckoutLeft}>
                   <div className={styles.leftFormItem}>
@@ -175,12 +177,20 @@ const CheckoutComp = () => {
                       <div className={styles.FinalRow}>
                         <div className={styles.formField}>
                           <label htmlFor="Date">Date of birth</label>
-                          <Field
-                            max="2005-01-01"
-                            required
-                            type={"date"}
-                            name="date"
+                          <Datetime
+                            utc={true}
+                            input={true}
+                            inputProps={{
+                              name: "date",
+                              placeholder: "Enter Date",
+                              required: true,
+                              max: "2005-01-01",
+                            }}
+                            onChange={(value: string | Moment) =>
+                              setFieldValue("date", value)
+                            }
                           />
+
                           {error ===
                           "You must be 18 years old to purchase a ticket" ? (
                             <p style={{ color: "red" }}>{error}</p>

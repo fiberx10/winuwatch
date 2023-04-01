@@ -25,7 +25,15 @@ const Footer = () => {
   }, []);
   return (
     <>
-      <div className={styles.FooterInsta}>
+      <div
+        style={{
+          background:
+            typeof window !== "undefined" && location.pathname !== "/Philosophy"
+              ? "#cbb9ac"
+              : "#a8957e",
+        }}
+        className={styles.FooterInsta}
+      >
         <h1 className={styles.background5}>Follow us</h1>
         <p>
           Don&apos;t miss the live draw and the announcement of the next
