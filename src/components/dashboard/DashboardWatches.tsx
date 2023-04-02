@@ -213,11 +213,7 @@ const DashboardWatches = () => {
                                             const url = await getDownloadURL(
                                               snapshot.ref
                                             );
-                                            setNewImgs( (newimgs) => {
-                                              return newimgs.length <= 3
-                                                ? newimgs.push(url)
-                                                : newimgs;
-                                            });
+                                            setNewImgs( imgs => imgs ? [...imgs, url] : [url]);
                                             console.log(newimgs);
                                             setFieldValue(
                                               "images_url",
