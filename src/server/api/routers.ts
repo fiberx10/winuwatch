@@ -67,7 +67,7 @@ export const OrderRouter = createTRPCRouter({
                 }
               : {}
           ),
-          success_url: `${getBaseUrl()}/stripe?payment=success`,
+          success_url: `${getBaseUrl()}/CheckoutPage/${id}`,
           cancel_url: `${getBaseUrl()}/CheckoutPage`,
         });
         const { id } = await ctx.prisma.order.create({
