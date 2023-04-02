@@ -14,6 +14,12 @@ import Row from "react-bootstrap/Row";
 import Image from "next/image";
 import { Formik } from "formik";
 import * as yup from "yup";
+
+import { toFormikValidationSchema } from 'zod-formik-adapter';
+import {
+  WatchesSchema
+} from "@/utils/zodSchemas"
+
 import {
   ref,
   uploadBytes,
@@ -28,9 +34,6 @@ import { FilePond, registerPlugin } from "react-filepond";
 // Import FilePond styles
 import "filepond/dist/filepond.min.css";
 
-// Import the Image EXIF Orientation and Image Preview plugins
-// Note: These need to be installed separately
-// `npm i filepond-plugin-image-preview filepond-plugin-image-exif-orientation --save`
 import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orientation";
 import FilePondPluginFilePoster from "filepond-plugin-file-poster";
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
@@ -175,7 +178,11 @@ const DashboardWatches = () => {
                         await refetch();
                         actions.setSubmitting(false);
                       }}
-                      validationSchema={schema}
+                      validationSchema={toFormikValidationSchema(WatchesSchema
+                          .omit({
+                            id : true
+                          })
+                      )}
                       initialValues={{
                         brand: watch.brand,
                         model: watch.model,
@@ -430,25 +437,12 @@ const DashboardWatches = () => {
           <Modal.Title>Add a Watch</Modal.Title>
         </Modal.Header>
         <Formik
-          validationSchema={schema}
+          validationSchema={toFormikValidationSchema(WatchesSchema.omit({
+            id : true,
+          }))}
           onSubmit={async (values, actions) => {
             setAdd(false);
-            await addWatch({
-              brand: values.brand,
-              model: values.model,
-              Bracelet_material: values.Bracelet_material,
-              bezel_material: values.bezel_material,
-              caliber_grear: values.caliber_grear,
-              number_of_stones: values.number_of_stones,
-              condition: values.condition,
-              glass: values.glass,
-              movement: values.movement,
-              reference_number: values.reference_number,
-              year_of_manifacture: values.year_of_manifacture,
-              has_box: values.has_box,
-              has_certificate: values.has_certificate,
-              images_url: values.images_url,
-            });
+            await addWatch(values);
             await refetch();
             console.log("Form submitted:", values);
 

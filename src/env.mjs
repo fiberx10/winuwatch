@@ -17,7 +17,7 @@ const server = z.object({
 const client = z.object({
   // database :
   //DATABASE_URL: z.string().url(),
-  //NODE_ENV: z.enum(["development", "test", "production"]),
+  NODE_ENV: z.enum(["development", "test", "production"]),
 
   NEXT_PUBLIC_PAYPAL_ID: z.string().min(1),
 

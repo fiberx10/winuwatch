@@ -16,8 +16,6 @@ export const OrderSchema = z.object({
   checkedEmail: z.boolean(),
   checkedTerms: z.boolean(),
   paymentId: z.string().optional(),
-  createdAt: z.date(),
-  updatedAt: z.date(),
   totalPrice: z.number(),
   status: z.nativeEnum(OrderStatus),
 });

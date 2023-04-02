@@ -47,7 +47,7 @@ const DashboardCompetitions = () => {
   };
 
   //DATA FROM BACKEND
-  const { data, isLoading, refetch } = api.Competition.getEverything.useQuery();
+  const { data, isLoading, refetch } = api.Competition.getAll.useQuery();
   const { data: activeComps, refetch: activeFetch } =
     api.Competition.getAll.useQuery({
       status: "ACTIVE",
@@ -79,7 +79,7 @@ const DashboardCompetitions = () => {
           <PlusOutlined /> Add
         </Button>
       </div>
-      {isLoading ? (
+      {isLoading || data === null || !data ? (
         <p>Loading...</p>
       ) : (
         <Accordion defaultActiveKey={["0"]}>
@@ -89,7 +89,8 @@ const DashboardCompetitions = () => {
             </Accordion.Header>
             <Accordion.Body>
               <div className={styles.dashCompsGrid}>
-                {data?.map((comp) => {
+                {data.map((comp) => {
+                  if (comp === null || comp.Watches === null) return null;
                   return (
                     comp.status === "ACTIVE" && (
                       <div className={styles.dashGridItem} key={comp.id}>
@@ -150,25 +151,8 @@ const DashboardCompetitions = () => {
 
                                 console.log("Form submitted:", values);
                                 await updateComp({
+                                  ...values,
                                   id: comp.id,
-                                  name: values.name,
-                                  start_date: new Date(values.start_date),
-                                  end_date: new Date(values.end_date),
-                                  location: values.location,
-                                  price: values.price,
-                                  max_space_in_final_draw:
-                                    values.max_space_in_final_draw,
-                                  max_watch_number: values.max_watch_number,
-                                  run_up_prize: values.run_up_prize,
-                                  watchesId: values.watchesId,
-                                  total_tickets: values.total_tickets,
-                                  ticket_price: values.ticket_price,
-                                  status: values.status as
-                                    | "ACTIVE"
-                                    | "NOT_ACTIVE"
-                                    | "COMPLETED",
-                                  drawing_date: new Date(values.drawing_date),
-                                  remaining_tickets: values.remaining_tickets,
                                 });
                                 await refetch();
                                 await activeFetch();
@@ -186,7 +170,10 @@ const DashboardCompetitions = () => {
                                   comp.max_space_in_final_draw,
                                 max_watch_number: comp.max_watch_number,
                                 run_up_prize: comp.run_up_prize as string,
-                                watchesId: comp.Watches.id,
+                                watchesId:
+                                  comp.Watches === null
+                                    ? undefined
+                                    : comp.Watches.id,
                                 total_tickets: comp.total_tickets,
                                 ticket_price: comp.ticket_price,
                                 status: comp.status,
@@ -439,6 +426,7 @@ const DashboardCompetitions = () => {
             <Accordion.Body>
               <div className={styles.dashCompsGrid}>
                 {data?.map((comp) => {
+                  if (comp === null || comp.Watches === null) return null;
                   return (
                     comp.status === "NOT_ACTIVE" && (
                       <div className={styles.dashGridItem} key={comp.id}>
@@ -499,25 +487,8 @@ const DashboardCompetitions = () => {
 
                                 console.log("Form submitted:", values);
                                 await updateComp({
+                                  ...values,
                                   id: comp.id,
-                                  name: values.name,
-                                  start_date: new Date(values.start_date),
-                                  end_date: new Date(values.end_date),
-                                  location: values.location,
-                                  price: values.price,
-                                  max_space_in_final_draw:
-                                    values.max_space_in_final_draw,
-                                  max_watch_number: values.max_watch_number,
-                                  run_up_prize: values.run_up_prize,
-                                  watchesId: values.watchesId,
-                                  total_tickets: values.total_tickets,
-                                  ticket_price: values.ticket_price,
-                                  status: values.status as
-                                    | "ACTIVE"
-                                    | "NOT_ACTIVE"
-                                    | "COMPLETED",
-                                  drawing_date: new Date(values.drawing_date),
-                                  remaining_tickets: values.remaining_tickets,
                                 });
                                 await refetch();
                                 await activeFetch();
@@ -788,6 +759,8 @@ const DashboardCompetitions = () => {
             <Accordion.Body>
               <div className={styles.dashCompsGrid}>
                 {data?.map((comp) => {
+                  if (comp === null || comp.Watches === null) return null;
+
                   return (
                     comp.status === "COMPLETED" && (
                       <div className={styles.dashGridItem} key={comp.id}>
@@ -848,25 +821,8 @@ const DashboardCompetitions = () => {
 
                                 console.log("Form submitted:", values);
                                 await updateComp({
+                                  ...values,
                                   id: comp.id,
-                                  name: values.name,
-                                  start_date: new Date(values.start_date),
-                                  end_date: new Date(values.end_date),
-                                  location: values.location,
-                                  price: values.price,
-                                  max_space_in_final_draw:
-                                    values.max_space_in_final_draw,
-                                  max_watch_number: values.max_watch_number,
-                                  run_up_prize: values.run_up_prize,
-                                  watchesId: values.watchesId,
-                                  total_tickets: values.total_tickets,
-                                  ticket_price: values.ticket_price,
-                                  status: values.status as
-                                    | "ACTIVE"
-                                    | "NOT_ACTIVE"
-                                    | "COMPLETED",
-                                  drawing_date: new Date(values.drawing_date),
-                                  remaining_tickets: values.remaining_tickets,
                                 });
                                 await refetch();
                                 await activeFetch();
@@ -1142,20 +1098,14 @@ const DashboardCompetitions = () => {
             setAdd(false);
             console.log("Form submitted:", values);
             await addComp({
-              name: values.name,
+              ...values,
               start_date: new Date(values.start_date),
               end_date: new Date(values.end_date),
-              location: values.location,
-              price: values.price,
-              max_space_in_final_draw: values.max_space_in_final_draw,
-              max_watch_number: values.max_watch_number,
-              run_up_prize: values.run_up_prize,
-              watchesId: values.watchesId,
-              total_tickets: values.total_tickets,
-              ticket_price: values.ticket_price,
               status: values.status as "ACTIVE" | "NOT_ACTIVE" | "COMPLETED",
               drawing_date: new Date(values.drawing_date),
-              remaining_tickets: values.total_tickets,
+              winner_announcement_date: null,
+              winner: null,
+              second_reward: null,
             });
             await refetch();
             await activeFetch();

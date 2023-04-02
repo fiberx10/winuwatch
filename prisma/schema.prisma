@@ -19,7 +19,8 @@ model ImagesUrl {
   url       String
   WatchesId String
   Watches   Watches @relation(fields: [WatchesId], references: [id])
-
+ createdAt                DateTime          @default(now())
+  updatedAt                DateTime          @updatedAt
   @@index([WatchesId])
   @@map("images_url")
 }
@@ -40,9 +41,11 @@ model Watches {
   has_certificate     Boolean      @default(false)
   condition           String
   images_url          ImagesUrl[]
-  Competition         Competition?
-
+  Competition         Competition? 
+   createdAt                DateTime          @default(now())
+  updatedAt                DateTime          @updatedAt
   @@map("watches")
+  @@index([id])
 }
 
 model Competition {
@@ -62,16 +65,14 @@ model Competition {
   price                    Float
   status                   CompetitionStatus
   winner                   String?
-  orderId                  String?
   second_reward            String?
   createdAt                DateTime          @default(now())
   updatedAt                DateTime          @updatedAt
   watchesId                String            @unique
-  Watches                  Watches           @relation(fields: [watchesId], references: [id])
-  Order                    Order?            @relation(fields: [orderId], references: [id])
+  Watches                  Watches?           @relation(fields: [watchesId], references: [id])
+  Order                    Order[]          
   Ticket                   Ticket[]
-
-  @@index([orderId])
+  @@index([id])
   @@map("competition")
 }
 
@@ -130,7 +131,8 @@ model answer {
   answer     String
   questionId String
   Question   Question @relation(fields: [questionId], references: [id])
-
+ createdAt                DateTime          @default(now())
+  updatedAt                DateTime          @updatedAt
   @@index([questionId])
   @@map("answers")
 }
