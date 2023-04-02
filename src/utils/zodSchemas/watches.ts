@@ -15,4 +15,5 @@ export const WatchesSchema = z.object({
   has_box: z.boolean(),
   has_certificate: z.boolean(),
   condition: z.string(),
+  images_url: z.array(z.string()),
 });

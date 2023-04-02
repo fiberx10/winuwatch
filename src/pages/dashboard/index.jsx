@@ -5,6 +5,7 @@ import { useStore as UseStore } from "@/components/Store";
 import DashboardNav from "@/components/dashboard/DashboardNav";
 import DashboardCompetitions from "@/components/dashboard/DashboardCompetitions";
 import DashboardWatches from "@/components/dashboard/DashboardWatches";
+import DashboardOrders from "@/components/dashboard/DashboardOrders";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Head from "next/head";
 
@@ -28,6 +29,8 @@ const index = () => {
             <DashboardCompetitions />
           ) : menu === "Watches" ? (
             <DashboardWatches />
+          ) : menu === "Orders" ? (
+            <DashboardOrders />
           ) : (
             <h1>Competitions</h1>
           )}

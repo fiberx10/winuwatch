@@ -11,7 +11,12 @@ input::-webkit-inner-spin-button {
 input[type="number"] {
   -moz-appearance: textfield;
 }
-
+.css-pdct74-MuiTablePagination-selectLabel {
+  margin-bottom: 0 !important;
+}
+.css-levciy-MuiTablePagination-displayedRows {
+  margin-bottom: 0 !important;
+}
 * {
   margin: 0;
   padding: 0;

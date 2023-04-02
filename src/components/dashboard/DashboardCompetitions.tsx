@@ -79,7 +79,7 @@ const DashboardCompetitions = () => {
           <PlusOutlined /> Add
         </Button>
       </div>
-      {(isLoading  ||  data ===null || !data) ? (
+      {isLoading || data === null || !data ? (
         <p>Loading...</p>
       ) : (
         <Accordion defaultActiveKey={["0"]}>
@@ -90,7 +90,7 @@ const DashboardCompetitions = () => {
             <Accordion.Body>
               <div className={styles.dashCompsGrid}>
                 {data.map((comp) => {
-                  if( comp === null || comp.Watches === null) return null
+                  if (comp === null || comp.Watches === null) return null;
                   return (
                     comp.status === "ACTIVE" && (
                       <div className={styles.dashGridItem} key={comp.id}>
@@ -170,7 +170,10 @@ const DashboardCompetitions = () => {
                                   comp.max_space_in_final_draw,
                                 max_watch_number: comp.max_watch_number,
                                 run_up_prize: comp.run_up_prize as string,
-                                watchesId: comp.Watches === null ? undefined : comp.Watches.id,
+                                watchesId:
+                                  comp.Watches === null
+                                    ? undefined
+                                    : comp.Watches.id,
                                 total_tickets: comp.total_tickets,
                                 ticket_price: comp.ticket_price,
                                 status: comp.status,
@@ -485,7 +488,7 @@ const DashboardCompetitions = () => {
                                 console.log("Form submitted:", values);
                                 await updateComp({
                                   ...values,
-                                  id: comp.id
+                                  id: comp.id,
                                 });
                                 await refetch();
                                 await activeFetch();
