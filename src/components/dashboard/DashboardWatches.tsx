@@ -15,10 +15,8 @@ import Image from "next/image";
 import { Formik } from "formik";
 import * as yup from "yup";
 
-import { toFormikValidationSchema } from 'zod-formik-adapter';
-import {
-  WatchesSchema
-} from "@/utils/zodSchemas"
+import { toFormikValidationSchema } from "zod-formik-adapter";
+import { WatchesSchema } from "@/utils/zodSchemas";
 
 import {
   ref,
@@ -82,21 +80,7 @@ const DashboardWatches = () => {
       data: i,
     });
   };
-  const schema = yup.object().shape({
-    brand: yup.string().required(),
-    model: yup.string().required(),
-    Bracelet_material: yup.string().required(),
-    bezel_material: yup.string().required(),
-    caliber_grear: yup.string().required(),
-    number_of_stones: yup.string().required(),
-    condition: yup.string().required(),
-    glass: yup.string().required(),
-    movement: yup.string().required(),
-    reference_number: yup.string().required(),
-    year_of_manifacture: yup.string().required(),
-    has_box: yup.bool().required(),
-    has_certificate: yup.bool().required(),
-  });
+
   const imgs: string[] = [];
   const newimgs: string[] = [];
 
@@ -178,10 +162,10 @@ const DashboardWatches = () => {
                         await refetch();
                         actions.setSubmitting(false);
                       }}
-                      validationSchema={toFormikValidationSchema(WatchesSchema
-                          .omit({
-                            id : true
-                          })
+                      validationSchema={toFormikValidationSchema(
+                        WatchesSchema.omit({
+                          id: true,
+                        })
                       )}
                       initialValues={{
                         brand: watch.brand,
@@ -437,9 +421,11 @@ const DashboardWatches = () => {
           <Modal.Title>Add a Watch</Modal.Title>
         </Modal.Header>
         <Formik
-          validationSchema={toFormikValidationSchema(WatchesSchema.omit({
-            id : true,
-          }))}
+          validationSchema={toFormikValidationSchema(
+            WatchesSchema.omit({
+              id: true,
+            })
+          )}
           onSubmit={async (values, actions) => {
             setAdd(false);
             await addWatch(values);
