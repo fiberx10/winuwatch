@@ -13,11 +13,13 @@ const CompetitionComponent = ({
 }) => {
   const [counter, setCounter] = useState(1);
   const [filter, setFilter] = useState(5);
-  const [image, setImage] = useState(data.Watches.images_url[0]);
+
+  const DefaultImage = (data  && data.Watches && data.Watches.images_url && data.Watches.images_url[0] && data.Watches.images_url[0].url) ?? "/images/watch.png";
+  const [image, setImage] = useState(DefaultImage);
   const { addComp, updateComp, competitions } = useCart();
   const router = useRouter();
 
-  return (
+  return data && data.Watches && data.Watches.images_url &&(
     <div className={styles.compWrapper}>
       <div className={styles.CompetitionMain}>
         <div className={styles.images}>
@@ -36,12 +38,12 @@ const CompetitionComponent = ({
                 .filter((_, i) => i !== 0)
                 .map((item, i) => (
                   <Image
-                    onMouseEnter={() => setImage(item)}
-                    onMouseLeave={() => setImage(data.Watches.images_url[0])}
+                    onMouseEnter={() => setImage(item.url)}
+                    onMouseLeave={() => setImage(DefaultImage)}
                     width={150}
                     height={130}
                     alt="watchImage"
-                    src={item}
+                    src={item.url}
                     key={i}
                   />
                 ))
@@ -50,8 +52,8 @@ const CompetitionComponent = ({
         </div>
         <div className={styles.CompRight}>
           <div className={styles.CompTit}>
-            <h1>{data.name}</h1>
-            <p>market value {Formater(data.price)}</p>
+            <h1>{data?.name}</h1>
+            <p>market value {Formater(data?.price)}</p>
           </div>
           <div className={styles.CompTicketSelec}>
             <h3>How many tickets would you like?</h3>
@@ -200,7 +202,7 @@ const CompetitionComponent = ({
                 "Case",
                 "Bracelet material",
               ].map((item, i) => {
-                return (
+                return data.Watches &&(
                   <span key={i}>
                     <b>{item}</b>
                     <p
@@ -213,7 +215,7 @@ const CompetitionComponent = ({
                             : "none",
                       }}
                     >
-                      {item === "Brand"
+                      {item === "Brand" 
                         ? data.Watches.brand
                         : item === "Model"
                         ? data.Watches.model
@@ -240,7 +242,7 @@ const CompetitionComponent = ({
                 "Glass",
                 "Bezel material",
               ].map((item, i) => {
-                return (
+                return data.Watches &&  data.Watches !== null && (
                   <span key={i}>
                     <b>{item}</b>
                     <p>

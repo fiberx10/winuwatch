@@ -46,7 +46,7 @@ const CartComp = () => {
           const ComptetionData = data.find(
             (compData) => compData.id === comp.compID
           );
-          if (!ComptetionData) return null;
+          if (!ComptetionData || ComptetionData.Watches === null) return null;
           return (
             <div className={styles.Watch} key={index}>
               <div className={styles.watchLeft}>
@@ -55,7 +55,7 @@ const CartComp = () => {
                   height={195}
                   alt="watchImage"
                   src={
-                    ComptetionData.Watches.images_url[0] || "/images/watch.png"
+                    ComptetionData.Watches.images_url[0]?.url || "/images/watch.png"
                   }
                 />
                 <div className={styles.watchleftDesc}>

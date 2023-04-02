@@ -18,9 +18,6 @@ export const CompetitionSchema = z.object({
   price: z.number(),
   status: z.nativeEnum(CompetitionStatus),
   winner: z.string().nullish(),
-  orderId: z.string().nullish(),
   second_reward: z.string().nullish(),
-  createdAt: z.date(),
-  updatedAt: z.date(),
   watchesId: z.string(),
 });

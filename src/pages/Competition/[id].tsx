@@ -34,17 +34,19 @@ export default function Competition({
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const { data, isLoading, error } = api.Competition.byID.useQuery(compID);
   //TODO: competition data is either a watch or an error, need to handle both cases
-
   return (
     <div>
       <Head>
-        <title>Win u Watch - {data?.Watches.brand}</title>
+        <title>
+          Win u Watch -{" "}
+          {data !== null && data && data.Watches !== null && data.Watches.brand}
+        </title>
         <meta name="description" content="Win u Watch Competition" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <NavBar />
-      {data && <CompetitionComponent data={data} />}
+      {CompetitionComponent({ data })}
       <Footer />
     </div>
   );

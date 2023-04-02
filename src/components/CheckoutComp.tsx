@@ -249,7 +249,7 @@ const CheckoutComp = () => {
                           (compData) => compData.id === order.compID
                         );
 
-                        if (!ComptetionData) return null;
+                        if (!ComptetionData || ComptetionData.Watches === null) return null;
                         return (
                           <div className={styles.orderItem} key={i}>
                             <Image
@@ -261,8 +261,8 @@ const CheckoutComp = () => {
                             />
                             <div className={styles.orderTit}>
                               <h3>
-                                {ComptetionData.Watches.brand}{" "}
-                                {ComptetionData.Watches.model}
+                                {ComptetionData?.Watches.brand}{" "}
+                                {ComptetionData?.Watches.model}
                               </h3>
                               <span>
                                 {values.comp.map((comp, i) => {

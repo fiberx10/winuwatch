@@ -43,7 +43,7 @@ const UpcomingComps = () => {
     });
   };
   //DATA FROM BACKEND
-  const { data, refetch } = api.Competition.getEverything.useQuery();
+  const { data, refetch } = api.Competition.getAll.useQuery();
   const { refetch: activeFetch } = api.Competition.getAll.useQuery({
     status: "ACTIVE",
   });
@@ -70,6 +70,7 @@ const UpcomingComps = () => {
       <Accordion.Body>
         <div className={styles.dashCompsGrid}>
           {data?.map((comp) => {
+            if (comp === null || comp.Watches === null) return null;
             return (
               comp.drawing_date > today && (
                 <div className={styles.dashGridItem} key={comp.id}>
