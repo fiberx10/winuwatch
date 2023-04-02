@@ -13,7 +13,6 @@ import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Image from "next/image";
 import { Formik } from "formik";
-import * as yup from "yup";
 
 import { toFormikValidationSchema } from "zod-formik-adapter";
 import { WatchesSchema } from "@/utils/zodSchemas";
@@ -49,7 +48,8 @@ const DashboardWatches = () => {
   const { mutateAsync: removewatch } = api.Watches.remove.useMutation();
   const { mutateAsync: addWatch } = api.Watches.add.useMutation();
   const { mutateAsync: updateWatch } = api.Watches.update.useMutation();
-
+  const [imgs, setImgs] = useState<string[]>([]);
+  const [newimgs, setNewImgs] = useState<string[]>([]);
   //REMOVE WATCH
   const [remove, setRemove] = useState({ modal: false, id: "" });
   // HANDLE REMOVE WATCH
@@ -72,7 +72,7 @@ const DashboardWatches = () => {
   // HANDLE UPDATE MODAL FORM
   const handleClose = () => {
     setShow({ modal: false, data: 0 });
-    newimgs.splice(0, newimgs.length);
+    setNewImgs([]);
   };
   const handleShow = (i: number) => {
     setShow({
@@ -81,8 +81,6 @@ const DashboardWatches = () => {
     });
   };
 
-  const imgs: string[] = [];
-  const newimgs: string[] = [];
 
   return (
     <div className={styles.DashCompsMain}>
@@ -215,10 +213,11 @@ const DashboardWatches = () => {
                                             const url = await getDownloadURL(
                                               snapshot.ref
                                             );
-
-                                            newimgs.length <= 3
-                                              ? newimgs.push(url)
-                                              : newimgs;
+                                            setNewImgs( (newimgs) => {
+                                              return newimgs.length <= 3
+                                                ? newimgs.push(url)
+                                                : newimgs;
+                                            });
                                             console.log(newimgs);
                                             setFieldValue(
                                               "images_url",
@@ -466,8 +465,7 @@ const DashboardWatches = () => {
                           uploadBytes(ref(storage, fileName), file)
                             .then(async (snapshot: UploadResult) => {
                               const url = await getDownloadURL(snapshot.ref);
-
-                              imgs.push(url);
+                              setImgs((imgs) => [...imgs, url]);
                               console.log(imgs);
                               setFieldValue("images_url", imgs);
                               load(url);
@@ -621,7 +619,7 @@ const DashboardWatches = () => {
                   variant="secondary"
                   onClick={() => {
                     setAdd(false);
-                    imgs.splice(0, imgs.length);
+                    setImgs([]);
                   }}
                 >
                   Close
