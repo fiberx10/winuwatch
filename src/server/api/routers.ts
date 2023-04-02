@@ -3,7 +3,12 @@ import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { CompetitionStatus, OrderStatus } from "@prisma/client";
 import { getBaseUrl, CreateOrderSchema } from "@/utils";
 import { WatchesSchema, CompetitionSchema } from "@/utils/zodSchemas";
+import { env } from "@/env.mjs";
+import stripe from "stripe";
 
+const Stripe = new stripe(env.STRIPE_SECRET_KEY, {
+  apiVersion: "2022-11-15",
+})
 export const OrderRouter = createTRPCRouter({
   getAll: publicProcedure.input(z.array(z.string()).optional()).query(
     async ({ ctx, input }) =>
@@ -18,7 +23,7 @@ export const OrderRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       try {
         const { payment_intent, url } =
-          await ctx.stripe.checkout.sessions.create({
+          await Stripe.checkout.sessions.create({
             payment_method_types: ["card"],
             mode: "payment",
             line_items: (
