@@ -13,7 +13,7 @@ import "react-datetime/css/react-datetime.css";
 const CheckoutComp = () => {
   const router = useRouter();
 
-  const { mutateAsync: createOrder } = api.Order.create.useMutation();
+  const { mutateAsync: createOrder } = api.Order.createStripe.useMutation();
   const { competitions, cardDetails, updateComp, reset } = useCart();
 
   const { data: items } = api.Competition.getAll.useQuery({
