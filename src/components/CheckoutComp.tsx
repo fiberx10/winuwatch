@@ -10,12 +10,11 @@ import Image from "next/image";
 import { Formik, Form, Field } from "formik";
 import Datetime from "react-datetime";
 import "react-datetime/css/react-datetime.css";
-import type { Moment } from "moment";
 const CheckoutComp = () => {
   const router = useRouter();
 
   const { mutateAsync: createOrder } = api.Order.create.useMutation();
-  const { competitions, cardDetails } = useCart();
+  const { competitions, cardDetails, updateComp, reset } = useCart();
 
   const { data: items } = api.Competition.getAll.useQuery({
     ids: competitions.map((comp) => comp.compID),
@@ -64,14 +63,11 @@ const CheckoutComp = () => {
                 if (!IsLegal(values.date)) {
                   setError("You must be 18 years old to purchase a ticket");
                 } else {
-                    const {
-                      url,
-                      error
-                    }= await createOrder(res.data)
-                    if (url) {
-                      await router.push(url)
-                    }
-                    setError(error || "Error in the creating the order")
+                  const { url, error } = await createOrder(res.data);
+                  if (url) {
+                    await router.push(url);
+                  }
+                  setError(error || "Error in the creating the order");
                 }
               }
               actions.setSubmitting(false);
@@ -173,9 +169,7 @@ const CheckoutComp = () => {
                               required: true,
                               max: "2005-01-01",
                             }}
-                            onChange={(value: string | Moment) =>
-                              setFieldValue("date", value)
-                            }
+                            onChange={(value) => setFieldValue("date", value)}
                           />
 
                           {error ===
@@ -255,7 +249,7 @@ const CheckoutComp = () => {
                           (compData) => compData.id === order.compID
                         );
 
-                        if (!ComptetionData) return null;
+                        if (!ComptetionData || ComptetionData.Watches === null) return null;
                         return (
                           <div className={styles.orderItem} key={i}>
                             <Image
@@ -267,8 +261,8 @@ const CheckoutComp = () => {
                             />
                             <div className={styles.orderTit}>
                               <h3>
-                                {ComptetionData.Watches.brand}{" "}
-                                {ComptetionData.Watches.model}
+                                {ComptetionData?.Watches.brand}{" "}
+                                {ComptetionData?.Watches.model}
                               </h3>
                               <span>
                                 {values.comp.map((comp, i) => {
@@ -297,16 +291,22 @@ const CheckoutComp = () => {
                             <div className={styles.Counter}>
                               <div
                                 onClick={() => {
+                                  const number_tickets =
+                                    order.number_tickets > 1
+                                      ? order.number_tickets - 1
+                                      : order.number_tickets;
+                                  updateComp({
+                                    compID: order.compID,
+                                    number_tickets,
+                                    price_per_ticket: order.price_per_ticket,
+                                  });
                                   setValues({
                                     ...values,
                                     comp: values.comp.map((comp) => {
                                       if (comp.compID === order.compID) {
                                         return {
                                           ...comp,
-                                          number_tickets:
-                                            comp.number_tickets > 1
-                                              ? comp.number_tickets - 1
-                                              : comp.number_tickets,
+                                          number_tickets,
                                         };
                                       }
                                       return comp;
@@ -327,26 +327,25 @@ const CheckoutComp = () => {
                               </div>
                               <div
                                 onClick={() => {
-                                  console.log(
-                                    values.comp.reduce(
-                                      (a, b) =>
-                                        a +
-                                        b.number_tickets * b.price_per_ticket,
-                                      0
-                                    )
-                                  );
+                                  const number_tickets =
+                                    order.number_tickets >
+                                      ComptetionData.remaining_tickets ||
+                                    order.number_tickets >= 25
+                                      ? order.number_tickets
+                                      : order.number_tickets + 1;
 
+                                  updateComp({
+                                    compID: order.compID,
+                                    number_tickets,
+                                    price_per_ticket: order.price_per_ticket,
+                                  });
                                   setValues({
                                     ...values,
                                     comp: values.comp.map((comp) => {
                                       if (comp.compID === order.compID) {
                                         return {
                                           ...comp,
-                                          number_tickets:
-                                            comp.number_tickets <
-                                            ComptetionData.remaining_tickets
-                                              ? comp.number_tickets + 1
-                                              : comp.number_tickets,
+                                          number_tickets,
                                         };
                                       }
                                       return comp;
@@ -381,7 +380,6 @@ const CheckoutComp = () => {
                         </span>
                       </div>
                       {values.paymentMethod === "PAYPAL" ? (
-                        
                         <PayPalScriptProvider
                           options={{
                             "client-id": `${
@@ -433,7 +431,20 @@ const CheckoutComp = () => {
                           />
                         </PayPalScriptProvider>
                       ) : (
-                        <button type="submit">Confirm Order</button>
+                        <>
+                          <button type="submit">Confirm Order</button>
+                          <button type="button" 
+                          onClick={() => {
+                            reset()
+                            setValues({
+                              ...values,
+                              comp: [],
+                            });
+                          }}
+                          >
+                            Clear Cart
+                          </button>
+                        </>
                       )}
                     </div>
                   </div>

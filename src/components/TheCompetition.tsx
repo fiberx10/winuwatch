@@ -32,18 +32,21 @@ const TheCompetition = () => {
       <div className={styles.compWatches}>
         {data && data.length > 0 ? (
           data.map((watch) => {
+            if (watch === null || watch.Watches === null) return null;
+
             return (
               <div className={styles.watches} key={watch.id}>
                 <div
                   style={{
-                    background: watch.Watches.images_url[0]
+                    
+                    background: watch.Watches.images_url[0]?.url
                       ? `linear-gradient(
                       180deg,
                       rgba(255, 255, 255, 0) 0%,
                       rgba(255, 255, 255, 0) 36.25%,
                       #faf8f6 100%
                     ),
-                    url(${watch.Watches.images_url[0]})`
+                    url(${watch.Watches.images_url[0].url})`
                       : `linear-gradient(
                       180deg,
                       rgba(255, 255, 255, 0) 0%,
