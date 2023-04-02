@@ -59,9 +59,7 @@ const TheCompetition = () => {
                 >
                   <div className={styles.watchContent}>
                     <Link href={`/Competition/${watch.id}`}>Start now</Link>
-                    <h3>
-                      {watch.Watches.brand} {watch.Watches.model}
-                    </h3>
+                    <h3>{watch.name}</h3>
                     <p>Only {watch.remaining_tickets} tickets left!</p>
                   </div>
                 </div>

@@ -13,12 +13,9 @@ import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Image from "next/image";
 import { Formik } from "formik";
-import * as yup from "yup";
 
-import { toFormikValidationSchema } from 'zod-formik-adapter';
-import {
-  WatchesSchema
-} from "@/utils/zodSchemas"
+import { toFormikValidationSchema } from "zod-formik-adapter";
+import { WatchesSchema } from "@/utils/zodSchemas";
 
 import {
   ref,
@@ -51,7 +48,8 @@ const DashboardWatches = () => {
   const { mutateAsync: removewatch } = api.Watches.remove.useMutation();
   const { mutateAsync: addWatch } = api.Watches.add.useMutation();
   const { mutateAsync: updateWatch } = api.Watches.update.useMutation();
-
+  const [imgs, setImgs] = useState<string[]>([]);
+  const [newimgs, setNewImgs] = useState<string[]>([]);
   //REMOVE WATCH
   const [remove, setRemove] = useState({ modal: false, id: "" });
   // HANDLE REMOVE WATCH
@@ -74,7 +72,7 @@ const DashboardWatches = () => {
   // HANDLE UPDATE MODAL FORM
   const handleClose = () => {
     setShow({ modal: false, data: 0 });
-    newimgs.splice(0, newimgs.length);
+    setNewImgs([]);
   };
   const handleShow = (i: number) => {
     setShow({
@@ -82,23 +80,7 @@ const DashboardWatches = () => {
       data: i,
     });
   };
-  const schema = yup.object().shape({
-    brand: yup.string().required(),
-    model: yup.string().required(),
-    Bracelet_material: yup.string().required(),
-    bezel_material: yup.string().required(),
-    caliber_grear: yup.string().required(),
-    number_of_stones: yup.string().required(),
-    condition: yup.string().required(),
-    glass: yup.string().required(),
-    movement: yup.string().required(),
-    reference_number: yup.string().required(),
-    year_of_manifacture: yup.string().required(),
-    has_box: yup.bool().required(),
-    has_certificate: yup.bool().required(),
-  });
-  const imgs: string[] = [];
-  const newimgs: string[] = [];
+
 
   return (
     <div className={styles.DashCompsMain}>
@@ -178,10 +160,10 @@ const DashboardWatches = () => {
                         await refetch();
                         actions.setSubmitting(false);
                       }}
-                      validationSchema={toFormikValidationSchema(WatchesSchema
-                          .omit({
-                            id : true
-                          })
+                      validationSchema={toFormikValidationSchema(
+                        WatchesSchema.omit({
+                          id: true,
+                        })
                       )}
                       initialValues={{
                         brand: watch.brand,
@@ -231,10 +213,7 @@ const DashboardWatches = () => {
                                             const url = await getDownloadURL(
                                               snapshot.ref
                                             );
-
-                                            newimgs.length <= 3
-                                              ? newimgs.push(url)
-                                              : newimgs;
+                                            setNewImgs( imgs => imgs ? [...imgs, url] : [url]);
                                             console.log(newimgs);
                                             setFieldValue(
                                               "images_url",
@@ -437,9 +416,11 @@ const DashboardWatches = () => {
           <Modal.Title>Add a Watch</Modal.Title>
         </Modal.Header>
         <Formik
-          validationSchema={toFormikValidationSchema(WatchesSchema.omit({
-            id : true,
-          }))}
+          validationSchema={toFormikValidationSchema(
+            WatchesSchema.omit({
+              id: true,
+            })
+          )}
           onSubmit={async (values, actions) => {
             setAdd(false);
             await addWatch(values);
@@ -480,8 +461,7 @@ const DashboardWatches = () => {
                           uploadBytes(ref(storage, fileName), file)
                             .then(async (snapshot: UploadResult) => {
                               const url = await getDownloadURL(snapshot.ref);
-
-                              imgs.push(url);
+                              setImgs((imgs) => [...imgs, url]);
                               console.log(imgs);
                               setFieldValue("images_url", imgs);
                               load(url);
@@ -635,7 +615,7 @@ const DashboardWatches = () => {
                   variant="secondary"
                   onClick={() => {
                     setAdd(false);
-                    imgs.splice(0, imgs.length);
+                    setImgs([]);
                   }}
                 >
                   Close
