@@ -14,35 +14,82 @@ import { IoIosArrowUp, IoIosArrowDown } from "react-icons/io";
 import TablePagination from "@mui/material/TablePagination";
 
 function createData(
-  name: string,
-  calories: number,
-  fat: number,
-  carbs: number,
-  protein: number,
-  price: number
+  address: string,
+  checkedEmail: boolean,
+  checkedTerms: boolean,
+  country: string,
+  createdAt: Date,
+  date: Date,
+  email: string,
+  first_name: string,
+  id: string,
+  last_name: string,
+  paymentId: string,
+  paymentMethod: string,
+  phone: string,
+  status: string,
+  totalPrice: number,
+  town: string,
+  updatedAt: Date,
+  zip: string
 ) {
   return {
-    name,
-    calories,
-    fat,
-    carbs,
-    protein,
-    price,
-    history: [
-      {
-        date: "2020-01-05",
-        customerId: "11091700",
-        amount: 3,
-      },
-      {
-        date: "2020-01-02",
-        customerId: "Anonymous",
-        amount: 1,
-      },
-    ],
+    address,
+    checkedEmail,
+
+    checkedTerms,
+
+    country,
+
+    createdAt,
+
+    date,
+
+    email,
+
+    first_name,
+
+    id,
+
+    last_name,
+
+    paymentId,
+
+    paymentMethod,
+
+    phone,
+
+    status,
+
+    totalPrice,
+
+    town,
+
+    updatedAt,
+
+    zip,
   };
 }
-
+interface Orders {
+  address: string;
+  checkedEmail: boolean;
+  checkedTerms: boolean;
+  country: string;
+  createdAt: Date;
+  date: Date;
+  email: string;
+  first_name: string;
+  id: string;
+  last_name: string;
+  paymentId: string;
+  paymentMethod: string;
+  phone: string;
+  status: string;
+  totalPrice: number;
+  town: string;
+  updatedAt: Date;
+  zip: string;
+}
 function Row(props: { row: ReturnType<typeof createData> }) {
   const { row } = props;
   const [open, setOpen] = React.useState(false);
@@ -64,12 +111,12 @@ function Row(props: { row: ReturnType<typeof createData> }) {
           </IconButton>
         </TableCell>
         <TableCell component="th" scope="row">
-          {row.name}
+          {row.first_name}
         </TableCell>
-        <TableCell align="right">{row.calories}</TableCell>
-        <TableCell align="right">{row.fat}</TableCell>
-        <TableCell align="right">{row.carbs}</TableCell>
-        <TableCell align="right">{row.protein}</TableCell>
+        <TableCell align="right">{row.last_name}</TableCell>
+        <TableCell align="right">{row.totalPrice}</TableCell>
+        <TableCell align="right">{row.status}</TableCell>
+        <TableCell align="right">{row.paymentMethod}</TableCell>
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
@@ -88,18 +135,16 @@ function Row(props: { row: ReturnType<typeof createData> }) {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {row.history.map((historyRow) => (
-                    <TableRow key={historyRow.date}>
-                      <TableCell component="th" scope="row">
-                        {historyRow.date}
-                      </TableCell>
-                      <TableCell>{historyRow.customerId}</TableCell>
-                      <TableCell align="right">{historyRow.amount}</TableCell>
-                      <TableCell align="right">
-                        {Math.round(historyRow.amount * row.price * 100) / 100}
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                  <TableRow>
+                    <TableCell component="th" scope="row">
+                      {row.first_name}
+                    </TableCell>
+                    <TableCell>{row.first_name}</TableCell>
+                    <TableCell align="right">{row.first_name}</TableCell>
+                    <TableCell align="right">
+                      {Math.round(row.totalPrice * row.totalPrice * 100) / 100}
+                    </TableCell>
+                  </TableRow>
                 </TableBody>
               </Table>
             </Box>
@@ -110,15 +155,7 @@ function Row(props: { row: ReturnType<typeof createData> }) {
   );
 }
 
-const rows = [
-  createData("Frozen yoghurt", 159, 6.0, 24, 4.0, 3.99),
-  createData("Ice cream sandwich", 237, 9.0, 37, 4.3, 4.99),
-  createData("Eclair", 262, 16.0, 24, 6.0, 3.79),
-  createData("Cupcake", 305, 3.7, 67, 4.3, 2.5),
-  createData("Gingerbread", 356, 16.0, 49, 3.9, 1.5),
-];
-
-export default function CollapsibleTable() {
+export default function CollapsibleTable(orders: Array<Orders>) {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
@@ -157,15 +194,15 @@ export default function CollapsibleTable() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => (
-              <Row key={row.name} row={row} />
+            {orders.map((row) => (
+              <Row key={row.id} row={row} />
             ))}
           </TableBody>
         </Table>
         <TablePagination
           rowsPerPageOptions={[10, 25, 100]}
           component="div"
-          count={rows.length}
+          count={orders.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}

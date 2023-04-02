@@ -22,6 +22,9 @@ export const OrderRouter = createTRPCRouter({
             },
           },
         },
+        include: {
+          Ticket: true,
+        },
       })
   ),
   create: publicProcedure
