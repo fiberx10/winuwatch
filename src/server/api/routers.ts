@@ -31,22 +31,29 @@ export const OrderRouter = createTRPCRouter({
     .input(CreateOrderSchema)
     .mutation(async ({ ctx, input }) => {
       try {
-        const {comps, ...data } = input
+        const { comps, ...data } = input;
         const { id } = await ctx.prisma.order.create({
           data: {
             ...data,
             status: OrderStatus.PENDING,
-            Competition   : {
+            Competition: {
               connect: {
-                id: comps.map(({compID} )=> compID)
-                .filter((value, index, self) => self.indexOf(value) === index)[0], //TODO: FIx this later
+                id: comps
+                  .map(({ compID }) => compID)
+                  .filter(
+                    (value, index, self) => self.indexOf(value) === index
+                  )[0], //TODO: FIx this later
               },
             },
             Ticket: {
               createMany: {
-                data: input.comps.map((item) => ({
-                  competitionId: item.compID,
-                })),
+                data: input.comps
+                  .map(({ compID, number_tickets }) =>
+                    new Array(number_tickets).fill(0).map((_) => ({
+                      competitionId: compID,
+                    }))
+                  )
+                  .flat(),
               },
             },
           },
@@ -54,7 +61,7 @@ export const OrderRouter = createTRPCRouter({
         const { payment_intent, url } = await Stripe.checkout.sessions.create({
           payment_method_types: ["card"],
           mode: "payment",
-          customer_email : data.email,
+          customer_email: data.email,
           line_items: (
             await ctx.prisma.competition.findMany({
               where: {
@@ -116,16 +123,20 @@ export const OrderRouter = createTRPCRouter({
   create: publicProcedure
     .input(CreateOrderSchema)
     .mutation(async ({ ctx, input }) => {
-      const {comps, ...data} = input
+      const { comps, ...data } = input;
       return await ctx.prisma.order.create({
         data: {
           ...data,
           status: OrderStatus.CONFIRMED,
           Ticket: {
             createMany: {
-              data: comps.map((item) => ({
-                competitionId: item.compID,
-              })),
+              data: comps
+                .map(({ compID, number_tickets }) =>
+                  new Array(number_tickets).fill(0).map((_) => ({
+                    competitionId: compID,
+                  }))
+                )
+                .flat(),
             },
           },
         },
