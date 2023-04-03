@@ -57,7 +57,6 @@
   align-items: center;
   width: 100%;
   gap: 1rem;
-  height: 50px;
   flex-wrap: wrap;
 }
 .left b {
