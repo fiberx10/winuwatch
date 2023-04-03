@@ -78,7 +78,7 @@ model Order {
   last_name     String
   country       String
   address       String
-  town          String
+  town          String?
   zip           String
   phone         String
   email         String

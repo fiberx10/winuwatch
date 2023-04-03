@@ -31,10 +31,17 @@ export const OrderRouter = createTRPCRouter({
     .input(CreateOrderSchema)
     .mutation(async ({ ctx, input }) => {
       try {
+        const {comps, ...data } = input
         const { id } = await ctx.prisma.order.create({
           data: {
-            ...input,
+            ...data,
             status: OrderStatus.PENDING,
+            Competition   : {
+              connect: {
+                id: comps.map(({compID} )=> compID)
+                .filter((value, index, self) => self.indexOf(value) === index)[0], //TODO: FIx this later
+              },
+            },
             Ticket: {
               createMany: {
                 data: input.comps.map((item) => ({
@@ -51,7 +58,7 @@ export const OrderRouter = createTRPCRouter({
             await ctx.prisma.competition.findMany({
               where: {
                 id: {
-                  in: input.comps.map(({ compID }) => compID),
+                  in: comps.map(({ compID }) => compID),
                 },
               },
               include: {
@@ -81,7 +88,7 @@ export const OrderRouter = createTRPCRouter({
               : {}
           ),
           success_url: `${getBaseUrl()}/CheckoutPage/${id}`,
-          cancel_url: `${getBaseUrl()}/CheckoutPage`,
+          cancel_url: `${getBaseUrl()}/`,
         });
         await ctx.prisma.order.update({
           where: {
