@@ -57,13 +57,12 @@ const CheckoutComp = () => {
             onSubmit={async (values, actions) => {
               //if a value in the object values is undefined, it will not be sent to the server
               console.log("Form submitted:", values);
-              const tmp = CreateOrderSchema.parse({
+              const { url, error } = await createOrder({
                 ...values,
                 paymentMethod: values.paymentMethod as "PAYPAL" | "STRIPE",
                 date: new Date(values.date),
                 zip: values.zip.toString(),
-              }) 
-              const { url, error } = await createOrder(tmp);
+              });
               if (url) {
                 await router.push(url);
               }

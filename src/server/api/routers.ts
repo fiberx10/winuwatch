@@ -54,6 +54,7 @@ export const OrderRouter = createTRPCRouter({
         const { payment_intent, url } = await Stripe.checkout.sessions.create({
           payment_method_types: ["card"],
           mode: "payment",
+          customer_email : data.email,
           line_items: (
             await ctx.prisma.competition.findMany({
               where: {
@@ -88,7 +89,7 @@ export const OrderRouter = createTRPCRouter({
               : {}
           ),
           success_url: `${getBaseUrl()}/CheckoutPage/${id}`,
-          cancel_url: `${getBaseUrl()}/`,
+          cancel_url: `${getBaseUrl()}/CheckoutPage`,
         });
         await ctx.prisma.order.update({
           where: {
