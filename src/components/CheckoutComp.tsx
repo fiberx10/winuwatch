@@ -13,7 +13,7 @@ import "react-datetime/css/react-datetime.css";
 const CheckoutComp = () => {
   const router = useRouter();
 
-  const { mutateAsync: createOrder } = api.Order.create.useMutation();
+  const { mutateAsync: createOrder } = api.Order.createStripe.useMutation();
   const { competitions, cardDetails, updateComp, reset } = useCart();
 
   const { data: items } = api.Competition.getAll.useQuery({
@@ -57,7 +57,6 @@ const CheckoutComp = () => {
             onSubmit={async (values, actions) => {
               //if a value in the object values is undefined, it will not be sent to the server
               console.log("Form submitted:", values);
-
               const { url, error } = await createOrder({
                 ...values,
                 paymentMethod: values.paymentMethod as "PAYPAL" | "STRIPE",

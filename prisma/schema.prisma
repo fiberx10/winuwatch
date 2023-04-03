@@ -2,10 +2,6 @@ generator client {
   provider = "prisma-client-js"
 }
 
-generator erd {
-  provider = "prisma-erd-generator"
-  output   = "./erd.png"
-}
 
 
 datasource db {
@@ -82,7 +78,7 @@ model Order {
   last_name     String
   country       String
   address       String
-  town          String
+  town          String?
   zip           String
   phone         String
   email         String

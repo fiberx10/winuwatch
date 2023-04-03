@@ -27,14 +27,21 @@ export const OrderRouter = createTRPCRouter({
         },
       })
   ),
-  create: publicProcedure
+  createStripe: publicProcedure
     .input(CreateOrderSchema)
     .mutation(async ({ ctx, input }) => {
       try {
+        const {comps, ...data } = input
         const { id } = await ctx.prisma.order.create({
           data: {
-            ...input,
+            ...data,
             status: OrderStatus.PENDING,
+            Competition   : {
+              connect: {
+                id: comps.map(({compID} )=> compID)
+                .filter((value, index, self) => self.indexOf(value) === index)[0], //TODO: FIx this later
+              },
+            },
             Ticket: {
               createMany: {
                 data: input.comps.map((item) => ({
@@ -47,11 +54,12 @@ export const OrderRouter = createTRPCRouter({
         const { payment_intent, url } = await Stripe.checkout.sessions.create({
           payment_method_types: ["card"],
           mode: "payment",
+          customer_email : data.email,
           line_items: (
             await ctx.prisma.competition.findMany({
               where: {
                 id: {
-                  in: input.comps.map(({ compID }) => compID),
+                  in: comps.map(({ compID }) => compID),
                 },
               },
               include: {
@@ -105,6 +113,52 @@ export const OrderRouter = createTRPCRouter({
         };
       }
     }),
+  create: publicProcedure
+    .input(CreateOrderSchema)
+    .mutation(async ({ ctx, input }) => {
+      const {comps, ...data} = input
+      return await ctx.prisma.order.create({
+        data: {
+          ...data,
+          status: OrderStatus.CONFIRMED,
+          Ticket: {
+            createMany: {
+              data: comps.map((item) => ({
+                competitionId: item.compID,
+              })),
+            },
+          },
+        },
+      });
+    }),
+  update: publicProcedure
+    .input(
+      CreateOrderSchema.extend({
+        status: z.nativeEnum(OrderStatus),
+        id: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { id, ...data } = input;
+      return await ctx.prisma.order.update({
+        data: input,
+        where: {
+          id,
+        },
+      });
+    }),
+  remove: publicProcedure.input(z.string()).mutation(async ({ ctx, input }) => {
+    await ctx.prisma.ticket.deleteMany({
+      where: {
+        orderId: input,
+      },
+    });
+    return await ctx.prisma.order.delete({
+      where: {
+        id: input,
+      },
+    });
+  }),
 });
 
 export const CompetitionRouter = createTRPCRouter({
@@ -219,6 +273,12 @@ export const WatchesRouter = createTRPCRouter({
       });
     }),
   remove: publicProcedure.input(z.string()).mutation(async ({ ctx, input }) => {
+    //TODO: Delete the images from firebase
+    await ctx.prisma.imagesUrl.deleteMany({
+      where: {
+        WatchesId: input,
+      },
+    });
     return await ctx.prisma.watches.delete({
       where: {
         id: input,
@@ -332,6 +392,14 @@ export const WatchesRouter = createTRPCRouter({
     */
 });
 
+function shuffleArray(array: (string | undefined)[]) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array.filter((item): item is string => typeof item === "string");
+}
+
 export const QuestionRouter = createTRPCRouter({
   getOneRandom: publicProcedure.query(async ({ ctx }) => {
     const Questions = await ctx.prisma.question.findMany({
@@ -349,7 +417,7 @@ export const QuestionRouter = createTRPCRouter({
     }
     return {
       ...Question,
-      answers: Question.answers.map(({ answer }) => answer) || [],
+      answers: shuffleArray(Question.answers.map(({ answer }) => answer)) || [],
     };
   }),
 });
