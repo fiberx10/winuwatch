@@ -115,13 +115,14 @@ export const OrderRouter = createTRPCRouter({
   create: publicProcedure
     .input(CreateOrderSchema)
     .mutation(async ({ ctx, input }) => {
+      const {comps, ...data} = input
       return await ctx.prisma.order.create({
         data: {
-          ...input,
+          ...data,
           status: OrderStatus.CONFIRMED,
           Ticket: {
             createMany: {
-              data: input.comps.map((item) => ({
+              data: comps.map((item) => ({
                 competitionId: item.compID,
               })),
             },
