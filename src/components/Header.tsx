@@ -29,6 +29,7 @@ export default function Header() {
           style={{
             objectFit: "cover",
           }}
+          src="/images/professional-watches-cosmograph-daytona-cover-video_portrait.webm"
           width="100%"
           height="100%"
           autoPlay
