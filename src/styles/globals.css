@@ -28,7 +28,6 @@ input[type="number"] {
   font-family: "Kanit", sans-serif;
 }
 html {
-  background-attachment: fixed;
   background: #faf8f6;
 }
 .filepond--file {

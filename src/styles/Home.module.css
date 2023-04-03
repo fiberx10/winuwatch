@@ -16,11 +16,10 @@
 
 .vid {
   width: 100%;
-  z-index: -999;
+  z-index: -1;
   height: 100%;
   position: absolute;
   object-fit: cover;
-  filter: brightness(50%);
 }
 .NavBarContainer {
   display: flex;
@@ -186,6 +185,7 @@
   background-size: 100% 100vh;
   color: transparent;
   -webkit-background-clip: text;
+  -webkit-box-decoration-break: clone;
 }
 .background2 {
   background-image: url(https://content.rolex.com/dam/watches/family-pages/datejust/2023/a-date-with-destiny/classic-watches-datejust-a-date-with-destiny-yellow-cut-out.jpg);
@@ -196,6 +196,7 @@
   background-size: 100% 100vh;
   color: transparent;
   -webkit-background-clip: text;
+  -webkit-box-decoration-break: clone;
 }
 .background3 {
   background-image: url(https://content.rolex.com/dam/watches/family-pages/datejust/2023/a-date-with-destiny/classic-watches-datejust-a-date-with-destiny-yellow-cut-out.jpg);
@@ -205,11 +206,12 @@
   background-size: 100% 100vh;
   color: transparent;
   -webkit-background-clip: text;
+  -webkit-box-decoration-break: clone;
 }
 .background4 {
   background-image: url(https://content.rolex.com/dam/watches/family-pages/datejust/2023/a-date-with-destiny/classic-watches-datejust-a-date-with-destiny-yellow-cut-out.jpg);
   background-repeat: repeat-y;
-
+  -webkit-box-decoration-break: clone;
   background-clip: text;
   background-size: 100% 100vh;
   color: transparent;
@@ -218,7 +220,7 @@
 .background5 {
   background-image: url(https://content.rolex.com/dam/watches/family-pages/datejust/2023/a-date-with-destiny/classic-watches-datejust-a-date-with-destiny-yellow-cut-out.jpg);
   background-repeat: repeat-y;
-
+  -webkit-box-decoration-break: clone;
   background-clip: text;
   background-size: 100% 100vh;
   color: transparent;
@@ -227,7 +229,7 @@
 .background6 {
   background-image: url(https://content.rolex.com/dam/watches/family-pages/datejust/2023/a-date-with-destiny/classic-watches-datejust-a-date-with-destiny-yellow-cut-out.jpg);
   background-repeat: repeat-y;
-
+  -webkit-box-decoration-break: clone;
   background-clip: text;
   background-size: 100% 100vh;
   color: transparent;
