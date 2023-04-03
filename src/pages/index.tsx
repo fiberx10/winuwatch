@@ -26,6 +26,7 @@ const Home: NextPage = () => {
       name: "Test",
     });
   };*/
+
   const upComingWatchesCarou = [
     {
       img: "/images/upWatch9.webp",
