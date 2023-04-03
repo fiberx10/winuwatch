@@ -81,7 +81,6 @@ const DashboardWatches = () => {
     });
   };
 
-
   return (
     <div className={styles.DashCompsMain}>
       <div className={styles.dashCompsTopHeader}>
@@ -213,7 +212,9 @@ const DashboardWatches = () => {
                                             const url = await getDownloadURL(
                                               snapshot.ref
                                             );
-                                            setNewImgs( imgs => imgs ? [...imgs, url] : [url]);
+                                            setNewImgs((imgs) =>
+                                              imgs ? [...imgs, url] : [url]
+                                            );
                                             console.log(newimgs);
                                             setFieldValue(
                                               "images_url",
