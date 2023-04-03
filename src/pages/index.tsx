@@ -61,7 +61,7 @@ const Home: NextPage = () => {
       img: "/images/upWatch2.png",
       brand: "Rolex",
       title: "SUBMARINER DATE",
-      text: "\"Hulk\" Submariner Date 116610LV",
+      text: '"Hulk" Submariner Date 116610LV',
     },
     {
       img: "/images/upWatch4.webp",

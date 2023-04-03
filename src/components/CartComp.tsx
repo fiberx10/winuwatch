@@ -55,7 +55,8 @@ const CartComp = () => {
                   height={195}
                   alt="watchImage"
                   src={
-                    ComptetionData.Watches.images_url[0]?.url || "/images/watch.png"
+                    ComptetionData.Watches.images_url[0]?.url ||
+                    "/images/watch.png"
                   }
                 />
                 <div className={styles.watchleftDesc}>

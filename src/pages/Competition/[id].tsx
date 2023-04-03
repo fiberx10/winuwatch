@@ -15,9 +15,7 @@ import { Formater } from "@/utils";
 import { useState } from "react";
 import Image from "next/image";
 
-export const getServerSideProps = (
-  context: GetServerSidePropsContext
-) => {
+export const getServerSideProps = (context: GetServerSidePropsContext) => {
   try {
     const compID = z.string().parse(context.params?.id);
     return {
@@ -63,7 +61,7 @@ export default function Competition({
         <div className={styles.compWrapper}>
           <div className={styles.CompetitionMain}>
             <div className={styles.images}>
-              {data.Watches.images_url[0]?.url &&  (
+              {data.Watches.images_url[0]?.url && (
                 <Image
                   width={450}
                   height={440}

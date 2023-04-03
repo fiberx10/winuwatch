@@ -19,7 +19,7 @@ const CheckoutComp = () => {
   const { data: items } = api.Competition.getAll.useQuery({
     ids: competitions.map((comp) => comp.compID),
   });
-  const IsLegal = (Birthdate?: Date) => {
+  const IsLegal = (Birthdate = new Date()) => {
     const LegalAge = 18;
     const now = new Date();
     return (
@@ -27,7 +27,7 @@ const CheckoutComp = () => {
         now.getFullYear() - LegalAge,
         now.getMonth(),
         now.getDate()
-      ).getTime() >= (Birthdate || new Date()).getTime()
+      ).getTime() >= Birthdate.getTime()
     );
   };
   const [error, setError] = useState<string | undefined>();
@@ -44,32 +44,38 @@ const CheckoutComp = () => {
               country: "",
               address: "",
               town: "",
-              zip: undefined,
-              phone: undefined,
+              zip: "",
+              phone: "",
               email: "",
               paymentMethod: "STRIPE",
               totalPrice: totalCost,
-              comp: competitions,
-              date: undefined,
+              comps: competitions,
+              date: new Date(),
               checkedEmail: false,
               checkedTerms: false,
             }}
             onSubmit={async (values, actions) => {
               //if a value in the object values is undefined, it will not be sent to the server
-              const res = CreateOrderSchema.safeParse(values);
+              console.log("Form submitted:", values);
 
-              if (res.success) {
-                console.log("Form submitted:", res.data);
-                if (!IsLegal(values.date)) {
-                  setError("You must be 18 years old to purchase a ticket");
-                } else {
-                  const { url, error } = await createOrder(res.data);
-                  if (url) {
-                    await router.push(url);
-                  }
-                  setError(error || "Error in the creating the order");
-                }
+              const { url, error } = await createOrder({
+                ...values,
+                paymentMethod: values.paymentMethod as "PAYPAL" | "STRIPE",
+                date: new Date(values.date),
+                zip: values.zip.toString(),
+              });
+              if (url) {
+                await router.push(url);
               }
+              setError(error || "Error in the creating the order");
+              console.log(error);
+
+              // const res = CreateOrderSchema.safeParse(values);
+
+              // if (res.success) {
+              //   console.log("Form submitted:", res.data);
+
+              // }
               actions.setSubmitting(false);
             }}
           >
@@ -137,7 +143,7 @@ const CheckoutComp = () => {
                             required
                             id="zip"
                             name="zip"
-                            type="number"
+                            type="text"
                             min={0}
                           />
                         </div>
@@ -163,6 +169,10 @@ const CheckoutComp = () => {
                           <Datetime
                             utc={true}
                             input={true}
+                            timeFormat={false}
+                            isValidDate={(currentDate, selectedDate) => {
+                              return IsLegal(new Date(currentDate as Date));
+                            }}
                             inputProps={{
                               name: "date",
                               placeholder: "Enter Date",
@@ -187,7 +197,6 @@ const CheckoutComp = () => {
                     <div className={styles.PaymentMethod}>
                       <div className={styles.method}>
                         <Field
-                          defaultChecked
                           type="radio"
                           name="paymentMethod"
                           value="STRIPE"
@@ -224,7 +233,7 @@ const CheckoutComp = () => {
                     </div>
                     <div className={styles.SignMeUp}>
                       <label>
-                        <Field required name="checkedSMS" type="checkbox" />
+                        <Field required name="checkedTerms" type="checkbox" />
                         <p>
                           I hereby declare that I have thoroughly read,
                           completely understood, and unconditionally accepted
@@ -244,12 +253,13 @@ const CheckoutComp = () => {
                   <h1> Order Summary</h1>
                   <div className={styles.RightCon}>
                     <div className={styles.OrdersFlex}>
-                      {values.comp.map((order, i) => {
+                      {values.comps.map((order, i) => {
                         const ComptetionData = items.find(
                           (compData) => compData.id === order.compID
                         );
 
-                        if (!ComptetionData || ComptetionData.Watches === null) return null;
+                        if (!ComptetionData || ComptetionData.Watches === null)
+                          return null;
                         return (
                           <div className={styles.orderItem} key={i}>
                             <Image
@@ -265,7 +275,7 @@ const CheckoutComp = () => {
                                 {ComptetionData?.Watches.model}
                               </h3>
                               <span>
-                                {values.comp.map((comp, i) => {
+                                {values.comps.map((comp, i) => {
                                   return (
                                     <p key={i}>
                                       $
@@ -279,7 +289,7 @@ const CheckoutComp = () => {
                               </span>
                               <h3>
                                 Remaining Tickets:{" "}
-                                {values.comp.map((comp) => {
+                                {values.comps.map((comp) => {
                                   return (
                                     ComptetionData.remaining_tickets &&
                                     ComptetionData.remaining_tickets -
@@ -302,7 +312,7 @@ const CheckoutComp = () => {
                                   });
                                   setValues({
                                     ...values,
-                                    comp: values.comp.map((comp) => {
+                                    comps: values.comps.map((comp) => {
                                       if (comp.compID === order.compID) {
                                         return {
                                           ...comp,
@@ -323,7 +333,9 @@ const CheckoutComp = () => {
                                 />
                               </div>
                               <div className={styles.counterValue}>
-                                {values.comp.map((comp) => comp.number_tickets)}
+                                {values.comps.map(
+                                  (comp) => comp.number_tickets
+                                )}
                               </div>
                               <div
                                 onClick={() => {
@@ -341,7 +353,7 @@ const CheckoutComp = () => {
                                   });
                                   setValues({
                                     ...values,
-                                    comp: values.comp.map((comp) => {
+                                    comps: values.comps.map((comp) => {
                                       if (comp.compID === order.compID) {
                                         return {
                                           ...comp,
@@ -371,7 +383,7 @@ const CheckoutComp = () => {
                         <p>{`Total`}</p>
                         <span>
                           {Formater(
-                            values.comp.reduce(
+                            values.comps.reduce(
                               (a, b) =>
                                 a + b.number_tickets * b.price_per_ticket,
                               0
@@ -404,7 +416,7 @@ const CheckoutComp = () => {
                               }
                             }}
                             forceReRender={[
-                              values.comp.reduce(
+                              values.comps.reduce(
                                 (a, b) =>
                                   a + b.number_tickets * b.price_per_ticket,
                                 0
@@ -433,14 +445,15 @@ const CheckoutComp = () => {
                       ) : (
                         <>
                           <button type="submit">Confirm Order</button>
-                          <button type="button" 
-                          onClick={() => {
-                            reset()
-                            setValues({
-                              ...values,
-                              comp: [],
-                            });
-                          }}
+                          <button
+                            type="button"
+                            onClick={() => {
+                              reset();
+                              setValues({
+                                ...values,
+                                comps: [],
+                              });
+                            }}
                           >
                             Clear Cart
                           </button>

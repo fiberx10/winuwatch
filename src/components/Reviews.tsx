@@ -10,7 +10,8 @@ const Reviews = () => {
       score: 5,
       numberOfRev: 12,
       review: "I had the best experience online.",
-      fullRev: "I had the best experience online. The website is very intuitive and functional. I wish to win and to expand my watches collection, good luck to me !",
+      fullRev:
+        "I had the best experience online. The website is very intuitive and functional. I wish to win and to expand my watches collection, good luck to me !",
       fullname: "Chanel Cohen",
       time: "23.3.2023",
     },
@@ -19,7 +20,8 @@ const Reviews = () => {
       score: 4.8,
       numberOfRev: 9,
       review: "Very good idea and a beautiful website",
-      fullRev: "Very good idea and a beautiful website. thank you for giving us the chance to participate in the competition( with only one ticket! ) ",
+      fullRev:
+        "Very good idea and a beautiful website. thank you for giving us the chance to participate in the competition( with only one ticket! ) ",
       fullname: "Jessica Meyer",
       time: "17.3.2023",
     },
@@ -28,7 +30,8 @@ const Reviews = () => {
       score: 4.9,
       numberOfRev: 1,
       review: "Wow I like the idea it sound amazing …",
-      fullRev: "Wow I like the idea it sound amazing waiting for the opening of the website",
+      fullRev:
+        "Wow I like the idea it sound amazing waiting for the opening of the website",
       fullname: "Xampy",
       time: "17.3.2023",
     },
@@ -37,7 +40,8 @@ const Reviews = () => {
       score: 5,
       numberOfRev: 1,
       review: "Excellente présentation !",
-      fullRev: "Excellente présentation ! Impatient que le site ouvre en Europe Idee génial !!!",
+      fullRev:
+        "Excellente présentation ! Impatient que le site ouvre en Europe Idee génial !!!",
       fullname: "Koskas",
       time: "14.3.2023",
     },

@@ -14,7 +14,16 @@ export const OrderRouter = createTRPCRouter({
     async ({ ctx, input }) =>
       await ctx.prisma.order.findMany({
         where: {
-          id: input ? { in: input } : {},
+          Competition: {
+            some: {
+              id: {
+                in: input,
+              },
+            },
+          },
+        },
+        include: {
+          Ticket: true,
         },
       })
   ),
@@ -22,6 +31,19 @@ export const OrderRouter = createTRPCRouter({
     .input(CreateOrderSchema)
     .mutation(async ({ ctx, input }) => {
       try {
+        const { id } = await ctx.prisma.order.create({
+          data: {
+            ...input,
+            status: OrderStatus.PENDING,
+            Ticket: {
+              createMany: {
+                data: input.comps.map((item) => ({
+                  competitionId: item.compID,
+                })),
+              },
+            },
+          },
+        });
         const { payment_intent, url } = await Stripe.checkout.sessions.create({
           payment_method_types: ["card"],
           mode: "payment",
@@ -54,26 +76,20 @@ export const OrderRouter = createTRPCRouter({
                   },
                   quantity:
                     input.comps.find((item) => item.compID === comp.id)
-                      ?.quantity || 0,
+                      ?.number_tickets || 0,
                 }
               : {}
           ),
-          success_url: `${getBaseUrl()}/stripe?payment=success`,
+          success_url: `${getBaseUrl()}/CheckoutPage/${id}`,
           cancel_url: `${getBaseUrl()}/CheckoutPage`,
         });
-        const { id } = await ctx.prisma.order.create({
+        await ctx.prisma.order.update({
+          where: {
+            id,
+          },
           data: {
-            ...input,
-            status: OrderStatus.PENDING,
             paymentId:
               typeof payment_intent === "string" ? payment_intent : undefined,
-            Ticket: {
-              createMany: {
-                data: input.comps.map((item) => ({
-                  competitionId: item.compID,
-                })),
-              },
-            },
           },
         });
         return {

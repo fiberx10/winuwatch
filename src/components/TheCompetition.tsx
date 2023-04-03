@@ -38,7 +38,6 @@ const TheCompetition = () => {
               <div className={styles.watches} key={watch.id}>
                 <div
                   style={{
-                    
                     background: watch.Watches.images_url[0]?.url
                       ? `linear-gradient(
                       180deg,
