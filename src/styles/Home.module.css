@@ -16,7 +16,7 @@
   width: 100%;
   z-index: -1;
   height: 460px;
-  position: absolute;
+  position: relative;
 }
 .vid video {
   object-fit: cover;
@@ -69,6 +69,9 @@
   justify-content: center;
   position: relative;
   margin-top: -50px;
+  position: absolute;
+  top: 20vh;
+  width: 100%;
   text-align: center;
 }
 .HeaderTit h2 {
@@ -96,7 +99,10 @@
   align-items: center;
   justify-content: center;
   padding-bottom: 20px;
-  gap: 2rem;
+  gap: 1rem;
+  position: absolute;
+  top: 38vh;
+  width: 100%;
 }
 .HeaderDesc p {
   color: white;
@@ -982,9 +988,12 @@
   .HeaderTit {
     margin-bottom: -80px;
     flex-direction: column;
+    top: 50vw;
     padding: 0px 10px;
   }
-
+  .HeaderDesc {
+    top: 80vw;
+  }
   .HeaderTit h1 {
     font-size: 9vw;
     text-align: center;
@@ -1173,6 +1182,39 @@
     grid-template-columns: repeat(1, 1fr);
     width: 100%;
     text-align: center;
+  }
+}
+@media only screen and (min-width: 442px) and (max-width: 1216px) {
+  .HeaderTit {
+    top: 27vh;
+  }
+  .HeaderDesc {
+    top: 60vh;
+  }
+}
+
+@media only screen and (min-width: 700px) and (max-width: 930px) {
+  .HeaderTit h1 {
+    font-size: 60px;
+  }
+  .HeaderDesc {
+    top: 65vh;
+  }
+}
+@media only screen and (min-width: 1500px) {
+  .HeaderTit {
+    top: 15vh;
+  }
+  .HeaderDesc {
+    top: 30vh;
+  }
+}
+@media only screen and (min-width: 1216px) and (max-width: 1500px) {
+  .HeaderTit {
+    top: 12vw;
+  }
+  .HeaderDesc {
+    top: 24vw;
   }
 }
 @media only screen and (min-width: 930px) and (max-width: 1950px) {
