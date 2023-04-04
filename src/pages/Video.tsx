@@ -5,6 +5,7 @@ const Video = () => {
     <div
       style={{
         height: "50vh",
+        position: "fixed",
       }}
     >
       <video width="100%" height="100%" autoPlay loop playsInline muted={true}>
