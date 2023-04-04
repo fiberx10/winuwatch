@@ -286,7 +286,7 @@
   justify-content: flex-end;
 }
 .watchContent {
-  margin-bottom: -260px;
+  margin-bottom: -47vh;
   display: -webkit-flex;
   display: flex;
   flex-direction: column;
@@ -1180,6 +1180,7 @@
     align-items: flex-start;
     gap: 2.3rem;
   }
+
   .emails {
     width: 300px;
   }
@@ -1319,7 +1320,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 12rem;
+    row-gap: 14rem !important;
   }
   .emails {
     width: 250px;
