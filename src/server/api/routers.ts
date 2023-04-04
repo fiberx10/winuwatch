@@ -27,6 +27,19 @@ export const OrderRouter = createTRPCRouter({
         },
       })
   ),
+  getOrder: publicProcedure.input(z.string()).query(
+    async ({ ctx, input }) =>
+      await ctx.prisma.order.findMany({
+        where: input
+          ? {
+              id: input,
+            }
+          : {},
+        include: {
+          Ticket: true,
+        },
+      })
+  ),
   createStripe: publicProcedure
     .input(CreateOrderSchema)
     .mutation(async ({ ctx, input }) => {

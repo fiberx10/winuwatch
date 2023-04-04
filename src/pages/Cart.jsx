@@ -2,6 +2,7 @@ import CartComp from "@/components/CartComp";
 import Footer from "@/components/Footer";
 import NavBar from "@/components/NavBar";
 import Head from "next/head";
+import styles from "@/styles/Cart.module.css";
 
 export default function Cart() {
   return (
@@ -13,7 +14,9 @@ export default function Cart() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <NavBar />
-      <CartComp />
+      <div className={styles.CartWrapper}>
+        <CartComp />
+      </div>
       <Footer />
     </div>
   );

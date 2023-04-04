@@ -39,12 +39,14 @@ const Footer = () => {
           Don&apos;t miss the live draw and the announcement of the next
           competitions on Instagram !
         </p>
-        <Image
-          width={250}
-          height={52}
-          alt="instaFollow"
-          src="/images/InstaFooter.svg"
-        />
+        <Link href="https://www.instagram.com/winuwatch/">
+          <Image
+            width={250}
+            height={52}
+            alt="instaFollow"
+            src="/images/InstaFooter.svg"
+          />
+        </Link>
       </div>
       <div className={styles.Footer}>
         <div className={styles.FooterTop}>
@@ -61,9 +63,15 @@ const Footer = () => {
                   }}
                   key={i}
                 >
-                  <Link href="/">{menu.names[0]}</Link>
+                  <Link
+                    href={menu.names[0] === "PHILOSOPHY" ? "/Philosophy" : "/"}
+                  >
+                    {menu.names[0]}
+                  </Link>
                   <Link href="/">{menu.names[1]}</Link>
-                  <Link href="/">{menu.names[2]}</Link>
+                  <Link href={menu.names[0] === "Charity" ? "/Charity" : "/"}>
+                    {menu.names[2]}
+                  </Link>
                 </div>
               );
             })}

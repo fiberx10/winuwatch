@@ -211,7 +211,7 @@ const CheckoutComp = () => {
                           Credit card
                         </p>
                       </div>
-                      <div className={styles.method}>
+                      {/* <div className={styles.method}>
                         <Field
                           type="radio"
                           name="paymentMethod"
@@ -228,7 +228,7 @@ const CheckoutComp = () => {
                         >
                           PayPal
                         </p>
-                      </div>
+                      </div> */}
                     </div>
                     <div className={styles.SignMeUp}>
                       <label>
@@ -265,7 +265,11 @@ const CheckoutComp = () => {
                               width={106}
                               height={105}
                               className={styles.orderImg}
-                              src="/images/tester.png"
+                              src={
+                                ComptetionData.Watches.images_url[0]
+                                  ? ComptetionData.Watches.images_url[0].url
+                                  : "/images/tester.png"
+                              }
                               alt="watching"
                             />
                             <div className={styles.orderTit}>
