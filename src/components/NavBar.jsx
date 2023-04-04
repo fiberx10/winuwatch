@@ -31,8 +31,6 @@ export default function NavBar() {
           typeof window !== "undefined" && location.pathname !== "/"
             ? "unset"
             : "absolute",
-        top: "0",
-        width: "100%",
       }}
     >
       <div
