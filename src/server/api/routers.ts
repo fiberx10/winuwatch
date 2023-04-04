@@ -60,9 +60,13 @@ export const OrderRouter = createTRPCRouter({
             },
             Ticket: {
               createMany: {
-                data: input.comps.map((item) => ({
-                  competitionId: item.compID,
-                })),
+                data: input.comps
+                  .map(({ compID, number_tickets }) =>
+                    new Array(number_tickets).fill(0).map((_) => ({
+                      competitionId: compID,
+                    }))
+                  )
+                  .flat(),
               },
             },
           },
@@ -139,9 +143,13 @@ export const OrderRouter = createTRPCRouter({
           status: OrderStatus.CONFIRMED,
           Ticket: {
             createMany: {
-              data: comps.map((item) => ({
-                competitionId: item.compID,
-              })),
+              data: comps
+                .map(({ compID, number_tickets }) =>
+                  new Array(number_tickets).fill(0).map((_) => ({
+                    competitionId: compID,
+                  }))
+                )
+                .flat(),
             },
           },
         },
