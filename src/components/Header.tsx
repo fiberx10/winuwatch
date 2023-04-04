@@ -34,8 +34,8 @@ export default function Header() {
           muted={true}
         >
           <source
-            src="/images/professional-watches-cosmograph-daytona-cover-video_portrait.webm"
-            type="video/webm"
+            src="/images/professional-watches-cosmograph-daytona-cover-video_portrait.mp4"
+            type="video/mp4"
           />
         </video>
       </div>
