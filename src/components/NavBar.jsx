@@ -27,6 +27,12 @@ export default function NavBar() {
       className={styles.NavBarContainer}
       style={{
         color: navColor,
+        position:
+          typeof window !== "undefined" && location.pathname === "/"
+            ? "absolute"
+            : "initial",
+        top: "0",
+        width: "100%",
       }}
     >
       <div
