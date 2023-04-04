@@ -8,7 +8,6 @@
   background-size: cover;
   background-position: center;
   display: flex;
-  position: relative;
   flex-direction: column;
   justify-content: space-between;
 }
@@ -16,14 +15,14 @@
 .vid {
   width: 100%;
   z-index: -1;
-  height: 100%;
+  height: 460px;
   position: absolute;
 }
 .vid video {
   object-fit: cover;
-  filter: brightness(50%);
   width: 100%;
   height: 100%;
+  filter: brightness(50%);
 }
 .NavBarContainer {
   display: flex;
