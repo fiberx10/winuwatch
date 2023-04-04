@@ -28,9 +28,9 @@ export default function NavBar() {
       style={{
         color: navColor,
         position:
-          typeof window !== "undefined" && location.pathname === "/"
-            ? "absolute"
-            : "initial",
+          typeof window !== "undefined" && location.pathname !== "/"
+            ? "unset"
+            : "absolute",
         top: "0",
         width: "100%",
       }}
