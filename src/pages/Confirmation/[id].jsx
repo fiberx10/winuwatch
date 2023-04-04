@@ -2,9 +2,11 @@ import Footer from "@/components/Footer";
 import NavBar from "@/components/NavBar";
 import Head from "next/head";
 import { useRouter } from "next/router";
+import { api } from "@/utils/api";
 
-export default function Id({ data }) {
+export default function Confirmation() {
   const { query } = useRouter();
+  const { data } = api.Order.getOrder.useQuery(query.id);
   console.log(query);
   return (
     <div>
@@ -14,7 +16,9 @@ export default function Id({ data }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <NavBar />
-      <h1>Order {query.id} Completed</h1>
+    <div>
+        <h1>Order Complete</h1>
+    </div>
       <Footer />
     </div>
   );
