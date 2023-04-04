@@ -27,6 +27,8 @@
 .NavBarContainer {
   display: flex;
   align-items: center;
+  position: absolute;
+  width: 100%;
   justify-content: center;
   font-size: 15px;
   gap: 3rem;
