@@ -286,7 +286,7 @@
   justify-content: flex-end;
 }
 .watchContent {
-  margin-bottom: -260px;
+  margin-bottom: -47vh;
   display: -webkit-flex;
   display: flex;
   flex-direction: column;
@@ -915,9 +915,15 @@
     font-size: 14px;
   }
 }
+@media only screen and (min-width: 320px) and (max-width: 393px) {
+  .watchCon h3 {
+    font-size: 35px;
+  }
+}
 @media only screen and (min-width: 320px) and (max-width: 930px) {
   .AliceContainer h1 {
     margin-left: 10px;
+    top: -4%;
   }
   .certifBox p {
     font-size: 16px;
@@ -997,7 +1003,7 @@
     font-size: 35px;
   }
   .compWatches {
-    gap: 13rem;
+    row-gap: 17rem !important;
     flex-direction: column;
   }
   .watches {
@@ -1180,6 +1186,7 @@
     align-items: flex-start;
     gap: 2.3rem;
   }
+
   .emails {
     width: 300px;
   }
@@ -1319,7 +1326,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 12rem;
+    row-gap: 14rem !important;
   }
   .emails {
     width: 250px;

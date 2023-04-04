@@ -23,6 +23,10 @@ const Footer = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+  const howTo =
+    typeof window !== "undefined" && document.getElementById("Howtoplay");
+  const theComp =
+    typeof window !== "undefined" && document.getElementById("theComp");
   return (
     <>
       <div
@@ -64,12 +68,66 @@ const Footer = () => {
                   key={i}
                 >
                   <Link
-                    href={menu.names[0] === "PHILOSOPHY" ? "/Philosophy" : "/"}
+                    onClick={() => {
+                      menu.names[0] === "COMPETITIONS"
+                        ? typeof window !== "undefined" &&
+                          window.scrollTo({
+                            top:
+                              theComp !== null && theComp instanceof HTMLElement
+                                ? theComp.offsetTop
+                                : 400,
+                            behavior: "smooth",
+                          })
+                        : "";
+                    }}
+                    scroll={false}
+                    href={
+                      menu.names[0] === "PHILOSOPHY"
+                        ? "/Philosophy"
+                        : menu.names[0] === "Acceptable Use Policy"
+                        ? "https://winuwatch.uk/?page_id=774"
+                        : menu.names[0] === "Return Policy"
+                        ? "https://winuwatch.uk/?page_id=744"
+                        : ""
+                    }
                   >
                     {menu.names[0]}
                   </Link>
-                  <Link href="/">{menu.names[1]}</Link>
-                  <Link href={menu.names[0] === "Charity" ? "/Charity" : "/"}>
+                  <Link
+                    onClick={() => {
+                      menu.names[1] === "how to play"
+                        ? typeof window !== "undefined" &&
+                          window.scrollTo({
+                            top:
+                              howTo !== null && howTo instanceof HTMLElement
+                                ? howTo.offsetTop
+                                : 400,
+                            behavior: "smooth",
+                          })
+                        : "";
+                    }}
+                    scroll={false}
+                    href={
+                      menu.names[1] === "faq"
+                        ? "https://winuwatch.uk/?page_id=782"
+                        : menu.names[1] === "terms & conditions"
+                        ? "https://winuwatch.uk/?page_id=713"
+                        : ""
+                    }
+                  >
+                    {menu.names[1]}
+                  </Link>
+                  <Link
+                    href={
+                      menu.names[2] === "Charity"
+                        ? "/Charity"
+                        : menu.names[2] === "Privacy Policy"
+                        ? "https://winuwatch.uk/?page_id=3"
+                        : menu.names[2] === "contact"
+                        ? "mailto:info@winuwatch.uk"
+                        : ""
+                    }
+                  >
                     {menu.names[2]}
                   </Link>
                 </div>
