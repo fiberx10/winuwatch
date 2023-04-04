@@ -1,0 +1,128 @@
+.confirmwrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  padding-top: 80px;
+  padding-bottom: 80px;
+  padding-left: 80px;
+  padding-right: 80px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #f5f5f5;
+}
+
+.confirm_icon {
+  width: 100px;
+  height: 100px;
+  margin: 0 auto;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.confirm_text {
+  font-size: 20px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.confirm_text > h1 {
+  font-weight: 400;
+  font-size: 35px;
+  font-family: "Iskry", sans-serif;
+  text-transform: uppercase;
+  color: #000000;
+  padding-bottom: 20px;
+}
+
+.confirm_text > p {
+  font-weight: 300;
+  font-size: 24px;
+  color: rgba(30, 30, 30, 0.77);
+  flex: 1;
+}
+
+@media only screen and (max-width: 930px) {
+    .confirmwrapper {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        padding-top: 40px;
+        padding-bottom: 40px;
+        padding-left: 40px;
+        padding-right: 40px;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background-color: #f5f5f5;
+      }
+      
+      .confirm_icon {
+        width: 100px;
+        height: 100px;
+        margin: 0 auto;
+        margin-top: 20px;
+        margin-bottom: 20px;
+      }
+      
+      .confirm_text {
+        font-size: 20px;
+        text-align: center;
+        margin-bottom: 20px;
+      }
+      
+      .confirm_text > h1 {
+        font-weight: 400;
+        font-size: 35px;
+        font-family: "Iskry", sans-serif;
+        text-transform: uppercase;
+        color: #000000;
+        padding-bottom: 20px;
+      }
+      
+      .confirm_text > p {
+        font-weight: 300;
+        font-size: 20px;
+        color: rgba(30, 30, 30, 0.77);
+        flex: 1;
+      }
+}
+@media only screen and (min-width: 1440px) and (max-width: 2560px) {
+    .confirmwrapper {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        padding-top: 60px;
+        padding-bottom: 60px;
+        padding-left: 60px;
+        padding-right: 60px;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background-color: #f5f5f5;
+      }
+      
+      .confirm_icon {
+        width: 100px;
+        height: 100px;
+        margin: 0 auto;
+        margin-top: 20px;
+        margin-bottom: 20px;
+      }
+         
+      .confirm_text > h1 {
+        font-weight: 400;
+        font-size: 35px;
+        font-family: "Iskry", sans-serif;
+        text-transform: uppercase;
+        color: #000000;
+        padding-bottom: 20px;
+      }
+      
+      .confirm_text > p {
+        font-weight: 300;
+        font-size: 22px;
+        color: rgba(30, 30, 30, 0.77);
+        flex: 1;
+      }
+}
