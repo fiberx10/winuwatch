@@ -92,6 +92,7 @@
 .orderImg {
   width: 106px;
   height: 105px;
+  object-fit: cover;
   box-shadow: 0px 4px 30px -6px rgba(0, 0, 0, 0.1);
 }
 .orderItem {

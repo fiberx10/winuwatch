@@ -1,14 +1,36 @@
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
-import { CompetitionStatus, OrderStatus } from "@prisma/client";
+import { CompetitionStatus, Order, OrderStatus, Ticket } from "@prisma/client";
 import { getBaseUrl, CreateOrderSchema } from "@/utils";
 import { WatchesSchema, CompetitionSchema } from "@/utils/zodSchemas";
 import { env } from "@/env.mjs";
 import stripe from "stripe";
+import sendgrid from "@sendgrid/mail";
+import { render } from "@react-email/render";
 
 const Stripe = new stripe(env.STRIPE_SECRET_KEY, {
   apiVersion: "2022-11-15",
 });
+
+const Send_email = async (
+  order: Order & {
+    Ticket: Ticket[];
+  }
+) => {
+  //TODO here we implement the logic to send the email
+  sendgrid.setApiKey(
+    "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"
+  );
+
+  const options = {
+    from: "noreply@winuwatch.uk",
+    to: order.email,
+    subject: "Order Confirmation",
+    html: `<div>You've got a mail</div>`,
+  };
+
+  await sendgrid.send(options);
+};
 export const OrderRouter = createTRPCRouter({
   getAll: publicProcedure.input(z.array(z.string()).optional()).query(
     async ({ ctx, input }) =>
@@ -111,6 +133,7 @@ export const OrderRouter = createTRPCRouter({
           success_url: `${getBaseUrl()}/Confirmation/${id}`,
           cancel_url: `${getBaseUrl()}/CheckoutPage`,
         });
+
         await ctx.prisma.order.update({
           where: {
             id,
@@ -120,6 +143,7 @@ export const OrderRouter = createTRPCRouter({
               typeof payment_intent === "string" ? payment_intent : undefined,
           },
         });
+
         return {
           id,
           payment_intent,
@@ -163,7 +187,7 @@ export const OrderRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const { id, ...data } = input;
+      const { id } = input;
       return await ctx.prisma.order.update({
         data: input,
         where: {

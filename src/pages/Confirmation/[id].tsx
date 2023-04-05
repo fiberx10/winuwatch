@@ -8,7 +8,10 @@ import Image from "next/image";
 
 export default function Confirmation() {
   const { query } = useRouter();
-  const { data } = api.Order.getOrder.useQuery(query.id as string);
+  const { data } = api.Order.getOrder.useQuery(
+    query.id ? query.id.toString() : ""
+  );
+
   return (
     <div>
       <Head>
@@ -37,5 +40,3 @@ export default function Confirmation() {
     </div>
   );
 }
-
-
