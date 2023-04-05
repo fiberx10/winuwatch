@@ -1,4 +1,3 @@
-import * as React from "react";
 import { Html } from "@react-email/html";
 import { Head } from "@react-email/head";
 import { Section } from "@react-email/section";
@@ -10,23 +9,21 @@ import { Img } from "@react-email/img";
 import { Preview } from "@react-email/preview";
 import { Text } from "@react-email/text";
 import { Link } from "@react-email/link";
-interface SlackConfirmEmailProps {
-  clientName?: string;
+import { render } from "@react-email/render";
+
+
+const baseUrl = process.env.VERCEL_URL
+  ? `https://${process.env.VERCEL_URL}`
+  : ""; //TO be imporrted
+
+export const SlackConfirmEmail = (
+  clientName?: string,
   numerOfTickets?: Array<{
     compID: string;
     number_tickets: number;
     price_per_ticket: number;
-  }>;
-}
-
-const baseUrl = process.env.VERCEL_URL
-  ? `https://${process.env.VERCEL_URL}`
-  : "";
-
-export const SlackConfirmEmail = ({
-  clientName,
-  numerOfTickets,
-}: SlackConfirmEmailProps) => (
+  }>
+) => (
   <Html>
     <Head>
       <Font
@@ -161,6 +158,7 @@ export const SlackConfirmEmail = ({
     </Container>
   </Html>
 );
+
 
 export default SlackConfirmEmail;
 

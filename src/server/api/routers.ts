@@ -7,7 +7,7 @@ import { env } from "@/env.mjs";
 import stripe from "stripe";
 import sendgrid from "@sendgrid/mail";
 import { render } from "@react-email/render";
-
+import Email from "@/emails";
 const Stripe = new stripe(env.STRIPE_SECRET_KEY, {
   apiVersion: "2022-11-15",
 });
@@ -22,16 +22,17 @@ const Send_email = async (
     "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"
   );
 
-  const options = {
+  await sendgrid.send({
     from: "noreply@winuwatch.uk",
     to: order.email,
     subject: "Order Confirmation",
-    html: `<div>You've got a mail</div>`,
-  };
-
-  await sendgrid.send(options);
+    html: render(Email(
+        "Order Confirmation",
+      ))
+  });
 };
 export const OrderRouter = createTRPCRouter({
+  
   getAll: publicProcedure.input(z.array(z.string()).optional()).query(
     async ({ ctx, input }) =>
       await ctx.prisma.order.findMany({
