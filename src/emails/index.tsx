@@ -10,6 +10,7 @@ import { Preview } from "@react-email/preview";
 import { Text } from "@react-email/text";
 import { Link } from "@react-email/link";
 import { render } from "@react-email/render";
+import { Order, Ticket } from "@prisma/client";
 
 
 const baseUrl = process.env.VERCEL_URL
@@ -17,12 +18,9 @@ const baseUrl = process.env.VERCEL_URL
   : ""; //TO be imporrted
 
 export const SlackConfirmEmail = (
-  clientName?: string,
-  numerOfTickets?: Array<{
-    compID: string;
-    number_tickets: number;
-    price_per_ticket: number;
-  }>
+  order: Order & {
+    Ticket: Ticket[];
+  }
 ) => (
   <Html>
     <Head>

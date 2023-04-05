@@ -2,23 +2,49 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import sendgrid from "@sendgrid/mail";
 import { render } from "@react-email/render";
 import Email from "@/emails";
-import { CompetitionStatus, Order, OrderStatus, Ticket } from "@prisma/client";
+import nodemailer from "nodemailer";
+import { faker } from "@faker-js/faker";
+import { Order, OrderStatus, PaymentMethod, Ticket } from "@prisma/client";
 
-const Send_email = async () => {
-  //TODO here we implement the logic to send the email
-  sendgrid.setApiKey(
-    "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"
-  );
+const GENorder = (): Order & {
+  Ticket: Ticket[];
+} => ({
+  id: faker.datatype.uuid(),
+  first_name: faker.name.firstName(),
+  last_name: faker.name.lastName(),
+  country: faker.address.country(),
+  address: faker.address.streetAddress(),
+  town: faker.address.city(),
+  zip: faker.address.zipCode(),
+  email: faker.internet.email(),
+  phone: faker.phone.number(),
+  date: faker.date.past(),
+  status: faker.helpers.arrayElement([
+    OrderStatus.PENDING,
+    OrderStatus.CONFIRMED,
+    OrderStatus.CANCELLED,
+  ]),
+  paymentMethod: faker.helpers.arrayElement([
+    PaymentMethod.PAYPAL,
+    PaymentMethod.STRIPE,
+  ]),
+  checkedEmail: faker.datatype.boolean(),
+  checkedTerms: faker.datatype.boolean(),
+  totalPrice: faker.datatype.number(1000),
+  paymentId: faker.datatype.uuid(),
+  createdAt: faker.date.past(),
+  updatedAt: faker.date.past(),
+  Ticket: new Array(faker.datatype.number(10)).fill(0).map((_) => ({
+    id: faker.datatype.uuid(),
+    orderId: faker.datatype.uuid(),
+    competitionId: faker.datatype.uuid(),
+    createdAt: faker.date.past(),
+    updatedAt: faker.date.past(),
+  })),
+});
 
-  await sendgrid.send({
-    from: "noreply@winuwatch.uk",
-    to: "iliassjabali@gmail.com",
-    subject: "Order Confirmation",
-    html: render(Email("Order Confirmation")),
-  });
-};
 export default async function (req: NextApiRequest, res: NextApiResponse) {
-  await Send_email();
-  //console.log("email sent");
-  res.send(render(Email("Order Confirmation")));
+  //  res.send("Order Confirmation")));
+
+  res.send(render(Email(GENorder())));
 }
