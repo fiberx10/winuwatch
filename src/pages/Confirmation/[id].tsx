@@ -26,7 +26,7 @@ export default function Confirmation() {
           height={200}
         ></Image>
         <div className={styles.confirm_text}>
-          <h1>Thank you {data[0]?.first_name} for your order!</h1>
+          <h1>Thank you {data ? data[0]?.first_name : null} for your order!</h1>
           <p>
             Your order has been confirmed . <br /> You will receive an email
             confirmation shortly.
@@ -38,10 +38,4 @@ export default function Confirmation() {
   );
 }
 
-export async function getServerSideProps(ctx: any) {
-  return {
-    props: {
-      data: null,
-    },
-  };
-}
+
