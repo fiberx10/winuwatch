@@ -108,7 +108,7 @@ export const OrderRouter = createTRPCRouter({
                 }
               : {}
           ),
-          success_url: `${getBaseUrl()}/CheckoutPage/${id}`,
+          success_url: `${getBaseUrl()}/Confirmation/${id}`,
           cancel_url: `${getBaseUrl()}/CheckoutPage`,
         });
         await ctx.prisma.order.update({
