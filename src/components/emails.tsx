@@ -8,6 +8,7 @@ import { Preview } from "@react-email/preview";
 import { Text } from "@react-email/text";
 import { Button } from "@react-email/Button";
 import { Order, Ticket } from "@prisma/client";
+import Link from "next/link";
 import React from "react";
 
 export const SlackConfirmEmail = (
@@ -220,12 +221,17 @@ export const SlackConfirmEmail = (
             cursor: "pointer",
           }}
         >
+          <Link 
+            href="https://www.instagram.com/winuwatch/"
+            style={{ textDecoration: "none" }}
+          >
           <Img
             src="/images/InstaFooter.svg"
             width="200"
             height="100"
             alt="Slack"
           />
+          </Link>
         </Section>
       </Section>
 
