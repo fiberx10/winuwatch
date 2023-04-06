@@ -12,9 +12,7 @@ const Stripe = new stripe(env.STRIPE_SECRET_KEY, {
   apiVersion: "2022-11-15",
 });
 
-
 export const OrderRouter = createTRPCRouter({
-  
   getAll: publicProcedure.input(z.array(z.string()).optional()).query(
     async ({ ctx, input }) =>
       await ctx.prisma.order.findMany({

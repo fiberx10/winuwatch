@@ -3,13 +3,10 @@ import { Head } from "@react-email/head";
 import { Section } from "@react-email/section";
 import { Column } from "@react-email/column";
 import { Container } from "@react-email/container";
-import { Font } from "@react-email/font";
-import { Heading } from "@react-email/heading";
+
 import { Img } from "@react-email/img";
 import { Preview } from "@react-email/preview";
 import { Text } from "@react-email/text";
-import { Link } from "@react-email/link";
-import { render } from "@react-email/render";
 import { Button } from "@react-email/Button";
 import { Order, Ticket } from "@prisma/client";
 

@@ -4,16 +4,16 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { api } from "@/utils/api";
 import styles from "@/styles/Confirmation.module.css";
-import {z} from "zod";
+import { z } from "zod";
 import type {
   GetServerSidePropsContext,
   InferGetServerSidePropsType,
 } from "next";
-export const getServerSideProps = (context: GetServerSidePropsContext) => { 
-  const { id } = context.query; 
+export const getServerSideProps = (context: GetServerSidePropsContext) => {
+  const { id } = context.query;
   return {
     props: {
-      id : z.string().parse(id)
+      id: z.string().parse(id),
     },
   };
 };
@@ -31,8 +31,7 @@ export default function Confirmation({
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <NavBar />
-      <div className={styles.confirmwrapper}>
-      </div>
+      <div className={styles.confirmwrapper}></div>
       <div className={styles.confirmwrapper}>
         <div className={styles.confirm_text}>
           <h1>Thank you {data ? data[0]?.first_name : null} for your order!</h1>

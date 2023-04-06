@@ -29,7 +29,8 @@
     "**/*.cjs",
     "**/*.mjs",
     "src/components/Store.ts",
-    "src/components/NavBar.jsx"
-, "src/pages/api/index.ts"  ],
+    "src/components/NavBar.jsx",
+    "src/pages/api/index.ts"
+  ],
   "exclude": ["node_modules"]
 }
