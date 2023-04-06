@@ -6,6 +6,7 @@ import { Container } from "@react-email/container";
 import { Img } from "@react-email/img";
 import { Preview } from "@react-email/preview";
 import { Text } from "@react-email/text";
+//@ts-ignore
 import { Button } from "@react-email/Button";
 import { Order, Ticket } from "@prisma/client";
 import Link from "next/link";
