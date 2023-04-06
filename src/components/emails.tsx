@@ -221,16 +221,16 @@ export const SlackConfirmEmail = (
             cursor: "pointer",
           }}
         >
-          <Link 
+          <Link
             href="https://www.instagram.com/winuwatch/"
             style={{ textDecoration: "none" }}
           >
-          <Img
-            src="/images/InstaFooter.svg"
-            width="200"
-            height="100"
-            alt="Slack"
-          />
+            <Img
+              src="/images/InstaFooter.svg"
+              width="200"
+              height="100"
+              alt="Slack"
+            />
           </Link>
         </Section>
       </Section>
