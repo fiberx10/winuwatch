@@ -43,7 +43,7 @@ const GENorder = (): Order & {
   })),
 });
 
-export default async function (req: NextApiRequest, res: NextApiResponse) {
+export default function send(req: NextApiRequest, res: NextApiResponse) {
   //  res.send("Order Confirmation")));
 
   res.send(render(Email(GENorder())));

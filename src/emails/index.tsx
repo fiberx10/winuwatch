@@ -10,12 +10,8 @@ import { Preview } from "@react-email/preview";
 import { Text } from "@react-email/text";
 import { Link } from "@react-email/link";
 import { render } from "@react-email/render";
+import { Button } from "@react-email/Button";
 import { Order, Ticket } from "@prisma/client";
-
-
-const baseUrl = process.env.VERCEL_URL
-  ? `https://${process.env.VERCEL_URL}`
-  : ""; //TO be imporrted
 
 export const SlackConfirmEmail = (
   order: Order & {
@@ -24,45 +20,219 @@ export const SlackConfirmEmail = (
 ) => (
   <Html>
     <Head>
-      <Font
-        fontFamily="Roboto"
-        fallbackFontFamily="Verdana"
-        webFont={{
-          url: "https://fonts.gstatic.com/s/roboto/v27/KFOmCnqEu92Fr1Mu4mxKKTU1Kg.woff2",
-          format: "woff2",
-        }}
-        fontWeight={400}
-        fontStyle="normal"
+      <link rel="preconnect" href="https://fonts.googleapis.com" />
+
+      <link rel="preconnect" href="https://fonts.gstatic.com" />
+      <link
+        href="https://fonts.googleapis.com/css2?family=Kanit:wght@100;200;300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet"
       />
     </Head>
-    <Preview>Confirm your email address</Preview>
-    <Container style={container}>
-      <Section style={logoContainer}>
-        <Img
-          src={`${baseUrl}/static/slack-logo.png`}
-          width="120"
-          height="36"
-          alt="Slack"
-        />
-      </Section>
-      <Heading style={h1}>Confirm your email address</Heading>
-      <Text style={heroText}>
-        Your confirmation code is below - enter it in your open browser window
-        and we&apos;ll help you get signed in.
-      </Text>
 
-      <Section style={codeBox}>
-        <Text style={confirmationCodeText}>
-          {numerOfTickets?.map((ticket) => ticket.number_tickets)} {clientName}
+    <Preview>Confirm your email address</Preview>
+    <Container
+      style={{
+        margin: "0 auto",
+        fontFamily: "Kanit, sans-serif",
+        textAlign: "center",
+      }}
+    >
+      <Section
+        style={{
+          marginTop: "32px",
+          backgroundColor: "#a8957e",
+          padding: "20px",
+        }}
+      >
+        <Section
+          style={{
+            width: "100%",
+            display: "flex",
+            justifyContent: "center",
+            marginBottom: "20px",
+          }}
+        >
+          <Img src="/images/newLogo.png" width="200" height="100" alt="Slack" />
+        </Section>
+        <Text
+          style={{
+            fontSize: "16px",
+            textTransform: "uppercase",
+            color: "white",
+            margin: "5px 0px",
+          }}
+        >
+          {order.first_name}, Thank you!
+        </Text>
+        <Text
+          style={{
+            fontSize: "16px",
+            textTransform: "uppercase",
+            color: "white",
+            margin: "5px 0px",
+          }}
+        >
+          We are pleased to inform you that your
+        </Text>
+        <Text
+          style={{
+            fontSize: "16px",
+            textTransform: "uppercase",
+            color: "white",
+            margin: "5px 0px",
+          }}
+        >
+          registration has been successfully received and
+        </Text>
+        <Text
+          style={{
+            fontSize: "16px",
+            textTransform: "uppercase",
+            color: "white",
+            margin: "5px 0px",
+          }}
+        >
+          processed. you have now officially entered in the
+        </Text>
+        <Text
+          style={{
+            fontSize: "16px",
+            textTransform: "uppercase",
+            color: "white",
+            margin: "5px 0px",
+          }}
+        >
+          competition
         </Text>
       </Section>
 
-      <Text style={text}>
-        If you didn&apos;t request this email, there&apos;s nothing to worry
-        about - you can safely ignore it.
-      </Text>
+      <Section style={{}}>
+        <Img src="/images/tester.png" width="100%" height="100%" alt="" />
+        <Section
+          style={{
+            textAlign: "left",
+            textTransform: "uppercase",
+            backgroundColor: "#a8957e",
+            color: "white",
+          }}
+        >
+          <Text style={{ padding: "0px 0px 0px 20px" }}>Watch Info</Text>
+          <Section>
+            <Column style={{ width: "66%", padding: "0px 0px 0px 20px " }}>
+              <Text style={{}}>ORDER: {order.id}</Text>
+              <Text style={{}}>
+                QUANTITY: {order.Ticket.length} - TOTAL: £{order.totalPrice}
+              </Text>
+            </Column>
+            <Column
+              style={{
+                backgroundColor: "black",
+                textAlign: "center",
+                cursor: "pointer",
+                fontWeight: "600",
+              }}
+            >
+              <Button>CLICK TO SEE YOUR TICKET(S)!</Button>
+            </Column>
+          </Section>
+        </Section>
+      </Section>
 
-      <Section>
+      <Section
+        style={{
+          padding: "20px",
+          fontWeight: "500",
+        }}
+      >
+        <Text
+          style={{
+            fontSize: "16px",
+            textTransform: "uppercase",
+            color: "black",
+            margin: "5px 0px",
+          }}
+        >
+          What happens now?
+        </Text>
+        <Text
+          style={{
+            fontSize: "16px",
+            textTransform: "uppercase",
+            color: "black",
+            margin: "5px 0px",
+          }}
+        >
+          the contest will end on [end date] at [end time] [time zone],
+        </Text>
+        <Text
+          style={{
+            fontSize: "16px",
+            textTransform: "uppercase",
+            color: "black",
+            margin: "5px 0px",
+          }}
+        >
+          the winners will be announced on [announcement date]
+        </Text>
+        <Text
+          style={{
+            fontSize: "16px",
+            textTransform: "uppercase",
+            color: "black",
+            margin: "5px 0px",
+          }}
+        >
+          at [announcement time] [time zone]
+        </Text>
+        <Text
+          style={{
+            fontSize: "16px",
+            textTransform: "uppercase",
+            color: "black",
+            margin: "5px 0px",
+          }}
+        >
+          please make sure to follow us on instagram where we
+        </Text>
+        <Text
+          style={{
+            fontSize: "16px",
+            textTransform: "uppercase",
+            color: "black",
+            margin: "5px 0px",
+          }}
+        >
+          host a live for each competition.
+        </Text>
+        <Text
+          style={{
+            fontSize: "16px",
+            textTransform: "uppercase",
+            color: "black",
+            margin: "5px 0px",
+          }}
+        >
+          we wish you the best of luck!
+        </Text>
+        <Section
+          style={{
+            width: "100%",
+            display: "flex",
+            justifyContent: "center",
+            marginBottom: "20px",
+            cursor: "pointer",
+          }}
+        >
+          <Img
+            src="/images/InstaFooter.svg"
+            width="200"
+            height="100"
+            alt="Slack"
+          />
+        </Section>
+      </Section>
+
+      {/* <Section>
         <Column style={{ width: "66%" }}>
           <Img
             src={`${baseUrl}/static/slack-logo.png`}
@@ -152,72 +322,9 @@ export const SlackConfirmEmail = (
           <br />
           All rights reserved.
         </Text>
-      </Section>
+      </Section> */}
     </Container>
   </Html>
 );
 
-
 export default SlackConfirmEmail;
-
-const footerText = {
-  fontSize: "12px",
-  color: "#b7b7b7",
-  lineHeight: "15px",
-  textAlign: "left" as const,
-  marginBottom: "50px",
-};
-
-const footerLink = {
-  color: "#b7b7b7",
-  textDecoration: "underline",
-};
-
-const socialMediaIcon = {
-  display: "inline",
-  marginLeft: "32px",
-};
-
-const container = {
-  maxWidth: "600px",
-  margin: "0 auto",
-};
-
-const logoContainer = {
-  marginTop: "32px",
-};
-
-const h1 = {
-  color: "#1d1c1d",
-  fontSize: "36px",
-  fontWeight: "700",
-  margin: "30px 0",
-  padding: "0",
-  lineHeight: "42px",
-};
-
-const heroText = {
-  fontSize: "20px",
-  lineHeight: "28px",
-  marginBottom: "30px",
-};
-
-const codeBox = {
-  background: "rgb(245, 244, 245)",
-  borderRadius: "4px",
-  marginRight: "50px",
-  marginBottom: "30px",
-  padding: "43px 23px",
-};
-
-const confirmationCodeText = {
-  fontSize: "30px",
-  textAlign: "center" as const,
-  verticalAlign: "middle",
-};
-
-const text = {
-  color: "#000",
-  fontSize: "14px",
-  lineHeight: "24px",
-};
