@@ -216,9 +216,11 @@ const DashboardCompetitions = () => {
                                           onChange={(value: string | Moment) =>
                                             setFieldValue(
                                               "start_date",
-                                              moment(value)
-                                                .tz("Europe/London")
-                                                .format()
+                                              new Date(
+                                                moment(value)
+                                                  .tz("Europe/London")
+                                                  .format()
+                                              )
                                             )
                                           }
                                         />
@@ -239,9 +241,11 @@ const DashboardCompetitions = () => {
                                           onChange={(value) =>
                                             setFieldValue(
                                               "drawing_date",
-                                              moment(value)
-                                                .tz("Europe/London")
-                                                .format()
+                                              new Date(
+                                                moment(value)
+                                                  .tz("Europe/London")
+                                                  .format()
+                                              )
                                             )
                                           }
                                         />
@@ -261,9 +265,11 @@ const DashboardCompetitions = () => {
                                           onChange={(value) =>
                                             setFieldValue(
                                               "end_date",
-                                              moment(value)
-                                                .tz("Europe/London")
-                                                .format()
+                                              new Date(
+                                                moment(value)
+                                                  .tz("Europe/London")
+                                                  .format()
+                                              )
                                             )
                                           }
                                         />
@@ -549,9 +555,11 @@ const DashboardCompetitions = () => {
                                           onChange={(value: string | Moment) =>
                                             setFieldValue(
                                               "start_date",
-                                              moment(value)
-                                                .tz("Europe/London")
-                                                .format()
+                                              new Date(
+                                                moment(value)
+                                                  .tz("Europe/London")
+                                                  .format()
+                                              )
                                             )
                                           }
                                         />
@@ -572,9 +580,11 @@ const DashboardCompetitions = () => {
                                           onChange={(value) =>
                                             setFieldValue(
                                               "drawing_date",
-                                              moment(value)
-                                                .tz("Europe/London")
-                                                .format()
+                                              new Date(
+                                                moment(value)
+                                                  .tz("Europe/London")
+                                                  .format()
+                                              )
                                             )
                                           }
                                         />
@@ -594,9 +604,11 @@ const DashboardCompetitions = () => {
                                           onChange={(value) =>
                                             setFieldValue(
                                               "end_date",
-                                              moment(value)
-                                                .tz("Europe/London")
-                                                .format()
+                                              new Date(
+                                                moment(value)
+                                                  .tz("Europe/London")
+                                                  .format()
+                                              )
                                             )
                                           }
                                         />
@@ -883,9 +895,11 @@ const DashboardCompetitions = () => {
                                           onChange={(value: string | Moment) =>
                                             setFieldValue(
                                               "start_date",
-                                              moment(value)
-                                                .tz("Europe/London")
-                                                .format()
+                                              new Date(
+                                                moment(value)
+                                                  .tz("Europe/London")
+                                                  .format()
+                                              )
                                             )
                                           }
                                         />
@@ -906,9 +920,11 @@ const DashboardCompetitions = () => {
                                           onChange={(value) =>
                                             setFieldValue(
                                               "drawing_date",
-                                              moment(value)
-                                                .tz("Europe/London")
-                                                .format()
+                                              new Date(
+                                                moment(value)
+                                                  .tz("Europe/London")
+                                                  .format()
+                                              )
                                             )
                                           }
                                         />
@@ -928,9 +944,11 @@ const DashboardCompetitions = () => {
                                           onChange={(value) =>
                                             setFieldValue(
                                               "end_date",
-                                              moment(value)
-                                                .tz("Europe/London")
-                                                .format()
+                                              new Date(
+                                                moment(value)
+                                                  .tz("Europe/London")
+                                                  .format()
+                                              )
                                             )
                                           }
                                         />
@@ -1155,7 +1173,7 @@ const DashboardCompetitions = () => {
                       onChange={(value) =>
                         setFieldValue(
                           "start_date",
-                          moment(value).tz("Europe/London").format()
+                          new Date(moment(value).tz("Europe/London").format())
                         )
                       }
                     />
@@ -1173,7 +1191,7 @@ const DashboardCompetitions = () => {
                       onChange={(value) =>
                         setFieldValue(
                           "drawing_date",
-                          moment(value).tz("Europe/London").format()
+                          new Date(moment(value).tz("Europe/London").format())
                         )
                       }
                     />
@@ -1191,7 +1209,7 @@ const DashboardCompetitions = () => {
                       onChange={(value) =>
                         setFieldValue(
                           "end_date",
-                          moment(value).tz("Europe/London").format()
+                          new Date(moment(value).tz("Europe/London").format())
                         )
                       }
                     />
