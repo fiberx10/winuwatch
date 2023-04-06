@@ -4,13 +4,25 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { api } from "@/utils/api";
 import styles from "@/styles/Confirmation.module.css";
-import Image from "next/image";
+import {z} from "zod";
+import type {
+  GetServerSidePropsContext,
+  InferGetServerSidePropsType,
+} from "next";
+export const getServerSideProps = (context: GetServerSidePropsContext) => { 
+  const { id } = context.query; 
+  return {
+    props: {
+      id : z.string().parse(id)
+    },
+  };
+};
 
-export default function Confirmation() {
+export default function Confirmation({
+  id,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const { query } = useRouter();
-  const { data } = api.Order.getOrder.useQuery(
-    query.id ? query.id.toString() : ""
-  );
+  const { data } = api.Order.getOrder.useQuery(id);
 
   return (
     <div>
@@ -21,13 +33,8 @@ export default function Confirmation() {
       </Head>
       <NavBar />
       <div className={styles.confirmwrapper}>
-        <Image
-          src="/images/confirmation.png"
-          alt="confirmation"
-          className={styles.confirm_icon}
-          width={200}
-          height={200}
-        ></Image>
+      </div>
+      <div className={styles.confirmwrapper}>
         <div className={styles.confirm_text}>
           <h1>Thank you {data ? data[0]?.first_name : null} for your order!</h1>
           <p>

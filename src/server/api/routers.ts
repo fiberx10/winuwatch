@@ -12,25 +12,7 @@ const Stripe = new stripe(env.STRIPE_SECRET_KEY, {
   apiVersion: "2022-11-15",
 });
 
-const Send_email = async (
-  order: Order & {
-    Ticket: Ticket[];
-  }
-) => {
-  //TODO here we implement the logic to send the email
-  sendgrid.setApiKey(
-    "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"
-  );
 
-  await sendgrid.send({
-    from: "noreply@winuwatch.uk",
-    to: order.email,
-    subject: "Order Confirmation",
-    html: render(Email(
-        "Order Confirmation",
-      ))
-  });
-};
 export const OrderRouter = createTRPCRouter({
   
   getAll: publicProcedure.input(z.array(z.string()).optional()).query(
