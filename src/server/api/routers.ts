@@ -7,7 +7,7 @@ import { env } from "@/env.mjs";
 import stripe from "stripe";
 import sendgrid from "@sendgrid/mail";
 import { render } from "@react-email/render";
-import Email from "@/emails";
+import Email from "@/components/emails";
 const Stripe = new stripe(env.STRIPE_SECRET_KEY, {
   apiVersion: "2022-11-15",
 });

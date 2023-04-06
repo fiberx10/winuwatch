@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import sendgrid from "@sendgrid/mail";
 import { render } from "@react-email/render";
-import Email from "@/emails";
+import Email from "@/components/emails";
 import nodemailer from "nodemailer";
 import { faker } from "@faker-js/faker";
 import { Order, OrderStatus, PaymentMethod, Ticket } from "@prisma/client";

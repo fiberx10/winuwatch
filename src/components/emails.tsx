@@ -3,12 +3,12 @@ import { Head } from "@react-email/head";
 import { Section } from "@react-email/section";
 import { Column } from "@react-email/column";
 import { Container } from "@react-email/container";
-
 import { Img } from "@react-email/img";
 import { Preview } from "@react-email/preview";
 import { Text } from "@react-email/text";
 import { Button } from "@react-email/Button";
 import { Order, Ticket } from "@prisma/client";
+import React from "react";
 
 export const SlackConfirmEmail = (
   order: Order & {
