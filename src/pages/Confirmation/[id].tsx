@@ -21,7 +21,6 @@ export const getServerSideProps = (context: GetServerSidePropsContext) => {
 export default function Confirmation({
   id,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const { query } = useRouter();
   const { data } = api.Order.getOrder.useQuery(id);
 
   return (
