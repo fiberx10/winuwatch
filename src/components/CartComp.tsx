@@ -60,9 +60,9 @@ const CartComp = () => {
                   }
                 />
                 <div className={styles.watchleftDesc}>
-                  <h1>{ComptetionData.Watches.brand}</h1>
+                  <h1>{ComptetionData.Watches.model}</h1>
                   <h4>{ComptetionData.Watches.Bracelet_material}</h4>
-                  <p>{ComptetionData.Watches.model}</p>
+                  <p>{ComptetionData.Watches.brand}</p>
                 </div>
               </div>
               <div className={styles.CartRight}>

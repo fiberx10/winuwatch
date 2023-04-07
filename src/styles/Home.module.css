@@ -685,7 +685,7 @@
   font-weight: 600;
   font-size: 45px;
   position: absolute;
-  top: 0;
+  top: -1%;
   text-transform: uppercase;
 }
 .Rev {

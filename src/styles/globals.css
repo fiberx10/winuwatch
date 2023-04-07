@@ -45,6 +45,7 @@ input::-webkit-inner-spin-button {
 input[type="number"] {
   -moz-appearance: textfield;
 }
+
 .css-pdct74-MuiTablePagination-selectLabel {
   margin-bottom: 0 !important;
 }
@@ -102,7 +103,7 @@ html {
     display: none !important;
   }
   .alice-carousel__dots {
-    padding: 0px 20px !important;
+    padding: 0px 20px 0px 0px !important;
   }
 }
 .MuiRating-icon {
@@ -126,7 +127,7 @@ html {
 .alice-carousel__dots {
   display: flex;
   align-items: flex-start;
-  margin: 30px 0px 0px 0px !important;
+  margin: 30px 0px 0px 20px !important;
 }
 .alice-carousel__prev-btn {
   position: absolute;

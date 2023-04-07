@@ -9,7 +9,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: #f5f5f5;
+  background-color: transparent;
 }
 
 .confirm_icon {
@@ -54,7 +54,6 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: #f5f5f5;
   }
 
   .confirm_icon {
@@ -99,7 +98,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: #f5f5f5;
+    background-color: transparent;
   }
 
   .confirm_icon {

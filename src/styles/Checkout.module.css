@@ -1,7 +1,6 @@
 .CheckoutMain {
   display: flex;
   padding: 60px;
-  background: #f8f6f4;
 }
 .CheckoutLeft {
   flex: 1;
