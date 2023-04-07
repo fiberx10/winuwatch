@@ -1,11 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import sendgrid from "@sendgrid/mail";
 import { render } from "@react-email/render";
 import Email from "@/components/emails";
 import nodemailer from "nodemailer";
 import { faker } from "@faker-js/faker";
 import { Order, OrderStatus, PaymentMethod, Ticket } from "@prisma/client";
-import React from "react";
 const GENorder = (): Order & {
   Ticket: Ticket[];
 } => ({
@@ -43,8 +41,22 @@ const GENorder = (): Order & {
   })),
 });
 
-export default function send(req: NextApiRequest, res: NextApiResponse) {
+const transporter = nodemailer.createTransport({
+  host: "smtp.hostinger.com",
+  port: 465,
+  secure: true,
+  auth: {
+    user: "noreply@winuwatch.uk",
+    pass: "Password1!",
+  },
+});
+export default async function send(req: NextApiRequest, res: NextApiResponse) {
   //  res.send("Order Confirmation")));
-
+  await transporter.sendMail({
+    from: "noreply@winuwatch.uk",
+    to: "iliassjabali@gmail.com",
+    subject: "Order Confirmation",
+    html: render(Email(GENorder())),
+  });
   res.send(render(Email(GENorder())));
 }
