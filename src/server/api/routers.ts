@@ -5,11 +5,25 @@ import { getBaseUrl, CreateOrderSchema } from "@/utils";
 import { WatchesSchema, CompetitionSchema } from "@/utils/zodSchemas";
 import { env } from "@/env.mjs";
 import stripe from "stripe";
-import sendgrid from "@sendgrid/mail";
 import { render } from "@react-email/render";
-import Email from "@/components/emails";
+
 const Stripe = new stripe(env.STRIPE_SECRET_KEY, {
   apiVersion: "2022-11-15",
+});
+
+export const TicketsRouter = createTRPCRouter({
+  getTicket: publicProcedure.input(z.string().optional()).query(
+    async ({ ctx, input }) =>
+      await ctx.prisma.ticket.findUniqueOrThrow({
+        where: {
+          id: input,
+        },
+        include: {
+          Competition: true,
+          Order: true,
+        },
+      })
+  ),
 });
 
 export const OrderRouter = createTRPCRouter({
