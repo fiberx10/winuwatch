@@ -1247,7 +1247,7 @@
   dependencies:
     "@swc/helpers" "^0.4.14"
 
-"@react-email/button@^0.0.8":
+"@react-email/button@0.0.8":
   version "0.0.8"
   resolved "https://registry.yarnpkg.com/@react-email/button/-/button-0.0.8.tgz#50c95b504617dd488a1f5cc449a4ed7b4c43a0da"
   integrity sha512-EOIX/ewPgn/CXUvaAbR92jfWC8EXTSRBafpKtIbxchMcx/iIEG7/JqUndJdZ7BqgON1o6GLm3xP2+AtXtTZJkg==
