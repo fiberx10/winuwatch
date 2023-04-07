@@ -188,7 +188,7 @@ export default function Competition({
                                 : item === 15
                                 ? "20% off"
                                 : item === 25
-                                ? "25% off"
+                                ? "20% off"
                                 : ""}
                             </p>
                           </ToggleButton>
