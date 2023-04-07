@@ -10,6 +10,9 @@ import Image from "next/image";
 import { Formik, Form, Field } from "formik";
 import Datetime from "react-datetime";
 import "react-datetime/css/react-datetime.css";
+
+import { SlackConfirmEmail } from "@/components/emails";
+
 const CheckoutComp = () => {
   const router = useRouter();
 
@@ -57,6 +60,7 @@ const CheckoutComp = () => {
             onSubmit={async (values, actions) => {
               //if a value in the object values is undefined, it will not be sent to the server
               console.log("Form submitted:", values);
+
               const { url, error } = await createOrder({
                 ...values,
                 paymentMethod: values.paymentMethod as "PAYPAL" | "STRIPE",
@@ -64,6 +68,17 @@ const CheckoutComp = () => {
                 zip: values.zip.toString(),
               });
               if (url) {
+                // await resend.sendEmail({
+                //   from: "test@winuwatch.uk",
+                //   to: values.email,
+                //   subject: "Order Confirmation",
+                //   react: (
+                //     <SlackConfirmEmail
+                //       clientName={values.first_name}
+                //       numerOfTickets={values.comps}
+                //     />
+                //   ),
+                // })
                 await router.push(url);
               }
               setError(error || "Error in the creating the order");
@@ -169,7 +184,7 @@ const CheckoutComp = () => {
                             utc={true}
                             input={true}
                             timeFormat={false}
-                            isValidDate={(currentDate, selectedDate) => {
+                            isValidDate={(currentDate) => {
                               return IsLegal(new Date(currentDate as Date));
                             }}
                             inputProps={{
@@ -381,9 +396,28 @@ const CheckoutComp = () => {
                         );
                       })}
                     </div>
+                    <p
+                      style={{
+                        textDecoration: "underline",
+                        color: "#987358",
+                        fontWeight: "300",
+                        fontSize: "10px",
+                        textTransform: "uppercase",
+                        cursor: "pointer",
+                      }}
+                      onClick={() => {
+                        reset();
+                        setValues({
+                          ...values,
+                          comps: [],
+                        });
+                      }}
+                    >
+                      Clear Cart
+                    </p>
                     <div className={styles.orderSumBot}>
                       <div className={styles.orderSum}>
-                        <p>{`Total`}</p>
+                        <p>{`TOTAL`}</p>
                         <span>
                           {Formater(
                             values.comps.reduce(
@@ -448,18 +482,6 @@ const CheckoutComp = () => {
                       ) : (
                         <>
                           <button type="submit">Confirm Order</button>
-                          <button
-                            type="button"
-                            onClick={() => {
-                              reset();
-                              setValues({
-                                ...values,
-                                comps: [],
-                              });
-                            }}
-                          >
-                            Clear Cart
-                          </button>
                         </>
                       )}
                     </div>

@@ -38,7 +38,13 @@ const HowToPlay = () => {
           </p>
         </div>
         <div className={styles.howtoLine}>
-          <Image height={559} width={1} src="/images/Line.png" alt="line" />
+          <Image
+            className={styles.howLine}
+            height={559}
+            width={1}
+            src="/images/Line.png"
+            alt="line"
+          />
           <Image
             width={10}
             height={10}

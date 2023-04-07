@@ -170,6 +170,49 @@
     flex-direction: column;
   }
 }
+@media only screen and (height: 667px) {
+  .howLine {
+    height: 101vh;
+  }
+  .dot4 {
+    top: 54% !important;
+  }
+  .dot3 {
+    top: 28% !important;
+  }
+
+  .compWatches {
+    margin-bottom: 100px !important;
+  }
+  .ReviewsContainer {
+    margin-bottom: 200px !important;
+  }
+}
+@media only screen and (height: 740px) {
+  .howLine {
+    height: 100vh;
+  }
+  .dot4 {
+    top: 54% !important;
+  }
+  .dot3 {
+    top: 25% !important;
+  }
+  .upComingMain h1 {
+    font-size: 38px !important;
+  }
+  .ReviewsContainer {
+    margin-bottom: 250px !important;
+  }
+}
+@media only screen and (min-height: 844px) and (max-height: 851px) {
+  .howLine {
+    height: 75vh;
+  }
+  .dot4 {
+    top: 57% !important;
+  }
+}
 @media only screen and (max-width: 375px) {
   .howtoText {
     height: fit-content !important;
@@ -184,7 +227,7 @@
 }
 .CompP {
   font-weight: 300;
-  font-size: 15px;
+  font-size: 18px;
   color: #987358;
   padding-top: 50px;
 }
@@ -276,6 +319,7 @@
   width: 100%;
   row-gap: 10rem !important;
   justify-content: space-evenly !important;
+  margin-bottom: 100px;
 }
 .timer {
   display: flex;
@@ -299,6 +343,7 @@
 }
 .watchContent {
   margin-bottom: -47vh;
+  gap: 0.7rem;
   display: -webkit-flex;
   display: flex;
   flex-direction: column;
@@ -335,7 +380,7 @@
 .watchCon p {
   font-weight: 400;
   font-size: 15px;
-  color: #f3dca1;
+  color: #987358;
   text-transform: uppercase;
 }
 
@@ -615,8 +660,8 @@
   height: 532px;
 }
 .certifBox img {
-  width: 238px;
-  height: 363px;
+  width: 240px;
+  height: 370px;
 }
 .certifBox a {
   font-weight: 700;
@@ -640,7 +685,7 @@
   font-weight: 600;
   font-size: 45px;
   position: absolute;
-  top: 0;
+  top: -1%;
   text-transform: uppercase;
 }
 .Rev {
@@ -721,7 +766,9 @@
   justify-content: space-between;
   width: 90%;
   margin-top: 20px;
+  gap: 2rem;
 }
+
 .menusGrid {
   display: grid;
   grid-template-columns: repeat(4, auto);
@@ -839,8 +886,10 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   text-align: center;
   gap: 0.5rem;
+  height: 323px;
 }
 .upComingMain {
   padding-bottom: 100px;
@@ -866,7 +915,7 @@
 .upComTextTop p {
   color: grey;
   font-weight: 300;
-  width: 50%;
+  width: 55%;
 }
 .upComDet {
   display: flex;
@@ -876,8 +925,9 @@
 }
 .upComTextBot {
   color: grey;
-  width: 70%;
+  width: 167px;
   font-weight: 400;
+  height: 72px;
 }
 .SwiperButt {
   width: 100%;
@@ -904,12 +954,10 @@
   }
   .emails {
     width: 100%;
-    flex-direction: column;
     gap: 1rem;
   }
   .payment {
     width: 100%;
-    flex-direction: column;
     gap: 1rem;
   }
 }
@@ -1012,7 +1060,7 @@
   }
   .CompP {
     font-weight: 300;
-    font-size: 12px;
+    font-size: 16px;
   }
   .Comp h1 {
     font-size: 35px;
@@ -1020,6 +1068,7 @@
   .compWatches {
     row-gap: 17rem !important;
     flex-direction: column;
+    margin-bottom: 50px;
   }
   .watches {
     flex-direction: column-reverse;
@@ -1184,6 +1233,7 @@
     grid-template-columns: repeat(1, 1fr);
     width: 100%;
     text-align: center;
+    row-gap: 2rem;
   }
 }
 @media only screen and (min-width: 442px) and (max-width: 1216px) {
@@ -1194,7 +1244,11 @@
     top: 60vh;
   }
 }
-
+@media only screen and (max-width: 500px) {
+  .FooterTop img {
+    margin-right: 10px;
+  }
+}
 @media only screen and (min-width: 700px) and (max-width: 930px) {
   .HeaderTit h1 {
     font-size: 60px;
@@ -1430,12 +1484,37 @@
     gap: 6rem;
   }
 }
-@media only screen and (max-height: 667px) {
+@media only screen and (max-height: 915px) {
   .howtoText {
     height: fit-content;
   }
   .compWatches {
-    row-gap: 15rem !important;
+    row-gap: 20rem !important;
+  }
+  .watchCon h3 {
+    padding: 0px 10px;
+    font-size: 35px;
+  }
+  .Rev {
+    padding: 0px 20px;
+  }
+  .AliceContainer h1 {
+    margin-left: 20px;
+  }
+  .upComingMain h1 {
+    padding: 0px 10px;
+  }
+  .FooterTopRight {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 90%;
+  }
+  .emails {
+    width: 95%;
+  }
+  .payment {
+    width: 95%;
   }
 }
 @media only screen and (height: 851px) {

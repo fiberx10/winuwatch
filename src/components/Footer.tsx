@@ -2,11 +2,12 @@ import React, { useEffect } from "react";
 import styles from "../styles/Home.module.css";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 const Footer = () => {
   const data = [
     { names: ["COMPETITIONS", "how to play", "contact"] },
-    { names: ["PHILOSOPHY", "winners", "Charity"] },
+    { names: ["PHILOSOPHY", "trustpilot", "Charity"] },
     { names: ["Acceptable Use Policy", "faq"] },
     { names: ["Return Policy", "terms & conditions", "Privacy Policy"] },
   ];
@@ -23,6 +24,8 @@ const Footer = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+  const router = useRouter();
+
   const howTo =
     typeof window !== "undefined" && document.getElementById("Howtoplay");
   const theComp =
@@ -68,18 +71,27 @@ const Footer = () => {
                   key={i}
                 >
                   <Link
-                    onClick={() => {
+                    onClick={
                       menu.names[0] === "COMPETITIONS"
                         ? typeof window !== "undefined" &&
-                          window.scrollTo({
-                            top:
-                              theComp !== null && theComp instanceof HTMLElement
-                                ? theComp.offsetTop
-                                : 400,
-                            behavior: "smooth",
-                          })
-                        : "";
-                    }}
+                          window.location.pathname !== "/"
+                          ? async () => {
+                              await router.push("/");
+                            }
+                          : () => {
+                              window.scrollTo({
+                                top:
+                                  theComp !== null &&
+                                  theComp instanceof HTMLElement
+                                    ? theComp.offsetTop
+                                    : 400,
+                                behavior: "smooth",
+                              });
+                            }
+                        : () => {
+                            window.scrollTo(0, 0);
+                          }
+                    }
                     scroll={false}
                     href={
                       menu.names[0] === "PHILOSOPHY"
@@ -94,18 +106,26 @@ const Footer = () => {
                     {menu.names[0]}
                   </Link>
                   <Link
-                    onClick={() => {
+                    onClick={
                       menu.names[1] === "how to play"
                         ? typeof window !== "undefined" &&
-                          window.scrollTo({
-                            top:
-                              howTo !== null && howTo instanceof HTMLElement
-                                ? howTo.offsetTop
-                                : 400,
-                            behavior: "smooth",
-                          })
-                        : "";
-                    }}
+                          window.location.pathname !== "/"
+                          ? async () => {
+                              await router.push("/");
+                            }
+                          : () => {
+                              window.scrollTo({
+                                top:
+                                  howTo !== null && howTo instanceof HTMLElement
+                                    ? howTo.offsetTop
+                                    : 400,
+                                behavior: "smooth",
+                              });
+                            }
+                        : () => {
+                            window.scrollTo(0, 0);
+                          }
+                    }
                     scroll={false}
                     href={
                       menu.names[1] === "faq"

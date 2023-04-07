@@ -71,7 +71,7 @@ const Home: NextPage = () => {
       text: "Oyster, 41 mm, acier Oystersteel",
     },
     {
-      img: "/images/upWatch7.png",
+      img: "/images/upWatch11.png",
       brand: "Patek P.",
       title: "5712/1A NAUTILUS",
       text: "Self-winding",
