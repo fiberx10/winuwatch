@@ -396,9 +396,28 @@ const CheckoutComp = () => {
                         );
                       })}
                     </div>
+                    <p
+                      style={{
+                        textDecoration: "underline",
+                        color: "#987358",
+                        fontWeight: "300",
+                        fontSize: "10px",
+                        textTransform: "uppercase",
+                        cursor: "pointer",
+                      }}
+                      onClick={() => {
+                        reset();
+                        setValues({
+                          ...values,
+                          comps: [],
+                        });
+                      }}
+                    >
+                      Clear Cart
+                    </p>
                     <div className={styles.orderSumBot}>
                       <div className={styles.orderSum}>
-                        <p>{`Total`}</p>
+                        <p>{`TOTAL`}</p>
                         <span>
                           {Formater(
                             values.comps.reduce(
@@ -463,18 +482,6 @@ const CheckoutComp = () => {
                       ) : (
                         <>
                           <button type="submit">Confirm Order</button>
-                          <button
-                            type="button"
-                            onClick={() => {
-                              reset();
-                              setValues({
-                                ...values,
-                                comps: [],
-                              });
-                            }}
-                          >
-                            Clear Cart
-                          </button>
                         </>
                       )}
                     </div>

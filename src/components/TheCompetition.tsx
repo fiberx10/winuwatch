@@ -59,7 +59,9 @@ const TheCompetition = () => {
                   <div className={styles.watchContent}>
                     <Link href={`/Competition/${watch.id}`}>Start now</Link>
                     <h3>{watch.name}</h3>
-                    <p>Only {watch.remaining_tickets} tickets left!</p>
+                    <p>
+                      Only <b>{watch.remaining_tickets}</b> tickets left!
+                    </p>
                   </div>
                 </div>
                 <Timer date={watch.end_date} />

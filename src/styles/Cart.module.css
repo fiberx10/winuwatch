@@ -292,7 +292,7 @@
 @media only screen and (max-width: 728px) {
   .questionsCon button {
     height: 125px;
-    font-size: 13px;
+    font-size: 10px;
     width: 100%;
   }
 }

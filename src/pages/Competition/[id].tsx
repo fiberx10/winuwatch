@@ -133,8 +133,8 @@ export default function Competition({
                                 item > data.remaining_tickets
                                   ? "help"
                                   : "pointer",
-                              width: item >= 15 ? "68px" : "55px",
-                              height: item >= 15 ? "68px" : "55px",
+                              width: "55px",
+                              height: "55px",
                               backgroundColor:
                                 counter === item
                                   ? "rgb(146, 124, 102, 0.5)"
@@ -152,12 +152,44 @@ export default function Competition({
                             aria-label="left aligned"
                           >
                             <span
-                              style={{ fontSize: item >= 15 ? "18px" : "24px" }}
+                              style={{
+                                fontSize:
+                                  item === 5
+                                    ? "18px"
+                                    : item === 10
+                                    ? "18px"
+                                    : item === 15
+                                    ? "18px"
+                                    : item === 25
+                                    ? "18px"
+                                    : "24px",
+                                height:
+                                  item === 5
+                                    ? "23px"
+                                    : item === 10
+                                    ? "23px"
+                                    : item === 15
+                                    ? "23px"
+                                    : item === 25
+                                    ? "23px"
+                                    : "initial",
+                              }}
                             >
                               {item}
                             </span>
-                            <p className={styles.sold}>
-                              {item >= 15 ? "20% off" : ""}
+                            <p
+                              style={{ fontSize: "10px" }}
+                              className={styles.sold}
+                            >
+                              {item === 5
+                                ? "10% off"
+                                : item === 10
+                                ? "15% off"
+                                : item === 15
+                                ? "15% off"
+                                : item === 25
+                                ? "25% off"
+                                : ""}
                             </p>
                           </ToggleButton>
                         </Tooltip>
