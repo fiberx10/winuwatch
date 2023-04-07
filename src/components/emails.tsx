@@ -6,7 +6,7 @@ import { Container } from "@react-email/container";
 import { Img } from "@react-email/img";
 import { Preview } from "@react-email/preview";
 import { Text } from "@react-email/text";
-import { Button } from "@react-email/Button";
+//import { Button } from "@react-email/Button";
 import type { Order, Ticket } from "@prisma/client";
 import Link from "next/link";
 import React from "react";
@@ -129,8 +129,10 @@ export const SlackConfirmEmail = (
                 cursor: "pointer",
                 fontWeight: "600",
               }}
+              //TODO:  open the link
             >
-              <Button>CLICK TO SEE YOUR TICKET(S)!</Button>
+
+              CLICK TO SEE YOUR TICKET(S)!
             </Column>
           </Section>
         </Section>
