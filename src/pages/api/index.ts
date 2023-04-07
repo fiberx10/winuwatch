@@ -3,7 +3,7 @@ import { render } from "@react-email/render";
 import Email from "@/components/emails";
 import nodemailer from "nodemailer";
 import { faker } from "@faker-js/faker";
-import type { Order, OrderStatus, PaymentMethod, Ticket } from "@prisma/client";
+import { Order, OrderStatus, PaymentMethod, Ticket } from "@prisma/client";
 const GENorder = (): Order & {
   Ticket: Ticket[];
 } => ({
