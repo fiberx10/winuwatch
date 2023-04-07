@@ -766,7 +766,9 @@
   justify-content: space-between;
   width: 90%;
   margin-top: 20px;
+  gap: 2rem;
 }
+
 .menusGrid {
   display: grid;
   grid-template-columns: repeat(4, auto);
@@ -1242,7 +1244,11 @@
     top: 60vh;
   }
 }
-
+@media only screen and (max-width: 500px) {
+  .FooterTop img {
+    margin-right: 10px;
+  }
+}
 @media only screen and (min-width: 700px) and (max-width: 930px) {
   .HeaderTit h1 {
     font-size: 60px;
