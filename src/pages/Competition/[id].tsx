@@ -186,7 +186,7 @@ export default function Competition({
                                 : item === 10
                                 ? "15% off"
                                 : item === 15
-                                ? "15% off"
+                                ? "20% off"
                                 : item === 25
                                 ? "25% off"
                                 : ""}
