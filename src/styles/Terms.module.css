@@ -1,0 +1,42 @@
+@font-face {
+  font-family: Iskry;
+  src: url(../../public/images/Iskry-Regular.otf);
+}
+.TermsCon {
+  padding-left: 54px;
+  padding-top: 51px;
+  min-height: 100vh;
+}
+.TermsCon a {
+  color: black;
+}
+.TermsTxt {
+  margin-top: 70px;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+.TermsTxt h1 {
+  font-family: "Iskry", sans-serif;
+  font-weight: 400;
+  font-size: 35px;
+  text-transform: uppercase;
+  letter-spacing: 0rem;
+}
+.TermsTxt h2 {
+  font-family: "Iskry", sans-serif;
+  font-weight: 400;
+  font-size: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0rem;
+}
+.TermsTxt p {
+  font-weight: 300;
+  font-size: 15px;
+}
+.span p {
+  margin-left: 10px;
+}
+.MainP {
+  width: 80%;
+}
