@@ -11,48 +11,8 @@ const MonthlyEarnings = () => {
   // chart color
   const theme = useTheme();
   const secondary = "rgba(168, 149, 126, 0.7)";
-  const secondarylight = "rgba(168, 149, 126, 0.1)";
+  //const secondarylight = "rgba(168, 149, 126, 0.1)";
   const errorlight = "#fdede8";
-
-  // chart
-  const optionscolumnchart: any = {
-    chart: {
-      type: "area",
-      fontFamily: "'Plus Jakarta Sans', sans-serif;",
-      foreColor: "rgba(168, 149, 126, 0.3)",
-      toolbar: {
-        show: false,
-      },
-      height: 60,
-      sparkline: {
-        enabled: true,
-      },
-      group: "sparklines",
-    },
-    stroke: {
-      curve: "smooth",
-      width: 2,
-    },
-    fill: {
-      colors: ["#fff"],
-      type: "solid",
-      opacity: 0.05,
-    },
-    markers: {
-      size: 0,
-    },
-    tooltip: {
-      theme: theme.palette.mode === "dark" ? "dark" : "light",
-    },
-  };
-  const seriescolumnchart: any = [
-    {
-      name: "",
-      color: secondary,
-      data: [25, 66, 20, 40, 12, 58, 20],
-    },
-  ];
-
   return (
     <DashboardCard
       title="Monthly Earnings"
@@ -67,8 +27,43 @@ const MonthlyEarnings = () => {
       }
       footer={
         <Chart
-          options={optionscolumnchart}
-          series={seriescolumnchart}
+          options={{
+            chart: {
+              type: "area",
+              fontFamily: "'Plus Jakarta Sans', sans-serif;",
+              foreColor: "rgba(168, 149, 126, 0.3)",
+              toolbar: {
+                show: false,
+              },
+              height: 60,
+              sparkline: {
+                enabled: true,
+              },
+              group: "sparklines",
+            },
+            stroke: {
+              curve: "smooth",
+              width: 2,
+            },
+            fill: {
+              colors: ["#fff"],
+              type: "solid",
+              opacity: 0.05,
+            },
+            markers: {
+              size: 0,
+            },
+            tooltip: {
+              theme: theme.palette.mode === "dark" ? "dark" : "light",
+            },
+          }}
+          series={[
+            {
+              name: "",
+              color: secondary,
+              data: [25, 66, 20, 40, 12, 58, 20],
+            },
+          ]}
           type="area"
           height="60px"
         />
