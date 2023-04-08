@@ -10,7 +10,7 @@ import Loader from "../Loader";
 
 const DashboardWinners = () => {
   const [show, setShow] = useState({ modal: false, data: "" });
-  const { data, refetch, isLoading } = api.Competition.getAll.useQuery({});
+  const { data, isLoading } = api.Competition.getAll.useQuery({});
   const {
     mutateAsync: winner,
     data: winnerData,
@@ -146,6 +146,9 @@ const DashboardWinners = () => {
                               </p>
                               <p>
                                 With Order ID: <b>{winnerData.orderId}</b>
+                              </p>
+                              <p>
+                                With Ticket ID: <b>{winnerData.id}</b>
                               </p>
                             </div>
                           ) : comp.winner === null ? (
