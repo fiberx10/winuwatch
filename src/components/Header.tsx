@@ -1,9 +1,10 @@
 import NavBar from "./NavBar";
 import styles from "@/styles/Home.module.css";
 import Image from "next/image";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export default function Header() {
+  const [muted, setMuted] = useState(true);
   const theComp =
     typeof window !== "undefined" && document.getElementById("theComp");
   useEffect(() => {
@@ -31,7 +32,7 @@ export default function Header() {
           autoPlay
           loop
           playsInline
-          muted={true}
+          muted={muted}
         >
           <source
             src="https://firebasestorage.googleapis.com/v0/b/winuwatch-bd56d.appspot.com/o/professional-watches-cosmograph-daytona-cover-video_portrait.mp4?alt=media&token=20426bb0-5cee-4a37-8273-6b4fae3f0e95"
