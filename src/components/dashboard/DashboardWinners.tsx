@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
 import styles from "@/styles/Dashboard.module.css";
 import { api } from "@/utils/api";
 import { useState } from "react";
@@ -7,18 +8,22 @@ import Modal from "react-bootstrap/Modal";
 import "react-datetime/css/react-datetime.css";
 
 const DashboardWinners = () => {
-  const { data, refetch } = api.Competition.getAll.useQuery({});
   const [show, setShow] = useState({ modal: false, data: "" });
+  const { data, refetch } = api.Competition.getAll.useQuery({});
+  const { mutateAsync: winner, data: winnerData } =
+    api.Winners.pickOneRandom.useMutation();
 
-  const handleShow = (i: string) => {
+  const handleShow = async (i: string) => {
     setShow({
       modal: true,
       data: i,
     });
+    await winner(i);
   };
   const handleClose = () => {
     setShow({ modal: false, data: "" });
   };
+
   return (
     <div className={styles.DashCompsMain}>
       <div className={styles.dashCompsTopHeader}>
@@ -42,7 +47,9 @@ const DashboardWinners = () => {
                   <div>
                     <Button
                       variant="secondary"
-                      onClick={() => handleShow(comp.id)}
+                      onClick={async () => {
+                        await handleShow(comp.id);
+                      }}
                     >
                       Draw Winner
                     </Button>
@@ -66,11 +73,36 @@ const DashboardWinners = () => {
                   </span>
                 </div>
                 {show.data === comp.id && (
-                  <Modal show={show.modal} onHide={handleClose}>
+                  <Modal size="xl" show={show.modal} onHide={handleClose}>
                     <Modal.Header closeButton>
                       <Modal.Title>Manage your competition</Modal.Title>
                     </Modal.Header>
-                    <Modal.Body>Hello</Modal.Body>
+                    <Modal.Body>
+                      <h3>For Competiton: {comp?.name}</h3>
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "space-evenly",
+                        }}
+                      >
+                        <p>
+                          Winner Drawing Date:{" "}
+                          {comp?.drawing_date.toUTCString()}
+                        </p>
+                        <p>
+                          Current Winner:{" "}
+                          {comp.winner === null ? "none" : comp.winner}
+                        </p>
+                      </div>
+
+                      <div></div>
+
+                      <div>
+                        <Button>Confirm Winner</Button>
+                        <Button>Draw Winner</Button>
+                      </div>
+                    </Modal.Body>
                   </Modal>
                 )}
               </div>
