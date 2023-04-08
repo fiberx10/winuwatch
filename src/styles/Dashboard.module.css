@@ -108,6 +108,11 @@
   padding: 20px;
   border-radius: 10px;
   display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.WatchGridIMG {
+  display: flex;
   gap: 1rem;
 }
 .dashWatchGridDet {
@@ -117,7 +122,11 @@
   width: 100%;
 }
 .dashGridItemTop {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  place-items: center;
+  flex-wrap: wrap;
+  align-items: center;
   gap: 1rem;
 }
 .dashGridItemBot {
@@ -131,7 +140,7 @@
   gap: 1rem;
 }
 .dashGridItemTop p {
-  width: 45%;
+  width: 100%;
   color: grey;
   font-weight: 400;
   margin-bottom: 0 !important;

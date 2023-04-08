@@ -96,25 +96,30 @@ const DashboardWatches = () => {
           {data?.map((watch, i) => {
             return (
               <div className={styles.dashWatchesGridItem} key={watch.id}>
-                <Image
-                  width={200}
-                  height={200}
-                  style={{ objectFit: "cover" }}
-                  src={
-                    watch.images_url[0]
-                      ? watch.images_url[0]
-                      : "/images/tester.png"
-                  }
-                  alt="watchImage"
-                />
-                <div className={styles.dashWatchGridDet}>
+                <div className={styles.WatchGridIMG}>
+                  <Image
+                    width={200}
+                    height={200}
+                    style={{ objectFit: "cover" }}
+                    src={
+                      watch.images_url[0]
+                        ? watch.images_url[0]
+                        : "/images/tester.png"
+                    }
+                    alt="watchImage"
+                  />
                   <h2>
                     {watch.brand} {watch.model}
                   </h2>
+                </div>
+                <div className={styles.dashWatchGridDet}>
                   <div className={styles.dashGridItemTop}>
                     <p>Reference Nº : {watch.reference_number}</p>
                     <p>Manifacture Year : {watch.year_of_manifacture}</p>
                     <p>Condition : {watch.condition}</p>
+                    <p>Caliber : {watch.caliber_grear}</p>
+                    <p>Created at : {watch.createdAt.toUTCString()}</p>
+                    <p>Updated at : {watch.updatedAt.toUTCString()}</p>
                   </div>
                   <div className={styles.dashGridItemBot}>
                     <div>

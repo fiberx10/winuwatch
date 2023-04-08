@@ -45,7 +45,7 @@ const DashboardMainNav = () => {
         <div className={styles.Dashmenus}>
           <span>Other</span>
 
-          {["Participants", "Communication", "Settings"].map((menu, i) => {
+          {["Winners", "Communication", "Settings"].map((menu, i) => {
             return (
               <div
                 style={{
