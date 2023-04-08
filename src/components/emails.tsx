@@ -6,7 +6,7 @@ import type {
   Watches,
 } from "@prisma/client";
 import React from "react";
-import { getBaseUrl } from "@/utils";
+import { getBaseUrl, Formater } from "@/utils";
 import { renderToString } from "react-dom/server";
 
 const mail = (
@@ -227,8 +227,8 @@ const mail = (
                                         margin: "5px 0",
                                       }}
                                     >
-                                      QUANTITY: {order?.Ticket.length} - TOTAL:
-                                      £{order?.totalPrice}
+                                    QUANTITY: {order?.Ticket.length} - TOTAL:
+                                    {Formater(order?.totalPrice ?? 0)}
                                     </p>
                                   </td>
 
@@ -276,61 +276,60 @@ const mail = (
                 </tr>
               </thead>
               <tbody>
-                {order?.Ticket.map((ticket, index) => {
-                  return (
-                    <tr
-                      style={{
-                        width: "100%",
-                        border: "1px solid rgb(146, 124, 102)",
-                      }}
-                    >
-                      <td>
-                        <p
-                          data-id="react-email-text"
-                          style={{
-                            fontSize: "14px",
-                            lineHeight: "24px",
+                {order?.Ticket.map((ticket, index) => (
+                  <tr
+                    key={index}
+                    style={{
+                      width: "100%",
+                      border: "1px solid rgb(146, 124, 102)",
+                    }}
+                  >
+                    <td>
+                      <p
+                        data-id="react-email-text"
+                        style={{
+                          fontSize: "14px",
+                          lineHeight: "24px",
 
-                            textTransform: "uppercase",
-                            color: "black",
-                          }}
-                        >
-                          {index + 1}
-                        </p>
-                      </td>
-                      <td>
-                        <p
-                          data-id="react-email-text"
-                          style={{
-                            fontSize: "14px",
+                          textTransform: "uppercase",
+                          color: "black",
+                        }}
+                      >
+                        {index + 1}
+                      </p>
+                    </td>
+                    <td>
+                      <p
+                        data-id="react-email-text"
+                        style={{
+                          fontSize: "14px",
 
-                            lineHeight: "24px",
-                            textTransform: "uppercase",
+                          lineHeight: "24px",
+                          textTransform: "uppercase",
 
-                            color: "black",
-                          }}
-                        >
-                          {ticket?.id}
-                        </p>
-                      </td>
-                      <td>
-                        <a
-                          data-id="react-email-text"
-                          style={{
-                            fontSize: "14px",
-                            textAlign: "end",
-                            lineHeight: "24px",
-                            textTransform: "uppercase",
-                            color: "black",
-                          }}
-                          href={`${getBaseUrl()}/ticket/${ticket?.id}`}
-                        >
-                          see my ticket
-                        </a>
-                      </td>
-                    </tr>
-                  );
-                })}
+                          color: "black",
+                        }}
+                      >
+                        {ticket?.id}
+                      </p>
+                    </td>
+                    <td>
+                      <a
+                        data-id="react-email-text"
+                        style={{
+                          fontSize: "14px",
+                          textAlign: "end",
+                          lineHeight: "24px",
+                          textTransform: "uppercase",
+                          color: "black",
+                        }}
+                        href={`${getBaseUrl()}/ticket/${ticket?.id}`}
+                      >
+                        see my ticket
+                      </a>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
 
