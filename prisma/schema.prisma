@@ -2,8 +2,6 @@ generator client {
   provider = "prisma-client-js"
 }
 
-
-
 datasource db {
   provider     = "mysql"
   url          = "mysql://wdwuknnzs4f66zn9palj:pscale_pw_N75DyHGPirpB80uON4TnmpVEhZi6wRX5yG5em6jcbkY@aws.connect.psdb.cloud/win-u-wath?sslaccept=strict"
@@ -11,12 +9,13 @@ datasource db {
 }
 
 model ImagesUrl {
-  id        String  @id @default(cuid())
+  id        String   @id @default(cuid())
   url       String
   WatchesId String
-  Watches   Watches @relation(fields: [WatchesId], references: [id])
- createdAt                DateTime          @default(now())
-  updatedAt                DateTime          @updatedAt
+  Watches   Watches  @relation(fields: [WatchesId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   @@index([WatchesId])
   @@map("images_url")
 }
@@ -37,11 +36,12 @@ model Watches {
   has_certificate     Boolean      @default(false)
   condition           String
   images_url          ImagesUrl[]
-  Competition         Competition? 
-   createdAt                DateTime          @default(now())
-  updatedAt                DateTime          @updatedAt
-  @@map("watches")
+  Competition         Competition?
+  createdAt           DateTime     @default(now())
+  updatedAt           DateTime     @updatedAt
+
   @@index([id])
+  @@map("watches")
 }
 
 model Competition {
@@ -65,9 +65,10 @@ model Competition {
   createdAt                DateTime          @default(now())
   updatedAt                DateTime          @updatedAt
   watchesId                String            @unique
-  Watches                  Watches?           @relation(fields: [watchesId], references: [id])
-  Order                    Order[]          
+  Watches                  Watches?          @relation(fields: [watchesId], references: [id])
+  Order                    Order[]
   Ticket                   Ticket[]
+
   @@index([id])
   @@map("competition")
 }
@@ -127,8 +128,9 @@ model answer {
   answer     String
   questionId String
   Question   Question @relation(fields: [questionId], references: [id])
- createdAt                DateTime          @default(now())
-  updatedAt                DateTime          @updatedAt
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
   @@index([questionId])
   @@map("answers")
 }

@@ -1,4 +1,3 @@
-import type { NextApiRequest, NextApiResponse } from "next";
 import { render } from "@react-email/render";
 import Email from "@/components/emails";
 import nodemailer from "nodemailer";
@@ -41,7 +40,7 @@ const GENorder = (): Order & {
   })),
 });
 
-const Transporter = nodemailer.createTransport({
+const transporter = nodemailer.createTransport({
   host: "smtp.hostinger.com",
   port: 465,
   secure: true,
@@ -50,14 +49,15 @@ const Transporter = nodemailer.createTransport({
     pass: "Password1!",
   },
 });
-export default async function send(req: NextApiRequest, res: NextApiResponse) {
+async function send() {
   //  res.send("Order Confirmation")));
-
-  await Transporter.sendMail({
+  await transporter.sendMail({
     from: "noreply@winuwatch.uk",
-    to: "iliassjabali@gmail.com",
+    to: "fiberxsch108@gmail.com",
     subject: "Order Confirmation",
     html: render(Email(GENorder())),
   });
-  res.send(render(Email(GENorder())));
+  //res.send(render(Email(GENorder())));
 }
+
+export { send };
