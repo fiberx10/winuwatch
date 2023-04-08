@@ -41,7 +41,7 @@ const GENorder = (): Order & {
   })),
 });
 
-const {sendMail} = nodemailer.createTransport({
+const Transporter = nodemailer.createTransport({
   host: "smtp.hostinger.com",
   port: 465,
   secure: true,
@@ -53,7 +53,7 @@ const {sendMail} = nodemailer.createTransport({
 export default async function send(req: NextApiRequest, res: NextApiResponse) {
   //  res.send("Order Confirmation")));
 
-  await sendMail({
+  await Transporter.sendMail({
     from: "noreply@winuwatch.uk",
     to: "iliassjabali@gmail.com",
     subject: "Order Confirmation",
