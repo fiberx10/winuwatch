@@ -1,0 +1,240 @@
+.wrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  margin: 50px;
+  flex-direction: row;
+  align-items: center;
+  min-height: 400px;
+  justify-content: center;
+  background-color: transparent;
+  border-radius: 10px;
+  border: 1px solid rgb(146, 124, 102);
+}
+
+.wrapper_left {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  /* border-right: 1px solid rgb(146, 124, 102); */
+}
+
+.wrapper_right {
+  width: 100%;
+  height: 100%;
+  display: flex;
+
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  border-left: 1px solid rgb(146, 124, 102);
+}
+
+.confirmwrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  padding-top: 80px;
+  padding-bottom: 80px;
+  padding-left: 80px;
+  padding-right: 80px;
+  flex-direction: column;
+  background-color: transparent;
+}
+
+.comp_info {
+  width: 100%;
+  height: 100%;
+  text-align: left;
+  padding: 20px;
+  display: flex;
+  border-bottom: 1px solid rgb(146, 124, 102);
+  flex-direction: column;
+  background-color: transparent;
+}
+
+.ticket_info {
+  width: 100%;
+  height: 100%;
+  text-align: left;
+  padding: 20px;
+  display: flex;
+  /* border-bottom: 1px solid rgb(146, 124, 102); */
+  flex-direction: column;
+  background-color: transparent;
+}
+
+.comp_info > h6 {
+  font-weight: 400;
+  font-size: 15px;
+  /* font-family: "Iskry", sans-serif; */
+  text-transform: uppercase;
+  color: #000000;
+  text-align: left;
+  padding-bottom: 5px;
+}
+.comp_info > h5 {
+  font-weight: 400;
+  font-size: 12px;
+  text-align: left;
+  /* font-family: "Iskry", sans-serif; */
+  text-transform: uppercase;
+  color: #171717;
+  padding-bottom: 5px;
+}
+
+.ticket_info > h6 {
+  font-weight: 400;
+  font-size: 15px;
+  /* font-family: "Iskry", sans-serif; */
+  text-transform: uppercase;
+  color: #000000;
+  text-align: left;
+  padding-bottom: 5px;
+}
+.ticket_info > h5 {
+  font-weight: 400;
+  font-size: 12px;
+  text-align: left;
+  /* font-family: "Iskry", sans-serif; */
+  text-transform: uppercase;
+  color: #171717;
+  padding-bottom: 5px;
+}
+
+.wrapper_right > h6 {
+  font-weight: 400;
+  padding-top: 10px;
+  font-size: 15px;
+  /* font-family: 'roboto', sans-serif; */
+  /* font-family: "Iskry", sans-serif; */
+  /* text-transform: uppercase; */
+  color: #000000;
+  text-align: left;
+  padding-bottom: 5px;
+}
+
+.ticket_info_left {
+}
+
+.ticket_info_right {
+}
+
+.confirm_icon {
+  width: 100px;
+  height: 100px;
+  margin: 0 auto;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.confirm_text {
+  font-size: 20px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.confirm_text > h1 {
+  font-weight: 400;
+  font-size: 35px;
+  font-family: "Iskry", sans-serif;
+  text-transform: uppercase;
+  color: #000000;
+  padding-bottom: 20px;
+}
+
+.confirm_text > p {
+  font-weight: 300;
+  font-size: 24px;
+  color: rgba(30, 30, 30, 0.77);
+  flex: 1;
+}
+
+@media only screen and (max-width: 930px) {
+  .confirmwrapper {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    padding-top: 40px;
+    padding-bottom: 40px;
+    padding-left: 40px;
+    padding-right: 40px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .confirm_icon {
+    width: 100px;
+    height: 100px;
+    margin: 0 auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+
+  .confirm_text {
+    font-size: 20px;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .confirm_text > h1 {
+    font-weight: 400;
+    font-size: 35px;
+    font-family: "Iskry", sans-serif;
+    text-transform: uppercase;
+    color: #000000;
+    padding-bottom: 20px;
+  }
+
+  .confirm_text > p {
+    font-weight: 300;
+    font-size: 20px;
+    color: rgba(30, 30, 30, 0.77);
+    flex: 1;
+  }
+}
+@media only screen and (min-width: 1440px) and (max-width: 2560px) {
+  .confirmwrapper {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    padding-top: 60px;
+    padding-bottom: 60px;
+    padding-left: 60px;
+    padding-right: 60px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+  }
+
+  .confirm_icon {
+    width: 100px;
+    height: 100px;
+    margin: 0 auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+
+  .confirm_text > h1 {
+    font-weight: 400;
+    font-size: 35px;
+    font-family: "Iskry", sans-serif;
+    text-transform: uppercase;
+    color: #000000;
+    padding-bottom: 20px;
+  }
+
+  .confirm_text > p {
+    font-weight: 300;
+    font-size: 22px;
+    color: rgba(30, 30, 30, 0.77);
+    flex: 1;
+  }
+}
