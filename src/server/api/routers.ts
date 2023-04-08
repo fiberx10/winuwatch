@@ -5,10 +5,64 @@ import { getBaseUrl, CreateOrderSchema } from "@/utils";
 import { WatchesSchema, CompetitionSchema } from "@/utils/zodSchemas";
 import { env } from "@/env.mjs";
 import stripe from "stripe";
-import { render } from "@react-email/render";
 
 const Stripe = new stripe(env.STRIPE_SECRET_KEY, {
   apiVersion: "2022-11-15",
+});
+
+export const WinnersRouter = createTRPCRouter({
+  pickOneRandom: publicProcedure
+    .input(z.string())
+    .mutation(async ({ ctx, input }) => {
+      //based on the competition id, pick a random winner and return the ticket data and order data
+
+      const tickets = await ctx.prisma.ticket.findMany({
+        include: {
+          Order: true,
+          Competition: {
+            include: {
+              Watches: {
+                include: {
+                  images_url: true,
+                },
+              },
+            },
+          },
+        },
+      });
+      const random = Math.floor(Math.random() * tickets.length); // This algo neeeds to change
+      return tickets[random] ?? tickets[0];
+    }),
+  confirmWinner: publicProcedure
+    .input(z.string())
+    .mutation(async ({ ctx, input }) => {
+      //based on the ticket ID we should be able to close the competition and send the winner an email
+      const ticket = await ctx.prisma.ticket.findUnique({
+        where: {
+          id: input,
+        },
+        include: {
+          Order: true,
+          Competition: {
+            include: {
+              Watches: {
+                include: {
+                  images_url: true,
+                },
+              },
+            },
+          },
+        },
+      })
+      if (!ticket) {
+        throw new Error("Ticket not found");
+      }
+      const { Order, Competition } = ticket;
+      const { Watches } = Competition;
+      const { email} = Order;
+      return void 0; //TODO : Send email
+    })
+
 });
 
 export const TicketsRouter = createTRPCRouter({
