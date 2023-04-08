@@ -105,6 +105,7 @@ const mail = (
                         </tr>
                       </tbody>
                     </table>
+
                     <p
                       data-id="react-email-text"
                       style={{
@@ -120,50 +121,16 @@ const mail = (
                     <p
                       data-id="react-email-text"
                       style={{
-                        fontSize: "16px",
-                        lineHeight: "24px",
+                        fontSize: "17px",
+                        lineHeight: "28px",
                         margin: "5px 0px",
-                        textTransform: "uppercase",
-                        color: "white",
+                        // textTransform: "uppercase",
+                        color: "whitesmoke",
                       }}
                     >
-                      We are pleased to inform you that your
-                    </p>
-                    <p
-                      data-id="react-email-text"
-                      style={{
-                        fontSize: "16px",
-                        lineHeight: "24px",
-                        margin: "5px 0px",
-                        textTransform: "uppercase",
-                        color: "white",
-                      }}
-                    >
-                      registration has been successfully received and
-                    </p>
-                    <p
-                      data-id="react-email-text"
-                      style={{
-                        fontSize: "16px",
-                        lineHeight: "24px",
-                        margin: "5px 0px",
-                        textTransform: "uppercase",
-                        color: "white",
-                      }}
-                    >
-                      processed. you have now officially entered in the
-                    </p>
-                    <p
-                      data-id="react-email-text"
-                      style={{
-                        fontSize: "16px",
-                        lineHeight: "24px",
-                        margin: "5px 0px",
-                        textTransform: "uppercase",
-                        color: "white",
-                      }}
-                    >
-                      competition
+                      We are pleased to inform you that your registration has
+                      been successfully received and processed. you have now
+                      officially entered in the competition
                     </p>
                   </td>
                 </tr>
@@ -234,12 +201,12 @@ const mail = (
                             >
                               <tbody>
                                 <tr>
-                                  <td />
                                   <td
                                     data-id="__react-email-column"
                                     style={{
                                       width: "66%",
                                       padding: "0px 0px 0px 20px",
+                                      textAlign: "left",
                                     }}
                                   >
                                     <p
@@ -247,7 +214,7 @@ const mail = (
                                       style={{
                                         fontSize: "14px",
                                         lineHeight: "24px",
-                                        margin: "16px 0",
+                                        margin: "5px 0",
                                       }}
                                     >
                                       ORDER: {order?.id}
@@ -257,38 +224,15 @@ const mail = (
                                       style={{
                                         fontSize: "14px",
                                         lineHeight: "24px",
-                                        margin: "16px 0",
+                                        margin: "5px 0",
                                       }}
                                     >
                                       QUANTITY: {order?.Ticket.length} - TOTAL:
                                       £{order?.totalPrice}
                                     </p>
                                   </td>
-                                  <td
-                                    data-id="__react-email-column"
-                                    style={{
-                                      backgroundColor: "black",
-                                      textAlign: "center",
-                                      cursor: "pointer",
-                                      fontWeight: 600,
-                                    }}
-                                  >
-                                    <a
-                                      href={ order?.id &&
-                                        `${getBaseUrl()}/ticket/${
-                                        order.id
-                                      }`}
-                                    >
-                                      <button
-                                        style={{
-                                          color: "white",
-                                          textDecoration: "none",
-                                        }}
-                                      >
-                                        CLICK TO SEE YOUR TICKET(S)!
-                                      </button>
-                                    </a>
-                                  </td>
+
+                                  <th></th>
                                 </tr>
                               </tbody>
                             </table>
@@ -300,6 +244,96 @@ const mail = (
                 </tr>
               </tbody>
             </table>
+
+            <table
+              style={{
+                padding: "0px 0px 0px 20px",
+                width: "100%",
+                minWidth: "100%",
+                border: "1px solid rgb(146, 124, 102)",
+              }}
+            >
+              <thead>
+                <tr style={{ margin: "0px", padding: "0px" }}>
+                  <p
+                    data-id="react-email-text"
+                    style={{
+                      fontSize: "16px",
+                      flex: "1",
+                      textAlign: "left",
+                      lineHeight: "24px",
+                      margin: "0px",
+                      padding: "10px",
+                      paddingLeft: "20px",
+
+                      textTransform: "uppercase",
+                      color: "white",
+                      backgroundColor: "black",
+                    }}
+                  >
+                    My Tickets
+                  </p>
+                </tr>
+              </thead>
+              <tbody>
+                {order?.Ticket.map((ticket, index) => {
+                  return (
+                    <tr
+                      style={{
+                        width: "100%",
+                        border: "1px solid rgb(146, 124, 102)",
+                      }}
+                    >
+                      <td>
+                        <p
+                          data-id="react-email-text"
+                          style={{
+                            fontSize: "14px",
+                            lineHeight: "24px",
+
+                            textTransform: "uppercase",
+                            color: "black",
+                          }}
+                        >
+                          {index + 1}
+                        </p>
+                      </td>
+                      <td>
+                        <p
+                          data-id="react-email-text"
+                          style={{
+                            fontSize: "14px",
+
+                            lineHeight: "24px",
+                            textTransform: "uppercase",
+
+                            color: "black",
+                          }}
+                        >
+                          {ticket?.id}
+                        </p>
+                      </td>
+                      <td>
+                        <a
+                          data-id="react-email-text"
+                          style={{
+                            fontSize: "14px",
+                            textAlign: "end",
+                            lineHeight: "24px",
+                            textTransform: "uppercase",
+                            color: "black",
+                          }}
+                          href={`${getBaseUrl()}/ticket/${ticket?.id}`}
+                        >
+                          see my ticket
+                        </a>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+
             <table
               align="center"
               width="100%"
