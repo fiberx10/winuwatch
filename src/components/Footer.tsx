@@ -89,17 +89,16 @@ const Footer = () => {
                               });
                             }
                         : () => {
-                            window.scrollTo(0, 0);
+                            ("");
                           }
                     }
-                    scroll={false}
                     href={
                       menu.names[0] === "PHILOSOPHY"
                         ? "/Philosophy"
                         : menu.names[0] === "Acceptable Use Policy"
-                        ? "https://winuwatch.uk/?page_id=774"
+                        ? "/Acceptable_Use_Policy"
                         : menu.names[0] === "Return Policy"
-                        ? "https://winuwatch.uk/?page_id=744"
+                        ? "/Return_Policy"
                         : ""
                     }
                   >
@@ -123,15 +122,14 @@ const Footer = () => {
                               });
                             }
                         : () => {
-                            window.scrollTo(0, 0);
+                            ("");
                           }
                     }
-                    scroll={false}
                     href={
                       menu.names[1] === "faq"
-                        ? "https://winuwatch.uk/?page_id=782"
+                        ? "/FAQ"
                         : menu.names[1] === "terms & conditions"
-                        ? "https://winuwatch.uk/?page_id=713"
+                        ? "/TermsAndConditions"
                         : ""
                     }
                   >
@@ -142,7 +140,7 @@ const Footer = () => {
                       menu.names[2] === "Charity"
                         ? "/Charity"
                         : menu.names[2] === "Privacy Policy"
-                        ? "https://winuwatch.uk/?page_id=3"
+                        ? "/Privacy_Policy"
                         : menu.names[2] === "contact"
                         ? "mailto:info@winuwatch.uk"
                         : ""
