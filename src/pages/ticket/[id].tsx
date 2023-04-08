@@ -1,7 +1,6 @@
 import Footer from "@/components/Footer";
 import NavBar from "@/components/NavBar";
 import Head from "next/head";
-import { useRouter } from "next/router";
 import { api } from "@/utils/api";
 import styles from "@/styles/Ticket.module.css";
 import { z } from "zod";
@@ -24,8 +23,6 @@ export default function Confirmation({
   id,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const { data } = api.Tickets.getTicket.useQuery(id);
-
-  console.log(JSON.stringify(data));
 
   return (
     <div>

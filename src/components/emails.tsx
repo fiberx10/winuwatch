@@ -1,3 +1,7 @@
+/* eslint-disable @next/next/no-head-element */
+/* eslint-disable @next/next/no-page-custom-font */
+/* eslint-disable @next/next/no-img-element */
+
 import type {
   Competition,
   ImagesUrl,
@@ -274,10 +278,10 @@ const mail = (
                                     }}
                                   >
                                     <a
-                                      href={ order?.id &&
-                                        `${getBaseUrl()}/ticket/${
-                                        order.id
-                                      }`}
+                                      href={
+                                        order?.id &&
+                                        `${getBaseUrl()}/ticket/${order.id}`
+                                      }
                                     >
                                       <button
                                         style={{
@@ -450,5 +454,7 @@ const mail = (
   </div>
 );
 
-export default (order: Parameters<typeof mail>[0]) =>
+const EmailRendered = (order: Parameters<typeof mail>[0]) =>
   renderToString(mail(order));
+
+export default EmailRendered;

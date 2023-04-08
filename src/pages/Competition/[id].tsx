@@ -39,7 +39,7 @@ export const getServerSideProps = (context: GetServerSidePropsContext) => {
 export default function Competition({
   compID,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const { data, isLoading, error } = api.Competition.byID.useQuery(compID);
+  const { data, isLoading } = api.Competition.byID.useQuery(compID);
   const [counter, setCounter] = useState(1);
   const [filter, setFilter] = useState(5);
   const { addComp, updateComp, competitions } = useCart();
