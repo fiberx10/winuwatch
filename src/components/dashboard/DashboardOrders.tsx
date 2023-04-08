@@ -21,6 +21,7 @@ import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import { IoIosArrowDown } from "react-icons/io";
 import TablePagination from "@mui/material/TablePagination";
+import { ExportToCsv } from "export-to-csv";
 
 const DashboardOrders = () => {
   const [open, setOpen] = React.useState({
@@ -59,7 +60,19 @@ const DashboardOrders = () => {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
-  console.log(rowsPerPage);
+  const options = {
+    fieldSeparator: ",",
+    quoteStrings: '"',
+    decimalSeparator: ".",
+    showLabels: true,
+    showTitle: true,
+    title: "Order",
+    useTextFile: false,
+    useBom: true,
+    useKeysAsHeaders: true,
+    // headers: ['Column 1', 'Column 2', etc...] <-- Won't work with useKeysAsHeaders present!
+  };
+  const csvExporter = new ExportToCsv(options);
 
   return (
     <div className={styles.DashCompsMain}>
@@ -178,6 +191,11 @@ const DashboardOrders = () => {
                                     Created At
                                   </p>
                                 </TableCell>
+                                <TableCell align="right">
+                                  <p style={{ marginBottom: "0" }}>
+                                    Download CSV
+                                  </p>
+                                </TableCell>
                               </TableRow>
                             </TableHead>
                             <TableBody>
@@ -261,6 +279,15 @@ const DashboardOrders = () => {
                                       <TableCell align="right">
                                         {row.createdAt.toUTCString()}
                                       </TableCell>
+                                      <TableCell align="right">
+                                        <Button
+                                          onClick={() => {
+                                            csvExporter.generateCsv([row]);
+                                          }}
+                                        >
+                                          CSV
+                                        </Button>
+                                      </TableCell>
                                     </TableRow>
                                     <TableRow>
                                       <TableCell
@@ -309,6 +336,9 @@ const DashboardOrders = () => {
                                                   <TableCell align="right">
                                                     Ticket ID
                                                   </TableCell>
+                                                  <TableCell align="right">
+                                                    Download CSV
+                                                  </TableCell>
                                                 </TableRow>
                                               </TableHead>
                                               <TableBody>
@@ -334,6 +364,17 @@ const DashboardOrders = () => {
                                                     </TableCell>
                                                     <TableCell align="right">
                                                       {row.id.toUpperCase()}
+                                                    </TableCell>
+                                                    <TableCell align="right">
+                                                      <Button
+                                                        onClick={() => {
+                                                          csvExporter.generateCsv(
+                                                            [ticket]
+                                                          );
+                                                        }}
+                                                      >
+                                                        CSV
+                                                      </Button>
                                                     </TableCell>
                                                   </TableRow>
                                                 ))}
