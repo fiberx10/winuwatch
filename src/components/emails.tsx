@@ -9,7 +9,7 @@ import React from "react";
 import { getBaseUrl } from "@/utils";
 import { renderToString } from "react-dom/server";
 
-export const mail = (
+const mail = (
   order:
     | (Order & {
         Competition: (Competition & {
