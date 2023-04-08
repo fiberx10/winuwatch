@@ -115,6 +115,12 @@
   display: flex;
   gap: 1rem;
 }
+.LoaderWrapper {
+  width: 100%;
+  height: 50vh;
+  display: grid;
+  place-items: center;
+}
 .dashWatchGridDet {
   display: flex;
   flex-direction: column;

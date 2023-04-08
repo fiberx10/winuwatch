@@ -16,6 +16,7 @@ import Datetime from "react-datetime";
 import "react-datetime/css/react-datetime.css";
 import moment from "moment-timezone";
 import UpcomingComps from "./UpcomingComps";
+import Loader from "../Loader";
 
 const DashboardCompetitions = () => {
   //REMOVE COMPETITION
@@ -80,7 +81,9 @@ const DashboardCompetitions = () => {
         </Button>
       </div>
       {isLoading || data === null || !data ? (
-        <p>Loading...</p>
+        <div className={styles.LoaderWrapper}>
+          <Loader />
+        </div>
       ) : (
         <Accordion defaultActiveKey={["0"]}>
           <Accordion.Item eventKey="0">

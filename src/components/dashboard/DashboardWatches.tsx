@@ -35,6 +35,7 @@ import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orien
 import FilePondPluginFilePoster from "filepond-plugin-file-poster";
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
+import Loader from "../Loader";
 
 // Register the plugins
 registerPlugin(
@@ -90,7 +91,9 @@ const DashboardWatches = () => {
         </Button>
       </div>
       {isLoading ? (
-        <p>Loading...</p>
+        <div className={styles.LoaderWrapper}>
+          <Loader />
+        </div>
       ) : (
         <div className={styles.dashCompsGrid}>
           {data?.map((watch, i) => {

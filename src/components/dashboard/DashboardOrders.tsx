@@ -22,6 +22,7 @@ import Paper from "@mui/material/Paper";
 import { IoIosArrowDown } from "react-icons/io";
 import TablePagination from "@mui/material/TablePagination";
 import { ExportToCsv } from "export-to-csv";
+import Loader from "../Loader";
 
 const DashboardOrders = () => {
   const [open, setOpen] = React.useState({
@@ -80,7 +81,9 @@ const DashboardOrders = () => {
         <h1>Your Orders</h1>
       </div>
       {isLoading || data === null || !data ? (
-        <p>Loading...</p>
+        <div className={styles.LoaderWrapper}>
+          <Loader />
+        </div>
       ) : (
         <div className={styles.dashCompsGrid}>
           {data.map((comp) => {
