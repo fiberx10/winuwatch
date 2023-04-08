@@ -84,7 +84,7 @@ const DashboardWatches = () => {
   return (
     <div className={styles.DashCompsMain}>
       <div className={styles.dashCompsTopHeader}>
-        <h1>Your Competitions</h1>
+        <h1>Your Watches</h1>
         <Button onClick={() => setAdd(true)} variant="primary">
           <PlusOutlined /> Add
         </Button>

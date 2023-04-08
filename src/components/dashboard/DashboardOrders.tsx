@@ -64,7 +64,7 @@ const DashboardOrders = () => {
   return (
     <div className={styles.DashCompsMain}>
       <div className={styles.dashCompsTopHeader}>
-        <h1>Your Competitions</h1>
+        <h1>Your Orders</h1>
       </div>
       {isLoading || data === null || !data ? (
         <p>Loading...</p>
