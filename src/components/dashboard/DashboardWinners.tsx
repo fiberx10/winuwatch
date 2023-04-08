@@ -11,8 +11,11 @@ import Loader from "../Loader";
 const DashboardWinners = () => {
   const [show, setShow] = useState({ modal: false, data: "" });
   const { data, refetch, isLoading } = api.Competition.getAll.useQuery({});
-  const { mutateAsync: winner, data: winnerData } =
-    api.Winners.pickOneRandom.useMutation();
+  const {
+    mutateAsync: winner,
+    data: winnerData,
+    isLoading: winnerLoading,
+  } = api.Winners.pickOneRandom.useMutation();
 
   const handleShow = (i: string) => {
     setShow({
@@ -114,7 +117,22 @@ const DashboardWinners = () => {
                             padding: "20px",
                           }}
                         >
-                          {winnerData ? (
+                          {winnerLoading ? (
+                            <div
+                              style={{
+                                display: "flex",
+                                alignItems: "center",
+                                gap: "2rem",
+                              }}
+                            >
+                              <Loader />
+                              <p style={{ color: "#a8957e", margin: "0" }}>
+                                Loading Takes long if List of Participants is
+                                big...
+                              </p>
+                            </div>
+                          ) : winnerData &&
+                            winnerData.competitionId === show.data ? (
                             <div>
                               <p>
                                 New Winner is :{" "}
@@ -155,7 +173,7 @@ const DashboardWinners = () => {
                           <Button
                             variant="secondary"
                             onClick={async () => {
-                              await winner(comp.id);
+                              await winner(show.data);
                             }}
                           >
                             Draw Winner
