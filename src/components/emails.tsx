@@ -10,7 +10,7 @@ import type {
   Watches,
 } from "@prisma/client";
 import React from "react";
-import { getBaseUrl } from "@/utils";
+import { Formater, getBaseUrl } from "@/utils";
 import { renderToString } from "react-dom/server";
 
 const mail = (
@@ -73,43 +73,7 @@ const mail = (
             >
               <tbody>
                 <tr>
-                  <td>
-                    <table
-                      align="center"
-                      width="100%"
-                      data-id="react-email-section"
-                      style={{
-                        width: "100%",
-                        display: "flex",
-                        justifyContent: "center",
-                        marginBottom: "20px",
-                      }}
-                      border={0}
-                      cellPadding={0}
-                      cellSpacing={0}
-                      role="presentation"
-                    >
-                      <tbody>
-                        <tr>
-                          <td>
-                            <img
-                              data-id="react-email-img"
-                              alt="Slack"
-                              src="/images/newLogo.png"
-                              width={200}
-                              height={100}
-                              style={{
-                                display: "block",
-                                outline: "none",
-                                border: "none",
-                                textDecoration: "none",
-                              }}
-                            />
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-
+                  <td> 
                     <p
                       data-id="react-email-text"
                       style={{
@@ -236,7 +200,7 @@ const mail = (
                                       }}
                                     >
                                       QUANTITY: {order?.Ticket.length} - TOTAL:
-                                      £{order?.totalPrice}
+                                      {Formater(order?.totalPrice ?? 0)}
                                     </p>
                                   </td>
                                   <td
@@ -256,7 +220,6 @@ const mail = (
                                     >
                                       <button
                                         style={{
-                                          color: "white",
                                           textDecoration: "none",
                                         }}
                                       >
