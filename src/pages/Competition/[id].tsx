@@ -79,7 +79,7 @@ export default function Competition({
               <div className={styles.images}>
                 {data.Watches.images_url[0]?.url && (
                   <Image
-                    width={440}
+                    width={450}
                     height={440}
                     style={{ objectFit: "cover" }}
                     alt="watchImage"
@@ -92,7 +92,7 @@ export default function Competition({
                   {
                     // new array of image besides the first one
                     data.Watches.images_url
-                      .filter((_, i) => i !== 0  && i < 4)
+                      .filter((_, i) => i !== 0 && i < 4)
                       .slice(0, 3)
                       .map((item, i) => (
                         <Image
@@ -247,7 +247,29 @@ export default function Competition({
                       <p>
                         Tickets: {counter} x {Formater(data.ticket_price)}
                       </p>
-                      <span>{Formater(counter * data.ticket_price)}</span>
+                      <span>
+                        {counter === 5
+                          ? Formater(
+                              counter * data.ticket_price -
+                                (counter * data.ticket_price * 10) / 100
+                            )
+                          : counter === 10
+                          ? Formater(
+                              counter * data.ticket_price -
+                                (counter * data.ticket_price * 15) / 100
+                            )
+                          : counter === 15
+                          ? Formater(
+                              counter * data.ticket_price -
+                                (counter * data.ticket_price * 20) / 100
+                            )
+                          : counter === 25
+                          ? Formater(
+                              counter * data.ticket_price -
+                                (counter * data.ticket_price * 20) / 100
+                            )
+                          : Formater(counter * data.ticket_price)}
+                      </span>
                     </div>
                     <button
                       onClick={() => {
@@ -320,7 +342,6 @@ export default function Competition({
                       "Model",
                       "Reference number",
                       "Movement",
-                      "Case",
                       "Bracelet material",
                     ].map((item, i) => {
                       return (
@@ -345,8 +366,6 @@ export default function Competition({
                                 ? data.Watches.reference_number
                                 : item === "Movement"
                                 ? data.Watches.movement
-                                : item === "Case"
-                                ? data.Watches.Bracelet_material
                                 : item === "Bracelet material"
                                 ? data.Watches.Bracelet_material
                                 : ""}
@@ -360,7 +379,6 @@ export default function Competition({
                     {[
                       "Year of manufacture",
                       "Caliber/Gear",
-                      "Power reserve time",
                       "Number of stones",
                       "Glass",
                       "Bezel material",
@@ -375,8 +393,6 @@ export default function Competition({
                                 ? data.Watches.year_of_manifacture
                                 : item === "Caliber/Gear"
                                 ? data.Watches.caliber_grear
-                                : item === "Power reserve time"
-                                ? "70 h"
                                 : item === "Number of stones"
                                 ? data.Watches.number_of_stones
                                 : item === "Glass"

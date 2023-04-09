@@ -1059,8 +1059,7 @@
     position: relative;
   }
   .HomeHeader {
-    background-position: 23% 50%;
-    overflow: hidden;
+    background-position: 60%;
   }
   .HeaderTit {
     margin-bottom: -80px;
@@ -1263,12 +1262,12 @@
     row-gap: 2rem;
   }
 }
-@media only screen and (min-width: 442px) and (max-width: 1216px) {
+@media only screen and (min-width: 442px) {
   .HeaderTit {
-    top: 27vh;
+    top: 9rem;
   }
   .HeaderDesc {
-    top: 60vh;
+    top: 20rem;
   }
 }
 @media only screen and (max-width: 500px) {
@@ -1279,17 +1278,6 @@
 @media only screen and (min-width: 700px) and (max-width: 930px) {
   .HeaderTit h1 {
     font-size: 40px;
-  }
-  .HeaderDesc {
-    top: 65vh;
-  }
-}
-@media only screen and (min-width: 442px) {
-  .HeaderTit {
-    top: 12rem;
-  }
-  .HeaderDesc {
-    top: 22rem;
   }
 }
 
