@@ -17,6 +17,10 @@
   z-index: -1;
   height: 460px;
   position: relative;
+  background: url(../../public/images/main\ image.png);
+  background-repeat: no-repeat;
+  background-size: cover;
+  filter: brightness(50%);
 }
 .vid video {
   object-fit: cover;
