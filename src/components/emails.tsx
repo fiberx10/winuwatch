@@ -73,7 +73,7 @@ const mail = (
             >
               <tbody>
                 <tr>
-                  <td> 
+                  <td>
                     <p
                       data-id="react-email-text"
                       style={{
@@ -131,6 +131,7 @@ const mail = (
                         outline: "none",
                         border: "none",
                         textDecoration: "none",
+                        objectFit: "cover",
                       }}
                     />
                     <table
@@ -187,6 +188,7 @@ const mail = (
                                         fontSize: "14px",
                                         lineHeight: "24px",
                                         margin: "5px 0",
+                                        color: "white",
                                       }}
                                     >
                                       ORDER: {order?.id}
@@ -197,6 +199,7 @@ const mail = (
                                         fontSize: "14px",
                                         lineHeight: "24px",
                                         margin: "5px 0",
+                                        color: "white",
                                       }}
                                     >
                                       QUANTITY: {order?.Ticket.length} - TOTAL:
@@ -221,13 +224,15 @@ const mail = (
                                       <button
                                         style={{
                                           textDecoration: "none",
+                                          backgroundColor: "transparent",
+                                          color: "white",
+                                          cursor: "pointer",
                                         }}
                                       >
                                         CLICK TO SEE YOUR TICKET(S)!
                                       </button>
                                     </a>
                                   </td>
-
                                 </tr>
                               </tbody>
                             </table>
@@ -274,7 +279,7 @@ const mail = (
                 {order?.Ticket.map((ticket, index) => {
                   return (
                     <tr
-                    key={index}
+                      key={index}
                       style={{
                         width: "100%",
                         border: "1px solid rgb(146, 124, 102)",
@@ -334,7 +339,7 @@ const mail = (
               align="center"
               width="100%"
               data-id="react-email-section"
-              style={{ padding: "20px", fontWeight: 500 }}
+              style={{ padding: "20px", fontWeight: 500, textAlign: "center" }}
               border={0}
               cellPadding={0}
               cellSpacing={0}
@@ -363,6 +368,7 @@ const mail = (
                         margin: "5px 0px",
                         textTransform: "uppercase",
                         color: "black",
+                        fontWeight: "400",
                       }}
                     >
                       the contest will end on{" "}
@@ -380,6 +386,7 @@ const mail = (
                         margin: "5px 0px",
                         textTransform: "uppercase",
                         color: "black",
+                        fontWeight: "400",
                       }}
                     >
                       the winners will be announced on{" "}
@@ -393,6 +400,7 @@ const mail = (
                         margin: "5px 0px",
                         textTransform: "uppercase",
                         color: "black",
+                        fontWeight: "400",
                       }}
                     >
                       at{" "}
@@ -406,6 +414,7 @@ const mail = (
                         margin: "5px 0px",
                         textTransform: "uppercase",
                         color: "black",
+                        fontWeight: "400",
                       }}
                     >
                       please make sure to follow us on instagram where we
@@ -418,6 +427,7 @@ const mail = (
                         margin: "5px 0px",
                         textTransform: "uppercase",
                         color: "black",
+                        fontWeight: "400",
                       }}
                     >
                       host a live for each competition.
