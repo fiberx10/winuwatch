@@ -22,7 +22,7 @@ const Stripe = new stripe(env.STRIPE_SECRET_KEY, {
 });
 
 export const WinnersRouter = createTRPCRouter({
-  getCSV: publicProcedure.input(z.string()).query(async ({ ctx, input }) => {
+  getCSV: publicProcedure.input(z.string()).mutation(async ({ ctx, input }) => {
     const competition = await ctx.prisma.competition.findUnique({
       where: {
         id: input,

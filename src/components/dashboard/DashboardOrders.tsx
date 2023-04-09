@@ -42,6 +42,8 @@ const DashboardOrders = () => {
     opened: false,
     orderID: "",
   });
+  const { mutateAsync } = api.Winners.getCSV.useMutation();
+
   const { data, isLoading } = api.Competition.getAll.useQuery();
 
   // UPDATE
@@ -103,6 +105,15 @@ const DashboardOrders = () => {
                 </div>
                 <div className={styles.dashGridItemBot}>
                   <div>
+                    <Button
+                      variant="secondary"
+                      onClick={async () => {
+                        const data = await mutateAsync(comp.id);
+                        csvExporter.generateCsv(data);
+                      }}
+                    >
+                      CSV
+                    </Button>
                     <Button
                       variant="secondary"
                       onClick={() => handleShow(comp.id)}
@@ -282,15 +293,6 @@ const DashboardOrders = () => {
                                       <TableCell align="right">
                                         {row.createdAt.toUTCString()}
                                       </TableCell>
-                                      <TableCell align="right">
-                                        <Button
-                                          onClick={() => {
-                                            csvExporter.generateCsv([row]);
-                                          }}
-                                        >
-                                          CSV
-                                        </Button>
-                                      </TableCell>
                                     </TableRow>
                                     <TableRow>
                                       <TableCell
@@ -367,17 +369,6 @@ const DashboardOrders = () => {
                                                     </TableCell>
                                                     <TableCell align="right">
                                                       {row.id.toUpperCase()}
-                                                    </TableCell>
-                                                    <TableCell align="right">
-                                                      <Button
-                                                        onClick={() => {
-                                                          csvExporter.generateCsv(
-                                                            [ticket]
-                                                          );
-                                                        }}
-                                                      >
-                                                        CSV
-                                                      </Button>
                                                     </TableCell>
                                                   </TableRow>
                                                 ))}
