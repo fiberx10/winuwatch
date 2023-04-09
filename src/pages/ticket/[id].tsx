@@ -38,28 +38,36 @@ export default function Confirmation({
       <div className={styles.confirmwrapper}>
         {data && (
           <div className={styles.wrapper}>
-            <div className={styles.wrapper_left}>
+            <h1>Your Ticket Code : {data.id.slice(0, 8)}</h1>
+
+            <div className={styles.head}>
+              <header>
+                <p>Details</p>
+                <p>Order {data.Order.id.slice(0, 8)} </p>
+              </header>
               <div className={styles.comp_info}>
                 <h6>{data.Competition.name}</h6>
-                <h5>{data.Competition.drawing_date.toDateString()}</h5>
               </div>
-
-              <div className={styles.ticket_info}>
-                <h6>
-                  Customer Name : {data.Order.first_name} {data.Order.last_name}
-                </h6>
-                <h6> Total Price : {data.Order.totalPrice} $ </h6>
-              </div>
+              <header>
+                <p>Value of this ticket</p>
+                <p> £ {data.Order.totalPrice} </p>
+              </header>
             </div>
-            <div className={styles.wrapper_right}>
+
+            <div className={styles.qrcode}>
               <QRCode
                 size={50}
                 style={{ height: "auto", maxWidth: "40%", width: "40%" }}
                 value={data.id}
                 viewBox={`0 0 50 50`}
               />
-              <h6>Ticket Number : {data.id}</h6>
             </div>
+
+            <footer>
+              <h6>WITH THE CERTIGAME'S CERTIFICATION</h6>
+              <h1>CERTIGAME</h1>
+              <p>www.winuwatch.uk</p>
+            </footer>
           </div>
         )}
       </div>
