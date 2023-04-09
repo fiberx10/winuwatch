@@ -122,7 +122,7 @@ const Footer = () => {
                           }
                         : menu.names[1] === "faq"
                         ? async () => {
-                            await router.push("/Philosophy");
+                            await router.push("/FAQ");
                           }
                         : menu.names[1] === "terms & conditions"
                         ? async () => {
