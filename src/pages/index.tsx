@@ -9,15 +9,13 @@ import HowToPlay from "@/components/HowToPlay";
 import Certificate from "@/components/Certificate";
 import Reviews from "@/components/Reviews";
 import Footer from "@/components/Footer";
-import OurWinner from "@/components/OurWinner";
+//import OurWinner from "@/components/OurWinner";
 import UpComing from "@/components/UpComing";
-import { api } from "@/utils/api";
+//import { api } from "@/utils/api";
 
 const Home: NextPage = () => {
-  const {
+  /*const {
     data: Watches,
-    isLoading: isWatchesLoading,
-    error: WatchesError,
   } = api.Watches.getAll.useQuery();
   /*const { mutateAsync } = api.Payment.create.useMutation();
 

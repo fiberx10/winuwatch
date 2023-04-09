@@ -18,9 +18,9 @@ const queryClient = new QueryClient({
 const MyApp: AppType = ({ Component, pageProps }) => {
   return (
     <QueryClientProvider client={queryClient}>
-        <Component {...pageProps} />
-        <ReactQueryDevtools />
-     </QueryClientProvider>
+      <Component {...pageProps} />
+      <ReactQueryDevtools />
+    </QueryClientProvider>
   );
 };
 

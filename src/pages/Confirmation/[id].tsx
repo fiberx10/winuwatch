@@ -1,7 +1,6 @@
 import Footer from "@/components/Footer";
 import NavBar from "@/components/NavBar";
 import Head from "next/head";
-import { useRouter } from "next/router";
 import { api } from "@/utils/api";
 import styles from "@/styles/Confirmation.module.css";
 import { z } from "zod";

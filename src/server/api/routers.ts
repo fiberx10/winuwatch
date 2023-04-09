@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
-import { CompetitionStatus, Order, OrderStatus, Ticket } from "@prisma/client";
+import { CompetitionStatus, OrderStatus } from "@prisma/client";
 import { getBaseUrl, CreateOrderSchema } from "@/utils";
 import { WatchesSchema, CompetitionSchema } from "@/utils/zodSchemas";
 import { env } from "@/env.mjs";
@@ -19,6 +19,9 @@ export const WinnersRouter = createTRPCRouter({
       //based on the competition id, pick a random winner and return the ticket data and order data
 
       const tickets = await ctx.prisma.ticket.findMany({
+        where: {
+          competitionId: input,
+        },
         include: {
           Order: true,
           Competition: {
@@ -55,16 +58,17 @@ export const WinnersRouter = createTRPCRouter({
             },
           },
         },
-      })
+      });
       if (!ticket) {
         throw new Error("Ticket not found");
       }
+      /*
       const { Order, Competition } = ticket;
       const { Watches } = Competition;
-      const { email} = Order;
+      const { email } = Order;
+      */
       return void 0; //TODO : Send email
-    })
-
+    }),
 });
 
 export const TicketsRouter = createTRPCRouter({
