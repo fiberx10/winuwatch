@@ -27,10 +27,6 @@ export default function NavBar() {
       className={styles.NavBarContainer}
       style={{
         color: navColor,
-        position:
-          typeof window !== "undefined" && location.pathname !== "/"
-            ? "unset"
-            : "absolute",
       }}
     >
       <div
@@ -128,7 +124,12 @@ export default function NavBar() {
         className={styles.Logo}
         onClick={() => router.push("/")}
         alt="logo"
-        src={`/images/${navColor === "white" ? "newLogo.png" : "logo.png"}`}
+        style={{
+          cursor: "pointer",
+          filter: navColor === "white" ? "brightness(0) invert(1)" : "",
+          marginBottom: "-20px",
+        }}
+        src={`/images/logo.png`}
       />
 
       <div
