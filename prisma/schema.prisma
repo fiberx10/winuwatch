@@ -114,6 +114,7 @@ model Ticket {
 
 model Question {
   id            String   @id @default(cuid())
+  imageURL      String?
   question      String
   correctAnswer String
   createdAt     DateTime @default(now())
