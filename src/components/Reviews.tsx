@@ -60,7 +60,7 @@ const Reviews = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
   return (
-    <div className={styles.ReviewsContainer}>
+    <div id="trustpilot" className={styles.ReviewsContainer}>
       <div className={styles.AliceContainer}>
         <AliceCarousel
           infinite={true}

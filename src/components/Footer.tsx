@@ -31,6 +31,8 @@ const Footer = () => {
     typeof window !== "undefined" && document.getElementById("Howtoplay");
   const theComp =
     typeof window !== "undefined" && document.getElementById("theComp");
+  const trustpilot =
+    typeof window !== "undefined" && document.getElementById("trustpilot");
   useEffect(() => {
     typeof window !== "undefined" && setLocation(window.location.pathname);
   }, [windowLocation]);
@@ -120,6 +122,17 @@ const Footer = () => {
                         : menu.names[1] === "terms & conditions"
                         ? async () => {
                             await router.push("/TermsAndConditions");
+                          }
+                        : menu.names[1] === "trustpilot"
+                        ? () => {
+                            window.scrollTo({
+                              top:
+                                trustpilot !== null &&
+                                trustpilot instanceof HTMLElement
+                                  ? trustpilot.offsetTop
+                                  : 400,
+                              behavior: "smooth",
+                            });
                           }
                         : () => {
                             window.scrollTo({
