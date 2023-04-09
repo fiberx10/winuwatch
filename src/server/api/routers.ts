@@ -313,7 +313,7 @@ export const CompetitionRouter = createTRPCRouter({
       return Data[1].map((comp) => ({
         ...comp,
         remaining_tickets:
-          comp.remaining_tickets -
+          comp.total_tickets -
           (Data[0].find((item) => item.id === comp.id)?._count?.Ticket || 0),
       }));
     }),
