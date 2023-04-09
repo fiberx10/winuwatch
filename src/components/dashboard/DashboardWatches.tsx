@@ -49,7 +49,6 @@ const DashboardWatches = () => {
   const { mutateAsync: removewatch } = api.Watches.remove.useMutation();
   const { mutateAsync: addWatch } = api.Watches.add.useMutation();
   const { mutateAsync: updateWatch } = api.Watches.update.useMutation();
-  const [imgs, setImgs] = useState<string[]>([]);
   const [newimgs, setNewImgs] = useState<string[]>([]);
   //REMOVE WATCH
   const [remove, setRemove] = useState({ modal: false, id: "" });
@@ -236,6 +235,12 @@ const DashboardWatches = () => {
                                           console.log(e);
                                         });
                                     },
+                                  }}
+                                  onremovefile={(error, file) => {
+                                    console.log(error, file);
+                                  }}
+                                  onupdatefiles = {(fileItems) => {
+                                    console.log(fileItems);
                                   }}
                                   files={values.images_url.map((img) => {
                                     return {
