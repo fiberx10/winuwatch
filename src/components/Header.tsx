@@ -33,6 +33,7 @@ export default function Header() {
           playsInline
           muted={true}
         >
+        {/*
           <source
             src="/images/professional-watches-cosmograph-daytona-cover-video_portrait.webm"
             type="video/webm"
@@ -41,6 +42,7 @@ export default function Header() {
             src="/images/professional-watches-cosmograph-daytona-cover-video_portrait.mp4"
             type="video/mp4"
           />
+          */}
           <source
             src="/images/professional-watches-cosmograph-daytona-cover-video_portrait.mov"
             type="video/quicktime"
