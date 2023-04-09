@@ -16,6 +16,7 @@ import { useState } from "react";
 import Image from "next/image";
 import Loader from "@/components/Loader";
 import { Tooltip } from "@mui/material";
+import Timer from "@/components/Timer";
 
 export const getServerSideProps = (context: GetServerSidePropsContext) => {
   try {
@@ -114,10 +115,16 @@ export default function Competition({
                   <p>market value {Formater(data.price)}</p>
                 </div>
                 <div className={styles.CompTicketSelec}>
-                  <h3>How many tickets would you like?</h3>
+                  {data.remaining_tickets === 0 ? (
+                    <>
+                      <h3>Drawing Date for this competition in :</h3>
+                      <Timer displayFlex={true} date={data.drawing_date} />
+                    </>
+                  ) : (
+                    <h3>How many tickets would you like?</h3>
+                  )}
                   <div className={styles.tickets}>
-                    {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25].length >
-                    data.remaining_tickets ? (
+                    {data.remaining_tickets === 0 ? (
                       <p>No Tickets Left!</p>
                     ) : (
                       [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25]
@@ -242,58 +249,63 @@ export default function Competition({
                       />
                     </div>
                   </div>
-                  <div className={styles.addtoCart}>
-                    <div className={styles.prices}>
-                      <p>
-                        Tickets: {counter} x {Formater(data.ticket_price)}
-                      </p>
-                      <span>
-                        {counter === 5
-                          ? Formater(
-                              counter * data.ticket_price -
-                                (counter * data.ticket_price * 10) / 100
-                            )
-                          : counter === 10
-                          ? Formater(
-                              counter * data.ticket_price -
-                                (counter * data.ticket_price * 15) / 100
-                            )
-                          : counter === 15
-                          ? Formater(
-                              counter * data.ticket_price -
-                                (counter * data.ticket_price * 20) / 100
-                            )
-                          : counter === 25
-                          ? Formater(
-                              counter * data.ticket_price -
-                                (counter * data.ticket_price * 20) / 100
-                            )
-                          : Formater(counter * data.ticket_price)}
-                      </span>
+                  {data.remaining_tickets === 0 ? (
+                    ""
+                  ) : (
+                    <div className={styles.addtoCart}>
+                      <div className={styles.prices}>
+                        <p>
+                          Tickets: {counter} x {Formater(data.ticket_price)}
+                        </p>
+                        <span>
+                          {counter === 5
+                            ? Formater(
+                                counter * data.ticket_price -
+                                  (counter * data.ticket_price * 10) / 100
+                              )
+                            : counter === 10
+                            ? Formater(
+                                counter * data.ticket_price -
+                                  (counter * data.ticket_price * 15) / 100
+                              )
+                            : counter === 15
+                            ? Formater(
+                                counter * data.ticket_price -
+                                  (counter * data.ticket_price * 20) / 100
+                              )
+                            : counter === 25
+                            ? Formater(
+                                counter * data.ticket_price -
+                                  (counter * data.ticket_price * 20) / 100
+                              )
+                            : Formater(counter * data.ticket_price)}
+                        </span>
+                      </div>
+                      <button
+                        onClick={() => {
+                          competitions.length > 0
+                            ? competitions.filter(
+                                (comp) =>
+                                  comp.compID === data.id &&
+                                  updateComp({
+                                    compID: data.id,
+                                    number_tickets:
+                                      counter + comp.number_tickets,
+                                    price_per_ticket: data.ticket_price,
+                                  })
+                              )
+                            : addComp({
+                                compID: data.id,
+                                number_tickets: counter,
+                                price_per_ticket: data.ticket_price,
+                              });
+                          void router.push("/Cart");
+                        }}
+                      >
+                        CONTINUE
+                      </button>
                     </div>
-                    <button
-                      onClick={() => {
-                        competitions.length > 0
-                          ? competitions.filter(
-                              (comp) =>
-                                comp.compID === data.id &&
-                                updateComp({
-                                  compID: data.id,
-                                  number_tickets: counter + comp.number_tickets,
-                                  price_per_ticket: data.ticket_price,
-                                })
-                            )
-                          : addComp({
-                              compID: data.id,
-                              number_tickets: counter,
-                              price_per_ticket: data.ticket_price,
-                            });
-                        void router.push("/Cart");
-                      }}
-                    >
-                      CONTINUE
-                    </button>
-                  </div>
+                  )}
                 </div>
               </div>
             </div>

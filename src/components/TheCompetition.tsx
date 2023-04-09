@@ -64,7 +64,7 @@ const TheCompetition = () => {
                     </p>
                   </div>
                 </div>
-                <Timer date={watch.end_date} />
+                <Timer displayFlex={false} date={watch.end_date} />
               </div>
             );
           })

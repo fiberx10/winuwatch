@@ -2,7 +2,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 import styles from "../styles/Home.module.css";
 
-const Timer = ({ date }: { date: Date }) => {
+const Timer = ({ date, displayFlex }: { date: Date; displayFlex: boolean }) => {
   const [days, setDays] = useState(0);
   const [hours, setHours] = useState(0);
   const [minutes, setMinutes] = useState(0);
@@ -22,7 +22,13 @@ const Timer = ({ date }: { date: Date }) => {
     return () => clearInterval(interval);
   }, [date]);
   return (
-    <div className={styles.timer}>
+    <div
+      style={{
+        flexDirection: displayFlex ? "row" : "column",
+        gap: displayFlex ? "1rem" : "0",
+      }}
+      className={styles.timer}
+    >
       <div className={styles.timerItem}>
         <p>{days}</p>
         <h6>Days</h6>
