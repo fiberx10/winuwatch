@@ -300,8 +300,8 @@ export default function Competition({
                   )}
                   {data.end_date.toString() && (
                     <p>
-                      Winner announcement: {data.end_date.toString()} in direct
-                      live on instagram @winuwatch
+                      Winner announcement: {data.drawing_date.toString()} in
+                      direct live on instagram @winuwatch
                     </p>
                   )}
 
