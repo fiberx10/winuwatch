@@ -3,7 +3,6 @@
   height: 100%;
   display: grid;
   place-items: center;
-  padding-top: 80px;
   padding-bottom: 80px;
   padding-left: 80px;
   padding-right: 80px;
@@ -146,7 +145,6 @@
   
   .confirmwrapper {
     padding: 20px;
-    padding-top: 80px;
   }
   .wrapper {
     width: 100%;

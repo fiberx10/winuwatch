@@ -34,7 +34,7 @@ export default function Confirmation({
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <NavBar />
+   
       <div className={styles.confirmwrapper}>
         {data && (
           <div className={styles.wrapper}>
@@ -71,7 +71,7 @@ export default function Confirmation({
           </div>
         )}
       </div>
-      <Footer />
+   
     </div>
   );
 }
