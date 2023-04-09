@@ -64,8 +64,15 @@ export default function Confirmation({
             </div>
 
             <footer>
-              <h6>WITH THE CERTIGAME&apos;S CERTIFICATION</h6>
-              <h1>CERTIGAME</h1>
+              <h6>WITH THE Randomdraws&apos;S CERTIFICATION</h6>
+              <img 
+                style={{
+                  marginTop: "15px",
+                  height: "auto",
+                  maxWidth: "200px",
+                  // maxWidth: "60%",
+                }}
+              src="/images/certigame_logo.png" alt="certigame" />
               <p>www.winuwatch.uk</p>
             </footer>
           </div>
