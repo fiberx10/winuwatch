@@ -220,16 +220,16 @@ const DashboardWatches = () => {
                                             const url = await getDownloadURL(
                                               snapshot.ref
                                             );
-                                            setNewImgs((imgs) =>
-                                              imgs ? [...imgs, url] : [url]
-                                            );
-                                            console.log(newimgs);
-                                            setFieldValue(
-                                              "images_url",
-                                              newimgs
-                                            );
+                                            const imgs1: string[] = [];
+                                            imgs1.push(url);
+
+                                            // setNewImgs((imgs) =>
+                                            //   imgs ? [...imgs, url] : [url]
+                                            // );
+                                            console.log(imgs1);
 
                                             load(url);
+                                            setFieldValue("images_url", imgs1);
                                           }
                                         )
                                         .catch((e) => {
@@ -249,7 +249,7 @@ const DashboardWatches = () => {
                                     };
                                   })}
                                   allowMultiple={true}
-                                  maxFiles={3}
+                                  maxFiles={4}
                                   name="images_url" /* sets the file input name, it's filepond by default */
                                   labelIdle='Drag & Drop your files or <span class="filepond--label-action">Browse</span>'
                                 />
@@ -470,9 +470,10 @@ const DashboardWatches = () => {
                           uploadBytes(ref(storage, fileName), file)
                             .then(async (snapshot: UploadResult) => {
                               const url = await getDownloadURL(snapshot.ref);
-                              setImgs((imgs) => [...imgs, url]);
-                              console.log(imgs);
-                              setFieldValue("images_url", imgs);
+
+                              const imgs2: string[] = [];
+                              imgs2.push(url);
+                              setFieldValue("images_url", imgs2);
                               load(url);
                             })
                             .catch((e) => {
@@ -481,7 +482,7 @@ const DashboardWatches = () => {
                         },
                       }}
                       allowMultiple={true}
-                      maxFiles={3}
+                      maxFiles={4}
                       name="images_url" /* sets the file input name, it's filepond by default */
                       labelIdle='Drag & Drop your files or <span class="filepond--label-action">Browse</span>'
                     />
@@ -624,7 +625,6 @@ const DashboardWatches = () => {
                   variant="secondary"
                   onClick={() => {
                     setAdd(false);
-                    setImgs([]);
                   }}
                 >
                   Close
