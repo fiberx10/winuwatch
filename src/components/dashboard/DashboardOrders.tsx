@@ -24,6 +24,19 @@ import TablePagination from "@mui/material/TablePagination";
 import { ExportToCsv } from "export-to-csv";
 import Loader from "../Loader";
 
+const csvExporter = new ExportToCsv({
+  fieldSeparator: ",",
+  quoteStrings: '"',
+  decimalSeparator: ".",
+  showLabels: true,
+  showTitle: true,
+  title: "Order",
+  useTextFile: false,
+  useBom: true,
+  useKeysAsHeaders: true,
+  // headers: ['Column 1', 'Column 2', etc...] <-- Won't work with useKeysAsHeaders present!
+});
+
 const DashboardOrders = () => {
   const [open, setOpen] = React.useState({
     opened: false,
@@ -61,19 +74,6 @@ const DashboardOrders = () => {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
-  const options = {
-    fieldSeparator: ",",
-    quoteStrings: '"',
-    decimalSeparator: ".",
-    showLabels: true,
-    showTitle: true,
-    title: "Order",
-    useTextFile: false,
-    useBom: true,
-    useKeysAsHeaders: true,
-    // headers: ['Column 1', 'Column 2', etc...] <-- Won't work with useKeysAsHeaders present!
-  };
-  const csvExporter = new ExportToCsv(options);
 
   return (
     <div className={styles.DashCompsMain}>
