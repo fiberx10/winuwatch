@@ -1,14 +1,7 @@
-import { useEffect } from "react";
-import Image from "next/image";
-import dynamic from "next/dynamic";
-
 import NavBar from "./NavBar";
-
 import styles from "@/styles/Home.module.css";
-
-const HeaderVideo = dynamic(() => import("./shared/HeaderVideo"), {
-  ssr: false,
-});
+import Image from "next/image";
+import { useEffect } from "react";
 
 export default function Header() {
   const theComp =
@@ -55,7 +48,6 @@ export default function Header() {
            />
            Your browser does not support the video tag.
          </video>
-
       </div>
       <div className={styles.HeaderTit}>
         <h2 className={styles.background}>winuwatch</h2>

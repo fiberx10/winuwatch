@@ -5,7 +5,6 @@ import { api } from "@/utils/api";
 import styles from "@/styles/Ticket.module.css";
 import { z } from "zod";
 import QRCode from "react-qr-code";
-
 import type {
   GetServerSidePropsContext,
   InferGetServerSidePropsType,
