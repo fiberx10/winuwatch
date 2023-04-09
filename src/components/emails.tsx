@@ -10,7 +10,7 @@ import type {
   Watches,
 } from "@prisma/client";
 import React from "react";
-import { getBaseUrl } from "@/utils";
+import { Formater, getBaseUrl } from "@/utils";
 import { renderToString } from "react-dom/server";
 
 const mail = (
@@ -74,42 +74,6 @@ const mail = (
               <tbody>
                 <tr>
                   <td>
-                    <table
-                      align="center"
-                      width="100%"
-                      data-id="react-email-section"
-                      style={{
-                        width: "100%",
-                        display: "flex",
-                        justifyContent: "center",
-                        marginBottom: "20px",
-                      }}
-                      border={0}
-                      cellPadding={0}
-                      cellSpacing={0}
-                      role="presentation"
-                    >
-                      <tbody>
-                        <tr>
-                          <td>
-                            <img
-                              data-id="react-email-img"
-                              alt="Slack"
-                              src="/images/newLogo.png"
-                              width={200}
-                              height={100}
-                              style={{
-                                display: "block",
-                                outline: "none",
-                                border: "none",
-                                textDecoration: "none",
-                              }}
-                            />
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-
                     <p
                       data-id="react-email-text"
                       style={{
@@ -167,6 +131,7 @@ const mail = (
                         outline: "none",
                         border: "none",
                         textDecoration: "none",
+                        objectFit: "cover",
                       }}
                     />
                     <table
@@ -223,6 +188,7 @@ const mail = (
                                         fontSize: "14px",
                                         lineHeight: "24px",
                                         margin: "5px 0",
+                                        color: "white",
                                       }}
                                     >
                                       ORDER: {order?.id}
@@ -233,10 +199,11 @@ const mail = (
                                         fontSize: "14px",
                                         lineHeight: "24px",
                                         margin: "5px 0",
+                                        color: "white",
                                       }}
                                     >
                                       QUANTITY: {order?.Ticket.length} - TOTAL:
-                                      £{order?.totalPrice}
+                                      {Formater(order?.totalPrice ?? 0)}
                                     </p>
                                   </td>
                                   <td
@@ -251,20 +218,21 @@ const mail = (
                                     <a
                                       href={
                                         order?.id &&
-                                        `${getBaseUrl()}/ticket/${order.id}`
+                                        `${getBaseUrl()}/Confirmation/${order.id}`
                                       }
                                     >
                                       <button
                                         style={{
-                                          color: "white",
                                           textDecoration: "none",
+                                          backgroundColor: "transparent",
+                                          color: "white",
+                                          cursor: "pointer",
                                         }}
                                       >
-                                        CLICK TO SEE YOUR TICKET(S)!
+                                        CLICK TO SEE YOUR ORDER(S)!
                                       </button>
                                     </a>
                                   </td>
-
                                 </tr>
                               </tbody>
                             </table>
@@ -311,7 +279,7 @@ const mail = (
                 {order?.Ticket.map((ticket, index) => {
                   return (
                     <tr
-                    key={index}
+                      key={index}
                       style={{
                         width: "100%",
                         border: "1px solid rgb(146, 124, 102)",
@@ -371,7 +339,7 @@ const mail = (
               align="center"
               width="100%"
               data-id="react-email-section"
-              style={{ padding: "20px", fontWeight: 500 }}
+              style={{ padding: "20px", fontWeight: 500, textAlign: "center" }}
               border={0}
               cellPadding={0}
               cellSpacing={0}
@@ -400,6 +368,7 @@ const mail = (
                         margin: "5px 0px",
                         textTransform: "uppercase",
                         color: "black",
+                        fontWeight: "400",
                       }}
                     >
                       the contest will end on{" "}
@@ -417,6 +386,7 @@ const mail = (
                         margin: "5px 0px",
                         textTransform: "uppercase",
                         color: "black",
+                        fontWeight: "400",
                       }}
                     >
                       the winners will be announced on{" "}
@@ -430,6 +400,7 @@ const mail = (
                         margin: "5px 0px",
                         textTransform: "uppercase",
                         color: "black",
+                        fontWeight: "400",
                       }}
                     >
                       at{" "}
@@ -443,6 +414,7 @@ const mail = (
                         margin: "5px 0px",
                         textTransform: "uppercase",
                         color: "black",
+                        fontWeight: "400",
                       }}
                     >
                       please make sure to follow us on instagram where we
@@ -455,6 +427,7 @@ const mail = (
                         margin: "5px 0px",
                         textTransform: "uppercase",
                         color: "black",
+                        fontWeight: "400",
                       }}
                     >
                       host a live for each competition.

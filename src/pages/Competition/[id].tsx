@@ -92,7 +92,7 @@ export default function Competition({
                   {
                     // new array of image besides the first one
                     data.Watches.images_url
-                      .filter((_, i) => i !== 0)
+                      .filter((_, i) => i !== 0  && i < 4)
                       .slice(0, 3)
                       .map((item, i) => (
                         <Image

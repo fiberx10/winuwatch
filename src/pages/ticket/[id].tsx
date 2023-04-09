@@ -10,14 +10,7 @@ import type {
   GetServerSidePropsContext,
   InferGetServerSidePropsType,
 } from "next";
-export const getServerSideProps = (context: GetServerSidePropsContext) => {
-  const { id } = context.query;
-  return {
-    props: {
-      id: z.string().parse(id),
-    },
-  };
-};
+import Image from "next/image";
 
 export default function Confirmation({
   id,
@@ -62,14 +55,18 @@ export default function Confirmation({
 
             <footer>
               <h6>WITH THE Randomdraws&apos;S CERTIFICATION</h6>
-              <img 
+              <Image
                 style={{
                   marginTop: "15px",
                   height: "auto",
                   maxWidth: "200px",
                   // maxWidth: "60%",
                 }}
-              src="/images/certigame_logo.png" alt="certigame" />
+                src="/images/certigame_logo.png"
+                alt="certigame"
+                width={200}
+                height={200}
+              />
               <p>www.winuwatch.uk</p>
             </footer>
           </div>
@@ -78,3 +75,11 @@ export default function Confirmation({
     </div>
   );
 }
+export const getServerSideProps = (context: GetServerSidePropsContext) => {
+  const { id } = context.query;
+  return {
+    props: {
+      id: z.string().parse(id),
+    },
+  };
+};
