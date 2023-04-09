@@ -403,7 +403,7 @@ const mail = (
                       }}
                     >
                       the winners will be announced on{" "}
-                      {order?.Competition[0]?.winner_announcement_date?.toDateString()}
+                      {order?.Competition[0]?.drawing_date?.toDateString()}
                     </p>
                     <p
                       data-id="react-email-text"
@@ -417,7 +417,7 @@ const mail = (
                       }}
                     >
                       at{" "}
-                      {order?.Competition[0]?.winner_announcement_date?.toLocaleTimeString()}
+                      {order?.Competition[0]?.drawing_date?.toLocaleTimeString()}
                     </p>
                     <p
                       data-id="react-email-text"
