@@ -74,6 +74,14 @@ const mail = (
               <tbody>
                 <tr>
                   <td>
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <img alt="winuwatch logo" src="/images/newLogo.png" />
+                    </div>
                     <p
                       data-id="react-email-text"
                       style={{
@@ -218,7 +226,9 @@ const mail = (
                                     <a
                                       href={
                                         order?.id &&
-                                        `${getBaseUrl()}/Confirmation/${order.id}`
+                                        `${getBaseUrl()}/Confirmation/${
+                                          order.id
+                                        }`
                                       }
                                     >
                                       <button
@@ -374,7 +384,7 @@ const mail = (
                       the contest will end on{" "}
                       {order?.Competition[0]?.end_date.toDateString()} at{" "}
                       {order
-                        ? order?.Competition[0]?.end_date.toTimeString()
+                        ? order?.Competition[0]?.end_date.toLocaleTimeString()
                         : null}{" "}
                       ,
                     </p>
@@ -404,7 +414,7 @@ const mail = (
                       }}
                     >
                       at{" "}
-                      {order?.Competition[0]?.winner_announcement_date?.toTimeString()}
+                      {order?.Competition[0]?.winner_announcement_date?.toLocaleTimeString()}
                     </p>
                     <p
                       data-id="react-email-text"
