@@ -35,6 +35,7 @@ import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orien
 import FilePondPluginFilePoster from "filepond-plugin-file-poster";
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
+import Loader from "../Loader";
 
 // Register the plugins
 registerPlugin(
@@ -84,37 +85,44 @@ const DashboardWatches = () => {
   return (
     <div className={styles.DashCompsMain}>
       <div className={styles.dashCompsTopHeader}>
-        <h1>Your Competitions</h1>
+        <h1>Your Watches</h1>
         <Button onClick={() => setAdd(true)} variant="primary">
           <PlusOutlined /> Add
         </Button>
       </div>
       {isLoading ? (
-        <p>Loading...</p>
+        <div className={styles.LoaderWrapper}>
+          <Loader />
+        </div>
       ) : (
         <div className={styles.dashCompsGrid}>
           {data?.map((watch, i) => {
             return (
               <div className={styles.dashWatchesGridItem} key={watch.id}>
-                <Image
-                  width={200}
-                  height={200}
-                  style={{ objectFit: "cover" }}
-                  src={
-                    watch.images_url[0]
-                      ? watch.images_url[0]
-                      : "/images/tester.png"
-                  }
-                  alt="watchImage"
-                />
-                <div className={styles.dashWatchGridDet}>
+                <div className={styles.WatchGridIMG}>
+                  <Image
+                    width={200}
+                    height={200}
+                    style={{ objectFit: "cover" }}
+                    src={
+                      watch.images_url[0]
+                        ? watch.images_url[0]
+                        : "/images/tester.png"
+                    }
+                    alt="watchImage"
+                  />
                   <h2>
                     {watch.brand} {watch.model}
                   </h2>
+                </div>
+                <div className={styles.dashWatchGridDet}>
                   <div className={styles.dashGridItemTop}>
                     <p>Reference Nº : {watch.reference_number}</p>
                     <p>Manifacture Year : {watch.year_of_manifacture}</p>
                     <p>Condition : {watch.condition}</p>
+                    <p>Caliber : {watch.caliber_grear}</p>
+                    <p>Created at : {watch.createdAt.toUTCString()}</p>
+                    <p>Updated at : {watch.updatedAt.toUTCString()}</p>
                   </div>
                   <div className={styles.dashGridItemBot}>
                     <div>

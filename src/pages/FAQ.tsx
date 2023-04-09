@@ -28,7 +28,7 @@ const FAQ = () => {
           <br />
           <br /> <h2>How many tickets can I purchase?</h2>
           <br />
-          You can buy up to 50 tickets per person.
+          You can buy up to 25 tickets per person.
           <br />
           <br /> <h2>When is the next drawing?</h2>
           <br />

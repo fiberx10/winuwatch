@@ -1,3 +1,7 @@
+/* eslint-disable @next/next/no-head-element */
+/* eslint-disable @next/next/no-page-custom-font */
+/* eslint-disable @next/next/no-img-element */
+
 import type {
   Competition,
   ImagesUrl,
@@ -232,7 +236,31 @@ const mail = (
                                     </p>
                                   </td>
 
-                                  <th></th>
+                                  <td
+                                    data-id="__react-email-column"
+                                    style={{
+                                      backgroundColor: "black",
+                                      textAlign: "center",
+                                      cursor: "pointer",
+                                      fontWeight: 600,
+                                    }}
+                                  >
+                                    <a
+                                      href={
+                                        order?.id &&
+                                        `${getBaseUrl()}/ticket/${order.id}`
+                                      }
+                                    >
+                                      <button
+                                        style={{
+                                          color: "white",
+                                          textDecoration: "none",
+                                        }}
+                                      >
+                                        CLICK TO SEE YOUR TICKET(S)!
+                                      </button>
+                                    </a>
+                                  </td>
                                 </tr>
                               </tbody>
                             </table>
@@ -483,5 +511,7 @@ const mail = (
   </div>
 );
 
-export default (order: Parameters<typeof mail>[0]) =>
+const EmailRendered = (order: Parameters<typeof mail>[0]) =>
   renderToString(mail(order));
+
+export default EmailRendered;

@@ -1,10 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "../styles/Home.module.css";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
 const Footer = () => {
+  const [windowLocation, setLocation] = useState("");
   const data = [
     { names: ["COMPETITIONS", "how to play", "contact"] },
     { names: ["PHILOSOPHY", "trustpilot", "Charity"] },
@@ -30,6 +31,12 @@ const Footer = () => {
     typeof window !== "undefined" && document.getElementById("Howtoplay");
   const theComp =
     typeof window !== "undefined" && document.getElementById("theComp");
+  const trustpilot =
+    typeof window !== "undefined" && document.getElementById("trustpilot");
+  useEffect(() => {
+    typeof window !== "undefined" && setLocation(window.location.pathname);
+  }, [windowLocation]);
+
   return (
     <>
       <div
@@ -70,71 +77,81 @@ const Footer = () => {
                   }}
                   key={i}
                 >
-                  <Link
+                  <span
                     onClick={
-                      menu.names[0] === "COMPETITIONS"
-                        ? typeof window !== "undefined" &&
-                          window.location.pathname !== "/"
-                          ? async () => {
-                              await router.push("/");
-                            }
-                          : () => {
-                              window.scrollTo({
-                                top:
-                                  theComp !== null &&
-                                  theComp instanceof HTMLElement
-                                    ? theComp.offsetTop
-                                    : 400,
-                                behavior: "smooth",
-                              });
-                            }
-                        : () => {
-                            ("");
+                      windowLocation !== "/" && menu.names[0] === "COMPETITIONS"
+                        ? async () => {
+                            await router.push("/#theComp");
                           }
-                    }
-                    href={
-                      menu.names[0] === "PHILOSOPHY"
-                        ? "/Philosophy"
+                        : menu.names[0] === "PHILOSOPHY"
+                        ? async () => {
+                            await router.push("/Philosophy");
+                          }
                         : menu.names[0] === "Acceptable Use Policy"
-                        ? "/Acceptable_Use_Policy"
+                        ? async () => {
+                            await router.push("/Acceptable_Use_Policy");
+                          }
                         : menu.names[0] === "Return Policy"
-                        ? "/Return_Policy"
-                        : ""
+                        ? async () => {
+                            await router.push("/Return_Policy");
+                          }
+                        : () => {
+                            window.scrollTo({
+                              top:
+                                theComp !== null &&
+                                theComp instanceof HTMLElement
+                                  ? theComp.offsetTop
+                                  : 400,
+                              behavior: "smooth",
+                            });
+                          }
                     }
                   >
                     {menu.names[0]}
-                  </Link>
-                  <Link
+                  </span>
+                  <span
                     onClick={
-                      menu.names[1] === "how to play"
-                        ? typeof window !== "undefined" &&
-                          window.location.pathname !== "/"
-                          ? async () => {
-                              await router.push("/");
-                            }
-                          : () => {
-                              window.scrollTo({
-                                top:
-                                  howTo !== null && howTo instanceof HTMLElement
-                                    ? howTo.offsetTop
-                                    : 400,
-                                behavior: "smooth",
-                              });
-                            }
-                        : () => {
-                            ("");
+                      windowLocation !== "/" && menu.names[1] === "how to play"
+                        ? async () => {
+                            await router.push("/#Howtoplay");
                           }
-                    }
-                    href={
-                      menu.names[1] === "faq"
-                        ? "/FAQ"
+                        : windowLocation !== "/" &&
+                          menu.names[1] === "trustpilot"
+                        ? async () => {
+                            await router.push("/#trustpilot");
+                          }
+                        : menu.names[1] === "faq"
+                        ? async () => {
+                            await router.push("/Philosophy");
+                          }
                         : menu.names[1] === "terms & conditions"
-                        ? "/TermsAndConditions"
-                        : ""
+                        ? async () => {
+                            await router.push("/TermsAndConditions");
+                          }
+                        : menu.names[1] === "trustpilot"
+                        ? () => {
+                            window.scrollTo({
+                              top:
+                                trustpilot !== null &&
+                                trustpilot instanceof HTMLElement
+                                  ? trustpilot.offsetTop
+                                  : 400,
+                              behavior: "smooth",
+                            });
+                          }
+                        : () => {
+                            window.scrollTo({
+                              top:
+                                howTo !== null && howTo instanceof HTMLElement
+                                  ? howTo.offsetTop
+                                  : 400,
+                              behavior: "smooth",
+                            });
+                          }
                     }
                   >
                     {menu.names[1]}
-                  </Link>
+                  </span>
                   <Link
                     href={
                       menu.names[2] === "Charity"

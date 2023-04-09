@@ -124,7 +124,14 @@ const CartComp = () => {
           );
         })
       ) : (
-        <h1>No Items in the Cart</h1>
+        <h1
+          style={{
+            fontFamily: "Iskry, sans-serif",
+            textTransform: "uppercase",
+          }}
+        >
+          No Items in the Cart
+        </h1>
       )}
 
       <div className={styles.CartTotal}>

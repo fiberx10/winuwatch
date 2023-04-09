@@ -39,7 +39,7 @@ export const getServerSideProps = (context: GetServerSidePropsContext) => {
 export default function Competition({
   compID,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const { data, isLoading, error } = api.Competition.byID.useQuery(compID);
+  const { data, isLoading } = api.Competition.byID.useQuery(compID);
   const [counter, setCounter] = useState(1);
   const [filter, setFilter] = useState(5);
   const { addComp, updateComp, competitions } = useCart();
@@ -93,6 +93,7 @@ export default function Competition({
                     // new array of image besides the first one
                     data.Watches.images_url
                       .filter((_, i) => i !== 0)
+                      .slice(0, 3)
                       .map((item, i) => (
                         <Image
                           onMouseEnter={() => setImage(item.url)}
@@ -115,88 +116,102 @@ export default function Competition({
                 <div className={styles.CompTicketSelec}>
                   <h3>How many tickets would you like?</h3>
                   <div className={styles.tickets}>
-                    {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25]
-                      .filter((_, index) => index < filter)
-                      .map((item, i) => (
-                        <Tooltip
-                          key={i}
-                          title={
-                            item > data.remaining_tickets
-                              ? "No more tickets left!"
-                              : ""
-                          }
-                        >
-                          <ToggleButton
-                            onClick={() => setCounter(item)}
-                            sx={{
-                              cursor:
-                                item > data.remaining_tickets
-                                  ? "help"
-                                  : "pointer",
-                              width: "55px",
-                              height: "55px",
-                              backgroundColor:
-                                counter === item
-                                  ? "rgb(146, 124, 102, 0.5)"
-                                  : "initial",
-                              color:
-                                counter === item
-                                  ? "white !important"
-                                  : "initial",
-                              border:
-                                counter === item
-                                  ? "2px solid rgb(146, 124, 102) !important"
-                                  : "initial",
-                            }}
-                            value={item}
-                            aria-label="left aligned"
+                    {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25].length >
+                    data.remaining_tickets ? (
+                      <p>No Tickets Left!</p>
+                    ) : (
+                      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25]
+                        .filter((_, index) => index < filter)
+                        .map((item, i) => (
+                          <Tooltip
+                            key={i}
+                            title={
+                              item > data.remaining_tickets
+                                ? "No more tickets left!"
+                                : ""
+                            }
                           >
-                            <span
-                              style={{
-                                fontSize:
-                                  item === 5
-                                    ? "18px"
-                                    : item === 10
-                                    ? "18px"
-                                    : item === 15
-                                    ? "18px"
-                                    : item === 25
-                                    ? "18px"
-                                    : "24px",
-                                height:
-                                  item === 5
-                                    ? "23px"
-                                    : item === 10
-                                    ? "23px"
-                                    : item === 15
-                                    ? "23px"
-                                    : item === 25
-                                    ? "23px"
+                            <ToggleButton
+                              onClick={() => setCounter(item)}
+                              disabled={
+                                item > data.remaining_tickets ? true : false
+                              }
+                              sx={{
+                                cursor:
+                                  item > data.remaining_tickets
+                                    ? "help"
+                                    : "pointer",
+                                width: "55px",
+                                height: "55px",
+                                backgroundColor:
+                                  counter === item
+                                    ? "rgb(146, 124, 102, 0.5)"
+                                    : "initial",
+                                color:
+                                  counter === item
+                                    ? "white !important"
+                                    : "initial",
+                                border:
+                                  counter === item
+                                    ? "2px solid rgb(146, 124, 102) !important"
                                     : "initial",
                               }}
+                              value={item}
+                              aria-label="left aligned"
                             >
-                              {item}
-                            </span>
-                            <p
-                              style={{ fontSize: "10px" }}
-                              className={styles.sold}
-                            >
-                              {item === 5
-                                ? "10% off"
-                                : item === 10
-                                ? "15% off"
-                                : item === 15
-                                ? "20% off"
-                                : item === 25
-                                ? "20% off"
-                                : ""}
-                            </p>
-                          </ToggleButton>
-                        </Tooltip>
-                      ))}
+                              <span
+                                style={{
+                                  fontSize:
+                                    item === 5
+                                      ? "18px"
+                                      : item === 10
+                                      ? "18px"
+                                      : item === 15
+                                      ? "18px"
+                                      : item === 25
+                                      ? "18px"
+                                      : "24px",
+                                  height:
+                                    item === 5
+                                      ? "23px"
+                                      : item === 10
+                                      ? "23px"
+                                      : item === 15
+                                      ? "23px"
+                                      : item === 25
+                                      ? "23px"
+                                      : "initial",
+                                }}
+                              >
+                                {item}
+                              </span>
+                              <p
+                                style={{ fontSize: "10px" }}
+                                className={styles.sold}
+                              >
+                                {item === 5
+                                  ? "10% off"
+                                  : item === 10
+                                  ? "15% off"
+                                  : item === 15
+                                  ? "20% off"
+                                  : item === 25
+                                  ? "20% off"
+                                  : ""}
+                              </p>
+                            </ToggleButton>
+                          </Tooltip>
+                        ))
+                    )}
                     <button
                       style={{
-                        display: filter === 15 ? "none" : "flex",
+                        display:
+                          filter === 15
+                            ? "none"
+                            : [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25]
+                                .length > data.remaining_tickets
+                            ? "none"
+                            : "flex",
                       }}
                       onClick={() => setFilter(15)}
                       className={styles.showMore}
@@ -211,13 +226,13 @@ export default function Competition({
                       A part of the money is donated to the following
                       associations
                     </p>
-                    <div>
-                      <Image
+                    <div className={styles.compSponsors}>
+                      {/* <Image
                         width={130}
                         height={50}
                         alt="donation"
                         src="/images/cancerRes.png"
-                      />
+                      /> */}
                       <Image
                         width={130}
                         height={50}
@@ -285,8 +300,8 @@ export default function Competition({
                   )}
                   {data.end_date.toString() && (
                     <p>
-                      Winner announcement: {data.end_date.toString()} in direct
-                      live on instagram @winuwatch
+                      Winner announcement: {data.drawing_date.toString()} in
+                      direct live on instagram @winuwatch
                     </p>
                   )}
 
