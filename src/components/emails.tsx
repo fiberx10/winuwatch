@@ -80,7 +80,10 @@ const mail = (
                         justifyContent: "center",
                       }}
                     >
-                      <img alt="winuwatch logo" src="/images/newLogo.png" />
+                      <img
+                        alt="winuwatch logo"
+                        src="https://www.win-u-watch.uk/newLogo.png"
+                      />
                     </div>
                     <p
                       data-id="react-email-text"
@@ -400,7 +403,7 @@ const mail = (
                       }}
                     >
                       the winners will be announced on{" "}
-                      {order?.Competition[0]?.winner_announcement_date?.toDateString()}
+                      {order?.Competition[0]?.drawing_date?.toDateString()}
                     </p>
                     <p
                       data-id="react-email-text"
@@ -414,7 +417,7 @@ const mail = (
                       }}
                     >
                       at{" "}
-                      {order?.Competition[0]?.winner_announcement_date?.toLocaleTimeString()}
+                      {order?.Competition[0]?.drawing_date?.toLocaleTimeString()}
                     </p>
                     <p
                       data-id="react-email-text"
@@ -480,7 +483,7 @@ const mail = (
                               <img
                                 data-id="react-email-img"
                                 alt="Slack"
-                                src={getBaseUrl() + "/images/InstaFooter.svg"}
+                                src="https://www.win-u-watch.uk/InstaFooter.svg"
                                 width={200}
                                 height={100}
                                 style={{
