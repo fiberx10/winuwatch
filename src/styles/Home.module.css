@@ -785,6 +785,16 @@
   font-size: 14px;
   letter-spacing: 0.05em;
 }
+.menusGrid span {
+  text-decoration: none;
+  cursor: pointer;
+  color: white;
+  width: 150px;
+  text-transform: uppercase;
+  font-weight: 300;
+  font-size: 14px;
+  letter-spacing: 0.05em;
+}
 .emails {
   display: flex;
   align-items: center;
