@@ -10,7 +10,7 @@ import type {
   Watches,
 } from "@prisma/client";
 import React from "react";
-import { getBaseUrl, Formater } from "@/utils";
+import { getBaseUrl } from "@/utils";
 import { renderToString } from "react-dom/server";
 
 const mail = (
@@ -155,7 +155,11 @@ const mail = (
                     <img
                       data-id="react-email-img"
                       alt=""
-                      src="/images/tester.png"
+                      src={
+                        order
+                          ? order?.Competition[0]?.Watches?.images_url[0]?.url
+                          : ""
+                      }
                       width="100%"
                       height="100%"
                       style={{
@@ -231,11 +235,10 @@ const mail = (
                                         margin: "5px 0",
                                       }}
                                     >
-                                    QUANTITY: {order?.Ticket.length} - TOTAL:
-                                    {Formater(order?.totalPrice ?? 0)}
+                                      QUANTITY: {order?.Ticket.length} - TOTAL:
+                                      £{order?.totalPrice}
                                     </p>
                                   </td>
-
                                   <td
                                     data-id="__react-email-column"
                                     style={{
@@ -261,6 +264,7 @@ const mail = (
                                       </button>
                                     </a>
                                   </td>
+
                                 </tr>
                               </tbody>
                             </table>
@@ -304,60 +308,62 @@ const mail = (
                 </tr>
               </thead>
               <tbody>
-                {order?.Ticket.map((ticket, index) => (
-                  <tr
+                {order?.Ticket.map((ticket, index) => {
+                  return (
+                    <tr
                     key={index}
-                    style={{
-                      width: "100%",
-                      border: "1px solid rgb(146, 124, 102)",
-                    }}
-                  >
-                    <td>
-                      <p
-                        data-id="react-email-text"
-                        style={{
-                          fontSize: "14px",
-                          lineHeight: "24px",
+                      style={{
+                        width: "100%",
+                        border: "1px solid rgb(146, 124, 102)",
+                      }}
+                    >
+                      <td>
+                        <p
+                          data-id="react-email-text"
+                          style={{
+                            fontSize: "14px",
+                            lineHeight: "24px",
 
-                          textTransform: "uppercase",
-                          color: "black",
-                        }}
-                      >
-                        {index + 1}
-                      </p>
-                    </td>
-                    <td>
-                      <p
-                        data-id="react-email-text"
-                        style={{
-                          fontSize: "14px",
+                            textTransform: "uppercase",
+                            color: "black",
+                          }}
+                        >
+                          {index + 1}
+                        </p>
+                      </td>
+                      <td>
+                        <p
+                          data-id="react-email-text"
+                          style={{
+                            fontSize: "14px",
 
-                          lineHeight: "24px",
-                          textTransform: "uppercase",
+                            lineHeight: "24px",
+                            textTransform: "uppercase",
 
-                          color: "black",
-                        }}
-                      >
-                        {ticket?.id}
-                      </p>
-                    </td>
-                    <td>
-                      <a
-                        data-id="react-email-text"
-                        style={{
-                          fontSize: "14px",
-                          textAlign: "end",
-                          lineHeight: "24px",
-                          textTransform: "uppercase",
-                          color: "black",
-                        }}
-                        href={`${getBaseUrl()}/ticket/${ticket?.id}`}
-                      >
-                        see my ticket
-                      </a>
-                    </td>
-                  </tr>
-                ))}
+                            color: "black",
+                          }}
+                        >
+                          {ticket?.id}
+                        </p>
+                      </td>
+                      <td>
+                        <a
+                          data-id="react-email-text"
+                          style={{
+                            fontSize: "14px",
+                            textAlign: "end",
+                            lineHeight: "24px",
+                            textTransform: "uppercase",
+                            color: "black",
+                          }}
+                          href={`${getBaseUrl()}/ticket/${ticket?.id}`}
+                        >
+                          see my ticket
+                        </a>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
 
@@ -396,8 +402,12 @@ const mail = (
                         color: "black",
                       }}
                     >
-                      the contest will end on [end date] at [end time] [time
-                      zone],
+                      the contest will end on{" "}
+                      {order?.Competition[0]?.end_date.toDateString()} at{" "}
+                      {order
+                        ? order?.Competition[0]?.end_date.toTimeString()
+                        : null}{" "}
+                      ,
                     </p>
                     <p
                       data-id="react-email-text"
@@ -409,7 +419,8 @@ const mail = (
                         color: "black",
                       }}
                     >
-                      the winners will be announced on [announcement date]
+                      the winners will be announced on{" "}
+                      {order?.Competition[0]?.winner_announcement_date?.toDateString()}
                     </p>
                     <p
                       data-id="react-email-text"
@@ -421,7 +432,8 @@ const mail = (
                         color: "black",
                       }}
                     >
-                      at [announcement time] [time zone]
+                      at{" "}
+                      {order?.Competition[0]?.winner_announcement_date?.toTimeString()}
                     </p>
                     <p
                       data-id="react-email-text"

@@ -79,7 +79,7 @@ export default function Competition({
               <div className={styles.images}>
                 {data.Watches.images_url[0]?.url && (
                   <Image
-                    width={450}
+                    width={440}
                     height={440}
                     style={{ objectFit: "cover" }}
                     alt="watchImage"
