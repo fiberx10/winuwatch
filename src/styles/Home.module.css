@@ -1,11 +1,10 @@
 .HomeHeader {
   height: 460px;
   background: linear-gradient(
-      180deg,
-      rgba(0, 0, 0, 0.5) 26.56%,
-      rgba(0, 0, 0, 0.5) 100%
-    ),
-    url(../../public/images/main\ image.png);
+    180deg,
+    rgba(0, 0, 0, 0.5) 26.56%,
+    rgba(0, 0, 0, 0.5) 100%
+  );
   background-size: cover;
   background-position: center;
   display: flex;
@@ -1109,7 +1108,7 @@
     background-size: cover;
   }
   .timer {
-    flex-direction: row;
+    flex-direction: row !important;
     width: 100%;
     justify-content: space-evenly;
   }
