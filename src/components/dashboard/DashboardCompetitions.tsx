@@ -277,16 +277,6 @@ const DashboardCompetitions = () => {
                                           }
                                         />
                                       </Form.Group>
-                                      <Form.Group as={Col}>
-                                        <Form.Label>Location</Form.Label>
-                                        <Form.Control
-                                          value={values.location}
-                                          type="text"
-                                          placeholder="1234 Main St"
-                                          name="location"
-                                          onChange={handleChange}
-                                        />
-                                      </Form.Group>
 
                                       <Form.Group
                                         as={Col}
@@ -302,36 +292,7 @@ const DashboardCompetitions = () => {
                                         />
                                       </Form.Group>
                                     </Row>
-                                    <Row classa="mb-3">
-                                      <Form.Group as={Col}>
-                                        <Form.Label>
-                                          Final Draw Spaces
-                                        </Form.Label>
-                                        <Form.Control
-                                          type="number"
-                                          onChange={handleChange}
-                                          value={values.max_space_in_final_draw}
-                                          placeholder="Number of Spaces"
-                                          name="max_space_in_final_draw"
-                                        />
-                                      </Form.Group>
-
-                                      <Form.Group
-                                        as={Col}
-                                        controlId="formGridState"
-                                      >
-                                        <Form.Label>
-                                          Max Watch Number
-                                        </Form.Label>
-                                        <Form.Control
-                                          type="number"
-                                          onChange={handleChange}
-                                          value={values.max_watch_number}
-                                          placeholder="Number of Watches"
-                                          name="max_watch_number"
-                                        />
-                                      </Form.Group>
-                                    </Row>
+                                    <Row classa="mb-3"></Row>
                                     <Form.Group className="mb-3">
                                       <Form.Label>Run up Prize</Form.Label>
                                       <Form.Control
@@ -616,16 +577,6 @@ const DashboardCompetitions = () => {
                                           }
                                         />
                                       </Form.Group>
-                                      <Form.Group as={Col}>
-                                        <Form.Label>Location</Form.Label>
-                                        <Form.Control
-                                          value={values.location}
-                                          type="text"
-                                          placeholder="1234 Main St"
-                                          name="location"
-                                          onChange={handleChange}
-                                        />
-                                      </Form.Group>
 
                                       <Form.Group
                                         as={Col}
@@ -641,36 +592,7 @@ const DashboardCompetitions = () => {
                                         />
                                       </Form.Group>
                                     </Row>
-                                    <Row classa="mb-3">
-                                      <Form.Group as={Col}>
-                                        <Form.Label>
-                                          Final Draw Spaces
-                                        </Form.Label>
-                                        <Form.Control
-                                          type="number"
-                                          onChange={handleChange}
-                                          value={values.max_space_in_final_draw}
-                                          placeholder="Number of Spaces"
-                                          name="max_space_in_final_draw"
-                                        />
-                                      </Form.Group>
-
-                                      <Form.Group
-                                        as={Col}
-                                        controlId="formGridState"
-                                      >
-                                        <Form.Label>
-                                          Max Watch Number
-                                        </Form.Label>
-                                        <Form.Control
-                                          type="number"
-                                          onChange={handleChange}
-                                          value={values.max_watch_number}
-                                          placeholder="Number of Watches"
-                                          name="max_watch_number"
-                                        />
-                                      </Form.Group>
-                                    </Row>
+                                    <Row classa="mb-3"></Row>
                                     <Form.Group className="mb-3">
                                       <Form.Label>Run up Prize</Form.Label>
                                       <Form.Control
@@ -956,16 +878,6 @@ const DashboardCompetitions = () => {
                                           }
                                         />
                                       </Form.Group>
-                                      <Form.Group as={Col}>
-                                        <Form.Label>Location</Form.Label>
-                                        <Form.Control
-                                          value={values.location}
-                                          type="text"
-                                          placeholder="1234 Main St"
-                                          name="location"
-                                          onChange={handleChange}
-                                        />
-                                      </Form.Group>
 
                                       <Form.Group
                                         as={Col}
@@ -981,36 +893,7 @@ const DashboardCompetitions = () => {
                                         />
                                       </Form.Group>
                                     </Row>
-                                    <Row classa="mb-3">
-                                      <Form.Group as={Col}>
-                                        <Form.Label>
-                                          Final Draw Spaces
-                                        </Form.Label>
-                                        <Form.Control
-                                          type="number"
-                                          onChange={handleChange}
-                                          value={values.max_space_in_final_draw}
-                                          placeholder="Number of Spaces"
-                                          name="max_space_in_final_draw"
-                                        />
-                                      </Form.Group>
-
-                                      <Form.Group
-                                        as={Col}
-                                        controlId="formGridState"
-                                      >
-                                        <Form.Label>
-                                          Max Watch Number
-                                        </Form.Label>
-                                        <Form.Control
-                                          type="number"
-                                          onChange={handleChange}
-                                          value={values.max_watch_number}
-                                          placeholder="Number of Watches"
-                                          name="max_watch_number"
-                                        />
-                                      </Form.Group>
-                                    </Row>
+                                    <Row classa="mb-3"></Row>
                                     <Form.Group className="mb-3">
                                       <Form.Label>Run up Prize</Form.Label>
                                       <Form.Control
@@ -1140,8 +1023,8 @@ const DashboardCompetitions = () => {
             end_date: "",
             location: "",
             price: 0,
-            max_space_in_final_draw: 0,
-            max_watch_number: 0,
+            max_space_in_final_draw: 1,
+            max_watch_number: 1,
             run_up_prize: "",
             watchesId: "",
             total_tickets: 0,
@@ -1217,15 +1100,6 @@ const DashboardCompetitions = () => {
                       }
                     />
                   </Form.Group>
-                  <Form.Group as={Col}>
-                    <Form.Label>Location</Form.Label>
-                    <Form.Control
-                      type="text"
-                      placeholder="1234 Main St"
-                      name="location"
-                      onChange={handleChange}
-                    />
-                  </Form.Group>
 
                   <Form.Group as={Col} controlId="formGridPassword">
                     <Form.Label>Watch Price</Form.Label>
@@ -1237,27 +1111,7 @@ const DashboardCompetitions = () => {
                     />
                   </Form.Group>
                 </Row>
-                <Row classa="mb-3">
-                  <Form.Group as={Col}>
-                    <Form.Label>Final Draw Spaces</Form.Label>
-                    <Form.Control
-                      type="number"
-                      onChange={handleChange}
-                      placeholder="Number of Spaces"
-                      name="max_space_in_final_draw"
-                    />
-                  </Form.Group>
-
-                  <Form.Group as={Col} controlId="formGridState">
-                    <Form.Label>Max Watch Number</Form.Label>
-                    <Form.Control
-                      type="number"
-                      onChange={handleChange}
-                      placeholder="Number of Watches"
-                      name="max_watch_number"
-                    />
-                  </Form.Group>
-                </Row>
+                <Row classa="mb-3"></Row>
                 <Form.Group className="mb-3">
                   <Form.Label>Run up Prize</Form.Label>
                   <Form.Control
