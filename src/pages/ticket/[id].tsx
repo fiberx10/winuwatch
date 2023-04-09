@@ -38,12 +38,12 @@ export default function Confirmation({
       <div className={styles.confirmwrapper}>
         {data && (
           <div className={styles.wrapper}>
-            <h1>Your Ticket Code : {data.id.slice(0, 8)}</h1>
+            <h1>Your Ticket Code : {data.id.slice(0, 8)}...</h1>
 
             <div className={styles.head}>
               <header>
                 <p>Details</p>
-                <p>Order {data.Order.id.slice(0, 8)} </p>
+                <p>Order {data.Order.id.slice(0, 8)}... </p>
               </header>
               <div className={styles.comp_info}>
                 <h6>{data.Competition.name}</h6>
