@@ -650,7 +650,7 @@
 .certifBox {
   display: flex;
   align-items: center;
-  background-image: url(../../public/images/cover.png);
+
   background-repeat: no-repeat;
   background-position: -25% 20%;
   flex-direction: column;
@@ -660,8 +660,9 @@
   height: 532px;
 }
 .certifBox img {
-  width: 240px;
-  height: 370px;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 .certifBox a {
   font-weight: 700;
@@ -1220,8 +1221,8 @@
     background-position: -300%;
   }
   .certifBox img {
-    width: 196px;
-    height: 299px;
+    width: 100%;
+    height: 100%;
   }
   .AliceContainer {
     width: 100%;

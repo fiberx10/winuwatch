@@ -10,7 +10,7 @@ const Certificate = () => {
         <Image
           width={238}
           height={363}
-          src="/images/certifsvg.svg"
+          src="/images/certificate.svg"
           alt="certificate"
         />
       </div>
