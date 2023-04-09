@@ -25,7 +25,7 @@ export default function Header() {
       <NavBar />
       <div className={styles.vid}>
         <div className={styles.headerback}></div>
-        <video
+        {/* <video
           width="100%"
           height="100%"
           autoPlay
@@ -34,19 +34,10 @@ export default function Header() {
           muted={true}
         >
           <source
-            src="/images/professional-watches-cosmograph-daytona-cover-video_portrait.webm"
-            type="video/webm"
-          />
-          <source
-            src="/images/professional-watches-cosmograph-daytona-cover-video_portrait.mp4"
+            src="https://firebasestorage.googleapis.com/v0/b/winuwatch-bd56d.appspot.com/o/professional-watches-cosmograph-daytona-cover-video_portrait.mp4?alt=media&token=20426bb0-5cee-4a37-8273-6b4fae3f0e95"
             type="video/mp4"
           />
-          <source
-            src="/images/professional-watches-cosmograph-daytona-cover-video_portrait.mov"
-            type="video/quicktime"
-          />
-          Your browser does not support the video tag.
-        </video>
+        </video> */}
       </div>
       <div className={styles.HeaderTit}>
         <h2 className={styles.background}>winuwatch</h2>
