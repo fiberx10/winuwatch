@@ -391,8 +391,21 @@ export const CompetitionRouter = createTRPCRouter({
         };
   }),
   byID: publicProcedure.input(z.string()).query(async ({ ctx, input }) => {
-    return (
-      (await ctx.prisma.competition.findUnique({
+    const Data = await ctx.prisma.$transaction([
+      ctx.prisma.competition.findUnique({
+        where: {
+          id: input,
+        },
+        select: {
+          id: true,
+          _count: {
+            select: {
+              Ticket: true,
+            },
+          },
+        },
+      }),
+      ctx.prisma.competition.findUnique({
         where: {
           id: input,
         },
@@ -403,8 +416,16 @@ export const CompetitionRouter = createTRPCRouter({
             },
           },
         },
-      })) ?? undefined
-    );
+      }),
+    ]);
+    return Data[1]
+      ? {
+          ...Data[1],
+          remaining_tickets:
+            Data[1].total_tickets -
+            (Data[0]?._count?.Ticket || 0),
+        }
+      : undefined;
   }),
   updateOne: publicProcedure
     .input(
