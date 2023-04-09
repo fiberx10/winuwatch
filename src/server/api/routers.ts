@@ -4,15 +4,53 @@ import { CompetitionStatus, OrderStatus } from "@prisma/client";
 import { getBaseUrl, CreateOrderSchema } from "@/utils";
 import { WatchesSchema, CompetitionSchema } from "@/utils/zodSchemas";
 import { env } from "@/env.mjs";
+import Email from "@/components/emails";
 import stripe from "stripe";
+import nodemailer from "nodemailer";
 
+const Transporter = nodemailer.createTransport({
+  host: "smtp.hostinger.com",
+  port: 465,
+  secure: true,
+  auth: {
+    user: "noreply@winuwatch.uk",
+    pass: "Password1!",
+  },
+});
 const Stripe = new stripe(env.STRIPE_SECRET_KEY, {
   apiVersion: "2022-11-15",
 });
 
-
-
 export const WinnersRouter = createTRPCRouter({
+  getCSV: publicProcedure.input(z.string()).query(async ({ ctx, input }) => {
+    const competition = await ctx.prisma.competition.findUnique({
+      where: {
+        id: input,
+      },
+      include: {
+        Order: {
+          include: {
+            Ticket: true,
+          },
+        },
+      },
+    });
+    if (!competition) {
+      throw new Error("Competition not found");
+    }
+    const { Order } = competition;
+    const csv = Order.map((order) => ({
+      Full_Name: `${order.first_name} ${order.last_name}`,
+      Order_ID: order.id,
+      competionName: competition.name,
+      competitionid: competition.id,
+      Number_of_Tickets: order.Ticket.length,
+      Ticket_ID: order.Ticket.map((ticket) => ticket.id).join(", "),
+      Total_Price: order.totalPrice,
+      Price_per_Ticket: order.totalPrice / order.Ticket.length,
+    }));
+    return csv;
+  }),
   pickOneRandom: publicProcedure
     .input(z.string())
     .mutation(async ({ ctx, input }) => {
@@ -189,7 +227,7 @@ export const OrderRouter = createTRPCRouter({
           cancel_url: `${getBaseUrl()}/CheckoutPage`,
         });
 
-        await ctx.prisma.order.update({
+        const dataUp = await ctx.prisma.order.update({
           where: {
             id,
           },
@@ -197,6 +235,24 @@ export const OrderRouter = createTRPCRouter({
             paymentId:
               typeof payment_intent === "string" ? payment_intent : undefined,
           },
+          include: {
+            Ticket: true,
+            Competition: {
+              include: {
+                Watches: {
+                  include: {
+                    images_url: true,
+                  },
+                },
+              },
+            },
+          },
+        });
+        await Transporter.sendMail({
+          from: "noreply@winuwatch.uk",
+          to: data.email,
+          subject: `Order Confirmation - Winuwatch #${dataUp?.id || "000000"}`,
+          html: Email(dataUp),
         });
 
         return {
