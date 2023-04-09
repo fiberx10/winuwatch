@@ -34,7 +34,7 @@ export default function Confirmation({
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-   
+
       <div className={styles.confirmwrapper}>
         {data && (
           <div className={styles.wrapper}>
@@ -64,14 +64,13 @@ export default function Confirmation({
             </div>
 
             <footer>
-              <h6>WITH THE CERTIGAME'S CERTIFICATION</h6>
+              <h6>WITH THE CERTIGAME&apos;S CERTIFICATION</h6>
               <h1>CERTIGAME</h1>
               <p>www.winuwatch.uk</p>
             </footer>
           </div>
         )}
       </div>
-   
     </div>
   );
 }
