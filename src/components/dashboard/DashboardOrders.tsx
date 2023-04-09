@@ -205,11 +205,6 @@ const DashboardOrders = () => {
                                     Created At
                                   </p>
                                 </TableCell>
-                                <TableCell align="right">
-                                  <p style={{ marginBottom: "0" }}>
-                                    Download CSV
-                                  </p>
-                                </TableCell>
                               </TableRow>
                             </TableHead>
                             <TableBody>
@@ -340,9 +335,6 @@ const DashboardOrders = () => {
                                                   </TableCell>
                                                   <TableCell align="right">
                                                     Ticket ID
-                                                  </TableCell>
-                                                  <TableCell align="right">
-                                                    Download CSV
                                                   </TableCell>
                                                 </TableRow>
                                               </TableHead>
