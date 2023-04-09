@@ -1,24 +1,22 @@
 .HomeHeader {
   height: 460px;
   background: linear-gradient(
-      180deg,
-      rgba(0, 0, 0, 0.5) 26.56%,
-      rgba(0, 0, 0, 0.5) 100%
-    ),
-    url(../../public/images/main\ image.png);
-  background-size: cover;
-  background-position: center;
+    180deg,
+    rgba(0, 0, 0, 0.5) 26.56%,
+    rgba(0, 0, 0, 0.5) 100%
+  );
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  background-repeat: no-repeat;
+  position: relative;
 }
 
 .vid {
   width: 100%;
   z-index: -1;
   height: 460px;
-  position: relative;
+  position: absolute;
+  top: 0;
 }
 .vid video {
   object-fit: cover;
@@ -1109,7 +1107,7 @@
     background-size: cover;
   }
   .timer {
-    flex-direction: row;
+    flex-direction: row !important;
     width: 100%;
     justify-content: space-evenly;
   }
