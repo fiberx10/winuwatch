@@ -80,7 +80,10 @@ const mail = (
                         justifyContent: "center",
                       }}
                     >
-                      <img alt="winuwatch logo" src="/images/newLogo.png" />
+                      <img
+                        alt="winuwatch logo"
+                        src="https://www.win-u-watch.uk/newLogo.png"
+                      />
                     </div>
                     <p
                       data-id="react-email-text"
@@ -480,7 +483,7 @@ const mail = (
                               <img
                                 data-id="react-email-img"
                                 alt="Slack"
-                                src={getBaseUrl() + "/images/InstaFooter.svg"}
+                                src="https://www.win-u-watch.uk/InstaFooter.svg"
                                 width={200}
                                 height={100}
                                 style={{
