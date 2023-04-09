@@ -135,8 +135,8 @@ const CartComp = () => {
       )}
 
       <div className={styles.CartTotal}>
-        <p>{`Total + (20%) VAT`}</p>
-        <span>{Formater(totalCost * 1.02)}</span>
+        <p>Total</p>
+        <span>{Formater(totalCost)}</span>
       </div>
       <div className={styles.cartCheckoutCon}>
         <button onClick={handleOpen}>Check Out</button>
