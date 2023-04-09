@@ -81,7 +81,7 @@ const Footer = () => {
                     onClick={
                       windowLocation !== "/" && menu.names[0] === "COMPETITIONS"
                         ? async () => {
-                            await router.push("/");
+                            await router.push("/#theComp");
                           }
                         : menu.names[0] === "PHILOSOPHY"
                         ? async () => {
@@ -113,7 +113,12 @@ const Footer = () => {
                     onClick={
                       windowLocation !== "/" && menu.names[1] === "how to play"
                         ? async () => {
-                            await router.push("/");
+                            await router.push("/#Howtoplay");
+                          }
+                        : windowLocation !== "/" &&
+                          menu.names[1] === "trustpilot"
+                        ? async () => {
+                            await router.push("/#trustpilot");
                           }
                         : menu.names[1] === "faq"
                         ? async () => {
