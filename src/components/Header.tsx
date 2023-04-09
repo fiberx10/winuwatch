@@ -26,10 +26,11 @@ export default function Header() {
       <div className={styles.vid}>
         <div className={styles.headerback}></div>
         <video
-           width="100%"
-           height="100%"
-           autoPlay={true}
-           muted={true}
+            width="100%"
+            height="100%"
+            autoPlay
+            muted
+            loop
          >
            <source
              src="/images/professional-watches-cosmograph-daytona-cover-video_portrait.webm"
