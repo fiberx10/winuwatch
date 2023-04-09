@@ -17,6 +17,10 @@
   z-index: -1;
   height: 460px;
   position: relative;
+  background: url(../../public/images/main\ image.png);
+  background-repeat: no-repeat;
+  background-size: cover;
+  filter: brightness(50%);
 }
 .vid video {
   object-fit: cover;
@@ -785,6 +789,16 @@
   font-size: 14px;
   letter-spacing: 0.05em;
 }
+.menusGrid span {
+  text-decoration: none;
+  cursor: pointer;
+  color: white;
+  width: 150px;
+  text-transform: uppercase;
+  font-weight: 300;
+  font-size: 14px;
+  letter-spacing: 0.05em;
+}
 .emails {
   display: flex;
   align-items: center;
@@ -1251,28 +1265,21 @@
 }
 @media only screen and (min-width: 700px) and (max-width: 930px) {
   .HeaderTit h1 {
-    font-size: 60px;
+    font-size: 40px;
   }
   .HeaderDesc {
     top: 65vh;
   }
 }
-@media only screen and (min-width: 1500px) {
+@media only screen and (min-width: 442px) {
   .HeaderTit {
-    top: 15vh;
+    top: 12rem;
   }
   .HeaderDesc {
-    top: 30vh;
+    top: 22rem;
   }
 }
-@media only screen and (min-width: 1216px) and (max-width: 1500px) {
-  .HeaderTit {
-    top: 12vw;
-  }
-  .HeaderDesc {
-    top: 24vw;
-  }
-}
+
 @media only screen and (min-width: 930px) and (max-width: 1950px) {
   .flexStart {
     min-width: 28%;
@@ -1484,7 +1491,7 @@
     gap: 6rem;
   }
 }
-@media only screen and (max-height: 915px) {
+@media only screen and (max-width: 500px) and (max-height: 915px) {
   .howtoText {
     height: fit-content;
   }

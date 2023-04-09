@@ -34,8 +34,10 @@ const DashboardMainNav = () => {
                   <ReconciliationOutlined />
                 ) : i === 2 ? (
                   <TrophyOutlined />
-                ) : (
+                ) : i === 3 ? (
                   <BookOutlined />
+                ) : (
+                  <UsergroupAddOutlined />
                 )}
                 <p>{menu}</p>
               </div>
@@ -45,23 +47,18 @@ const DashboardMainNav = () => {
         <div className={styles.Dashmenus}>
           <span>Other</span>
 
-          {["Participants", "Communication", "Settings"].map((menu, i) => {
+          {["Communication", "Settings"].map((menu, i) => {
             return (
               <div
                 style={{
                   color: Menu === menu ? "white" : "hsla(0, 0%, 100%, 0.4)",
                 }}
                 //onClick={() => {}}
+
                 className={styles.Menu}
                 key={i}
               >
-                {i === 0 ? (
-                  <UsergroupAddOutlined />
-                ) : i === 1 ? (
-                  <MessageOutlined />
-                ) : (
-                  <SettingOutlined />
-                )}
+                {i === 0 ? <MessageOutlined /> : <SettingOutlined />}
                 <p>{menu}</p>
               </div>
             );

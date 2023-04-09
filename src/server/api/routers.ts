@@ -275,24 +275,51 @@ export const CompetitionRouter = createTRPCRouter({
         .optional()
     )
     .query(async ({ ctx, input }) => {
-      return await ctx.prisma.competition.findMany({
-        where: input
-          ? {
-              status: input.status,
-              id: {
-                in: input.ids,
+      const Data = await ctx.prisma.$transaction([
+        ctx.prisma.competition.findMany({
+          where: input
+            ? {
+                status: input.status,
+                id: {
+                  in: input.ids,
+                },
+              }
+            : {},
+          select: {
+            id: true,
+            _count: {
+              select: {
+                Ticket: true,
               },
-            }
-          : {},
-        include: {
-          Watches: {
-            include: {
-              images_url: true,
             },
           },
-        },
-      });
+        }),
+        ctx.prisma.competition.findMany({
+          where: input
+            ? {
+                status: input.status,
+                id: {
+                  in: input.ids,
+                },
+              }
+            : {},
+          include: {
+            Watches: {
+              include: {
+                images_url: true,
+              },
+            },
+          },
+        }),
+      ]);
+      return Data[1].map((comp) => ({
+        ...comp,
+        remaining_tickets:
+          comp.total_tickets -
+          (Data[0].find((item) => item.id === comp.id)?._count?.Ticket || 0),
+      }));
     }),
+
   delete: publicProcedure.input(z.string()).mutation(async ({ ctx, input }) => {
     return (await ctx.prisma.competition.delete({
       where: {

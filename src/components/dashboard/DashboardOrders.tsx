@@ -21,6 +21,21 @@ import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import { IoIosArrowDown } from "react-icons/io";
 import TablePagination from "@mui/material/TablePagination";
+import { ExportToCsv } from "export-to-csv";
+import Loader from "../Loader";
+
+const csvExporter = new ExportToCsv({
+  fieldSeparator: ",",
+  quoteStrings: '"',
+  decimalSeparator: ".",
+  showLabels: true,
+  showTitle: true,
+  title: "Order",
+  useTextFile: false,
+  useBom: true,
+  useKeysAsHeaders: true,
+  // headers: ['Column 1', 'Column 2', etc...] <-- Won't work with useKeysAsHeaders present!
+});
 
 const DashboardOrders = () => {
   const [open, setOpen] = React.useState({
@@ -47,7 +62,7 @@ const DashboardOrders = () => {
   const { data: orders } = api.Order.getAll.useQuery([show.data]);
 
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -63,10 +78,12 @@ const DashboardOrders = () => {
   return (
     <div className={styles.DashCompsMain}>
       <div className={styles.dashCompsTopHeader}>
-        <h1>Your Competitions</h1>
+        <h1>Your Orders</h1>
       </div>
       {isLoading || data === null || !data ? (
-        <p>Loading...</p>
+        <div className={styles.LoaderWrapper}>
+          <Loader />
+        </div>
       ) : (
         <div className={styles.dashCompsGrid}>
           {data.map((comp) => {
@@ -177,171 +194,207 @@ const DashboardOrders = () => {
                                     Created At
                                   </p>
                                 </TableCell>
+                                <TableCell align="right">
+                                  <p style={{ marginBottom: "0" }}>
+                                    Download CSV
+                                  </p>
+                                </TableCell>
                               </TableRow>
                             </TableHead>
                             <TableBody>
-                              {orders?.map((row) => (
-                                <>
-                                  <TableRow
-                                    key={row.id}
-                                    hover
-                                    onClick={() =>
-                                      setOpen({
-                                        opened: !open.opened,
-                                        orderID: row.id,
-                                      })
-                                    }
-                                    sx={{
-                                      "& > *": {
-                                        borderBottom: "unset",
-                                        cursor: "pointer",
-                                      },
-                                    }}
-                                  >
-                                    <TableCell>
-                                      <IconButton
-                                        aria-label="expand row"
-                                        size="small"
-                                        onClick={() =>
-                                          setOpen({
-                                            opened: !open.opened,
-                                            orderID: row.id,
-                                          })
-                                        }
-                                      >
-                                        <IoIosArrowDown />
-                                      </IconButton>
-                                    </TableCell>
-                                    <TableCell component="th" scope="row">
-                                      {row.first_name} {row.last_name}
-                                    </TableCell>
-
-                                    <TableCell align="right">
-                                      {row.country}
-                                    </TableCell>
-                                    <TableCell align="right">
-                                      {row.paymentMethod}
-                                    </TableCell>
-                                    <TableCell align="right">
-                                      £{row.totalPrice}
-                                    </TableCell>
-                                    <TableCell align="right">
-                                      {row.status}
-                                    </TableCell>
-                                    <TableCell align="right">
-                                      {row.email}
-                                    </TableCell>
-                                    <TableCell align="right">
-                                      {row.phone}
-                                    </TableCell>
-                                    <TableCell align="right">
-                                      {row.address}
-                                    </TableCell>
-                                    <TableCell align="right">
-                                      {row.town}
-                                    </TableCell>
-                                    <TableCell align="right">
-                                      {row.zip}
-                                    </TableCell>
-                                    <TableCell align="right">
-                                      {row.date.toDateString()}
-                                    </TableCell>
-                                    <TableCell align="right">
-                                      {row.checkedEmail ? "Yes" : "No"}
-                                    </TableCell>
-                                    <TableCell align="right">
-                                      {row.checkedTerms ? "Yes" : "No"}
-                                    </TableCell>
-                                    <TableCell align="right">
-                                      {row.createdAt.toUTCString()}
-                                    </TableCell>
-                                  </TableRow>
-                                  <TableRow>
-                                    <TableCell
-                                      style={{
-                                        paddingBottom: 0,
-                                        paddingTop: 0,
+                              {orders
+                                ?.slice(
+                                  page * rowsPerPage,
+                                  page * rowsPerPage + rowsPerPage
+                                )
+                                .map((row) => (
+                                  <>
+                                    <TableRow
+                                      key={row.id}
+                                      hover
+                                      onClick={() =>
+                                        setOpen({
+                                          opened: !open.opened,
+                                          orderID: row.id,
+                                        })
+                                      }
+                                      sx={{
+                                        "& > *": {
+                                          borderBottom: "unset",
+                                          cursor: "pointer",
+                                        },
                                       }}
-                                      colSpan={6}
                                     >
-                                      <Collapse
-                                        in={
-                                          row.id === open.orderID && open.opened
-                                        }
-                                        timeout="auto"
-                                        unmountOnExit
+                                      <TableCell>
+                                        <IconButton
+                                          aria-label="expand row"
+                                          size="small"
+                                          onClick={() =>
+                                            setOpen({
+                                              opened: !open.opened,
+                                              orderID: row.id,
+                                            })
+                                          }
+                                        >
+                                          <IoIosArrowDown />
+                                        </IconButton>
+                                      </TableCell>
+                                      <TableCell component="th" scope="row">
+                                        {row.first_name} {row.last_name}
+                                      </TableCell>
+
+                                      <TableCell align="right">
+                                        {row.country}
+                                      </TableCell>
+                                      <TableCell align="right">
+                                        {row.paymentMethod}
+                                      </TableCell>
+                                      <TableCell align="right">
+                                        £{row.totalPrice}
+                                      </TableCell>
+                                      <TableCell align="right">
+                                        {row.status}
+                                      </TableCell>
+                                      <TableCell align="right">
+                                        {row.email}
+                                      </TableCell>
+                                      <TableCell align="right">
+                                        {row.phone}
+                                      </TableCell>
+                                      <TableCell align="right">
+                                        {row.address}
+                                      </TableCell>
+                                      <TableCell align="right">
+                                        {row.town}
+                                      </TableCell>
+                                      <TableCell align="right">
+                                        {row.zip}
+                                      </TableCell>
+                                      <TableCell align="right">
+                                        {row.date.toDateString()}
+                                      </TableCell>
+                                      <TableCell align="right">
+                                        {row.checkedEmail ? "Yes" : "No"}
+                                      </TableCell>
+                                      <TableCell align="right">
+                                        {row.checkedTerms ? "Yes" : "No"}
+                                      </TableCell>
+                                      <TableCell align="right">
+                                        {row.createdAt.toUTCString()}
+                                      </TableCell>
+                                      <TableCell align="right">
+                                        <Button
+                                          onClick={() => {
+                                            csvExporter.generateCsv([row]);
+                                          }}
+                                        >
+                                          CSV
+                                        </Button>
+                                      </TableCell>
+                                    </TableRow>
+                                    <TableRow>
+                                      <TableCell
+                                        style={{
+                                          paddingBottom: 0,
+                                          paddingTop: 0,
+                                        }}
+                                        colSpan={6}
                                       >
-                                        <Box sx={{ margin: 1, width: "100%" }}>
-                                          <Typography
-                                            variant="h6"
-                                            gutterBottom
-                                            component="div"
+                                        <Collapse
+                                          in={
+                                            row.id === open.orderID &&
+                                            open.opened
+                                          }
+                                          timeout="auto"
+                                          unmountOnExit
+                                        >
+                                          <Box
+                                            sx={{ margin: 1, width: "100%" }}
                                           >
-                                            Tickets
-                                          </Typography>
-                                          <Table
-                                            size="small"
-                                            aria-label="purchases"
-                                          >
-                                            <TableHead>
-                                              <TableRow>
-                                                <TableCell>
-                                                  Ticket Number
-                                                </TableCell>
-                                                <TableCell>
-                                                  First Name
-                                                </TableCell>
-                                                <TableCell align="right">
-                                                  Last Name
-                                                </TableCell>
-                                                <TableCell align="right">
-                                                  Price Per Ticket
-                                                </TableCell>
-                                                <TableCell align="right">
-                                                  Ticket ID
-                                                </TableCell>
-                                              </TableRow>
-                                            </TableHead>
-                                            <TableBody>
-                                              {row.Ticket.map((ticket) => (
-                                                <TableRow key={ticket.id}>
-                                                  <TableCell
-                                                    component="th"
-                                                    scope="row"
-                                                  >
-                                                    1
+                                            <Typography
+                                              variant="h6"
+                                              gutterBottom
+                                              component="div"
+                                            >
+                                              Tickets
+                                            </Typography>
+                                            <Table
+                                              size="small"
+                                              aria-label="purchases"
+                                            >
+                                              <TableHead>
+                                                <TableRow>
+                                                  <TableCell>
+                                                    Ticket Number
                                                   </TableCell>
                                                   <TableCell>
-                                                    {row.first_name}
+                                                    First Name
                                                   </TableCell>
                                                   <TableCell align="right">
-                                                    {row.last_name}
+                                                    Last Name
                                                   </TableCell>
                                                   <TableCell align="right">
-                                                    {Formater(
-                                                      row.totalPrice /
-                                                        row.Ticket.length
-                                                    )}
+                                                    Price Per Ticket
                                                   </TableCell>
                                                   <TableCell align="right">
-                                                    {row.id.toUpperCase()}
+                                                    Ticket ID
+                                                  </TableCell>
+                                                  <TableCell align="right">
+                                                    Download CSV
                                                   </TableCell>
                                                 </TableRow>
-                                              ))}
-                                            </TableBody>
-                                          </Table>
-                                        </Box>
-                                      </Collapse>
-                                    </TableCell>
-                                  </TableRow>
-                                </>
-                              ))}
+                                              </TableHead>
+                                              <TableBody>
+                                                {row.Ticket.map((ticket) => (
+                                                  <TableRow key={ticket.id}>
+                                                    <TableCell
+                                                      component="th"
+                                                      scope="row"
+                                                    >
+                                                      1
+                                                    </TableCell>
+                                                    <TableCell>
+                                                      {row.first_name}
+                                                    </TableCell>
+                                                    <TableCell align="right">
+                                                      {row.last_name}
+                                                    </TableCell>
+                                                    <TableCell align="right">
+                                                      {Formater(
+                                                        row.totalPrice /
+                                                          row.Ticket.length
+                                                      )}
+                                                    </TableCell>
+                                                    <TableCell align="right">
+                                                      {row.id.toUpperCase()}
+                                                    </TableCell>
+                                                    <TableCell align="right">
+                                                      <Button
+                                                        onClick={() => {
+                                                          csvExporter.generateCsv(
+                                                            [ticket]
+                                                          );
+                                                        }}
+                                                      >
+                                                        CSV
+                                                      </Button>
+                                                    </TableCell>
+                                                  </TableRow>
+                                                ))}
+                                              </TableBody>
+                                            </Table>
+                                          </Box>
+                                        </Collapse>
+                                      </TableCell>
+                                    </TableRow>
+                                  </>
+                                ))}
                             </TableBody>
                           </Table>
                           <TablePagination
-                            rowsPerPageOptions={[10, 25, 100]}
+                            rowsPerPageOptions={[5, 15, 100]}
                             component="div"
-                            count={orders ? orders?.length : -1}
+                            count={orders ? orders.length : -1}
                             rowsPerPage={rowsPerPage}
                             page={page}
                             onPageChange={handleChangePage}

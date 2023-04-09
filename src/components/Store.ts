@@ -41,6 +41,7 @@ export const Dashmenus = [
   "Competitions",
   "Watches",
   "Orders",
+  "Winners",
 ] as const;
 
 export const useStore = create<{
