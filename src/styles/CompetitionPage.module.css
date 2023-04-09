@@ -277,6 +277,9 @@
     width: 100%;
     gap: 0.8rem;
   }
+  .compSponsors {
+    margin: 10px 0px 20px 0px;
+  }
   .donations {
     width: 100%;
   }

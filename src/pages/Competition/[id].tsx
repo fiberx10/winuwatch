@@ -93,6 +93,7 @@ export default function Competition({
                     // new array of image besides the first one
                     data.Watches.images_url
                       .filter((_, i) => i !== 0)
+                      .slice(0, 3)
                       .map((item, i) => (
                         <Image
                           onMouseEnter={() => setImage(item.url)}
@@ -225,13 +226,13 @@ export default function Competition({
                       A part of the money is donated to the following
                       associations
                     </p>
-                    <div>
-                      <Image
+                    <div className={styles.compSponsors}>
+                      {/* <Image
                         width={130}
                         height={50}
                         alt="donation"
                         src="/images/cancerRes.png"
-                      />
+                      /> */}
                       <Image
                         width={130}
                         height={50}
