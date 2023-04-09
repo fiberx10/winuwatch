@@ -172,7 +172,19 @@ const CartComp = () => {
                       <CloseOutlined />
                     </span>
                   </div>
-                  <h1>{question?.question}</h1>
+                  <div className={styles.modalQuestion}>
+                    {question?.imageURL ? (
+                      <Image
+                        src={question?.imageURL}
+                        width={70}
+                        height={70}
+                        alt="questionImage"
+                      />
+                    ) : (
+                      ""
+                    )}
+                    <h1>{question?.question}</h1>
+                  </div>
                   <h2
                     style={{ display: wrong ? "flex" : "none", color: "red" }}
                   >

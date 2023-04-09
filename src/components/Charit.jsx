@@ -9,12 +9,12 @@ const Charit = () => {
       amount: 2346,
       desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur et sollicitudin eros. ",
     },
-    {
-      img: "/images/cancerRes.png",
-      name: "Cancer research uk",
-      amount: 2346,
-      desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur et sollicitudin eros. ",
-    },
+    // {
+    //   img: "/images/cancerRes.png",
+    //   name: "Cancer research uk",
+    //   amount: 2346,
+    //   desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur et sollicitudin eros. ",
+    // },
   ];
   return (
     <div className={styles.CharityMain}>
