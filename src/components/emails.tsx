@@ -218,7 +218,7 @@ const mail = (
                                     <a
                                       href={
                                         order?.id &&
-                                        `${getBaseUrl()}/ticket/${order.id}`
+                                        `${getBaseUrl()}/Confirmation/${order.id}`
                                       }
                                     >
                                       <button
@@ -229,7 +229,7 @@ const mail = (
                                           cursor: "pointer",
                                         }}
                                       >
-                                        CLICK TO SEE YOUR TICKET(S)!
+                                        CLICK TO SEE YOUR ORDER(S)!
                                       </button>
                                     </a>
                                   </td>
