@@ -56,7 +56,6 @@ const mail = (
             <table
               align="center"
               width="100%"
-              data-id="react-email-section"
               style={{
                 marginTop: "32px",
                 backgroundColor: "#a8957e",
@@ -70,65 +69,56 @@ const mail = (
               <tbody>
                 <tr>
                   <td>
-                    <table
-                      align="center"
-                      width="100%"
-                      data-id="react-email-section"
+                    <div
+                    
                       style={{
                         width: "100%",
-                        display: "flex",
+                        alignContent: "center",
                         justifyContent: "center",
+                        display: "grid",
+                        placeItems: "center",
                         marginBottom: "20px",
+                        textAlign: "center",
                       }}
-                      border={0}
-                      cellPadding={0}
-                      cellSpacing={0}
-                      role="presentation"
+
+                      
                     >
-                      <tbody>
-                        <tr>
-                          <td>
-                            <img
-                              data-id="react-email-img"
-                              alt="Slack"
-                              src="/images/newLogo.png"
-                              width={200}
-                              height={100}
-                              style={{
-                                display: "block",
-                                outline: "none",
-                                border: "none",
-                                textDecoration: "none",
-                              }}
-                            />
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
+                      <img
+                        alt="Slack"
+                        src="https://www.win-u-watch.uk/images/newLogo.png"
+                        width={200}
+                        height={100}
+                        style={{
+                          display: "block",
+                          outline: "none",
+                          border: "none",
+                          alignItems: "center",
+                          textDecoration: "none",
+                          margin: "0  auto",
+                        }}
+                      />
+                    </div>
 
                     <p
-                      
                       style={{
                         fontSize: "16px",
                         lineHeight: "24px",
                         margin: "5px 0px",
                         textTransform: "uppercase",
                         color: "white",
-                        textAlign : "left",
+                        textAlign: "left",
                       }}
                     >
                       {order?.first_name}, Thank you!
                     </p>
                     <p
-                      
                       style={{
                         fontSize: "17px",
                         lineHeight: "28px",
                         margin: "5px 0px",
                         // textTransform: "uppercase",
                         color: "whitesmoke",
-                        textAlign : "left",
-                        
+                        textAlign: "left",
                       }}
                     >
                       We are pleased to inform you that your registration has
@@ -142,7 +132,6 @@ const mail = (
             <table
               align="center"
               width="100%"
-              data-id="react-email-section"
               border={0}
               cellPadding={0}
               cellSpacing={0}
@@ -152,7 +141,6 @@ const mail = (
                 <tr>
                   <td>
                     <img
-                      data-id="react-email-img"
                       alt=""
                       src={
                         order
@@ -171,7 +159,6 @@ const mail = (
                     <table
                       align="center"
                       width="100%"
-                      data-id="react-email-section"
                       style={{
                         textAlign: "left",
                         textTransform: "uppercase",
@@ -187,7 +174,6 @@ const mail = (
                         <tr>
                           <td>
                             <p
-                              
                               style={{
                                 fontSize: "14px",
                                 lineHeight: "24px",
@@ -200,7 +186,6 @@ const mail = (
                             <table
                               align="center"
                               width="100%"
-                              data-id="react-email-section"
                               border={0}
                               cellPadding={0}
                               cellSpacing={0}
@@ -217,7 +202,6 @@ const mail = (
                                     }}
                                   >
                                     <p
-                                      
                                       style={{
                                         fontSize: "14px",
                                         lineHeight: "24px",
@@ -227,7 +211,6 @@ const mail = (
                                       ORDER: {order?.id}
                                     </p>
                                     <p
-                                      
                                       style={{
                                         fontSize: "14px",
                                         lineHeight: "24px",
@@ -253,34 +236,65 @@ const mail = (
             </table>
 
             <table
+              align="center"
+              width="100%"
+              border={0}
+              cellPadding={0}
+              cellSpacing={0}
+              role="presentation"
+            >
+              <tbody>
+                <tr>
+                  <td>
+                    <table
+                      align="center"
+                      width="100%"
+                      style={{
+                        textAlign: "left",
+                        textTransform: "uppercase",
+                        backgroundColor: "black",
+                        color: "white",
+                      }}
+                      border={0}
+                      cellPadding={0}
+                      cellSpacing={0}
+                      role="presentation"
+                    >
+                      <tbody>
+                        <tr>
+                          <td
+                            style={{
+                              fontSize: "16px",
+                              flex: "1",
+                              textAlign: "left",
+                              lineHeight: "24px",
+                              margin: "0px",
+                              padding: "10px",
+                              paddingLeft: "20px",
+                              textTransform: "uppercase",
+                              color: "white",
+                              backgroundColor: "black",
+                            }}
+                          >
+                            My Tickets
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+            <table
               style={{
                 padding: "0px 0px 0px 0px",
                 width: "100%",
+                paddingLeft: "20px",
                 minWidth: "100%",
                 border: "1px solid rgb(146, 124, 102)",
               }}
             >
-              <thead>
-                <tr style={{ margin: "0px", padding: "0px" }}>
-                  <p
-                    
-                    style={{
-                      fontSize: "16px",
-                      flex: "1",
-                      textAlign: "left",
-                      lineHeight: "24px",
-                      margin: "0px",
-                      padding: "10px",
-                      paddingLeft: "20px",
-                      textTransform: "uppercase",
-                      color: "white",
-                      backgroundColor: "black",
-                    }}
-                  >
-                    My Tickets
-                  </p>
-                </tr>
-              </thead>
               <tbody>
                 {order?.Ticket.map((ticket, index) => {
                   return (
@@ -293,11 +307,10 @@ const mail = (
                     >
                       <td>
                         <p
-                          
                           style={{
-                            fontSize: "14px",
+                            fontSize: "13px",
                             lineHeight: "24px",
-
+                            paddingRight: "5px",
                             textTransform: "uppercase",
                             color: "black",
                           }}
@@ -307,13 +320,10 @@ const mail = (
                       </td>
                       <td>
                         <p
-                          
                           style={{
-                            fontSize: "14px",
-
+                            fontSize: "13px",
                             lineHeight: "24px",
                             textTransform: "uppercase",
-
                             color: "black",
                           }}
                         >
@@ -322,13 +332,13 @@ const mail = (
                       </td>
                       <td>
                         <a
-                          
                           style={{
-                            fontSize: "14px",
+                            fontSize: "13px",
                             textAlign: "end",
                             lineHeight: "24px",
                             textTransform: "uppercase",
                             color: "black",
+                            textDecoration: "underline",
                           }}
                           href={`${getBaseUrl()}/ticket/${ticket?.id}`}
                         >
@@ -344,7 +354,6 @@ const mail = (
             <table
               align="center"
               width="100%"
-              data-id="react-email-section"
               style={{ padding: "20px", fontWeight: 500 }}
               border={0}
               cellPadding={0}
@@ -355,7 +364,6 @@ const mail = (
                 <tr>
                   <td>
                     <p
-                      
                       style={{
                         fontSize: "16px",
                         lineHeight: "24px",
@@ -365,31 +373,21 @@ const mail = (
                         textAlign: "left",
                       }}
                     >
-                      What happens now?
-               
-                      the contest will end on{" "}
+                      What happens now? the contest will end on{" "}
                       {order?.Competition[0]?.end_date.toDateString()} at{" "}
                       {order
                         ? order?.Competition[0]?.end_date.toTimeString()
                         : null}{" "}
-                      ,
-                  
-                      the winners will be announced on{" "}
+                      , the winners will be announced on{" "}
                       {order?.Competition[0]?.winner_announcement_date?.toDateString()}
-                   
                       at
                       {order?.Competition[0]?.winner_announcement_date?.toTimeString()}
-                  
-                      please make sure to follow us on instagram where we
-                 
-                      host a live for each competition.
-                    
-                      we wish you the best of luck!
+                      please make sure to follow us on instagram where we host a
+                      live for each competition. we wish you the best of luck!
                     </p>
                     <table
                       align="center"
                       width="100%"
-                      data-id="react-email-section"
                       style={{
                         width: "100%",
                         display: "flex",
@@ -410,9 +408,8 @@ const mail = (
                               href="https://www.instagram.com/winuwatch/"
                             >
                               <img
-                                data-id="react-email-img"
                                 alt="Slack"
-                                src={getBaseUrl() + "/images/InstaFooter.svg"}
+                                src="https://www.win-u-watch.uk/images/InstaFooter.svg"
                                 width={200}
                                 height={100}
                                 style={{
