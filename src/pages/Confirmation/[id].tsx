@@ -8,6 +8,9 @@ import type {
   GetServerSidePropsContext,
   InferGetServerSidePropsType,
 } from "next";
+
+import { useCart } from "@/components/Store";
+import { useEffect } from "react";
 export const getServerSideProps = (context: GetServerSidePropsContext) => {
   const { id } = context.query;
   return {
@@ -21,6 +24,11 @@ export default function Confirmation({
   id,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const { data } = api.Order.getOrder.useQuery(id);
+  const { reset } = useCart();
+
+  useEffect(() => {
+    reset();
+  }, [reset]);
 
   return (
     <div>

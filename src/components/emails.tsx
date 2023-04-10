@@ -283,7 +283,7 @@ const mail = (
                 {order?.Ticket.map((ticket, index) => {
                   return (
                     <tr
-                    key={index}
+                      key={index}
                       style={{
                         width: "100%",
                         border: "1px solid rgb(146, 124, 102)",
@@ -391,8 +391,8 @@ const mail = (
                         color: "black",
                       }}
                     >
-                      the winners will be announced on {order?.Competition[0]?.winner_announcement_date?.toDateString()}
-                     
+                      the winners will be announced on{" "}
+                      {order?.Competition[0]?.winner_announcement_date?.toDateString()}
                     </p>
                     <p
                       data-id="react-email-text"
@@ -404,7 +404,7 @@ const mail = (
                         color: "black",
                       }}
                     >
-                      at{" "}
+                      at
                       {order?.Competition[0]?.winner_announcement_date?.toTimeString()}
                     </p>
                     <p
