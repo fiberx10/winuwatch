@@ -10,10 +10,7 @@ import { CloseOutlined } from "@ant-design/icons";
 const CartComp = () => {
   const [open, setOpen] = useState(false);
   const [wrong, setWrong] = useState(false);
-
-  const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-
   const { cardDetails, updateComp, removeComp, competitions } = useCart();
 
   const { data } = api.Competition.getAll.useQuery({
@@ -70,6 +67,7 @@ const CartComp = () => {
                   <div
                     onClick={() =>
                       updateComp({
+                        reduction : 0,
                         compID: comp.compID,
                         number_tickets:
                           comp.number_tickets > 1
@@ -93,6 +91,7 @@ const CartComp = () => {
                   <div
                     onClick={() =>
                       updateComp({
+                        reduction : 0,
                         compID: comp.compID,
                         number_tickets:
                           comp.number_tickets < ComptetionData.remaining_tickets
@@ -117,6 +116,15 @@ const CartComp = () => {
                       comp.number_tickets * ComptetionData.ticket_price
                     )}
                   </h2>
+                  {
+                      comp.reduction > 0 && (
+                        <p>
+                          Discount: {'\t' + Formater(
+                            comp.reduction * (comp.number_tickets * ComptetionData.ticket_price) 
+                          )}
+                        </p>
+                      )
+                  }
                   <p onClick={() => removeComp(comp.compID)}>REMOVE</p>
                 </div>
               </div>
@@ -139,7 +147,7 @@ const CartComp = () => {
         <span>{Formater(totalCost)}</span>
       </div>
       <div className={styles.cartCheckoutCon}>
-        <button onClick={handleOpen}>Check Out</button>
+        <button onClick={() => setOpen(true)}>Check Out</button>
         <Modal
           aria-labelledby="spring-modal-title"
           aria-describedby="spring-modal-description"

@@ -9,11 +9,7 @@ interface Comp {
 }
 
 interface RootState {
-  competitions: {
-    compID: string;
-    number_tickets: number;
-    price_per_ticket: number;
-  }[];
+  competitions: Comp[];
   addComp: ({
     compID,
     number_tickets,
@@ -30,6 +26,7 @@ interface RootState {
     compID,
     number_tickets,
     price_per_ticket,
+    reduction = 0,
   }: Omit<Comp, "reduction"> & {
     reduction?: number;
     price_per_ticket?: number;
@@ -72,7 +69,7 @@ export const useCart = create<RootState>()(
           const { competitions } = get();
           return {
             totalCost: competitions.reduce(
-              (acc, c) => acc + c.number_tickets * c.price_per_ticket,
+              (acc, c) => acc + c.number_tickets * c.price_per_ticket * (1 - c.reduction),
               0
             ),
             Number_of_item: competitions.length,
