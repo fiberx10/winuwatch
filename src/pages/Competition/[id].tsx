@@ -214,7 +214,8 @@ export default function Competition({
                       />
                     </div>
                   </div>
-                  {data.remaining_tickets === 0 ? (
+                  {data.remaining_tickets === 0 ||
+                  data.end_date < new Date() ? (
                     ""
                   ) : (
                     <div className={styles.addtoCart}>
