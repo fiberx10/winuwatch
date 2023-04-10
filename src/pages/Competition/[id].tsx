@@ -36,43 +36,42 @@ export const getServerSideProps = (context: GetServerSidePropsContext) => {
   }
 };
 
+const MAX_TICKETS = 25;
+const TICKETREDUC = [
+  ...new Array(4).fill(0).map((_, i) => ({
+    value: i + 1,
+    reduction: 0.0,
+  })),
+  {
+    value: 5,
+    reduction: 0.1,
+  },
+  ...new Array(4).fill(0).map((_, i) => ({
+    value: i + 6,
+    reduction: 0.0,
+  })),
+  {
+    value: 10,
+    reduction: 0.1,
+  },
+  ...new Array(4).fill(0).map((_, i) => ({
+    value: i + 11,
+    reduction: 0.0,
+  })),
+  {
+    value: 20,
+    reduction: 0.2,
+  },
+];
 export default function Competition({
   compID,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const TicketReduc = [
-    ...new Array(4).fill(0).map((_, i) => ({
-      value: i + 1,
-      reduction: 0.0,
-    })),
-    {
-      value: 5,
-      reduction: 0.1,
-    },
-    ...new Array(4).fill(0).map((_, i) => ({
-      value: i + 6,
-      reduction: 0.0,
-    })),
-    {
-      value: 10,
-      reduction: 0.1,
-    },
-    ...new Array(4).fill(0).map((_, i) => ({
-      value: i + 11,
-      reduction: 0.0,
-    })),
-    {
-      value: 20,
-      reduction: 0.2,
-    },
-  ];
   const { data, isLoading } = api.Competition.byID.useQuery(compID);
-  const [counter, setCounter] = useState(
-    TicketReduc[0] ?? {
+  const [counter, setCounter] = useState({
       value: 1,
       reduction: 0,
     }
   );
-
   const [filter, setFilter] = useState(5);
   const { addComp, updateComp, competitions } = useCart();
   const [image, setImage] = useState<string | undefined>(undefined);
@@ -123,20 +122,17 @@ export default function Competition({
                 <div className={styles.innerImages}>
                   {
                     // new array of image besides the first one
-                    data.Watches.images_url
-                      .filter((_, i) => i !== 0 && i < 4)
-                      .slice(0, 3)
-                      .map((item, i) => (
-                        <Image
-                          onMouseEnter={() => setImage(item.url)}
-                          onMouseLeave={() => setImage(undefined)}
-                          width={150}
-                          height={130}
-                          alt="watchImage"
-                          src={item.url}
-                          key={i}
-                        />
-                      ))
+                    data.Watches.images_url.slice(1, 4).map(({ url }, i) => (
+                      <Image
+                        onMouseEnter={() => setImage(url)}
+                        onMouseLeave={() => setImage(undefined)}
+                        width={150}
+                        height={130}
+                        alt="watchImage"
+                        src={url}
+                        key={i}
+                      />
+                    ))
                   }
                 </div>
               </div>
@@ -158,38 +154,37 @@ export default function Competition({
                     {data.remaining_tickets === 0 ? (
                       <p>No Tickets Left!</p>
                     ) : (
-                      TicketReduc.filter(
-                        ({ value }) => value <= data.remaining_tickets
+                      TICKETREDUC.filter(
+                        ({ value }) =>
+                          value <= data.remaining_tickets && value <= filter
                       ).map(({ value: item, reduction }, i) => (
                         <ToggleButton
-                        key={i}
-                        onClick={() => setCounter({ value: item, reduction })}
-                        disabled={
-                          item > data.remaining_tickets ? true : false
-                        }
-                        sx={{
-                          cursor:
-                            item > data.remaining_tickets
-                              ? "help"
-                              : "pointer",
-                          width: "55px",
-                          height: "55px",
-                          backgroundColor:
-                            counter.value === item
-                              ? "rgb(146, 124, 102, 0.5)"
-                              : "initial",
-                          color:
-                            counter.value === item
-                              ? "white !important"
-                              : "initial",
-                          border:
-                            counter.value === item
-                              ? "2px solid rgb(146, 124, 102) !important"
-                              : "initial",
-                        }}
-                        value={item}
-                        aria-label="left aligned"
-                      >
+                          key={i}
+                          onClick={() => setCounter({ value: item, reduction })}
+                          disabled={item > data.remaining_tickets}
+                          sx={{
+                            cursor:
+                              item > data.remaining_tickets
+                                ? "help"
+                                : "pointer",
+                            width: "55px",
+                            height: "55px",
+                            backgroundColor:
+                              counter.value === item
+                                ? "rgb(146, 124, 102, 0.5)"
+                                : "initial",
+                            color:
+                              counter.value === item
+                                ? "white !important"
+                                : "initial",
+                            border:
+                              counter.value === item
+                                ? "2px solid rgb(146, 124, 102) !important"
+                                : "initial",
+                          }}
+                          value={item}
+                          aria-label="left aligned"
+                        >
                           <span
                             style={{
                               fontSize: reduction > 0 ? "18px" : "24px",
@@ -209,15 +204,9 @@ export default function Competition({
                     )}
                     <button
                       style={{
-                        display:
-                          filter === 15
-                            ? "none"
-                            : [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25]
-                                .length > data.remaining_tickets
-                            ? "none"
-                            : "flex",
+                        display: filter === MAX_TICKETS ? "none" : "flex",
                       }}
-                      onClick={() => setFilter(15)}
+                      onClick={() => setFilter(MAX_TICKETS)}
                       className={styles.showMore}
                     >
                       +
@@ -256,6 +245,15 @@ export default function Competition({
                             data.ticket_price
                           )}`}
                         </p>
+                        {
+                          counter.reduction > 0 && (
+                            <p>
+                              {` Discount: ${Formater(
+                                data.ticket_price * counter.reduction * counter.value
+                              )}`}
+                            </p>
+                          )
+                        }
                         <span>
                           {Formater(
                             counter.value * data.ticket_price -
@@ -326,8 +324,8 @@ export default function Competition({
                   )}
 
                   <p>
-                    Runner-Up prizes: 4 players will win {Formater(25)} credit into our
-                    next competition.
+                    Runner-Up prizes: 4 players will win {Formater(25)} credit
+                    into our next competition.
                   </p>
                 </div>
               </div>
