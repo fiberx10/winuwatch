@@ -47,7 +47,7 @@ export const WinnersRouter = createTRPCRouter({
       Full_Name: `${ticket.Order.first_name} ${ticket.Order.last_name}`,
       Order_ID: ticket.Order.id,
       competionName: competition.name,
-      Total_Price: ticket.Order.totalPrice
+      Total_Price: ticket.Order.totalPrice,
     }));
   }),
   pickOneRandom: publicProcedure
@@ -373,6 +373,44 @@ export const CompetitionRouter = createTRPCRouter({
           comp.total_tickets -
           (Data[0].find((item) => item.id === comp.id)?._count?.Ticket || 0),
       }));
+    }),
+  //GetUniqueByID
+  GetUniqueByID: publicProcedure
+    .input(z.string())
+    .query(async ({ ctx, input }) => {
+      const Data = await ctx.prisma.$transaction([
+        ctx.prisma.competition.findUnique({
+          where: {
+            id: input,
+          },
+          select: {
+            id: true,
+            _count: {
+              select: {
+                Ticket: true,
+              },
+            },
+          },
+        }),
+        ctx.prisma.competition.findUnique({
+          where: {
+            id: input,
+          },
+          include: {
+            Watches: {
+              include: {
+                images_url: true,
+              },
+            },
+          },
+        }),
+      ]);
+      return Data[1] && Data[0]
+        ? {
+            ...Data[1],
+            remaining_tickets: Data[1]?.total_tickets - Data[0]?._count?.Ticket,
+          }
+        : undefined;
     }),
 
   delete: publicProcedure.input(z.string()).mutation(async ({ ctx, input }) => {

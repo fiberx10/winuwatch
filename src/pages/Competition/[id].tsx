@@ -15,7 +15,6 @@ import { Formater } from "@/utils";
 import { useState } from "react";
 import Image from "next/image";
 import Loader from "@/components/Loader";
-import { Tooltip } from "@mui/material";
 import Timer from "@/components/Timer";
 
 export const getServerSideProps = (context: GetServerSidePropsContext) => {
@@ -40,7 +39,7 @@ export const getServerSideProps = (context: GetServerSidePropsContext) => {
 export default function Competition({
   compID,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const { data, isLoading } = api.Competition.byID.useQuery(compID);
+  const { data, isLoading } = api.Competition.GetUniqueByID.useQuery(compID);
   const [counter, setCounter] = useState(1);
   const [filter, setFilter] = useState(5);
   const { addComp, updateComp, competitions } = useCart();
@@ -130,84 +129,76 @@ export default function Competition({
                       [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25]
                         .filter((_, index) => index < filter)
                         .map((item, i) => (
-                          <Tooltip
+                          <ToggleButton
                             key={i}
-                            title={
-                              item > data.remaining_tickets
-                                ? "No more tickets left!"
-                                : ""
+                            onClick={() => setCounter(item)}
+                            disabled={
+                              item > data.remaining_tickets ? true : false
                             }
+                            sx={{
+                              cursor:
+                                item > data.remaining_tickets
+                                  ? "help"
+                                  : "pointer",
+                              width: "55px",
+                              height: "55px",
+                              backgroundColor:
+                                counter === item
+                                  ? "rgb(146, 124, 102, 0.5)"
+                                  : "initial",
+                              color:
+                                counter === item
+                                  ? "white !important"
+                                  : "initial",
+                              border:
+                                counter === item
+                                  ? "2px solid rgb(146, 124, 102) !important"
+                                  : "initial",
+                            }}
+                            value={item}
+                            aria-label="left aligned"
                           >
-                            <ToggleButton
-                              onClick={() => setCounter(item)}
-                              disabled={
-                                item > data.remaining_tickets ? true : false
-                              }
-                              sx={{
-                                cursor:
-                                  item > data.remaining_tickets
-                                    ? "help"
-                                    : "pointer",
-                                width: "55px",
-                                height: "55px",
-                                backgroundColor:
-                                  counter === item
-                                    ? "rgb(146, 124, 102, 0.5)"
-                                    : "initial",
-                                color:
-                                  counter === item
-                                    ? "white !important"
-                                    : "initial",
-                                border:
-                                  counter === item
-                                    ? "2px solid rgb(146, 124, 102) !important"
+                            <span
+                              style={{
+                                fontSize:
+                                  item === 5
+                                    ? "18px"
+                                    : item === 10
+                                    ? "18px"
+                                    : item === 15
+                                    ? "18px"
+                                    : item === 25
+                                    ? "18px"
+                                    : "24px",
+                                height:
+                                  item === 5
+                                    ? "23px"
+                                    : item === 10
+                                    ? "23px"
+                                    : item === 15
+                                    ? "23px"
+                                    : item === 25
+                                    ? "23px"
                                     : "initial",
                               }}
-                              value={item}
-                              aria-label="left aligned"
                             >
-                              <span
-                                style={{
-                                  fontSize:
-                                    item === 5
-                                      ? "18px"
-                                      : item === 10
-                                      ? "18px"
-                                      : item === 15
-                                      ? "18px"
-                                      : item === 25
-                                      ? "18px"
-                                      : "24px",
-                                  height:
-                                    item === 5
-                                      ? "23px"
-                                      : item === 10
-                                      ? "23px"
-                                      : item === 15
-                                      ? "23px"
-                                      : item === 25
-                                      ? "23px"
-                                      : "initial",
-                                }}
-                              >
-                                {item}
-                              </span>
-                              <p
-                                style={{ fontSize: "10px" }}
-                                className={styles.sold}
-                              >
-                                {item === 5
-                                  ? "10% off"
-                                  : item === 10
-                                  ? "15% off"
-                                  : item === 15
-                                  ? "20% off"
-                                  : item === 25
-                                  ? "20% off"
-                                  : ""}
-                              </p>
-                            </ToggleButton>
-                          </Tooltip>
+                              {item}
+                            </span>
+                            <p
+                              style={{ fontSize: "10px" }}
+                              className={styles.sold}
+                            >
+                              {item === 5
+                                ? "10% off"
+                                : item === 10
+                                ? "15% off"
+                                : item === 15
+                                ? "20% off"
+                                : item === 25
+                                ? "20% off"
+                                : ""}
+                            </p>
+                          </ToggleButton>
                         ))
                     )}
                     <button
