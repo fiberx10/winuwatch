@@ -3,7 +3,9 @@ import NavBar from "@/components/NavBar";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { api } from "@/utils/api";
-import { TypeOf, z } from "zod";
+import { z } from "zod";
+import { Tooltip } from "@mui/material";
+
 import type {
   GetServerSidePropsContext,
   InferGetServerSidePropsType,
