@@ -3,7 +3,7 @@ import NavBar from "@/components/NavBar";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { api } from "@/utils/api";
-import { z } from "zod";
+import { TypeOf, z } from "zod";
 import type {
   GetServerSidePropsContext,
   InferGetServerSidePropsType,
@@ -40,8 +40,23 @@ export const getServerSideProps = (context: GetServerSidePropsContext) => {
 export default function Competition({
   compID,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const TicketReduc = [
+    ...new Array(15).fill(0).map((_, i) => ({
+      value: i + 1,
+      reduction: 0.0,
+    })),
+    {
+      value: 20,
+      reduction: 0.2,
+    },
+  ];
   const { data, isLoading } = api.Competition.byID.useQuery(compID);
-  const [counter, setCounter] = useState(1);
+  const [counter, setCounter] = useState(
+    TicketReduc[0] ?? {
+      value: 1,
+      reduction: 0,
+    }
+  );
   const [filter, setFilter] = useState(5);
   const { addComp, updateComp, competitions } = useCart();
   const [image, setImage] = useState<string | undefined>(undefined);
@@ -127,88 +142,68 @@ export default function Competition({
                     {data.remaining_tickets === 0 ? (
                       <p>No Tickets Left!</p>
                     ) : (
-                      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25]
-                        .filter((_, index) => index < filter)
-                        .map((item, i) => (
-                          <Tooltip
-                            key={i}
-                            title={
-                              item > data.remaining_tickets
-                                ? "No more tickets left!"
-                                : ""
+                      TicketReduc.filter(
+                        ({ value }) => value <= data.remaining_tickets
+                      ).map(({ value: item, reduction }, i) => (
+                        <Tooltip
+                          key={i}
+                          title={
+                            item > data.remaining_tickets && "No more tickets left!"
+                          }
+                        >
+                          <ToggleButton
+                            onClick={() =>
+                              setCounter({ value: item, reduction })
                             }
+                            disabled={
+                              item > data.remaining_tickets ? true : false
+                            }
+                            sx={{
+                              cursor:
+                                item > data.remaining_tickets
+                                  ? "help"
+                                  : "pointer",
+                              width: "55px",
+                              height: "55px",
+                              backgroundColor:
+                                counter.value === item
+                                  ? "rgb(146, 124, 102, 0.5)"
+                                  : "initial",
+                              color:
+                                counter.value === item
+                                  ? "white !important"
+                                  : "initial",
+                              border:
+                                counter.value === item
+                                  ? "2px solid rgb(146, 124, 102) !important"
+                                  : "initial",
+                            }}
+                            value={item}
+                            aria-label="left aligned"
                           >
-                            <ToggleButton
-                              onClick={() => setCounter(item)}
-                              disabled={
-                                item > data.remaining_tickets ? true : false
-                              }
-                              sx={{
-                                cursor:
-                                  item > data.remaining_tickets
-                                    ? "help"
-                                    : "pointer",
-                                width: "55px",
-                                height: "55px",
-                                backgroundColor:
-                                  counter === item
-                                    ? "rgb(146, 124, 102, 0.5)"
-                                    : "initial",
-                                color:
-                                  counter === item
-                                    ? "white !important"
-                                    : "initial",
-                                border:
-                                  counter === item
-                                    ? "2px solid rgb(146, 124, 102) !important"
+                            <span
+                              style={{
+                                fontSize:
+                                  reduction > 0
+                                    ? "18px"
+                                    : "24px",
+                                height:
+                                  reduction > 0
+                                    ? "23px"
                                     : "initial",
                               }}
-                              value={item}
-                              aria-label="left aligned"
                             >
-                              <span
-                                style={{
-                                  fontSize:
-                                    item === 5
-                                      ? "18px"
-                                      : item === 10
-                                      ? "18px"
-                                      : item === 15
-                                      ? "18px"
-                                      : item === 25
-                                      ? "18px"
-                                      : "24px",
-                                  height:
-                                    item === 5
-                                      ? "23px"
-                                      : item === 10
-                                      ? "23px"
-                                      : item === 15
-                                      ? "23px"
-                                      : item === 25
-                                      ? "23px"
-                                      : "initial",
-                                }}
-                              >
-                                {item}
-                              </span>
-                              <p
-                                style={{ fontSize: "10px" }}
-                                className={styles.sold}
-                              >
-                                {item === 5
-                                  ? "10% off"
-                                  : item === 10
-                                  ? "15% off"
-                                  : item === 15
-                                  ? "20% off"
-                                  : item === 25
-                                  ? "20% off"
-                                  : ""}
-                              </p>
-                            </ToggleButton>
-                          </Tooltip>
-                        ))
+                              {item}
+                            </span>
+                            <p
+                              style={{ fontSize: "10px" }}
+                              className={styles.sold}
+                            >
+                              {reduction >0 && `-${reduction * 100}%` }
+                            </p>
+                          </ToggleButton>
+                        </Tooltip>
+                      ))
                     )}
                     <button
                       style={{
@@ -255,31 +250,18 @@ export default function Competition({
                     <div className={styles.addtoCart}>
                       <div className={styles.prices}>
                         <p>
-                          Tickets: {counter} x {Formater(data.ticket_price)}
+                          {` Tickets: ${counter.value} x ${Formater(
+                            data.ticket_price
+                          )}`}
                         </p>
-                        <span>
-                          {counter === 5
-                            ? Formater(
-                                counter * data.ticket_price -
-                                  (counter * data.ticket_price * 10) / 100
-                              )
-                            : counter === 10
-                            ? Formater(
-                                counter * data.ticket_price -
-                                  (counter * data.ticket_price * 15) / 100
-                              )
-                            : counter === 15
-                            ? Formater(
-                                counter * data.ticket_price -
-                                  (counter * data.ticket_price * 20) / 100
-                              )
-                            : counter === 25
-                            ? Formater(
-                                counter * data.ticket_price -
-                                  (counter * data.ticket_price * 20) / 100
-                              )
-                            : Formater(counter * data.ticket_price)}
-                        </span>
+                          <span>
+                            {Formater(
+                              counter.value * data.ticket_price -
+                                (counter.value *
+                                  data.ticket_price *
+                                  counter.reduction) 
+                            )}
+                          </span>
                       </div>
                       <button
                         onClick={() => {
@@ -288,15 +270,17 @@ export default function Competition({
                                 (comp) =>
                                   comp.compID === data.id &&
                                   updateComp({
+                                    reduction: counter.reduction,
                                     compID: data.id,
                                     number_tickets:
-                                      counter + comp.number_tickets,
+                                      counter.value + comp.number_tickets,
                                     price_per_ticket: data.ticket_price,
                                   })
                               )
                             : addComp({
+                                reduction: counter.reduction,
                                 compID: data.id,
-                                number_tickets: counter,
+                                number_tickets: counter.value,
                                 price_per_ticket: data.ticket_price,
                               });
                           void router.push("/Cart");
