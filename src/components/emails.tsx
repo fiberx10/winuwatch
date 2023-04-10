@@ -409,7 +409,7 @@ const mail = (
                             >
                               <img
                                 alt="Slack"
-                                src="https://www.win-u-watch.uk/images/InstaFooter.svg"
+                                src="https://www.win-u-watch.uk/images/InstaFooter.png"
                                 width={200}
                                 height={100}
                                 style={{
