@@ -278,7 +278,7 @@ export default function Competition({
                       ", new digital warranty card "}
                     {data.Watches.has_box && "& fully boxed"}.
                   </p>
-                  {data.max_space_in_final_draw && (
+                  {data.max_space_in_final_draw > 0 && (
                     <p>
                       Maximum spaces in the final draw:{" "}
                       {data.max_space_in_final_draw}
