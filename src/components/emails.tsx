@@ -81,34 +81,21 @@ const mail = (
               <tbody>
                 <tr>
                   <td>
-                    <div
+                    <img
+                      alt="Slack"
+                      src="https://www.win-u-watch.uk/images/newLogo.png"
+                      width={200}
+                      height={100}
                       style={{
-                        width: "100%",
-                        alignContent: "center",
-                        justifyContent: "center",
-                        display: "grid",
-                        placeItems: "center",
+                        display: "block",
+                        outline: "none",
+                        alignSelf: "center",
+                        border: "none",
+                        textDecoration: "none",
+                        margin: "0  auto",
                         marginBottom: "20px",
-                        textAlign: "center",
                       }}
-                    >
-                      <p>
-                        <img
-                          alt="Slack"
-                          src="https://www.win-u-watch.uk/images/newLogo.png"
-                          width={200}
-                          height={100}
-                          style={{
-                            display: "block",
-                            outline: "none",
-                            alignSelf: "center",
-                            border: "none",
-                            textDecoration: "none",
-                            marginRight: "10px",
-                          }}
-                        />
-                      </p>
-                    </div>
+                    />
                     <div
                       style={{
                         fontSize: "16px",
@@ -410,286 +397,55 @@ const mail = (
                       host a live for each competition. <br /> we wish you the
                       best of luck!
                     </p>
-
-                    <div style={{ width: "37.5em" }}>
-                      <div
+                    <a
+                      style={{
+                        width: "100%",
+                        display: "flex",
+                        justifyContent: "center",
+                        margin: "0  auto",
+                      }}
+                      href="https://www.instagram.com/winuwatch/"
+                    >
+                      <img
+                        alt="instaFollow"
+                        src="https://www.win-u-watch.uk/images/InstaFooter.png"
+                        style={{ margin: "0  auto" }}
+                      />
+                    </a>
+                    <h4
+                      style={{
+                        width: "100%",
+                        textAlign: "center",
+                        fontWeight: "400",
+                        background: "lightgrey",
+                      }}
+                    >
+                      LISAM WATCH 86-90 PAUL STREET LONDON, CITY OF LONDON EC2A
+                      4NE
+                    </h4>
+                    <div style={{ display: "flex" }}>
+                      <h5
                         style={{
-                          background: "#cbb9ac",
-                          height: "fit-content",
-                          padding: "20px 0",
-                          gap: "1rem",
+                          margin: "0",
+                          fontWeight: "300",
+                          marginRight: "auto",
                         }}
                       >
-                        <h1
+                        NO LONGER WANT TO RECEIVE THESE EMAILS? UNSUBSCRIBE
+                      </h5>
+                      <a
+                        style={{ textDecoration: "none", color: "black" }}
+                        href="https://www.win-u-watch.uk/Privacy_Policy"
+                      >
+                        <h5
                           style={{
-                            fontFamily: "Montserrat,sans-serif",
-                            textTransform: "uppercase",
-                            fontWeight: "600",
-                            fontSize: "45px",
-                            color: "#987358",
                             margin: "0",
-                            width: "100%",
-                            textAlign: "center",
+                            fontWeight: "300",
                           }}
                         >
-                          Follow us
-                        </h1>
-
-                        <p
-                          style={{
-                            fontWeight: "400",
-                            fontSize: "20px",
-                            width: "80%",
-                            textAlign: "center",
-                            color: "#faf8f6",
-                            marginLeft: "10%",
-                          }}
-                        >
-                          Don&apos;t miss the live draw and the announcement of
-                          the next competitions on Instagram !
-                        </p>
-
-                        <a
-                          style={{
-                            width: "100%",
-                            display: "flex",
-                            justifyContent: "center",
-                          }}
-                          href="https://www.instagram.com/winuwatch/"
-                        >
-                          <img
-                            alt="instaFollow"
-                            src="https://www.win-u-watch.uk/images/InstaFooter.png"
-                          />
-                        </a>
-                      </div>
-
-                      <div
-                        style={{
-                          background: "#cbb9ac",
-                          paddingBottom: "20px",
-                          gap: "1rem",
-
-                          justifyContent: "space-evenly",
-                          width: "100%",
-                        }}
-                      >
-                        <div
-                          style={{
-                            flexDirection: "column",
-                            gap: "2rem",
-                            width: "100%",
-                            paddingTop: "20px",
-                            textAlign: "center",
-                          }}
-                        >
-                          <div
-                            style={{
-                              width: "100%",
-                              display: "flex",
-                              justifyContent: "center",
-                              marginBottom: "20px",
-                            }}
-                          >
-                            <img
-                              width={144}
-                              height={76}
-                              style={{ marginRight: "10px" }}
-                              src="https://www.win-u-watch.uk/images/newLogo.png"
-                              alt="logo"
-                            />
-                          </div>
-
-                          {data.map((menu, i) => {
-                            return (
-                              <>
-                                <a
-                                  style={{
-                                    textDecoration: "none",
-                                    color: "#fff",
-                                    textTransform: "uppercase",
-                                    fontWeight: "300",
-                                    fontSize: "14px",
-                                    letterSpacing: ".05em",
-                                    marginBottom: "10px",
-                                  }}
-                                  href={
-                                    menu.names[0] === "COMPETITIONS"
-                                      ? "https://www.win-u-watch.uk/#theComp"
-                                      : menu.names[0] === "PHILOSOPHY"
-                                      ? "https://www.win-u-watch.uk/Philosophy"
-                                      : menu.names[0] ===
-                                        "Acceptable Use Policy"
-                                      ? "https://www.win-u-watch.uk/Acceptable_Use_Policy"
-                                      : "https://www.win-u-watch.uk/Return_Policy"
-                                  }
-                                >
-                                  {menu.names[0]}
-                                </a>
-                                <a
-                                  style={{
-                                    textDecoration: "none",
-                                    color: "#fff",
-                                    textTransform: "uppercase",
-                                    fontWeight: "300",
-                                    fontSize: "14px",
-                                    letterSpacing: ".05em",
-                                    marginBottom: "10px",
-                                  }}
-                                  href={
-                                    menu.names[1] === "how to play"
-                                      ? "https://www.win-u-watch.uk/#Howtoplay"
-                                      : menu.names[1] === "trustpilot"
-                                      ? "https://www.win-u-watch.uk/#trustpilot"
-                                      : menu.names[1] === "faq"
-                                      ? "https://www.win-u-watch.uk/FAQ"
-                                      : "https://www.win-u-watch.uk/TermsAndConditions"
-                                  }
-                                >
-                                  {menu.names[1]}
-                                </a>
-                                <a
-                                  style={{
-                                    textDecoration: "none",
-                                    color: "#fff",
-                                    textTransform: "uppercase",
-                                    fontWeight: "300",
-                                    fontSize: "14px",
-                                    letterSpacing: ".05em",
-                                    marginBottom: "10px",
-                                  }}
-                                  href={
-                                    menu.names[2] === "Charity"
-                                      ? "/Charity"
-                                      : menu.names[2] === "Privacy Policy"
-                                      ? "/Privacy_Policy"
-                                      : menu.names[2] === "contact"
-                                      ? "mailto:info@winuwatch.uk"
-                                      : ""
-                                  }
-                                >
-                                  {menu.names[2]}
-                                </a>
-                              </>
-                            );
-                          })}
-                          <div
-                            style={{
-                              width: "90%",
-                            }}
-                          >
-                            <div
-                              style={{
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "space-between",
-                                padding: "15px 0",
-                                borderBottom: "1px solid #fff",
-                                width: "95%",
-                                gap: "1rem",
-                                color: "white",
-                              }}
-                            >
-                              <p style={{ margin: "0" }}>
-                                For enquiries, please email
-                              </p>
-                              <a
-                                style={{
-                                  color: "white",
-                                }}
-                                href="mailto:info@winuwatch.uk"
-                              >
-                                <u>info@winuwatch.uk</u>
-                              </a>
-                            </div>
-                            <div
-                              style={{
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "space-between",
-                                padding: "15px 0",
-                                borderBottom: "1px solid #fff",
-                                width: "95%",
-                                gap: "1rem",
-                                color: "white",
-                              }}
-                            >
-                              <p style={{ margin: "0" }}>100% Secure payment</p>
-                              <div
-                                style={{
-                                  display: "flex",
-                                  alignItems: "center",
-                                  gap: "1rem",
-                                }}
-                              >
-                                <div
-                                  style={{
-                                    justifyContent: "center",
-                                    fontWeight: "500",
-                                    fontSize: "14px",
-                                    fontStyle: "italic",
-                                    padding: "1px 7px",
-                                    border: "1px solid #fff",
-                                  }}
-                                >
-                                  visa
-                                </div>
-                                <div
-                                  style={{
-                                    padding: "4.5px 8px",
-                                    border: "1px solid #fff",
-                                    filter: "brightness(0) invert(1)",
-                                  }}
-                                >
-                                  <img
-                                    width={14}
-                                    height={14}
-                                    src="https://www.win-u-watch.uk/images/visacircdark.png"
-                                    alt="visarecdark"
-                                  />
-                                  <img
-                                    width={14}
-                                    height={14}
-                                    src="https://www.win-u-watch.uk/images/viacirclight.png"
-                                    alt="visareclight"
-                                    style={{
-                                      marginLeft: "-3px",
-                                    }}
-                                  />
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div
-                          style={{
-                            gap: "1rem",
-                            color: "white",
-                          }}
-                        >
-                          <h3
-                            style={{
-                              margin: "0",
-                              fontWeight: "300",
-                              fontSize: "18px",
-                            }}
-                          >
-                            Win U Watch © 2023
-                          </h3>
-                          <p
-                            style={{
-                              fontWeight: "300",
-                              fontSize: "15px",
-                              textAlign: "center",
-                              width: "60%",
-                              margin: "0",
-                            }}
-                          >
-                            Lisam Watch Ltd is registered at 63-66 Hatton
-                            Gardens, London, EC1N 8LE, UK
-                          </p>
-                        </div>
-                      </div>
+                          PRIVACY POLICY
+                        </h5>
+                      </a>
                     </div>
                   </td>
                 </tr>
