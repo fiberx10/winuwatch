@@ -15,7 +15,6 @@ import { Formater } from "@/utils";
 import { useState } from "react";
 import Image from "next/image";
 import Loader from "@/components/Loader";
-import { Tooltip } from "@mui/material";
 import Timer from "@/components/Timer";
 
 export const getServerSideProps = (context: GetServerSidePropsContext) => {
@@ -57,6 +56,7 @@ export default function Competition({
       reduction: 0,
     }
   );
+
   const [filter, setFilter] = useState(5);
   const { addComp, updateComp, competitions } = useCart();
   const [image, setImage] = useState<string | undefined>(undefined);
@@ -158,6 +158,7 @@ export default function Competition({
                             disabled={
                               item > data.remaining_tickets ? true : false
                             }
+
                             sx={{
                               cursor:
                                 item > data.remaining_tickets
@@ -175,6 +176,7 @@ export default function Competition({
                                   : "initial",
                               border:
                                 counter.value === item
+
                                   ? "2px solid rgb(146, 124, 102) !important"
                                   : "initial",
                             }}
@@ -189,6 +191,7 @@ export default function Competition({
                                     : "24px",
                                 height:
                                   reduction > 0
+
                                     ? "23px"
                                     : "initial",
                               }}
@@ -204,6 +207,7 @@ export default function Competition({
                           </ToggleButton>
                         </Tooltip>
                       ))
+
                     )}
                     <button
                       style={{
