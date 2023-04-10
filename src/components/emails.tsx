@@ -181,7 +181,9 @@ const mail = (
                                 padding: "0px 0px 0px 20px",
                               }}
                             >
-                              Watch Info
+                              {
+                                order?.Competition[0]?.name
+                              }
                             </p>
                             <table
                               align="center"
