@@ -237,7 +237,8 @@ const DashboardWatches = () => {
                                   }}
                                   onremovefile={async (error, file) => {
                                     //console.log(error, file.source);
-                                    if (typeof file.source === "string") await removeWatchIMG(file.source);
+                                    if (typeof file.source === "string")
+                                      await removeWatchIMG(file.source);
                                     await refetch();
                                   }}
                                   files={watch.images_url.map((img) => {
