@@ -36,6 +36,7 @@ import FilePondPluginFilePoster from "filepond-plugin-file-poster";
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
 import Loader from "../Loader";
+import { string } from "zod";
 
 // Register the plugins
 registerPlugin(
@@ -49,6 +50,10 @@ const DashboardWatches = () => {
   const { mutateAsync: removewatch } = api.Watches.remove.useMutation();
   const { mutateAsync: addWatch } = api.Watches.add.useMutation();
   const { mutateAsync: updateWatch } = api.Watches.update.useMutation();
+  const { mutateAsync: addWatchIMG } = api.Watches.addWatchIMG.useMutation();
+  const { mutateAsync: removeWatchIMG } =
+    api.Watches.removeWatchIMG.useMutation();
+
   const [newimgs, setNewImgs] = useState<string[]>([]);
   //REMOVE WATCH
   const [remove, setRemove] = useState({ modal: false, id: "" });
@@ -160,7 +165,6 @@ const DashboardWatches = () => {
                           year_of_manifacture: values.year_of_manifacture,
                           has_box: values.has_box,
                           has_certificate: values.has_certificate,
-                          images_url: values.images_url,
                         });
                         console.log("Form submitted:", values);
                         await refetch();
@@ -169,6 +173,7 @@ const DashboardWatches = () => {
                       validationSchema={toFormikValidationSchema(
                         WatchesSchema.omit({
                           id: true,
+                          images_url: true,
                         })
                       )}
                       initialValues={{
@@ -185,7 +190,6 @@ const DashboardWatches = () => {
                         year_of_manifacture: watch.year_of_manifacture,
                         has_box: watch.has_box,
                         has_certificate: watch.has_certificate,
-                        images_url: watch.images_url,
                       }}
                     >
                       {({
@@ -219,16 +223,11 @@ const DashboardWatches = () => {
                                             const url = await getDownloadURL(
                                               snapshot.ref
                                             );
-                                            const imgs1: string[] = [];
-                                            imgs1.push(url);
-
-                                            // setNewImgs((imgs) =>
-                                            //   imgs ? [...imgs, url] : [url]
-                                            // );
-                                            console.log(imgs1);
-
-                                            load(url);
-                                            setFieldValue("images_url", imgs1);
+                                            await addWatchIMG({
+                                              WatchesId: watch.id,
+                                              url,
+                                            });
+                                            await refetch();
                                           }
                                         )
                                         .catch((e) => {
@@ -236,13 +235,13 @@ const DashboardWatches = () => {
                                         });
                                     },
                                   }}
-                                  onremovefile={(error, file) => {
-                                    console.log(error, file);
+                                  onremovefile={async (error, file) => {
+                                    //console.log(error, file.source);
+                                    if (typeof file.source === "string")
+                                      await removeWatchIMG(file.source);
+                                    await refetch();
                                   }}
-                                  onupdatefiles = {(fileItems) => {
-                                    console.log(fileItems);
-                                  }}
-                                  files={values.images_url.map((img) => {
+                                  files={watch.images_url.map((img) => {
                                     return {
                                       source: img,
                                       options: {

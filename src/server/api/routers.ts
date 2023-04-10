@@ -2,7 +2,11 @@ import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { CompetitionStatus, OrderStatus } from "@prisma/client";
 import { getBaseUrl, CreateOrderSchema } from "@/utils";
-import { WatchesSchema, CompetitionSchema } from "@/utils/zodSchemas";
+import {
+  WatchesSchema,
+  CompetitionSchema,
+  ImagesUrlSchema,
+} from "@/utils/zodSchemas";
 import { env } from "@/env.mjs";
 import Email from "@/components/emails";
 import stripe from "stripe";
@@ -28,9 +32,9 @@ export const WinnersRouter = createTRPCRouter({
         id: input,
       },
       include: {
-        Order: {
+        Ticket: {
           include: {
-            Ticket: true,
+            Order: true,
           },
         },
       },
@@ -38,18 +42,13 @@ export const WinnersRouter = createTRPCRouter({
     if (!competition) {
       throw new Error("Competition not found");
     }
-    const { Order } = competition;
-    const csv = Order.map((order) => ({
-      Full_Name: `${order.first_name} ${order.last_name}`,
-      Order_ID: order.id,
+    return competition.Ticket.map((ticket) => ({
+      ticketID: ticket.id,
+      Full_Name: `${ticket.Order.first_name} ${ticket.Order.last_name}`,
+      Order_ID: ticket.Order.id,
       competionName: competition.name,
-      competitionid: competition.id,
-      Number_of_Tickets: order.Ticket.length,
-      Ticket_ID: order.Ticket.map((ticket) => ticket.id).join(", "),
-      Total_Price: order.totalPrice,
-      Price_per_Ticket: order.totalPrice / order.Ticket.length,
+      Total_Price: ticket.Order.totalPrice,
     }));
-    return csv;
   }),
   pickOneRandom: publicProcedure
     .input(z.string())
@@ -375,6 +374,44 @@ export const CompetitionRouter = createTRPCRouter({
           (Data[0].find((item) => item.id === comp.id)?._count?.Ticket || 0),
       }));
     }),
+  //GetUniqueByID
+  GetUniqueByID: publicProcedure
+    .input(z.string())
+    .query(async ({ ctx, input }) => {
+      const Data = await ctx.prisma.$transaction([
+        ctx.prisma.competition.findUnique({
+          where: {
+            id: input,
+          },
+          select: {
+            id: true,
+            _count: {
+              select: {
+                Ticket: true,
+              },
+            },
+          },
+        }),
+        ctx.prisma.competition.findUnique({
+          where: {
+            id: input,
+          },
+          include: {
+            Watches: {
+              include: {
+                images_url: true,
+              },
+            },
+          },
+        }),
+      ]);
+      return Data[1] && Data[0]
+        ? {
+            ...Data[1],
+            remaining_tickets: Data[1]?.total_tickets - Data[0]?._count?.Ticket,
+          }
+        : undefined;
+    }),
 
   delete: publicProcedure.input(z.string()).mutation(async ({ ctx, input }) => {
     return (await ctx.prisma.competition.delete({
@@ -391,8 +428,21 @@ export const CompetitionRouter = createTRPCRouter({
         };
   }),
   byID: publicProcedure.input(z.string()).query(async ({ ctx, input }) => {
-    return (
-      (await ctx.prisma.competition.findUnique({
+    const Data = await ctx.prisma.$transaction([
+      ctx.prisma.competition.findUnique({
+        where: {
+          id: input,
+        },
+        select: {
+          id: true,
+          _count: {
+            select: {
+              Ticket: true,
+            },
+          },
+        },
+      }),
+      ctx.prisma.competition.findUnique({
         where: {
           id: input,
         },
@@ -403,8 +453,16 @@ export const CompetitionRouter = createTRPCRouter({
             },
           },
         },
-      })) ?? undefined
-    );
+      }),
+    ]);
+    return Data[1]
+      ? {
+          ...Data[1],
+          remaining_tickets:
+            Data[1].total_tickets -
+            (Data[0]?._count?.Ticket || 0),
+        }
+      : undefined;
   }),
   updateOne: publicProcedure
     .input(
@@ -471,6 +529,31 @@ export const WatchesRouter = createTRPCRouter({
       },
     });
   }),
+  removeWatchIMG: publicProcedure
+    .input(z.string())
+    .mutation(async ({ ctx, input }) => {
+      //TODO: Delete the images from firebase
+      await ctx.prisma.imagesUrl.deleteMany({
+        where: {
+          url: input,
+        },
+      });
+    }),
+  addWatchIMG: publicProcedure
+    .input(
+      z.object({
+        WatchesId: z.string(),
+        url: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      return await ctx.prisma.imagesUrl.create({
+        data: {
+          ...input,
+        },
+      });
+    }),
+
   add: publicProcedure
     .input(
       WatchesSchema.omit({
