@@ -11,7 +11,7 @@ import type {
 import styles from "@/styles/CompetitionPage.module.css";
 import { useCart } from "@/components/Store";
 import ToggleButton from "@mui/material/ToggleButton";
-import { Formater } from "@/utils";
+import { Formater, DateFormater } from "@/utils";
 import { useState } from "react";
 import Image from "next/image";
 import Loader from "@/components/Loader";
@@ -40,8 +40,24 @@ export default function Competition({
   compID,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const TicketReduc = [
-    ...new Array(15).fill(0).map((_, i) => ({
+    ...new Array(4).fill(0).map((_, i) => ({
       value: i + 1,
+      reduction: 0.0,
+    })),
+    {
+      value: 5,
+      reduction: 0.1,
+    },
+    ...new Array(4).fill(0).map((_, i) => ({
+      value: i + 6,
+      reduction: 0.0,
+    })),
+    {
+      value: 10,
+      reduction: 0.1,
+    },
+    ...new Array(4).fill(0).map((_, i) => ({
+      value: i + 11,
       reduction: 0.0,
     })),
     {
@@ -146,34 +162,34 @@ export default function Competition({
                         ({ value }) => value <= data.remaining_tickets
                       ).map(({ value: item, reduction }, i) => (
                         <ToggleButton
-                          key={i}
-                          onClick={() => setCounter({ value: item, reduction })}
-                          disabled={
-                            item > data.remaining_tickets ? true : false
-                          }
-                          sx={{
-                            cursor:
-                              item > data.remaining_tickets
-                                ? "help"
-                                : "pointer",
-                            width: "55px",
-                            height: "55px",
-                            backgroundColor:
-                              counter.value === item
-                                ? "rgb(146, 124, 102, 0.5)"
-                                : "initial",
-                            color:
-                              counter.value === item
-                                ? "white !important"
-                                : "initial",
-                            border:
-                              counter.value === item
-                                ? "2px solid rgb(146, 124, 102) !important"
-                                : "initial",
-                          }}
-                          value={item}
-                          aria-label="left aligned"
-                        >
+                        key={i}
+                        onClick={() => setCounter({ value: item, reduction })}
+                        disabled={
+                          item > data.remaining_tickets ? true : false
+                        }
+                        sx={{
+                          cursor:
+                            item > data.remaining_tickets
+                              ? "help"
+                              : "pointer",
+                          width: "55px",
+                          height: "55px",
+                          backgroundColor:
+                            counter.value === item
+                              ? "rgb(146, 124, 102, 0.5)"
+                              : "initial",
+                          color:
+                            counter.value === item
+                              ? "white !important"
+                              : "initial",
+                          border:
+                            counter.value === item
+                              ? "2px solid rgb(146, 124, 102) !important"
+                              : "initial",
+                        }}
+                        value={item}
+                        aria-label="left aligned"
+                      >
                           <span
                             style={{
                               fontSize: reduction > 0 ? "18px" : "24px",
@@ -300,17 +316,17 @@ export default function Competition({
                     <p>Maximum watch winners: {data.max_watch_number}</p>
                   )}
                   {data.end_date.toString() && (
-                    <p>End of competition: {data.end_date.toString()}</p>
+                    <p>End of competition: {DateFormater(data.end_date)}</p>
                   )}
                   {data.end_date.toString() && (
                     <p>
-                      Winner announcement: {data.drawing_date.toString()} in
+                      Winner announcement: {DateFormater(data.drawing_date)} in
                       direct live on instagram @winuwatch
                     </p>
                   )}
 
                   <p>
-                    Runner-Up prizes: 4 players will win £25 credit into our
+                    Runner-Up prizes: 4 players will win {Formater(25)} credit into our
                     next competition.
                   </p>
                 </div>
@@ -364,8 +380,8 @@ export default function Competition({
                       "Number of stones",
                       "Glass",
                       "Bezel material",
-                    ].map((item, i) => {
-                      return (
+                    ].map(
+                      (item, i) =>
                         data.Watches &&
                         data.Watches !== null && (
                           <span key={i}>
@@ -385,8 +401,7 @@ export default function Competition({
                             </p>
                           </span>
                         )
-                      );
-                    })}
+                    )}
                   </div>
                 </div>
               </div>

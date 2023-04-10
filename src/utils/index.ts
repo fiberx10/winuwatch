@@ -14,9 +14,15 @@ export const CreateOrderSchema = OrderSchema.extend({
   status: true,
   id: true,
 });
-
+const LOCAL = "en-UK";
 export const Formater = (value: number | bigint) =>
-  new Intl.NumberFormat("en-UK", {
+  new Intl.NumberFormat(LOCAL, {
     style: "currency",
     currency: "GBP",
+  }).format(value);
+
+export const DateFormater = (value: Date) =>
+  new Intl.DateTimeFormat(LOCAL, {
+    dateStyle: "full",
+    timeStyle: "long",
   }).format(value);
