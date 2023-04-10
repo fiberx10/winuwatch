@@ -2,6 +2,7 @@ import { z } from "zod";
 import { OrderSchema } from "./zodSchemas";
 export * from "./api";
 
+
 export const CreateOrderSchema = OrderSchema.extend({
   comps: z.array(
     z.object({
@@ -26,3 +27,32 @@ export const DateFormater = (value: Date) =>
     dateStyle: "full",
     timeStyle: "long",
   }).format(value);
+
+
+export const MAX_TICKETS = 25;
+export const TICKETREDUC = [
+  ...new Array(4).fill(0).map((_, i) => ({
+    value: i + 1,
+    reduction: 0.0,
+  })),
+  {
+    value: 5,
+    reduction: 0.1,
+  },
+  ...new Array(4).fill(0).map((_, i) => ({
+    value: i + 6,
+    reduction: 0.0,
+  })),
+  {
+    value: 10,
+    reduction: 0.1,
+  },
+  ...new Array(4).fill(0).map((_, i) => ({
+    value: i + 11,
+    reduction: 0.0,
+  })),
+  {
+    value: 20,
+    reduction: 0.2,
+  },
+];

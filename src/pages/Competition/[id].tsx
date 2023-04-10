@@ -11,7 +11,7 @@ import type {
 import styles from "@/styles/CompetitionPage.module.css";
 import { useCart } from "@/components/Store";
 import ToggleButton from "@mui/material/ToggleButton";
-import { Formater, DateFormater } from "@/utils";
+import { Formater, DateFormater,  MAX_TICKETS, TICKETREDUC } from "@/utils";
 import { useState } from "react";
 import Image from "next/image";
 import Loader from "@/components/Loader";
@@ -36,33 +36,7 @@ export const getServerSideProps = (context: GetServerSidePropsContext) => {
   }
 };
 
-const MAX_TICKETS = 25;
-const TICKETREDUC = [
-  ...new Array(4).fill(0).map((_, i) => ({
-    value: i + 1,
-    reduction: 0.0,
-  })),
-  {
-    value: 5,
-    reduction: 0.1,
-  },
-  ...new Array(4).fill(0).map((_, i) => ({
-    value: i + 6,
-    reduction: 0.0,
-  })),
-  {
-    value: 10,
-    reduction: 0.1,
-  },
-  ...new Array(4).fill(0).map((_, i) => ({
-    value: i + 11,
-    reduction: 0.0,
-  })),
-  {
-    value: 20,
-    reduction: 0.2,
-  },
-];
+
 export default function Competition({
   compID,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
