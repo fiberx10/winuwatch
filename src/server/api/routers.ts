@@ -32,9 +32,9 @@ export const WinnersRouter = createTRPCRouter({
         id: input,
       },
       include: {
-        Order: {
+        Ticket: {
           include: {
-            Ticket: true,
+            Order: true,
           },
         },
       },
@@ -42,18 +42,13 @@ export const WinnersRouter = createTRPCRouter({
     if (!competition) {
       throw new Error("Competition not found");
     }
-    const { Order } = competition;
-    const csv = Order.map((order) => ({
-      Full_Name: `${order.first_name} ${order.last_name}`,
-      Order_ID: order.id,
+    return competition.Ticket.map((ticket) => ({
+      ticketID: ticket.id,
+      Full_Name: `${ticket.Order.first_name} ${ticket.Order.last_name}`,
+      Order_ID: ticket.Order.id,
       competionName: competition.name,
-      competitionid: competition.id,
-      Number_of_Tickets: order.Ticket.length,
-      Ticket_ID: order.Ticket.map((ticket) => ticket.id).join(", "),
-      Total_Price: order.totalPrice,
-      Price_per_Ticket: order.totalPrice / order.Ticket.length,
+      Total_Price: ticket.Order.totalPrice
     }));
-    return csv;
   }),
   pickOneRandom: publicProcedure
     .input(z.string())
