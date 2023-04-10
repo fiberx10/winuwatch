@@ -4,8 +4,6 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { api } from "@/utils/api";
 import { z } from "zod";
-import { Tooltip } from "@mui/material";
-
 import type {
   GetServerSidePropsContext,
   InferGetServerSidePropsType,
@@ -147,69 +145,51 @@ export default function Competition({
                       TicketReduc.filter(
                         ({ value }) => value <= data.remaining_tickets
                       ).map(({ value: item, reduction }, i) => (
-                        <Tooltip
+                        <ToggleButton
                           key={i}
-                          title={
-                            item > data.remaining_tickets && "No more tickets left!"
+                          onClick={() => setCounter({ value: item, reduction })}
+                          disabled={
+                            item > data.remaining_tickets ? true : false
                           }
+                          sx={{
+                            cursor:
+                              item > data.remaining_tickets
+                                ? "help"
+                                : "pointer",
+                            width: "55px",
+                            height: "55px",
+                            backgroundColor:
+                              counter.value === item
+                                ? "rgb(146, 124, 102, 0.5)"
+                                : "initial",
+                            color:
+                              counter.value === item
+                                ? "white !important"
+                                : "initial",
+                            border:
+                              counter.value === item
+                                ? "2px solid rgb(146, 124, 102) !important"
+                                : "initial",
+                          }}
+                          value={item}
+                          aria-label="left aligned"
                         >
-                          <ToggleButton
-                            onClick={() =>
-                              setCounter({ value: item, reduction })
-                            }
-                            disabled={
-                              item > data.remaining_tickets ? true : false
-                            }
-
-                            sx={{
-                              cursor:
-                                item > data.remaining_tickets
-                                  ? "help"
-                                  : "pointer",
-                              width: "55px",
-                              height: "55px",
-                              backgroundColor:
-                                counter.value === item
-                                  ? "rgb(146, 124, 102, 0.5)"
-                                  : "initial",
-                              color:
-                                counter.value === item
-                                  ? "white !important"
-                                  : "initial",
-                              border:
-                                counter.value === item
-
-                                  ? "2px solid rgb(146, 124, 102) !important"
-                                  : "initial",
+                          <span
+                            style={{
+                              fontSize: reduction > 0 ? "18px" : "24px",
+                              height: reduction > 0 ? "23px" : "initial",
                             }}
-                            value={item}
-                            aria-label="left aligned"
                           >
-                            <span
-                              style={{
-                                fontSize:
-                                  reduction > 0
-                                    ? "18px"
-                                    : "24px",
-                                height:
-                                  reduction > 0
-
-                                    ? "23px"
-                                    : "initial",
-                              }}
-                            >
-                              {item}
-                            </span>
-                            <p
-                              style={{ fontSize: "10px" }}
-                              className={styles.sold}
-                            >
-                              {reduction >0 && `-${reduction * 100}%` }
-                            </p>
-                          </ToggleButton>
-                        </Tooltip>
+                            {item}
+                          </span>
+                          <p
+                            style={{ fontSize: "10px" }}
+                            className={styles.sold}
+                          >
+                            {reduction > 0 && `-${reduction * 100}%`}
+                          </p>
+                        </ToggleButton>
                       ))
-
                     )}
                     <button
                       style={{
@@ -260,14 +240,14 @@ export default function Competition({
                             data.ticket_price
                           )}`}
                         </p>
-                          <span>
-                            {Formater(
-                              counter.value * data.ticket_price -
-                                (counter.value *
-                                  data.ticket_price *
-                                  counter.reduction) 
-                            )}
-                          </span>
+                        <span>
+                          {Formater(
+                            counter.value * data.ticket_price -
+                              counter.value *
+                                data.ticket_price *
+                                counter.reduction
+                          )}
+                        </span>
                       </div>
                       <button
                         onClick={() => {
