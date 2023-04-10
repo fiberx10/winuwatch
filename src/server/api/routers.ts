@@ -2,7 +2,11 @@ import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { CompetitionStatus, OrderStatus } from "@prisma/client";
 import { getBaseUrl, CreateOrderSchema } from "@/utils";
-import { WatchesSchema, CompetitionSchema } from "@/utils/zodSchemas";
+import {
+  WatchesSchema,
+  CompetitionSchema,
+  ImagesUrlSchema,
+} from "@/utils/zodSchemas";
 import { env } from "@/env.mjs";
 import Email from "@/components/emails";
 import stripe from "stripe";
@@ -471,6 +475,31 @@ export const WatchesRouter = createTRPCRouter({
       },
     });
   }),
+  removeWatchIMG: publicProcedure
+    .input(z.string())
+    .mutation(async ({ ctx, input }) => {
+      //TODO: Delete the images from firebase
+      await ctx.prisma.imagesUrl.deleteMany({
+        where: {
+          url: input,
+        },
+      });
+    }),
+  addWatchIMG: publicProcedure
+    .input(
+      z.object({
+        WatchesId: z.string(),
+        url: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      return await ctx.prisma.imagesUrl.create({
+        data: {
+          ...input,
+        },
+      });
+    }),
+
   add: publicProcedure
     .input(
       WatchesSchema.omit({
