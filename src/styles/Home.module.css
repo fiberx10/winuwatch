@@ -1270,7 +1270,7 @@
   }
 }
 @media only screen and (max-width: 500px) {
-  .FooterTop img {
+  .footerLogo {
     margin-right: 10px;
   }
 }
