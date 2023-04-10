@@ -107,25 +107,28 @@ const mail = (
                     </table>
 
                     <p
-                      data-id="react-email-text"
+                      
                       style={{
                         fontSize: "16px",
                         lineHeight: "24px",
                         margin: "5px 0px",
                         textTransform: "uppercase",
                         color: "white",
+                        textAlign : "left",
                       }}
                     >
                       {order?.first_name}, Thank you!
                     </p>
                     <p
-                      data-id="react-email-text"
+                      
                       style={{
                         fontSize: "17px",
                         lineHeight: "28px",
                         margin: "5px 0px",
                         // textTransform: "uppercase",
                         color: "whitesmoke",
+                        textAlign : "left",
+                        
                       }}
                     >
                       We are pleased to inform you that your registration has
@@ -184,7 +187,7 @@ const mail = (
                         <tr>
                           <td>
                             <p
-                              data-id="react-email-text"
+                              
                               style={{
                                 fontSize: "14px",
                                 lineHeight: "24px",
@@ -214,7 +217,7 @@ const mail = (
                                     }}
                                   >
                                     <p
-                                      data-id="react-email-text"
+                                      
                                       style={{
                                         fontSize: "14px",
                                         lineHeight: "24px",
@@ -224,7 +227,7 @@ const mail = (
                                       ORDER: {order?.id}
                                     </p>
                                     <p
-                                      data-id="react-email-text"
+                                      
                                       style={{
                                         fontSize: "14px",
                                         lineHeight: "24px",
@@ -251,7 +254,7 @@ const mail = (
 
             <table
               style={{
-                padding: "0px 0px 0px 20px",
+                padding: "0px 0px 0px 0px",
                 width: "100%",
                 minWidth: "100%",
                 border: "1px solid rgb(146, 124, 102)",
@@ -260,7 +263,7 @@ const mail = (
               <thead>
                 <tr style={{ margin: "0px", padding: "0px" }}>
                   <p
-                    data-id="react-email-text"
+                    
                     style={{
                       fontSize: "16px",
                       flex: "1",
@@ -269,7 +272,6 @@ const mail = (
                       margin: "0px",
                       padding: "10px",
                       paddingLeft: "20px",
-
                       textTransform: "uppercase",
                       color: "white",
                       backgroundColor: "black",
@@ -291,7 +293,7 @@ const mail = (
                     >
                       <td>
                         <p
-                          data-id="react-email-text"
+                          
                           style={{
                             fontSize: "14px",
                             lineHeight: "24px",
@@ -305,7 +307,7 @@ const mail = (
                       </td>
                       <td>
                         <p
-                          data-id="react-email-text"
+                          
                           style={{
                             fontSize: "14px",
 
@@ -320,7 +322,7 @@ const mail = (
                       </td>
                       <td>
                         <a
-                          data-id="react-email-text"
+                          
                           style={{
                             fontSize: "14px",
                             textAlign: "end",
@@ -353,94 +355,35 @@ const mail = (
                 <tr>
                   <td>
                     <p
-                      data-id="react-email-text"
+                      
                       style={{
                         fontSize: "16px",
                         lineHeight: "24px",
                         margin: "5px 0px",
                         textTransform: "uppercase",
                         color: "black",
+                        textAlign: "left",
                       }}
                     >
                       What happens now?
-                    </p>
-                    <p
-                      data-id="react-email-text"
-                      style={{
-                        fontSize: "16px",
-                        lineHeight: "24px",
-                        margin: "5px 0px",
-                        textTransform: "uppercase",
-                        color: "black",
-                      }}
-                    >
+               
                       the contest will end on{" "}
                       {order?.Competition[0]?.end_date.toDateString()} at{" "}
                       {order
                         ? order?.Competition[0]?.end_date.toTimeString()
                         : null}{" "}
                       ,
-                    </p>
-                    <p
-                      data-id="react-email-text"
-                      style={{
-                        fontSize: "16px",
-                        lineHeight: "24px",
-                        margin: "5px 0px",
-                        textTransform: "uppercase",
-                        color: "black",
-                      }}
-                    >
+                  
                       the winners will be announced on{" "}
                       {order?.Competition[0]?.winner_announcement_date?.toDateString()}
-                    </p>
-                    <p
-                      data-id="react-email-text"
-                      style={{
-                        fontSize: "16px",
-                        lineHeight: "24px",
-                        margin: "5px 0px",
-                        textTransform: "uppercase",
-                        color: "black",
-                      }}
-                    >
+                   
                       at
                       {order?.Competition[0]?.winner_announcement_date?.toTimeString()}
-                    </p>
-                    <p
-                      data-id="react-email-text"
-                      style={{
-                        fontSize: "16px",
-                        lineHeight: "24px",
-                        margin: "5px 0px",
-                        textTransform: "uppercase",
-                        color: "black",
-                      }}
-                    >
+                  
                       please make sure to follow us on instagram where we
-                    </p>
-                    <p
-                      data-id="react-email-text"
-                      style={{
-                        fontSize: "16px",
-                        lineHeight: "24px",
-                        margin: "5px 0px",
-                        textTransform: "uppercase",
-                        color: "black",
-                      }}
-                    >
+                 
                       host a live for each competition.
-                    </p>
-                    <p
-                      data-id="react-email-text"
-                      style={{
-                        fontSize: "16px",
-                        lineHeight: "24px",
-                        margin: "5px 0px",
-                        textTransform: "uppercase",
-                        color: "black",
-                      }}
-                    >
+                    
                       we wish you the best of luck!
                     </p>
                     <table
