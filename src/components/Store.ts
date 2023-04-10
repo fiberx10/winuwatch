@@ -5,6 +5,7 @@ interface Comp {
   compID: string;
   number_tickets: number;
   price_per_ticket: number;
+  reduction: number;
 }
 
 interface RootState {
@@ -17,11 +18,8 @@ interface RootState {
     compID,
     number_tickets,
     price_per_ticket,
-  }: {
-    compID: string;
-    number_tickets: number;
-    price_per_ticket: number;
-  }) => void;
+    reduction = 0,
+  }: Comp) => void;
   removeComp: (compID: string) => void;
   cardDetails: () => {
     totalCost: number;
@@ -32,7 +30,10 @@ interface RootState {
     compID,
     number_tickets,
     price_per_ticket,
-  }: Comp & { price_per_ticket: number | undefined }) => void;
+  }: Omit<Comp, "reduction"> & {
+    reduction?: number;
+    price_per_ticket?: number;
+  }) => void;
   reset: () => void;
 }
 
