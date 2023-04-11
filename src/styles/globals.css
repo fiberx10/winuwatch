@@ -65,6 +65,7 @@ input[type="number"] {
 
 html {
   background: #faf8f6;
+  scroll-behavior: smooth !important;
 }
 .filepond--file {
   flex-direction: column;

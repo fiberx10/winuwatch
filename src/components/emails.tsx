@@ -390,7 +390,7 @@ const mail = (
                         : null}{" "}
                       , the winners will be announced on{" "}
                       {order?.Competition[0]?.winner_announcement_date?.toDateString()}
-                      at
+                      at{" "}
                       {order?.Competition[0]?.winner_announcement_date?.toTimeString()}
                       <br /> please make sure to follow us on instagram where we{" "}
                       <br />
