@@ -1,9 +1,11 @@
 import React, { useEffect } from "react";
 import styles from "../styles/Home.module.css";
-
 import Image from "next/image";
+import { useTranslations } from "next-intl";
+
 
 const HowToPlay = () => {
+  const  t = useTranslations("home");
   useEffect(() => {
     const handleScroll = () => {
       const background = document.querySelector(
@@ -21,20 +23,28 @@ const HowToPlay = () => {
     typeof window !== "undefined" && document.getElementById("theComp");
   return (
     <div id="Howtoplay" className={styles.howtoContainer}>
-      <h1 className={styles.background3}>how to play</h1>
+      <h1 className={styles.background3}>{
+        t("howtoplay")
+      }</h1>
       <div className={styles.howtoText}>
         <div className={styles.howtoTxt1}>
-          <h2>Choose your tickets</h2>
+          <h2>{
+              t("chooseyourtickets")
+            }</h2>
           <p>
-            Choose how many tickets you want - up to 25 per person - and
-            you&apos;re on the way to winning the luxury timepiece.
+            {
+              t("chooseyourticketsdesc")
+            }
           </p>
         </div>
         <div className={styles.howtoTxt2}>
-          <h2>Play the game online</h2>
+          <h2>{
+              t("playthegame")
+}</h2>
           <p>
-            Test your watch knowledge in our online game – built to sort the
-            connoisseurs from the pretenders.
+            {
+              t("playthegamedesc")
+            }
           </p>
         </div>
         <div className={styles.howtoLine}>
@@ -75,17 +85,22 @@ const HowToPlay = () => {
           />
         </div>
         <div className={styles.howtoTxt3}>
-          <h2>Buy your tickets</h2>
+          <h2>{
+              t("buytickets")
+            }</h2>
           <p>
-            Pay securely to submit your entry. We use a third party Random
-            Number Generator called <u>Randomdraws</u> to choose the winner.
+          
+           {t("buyticketsdesc")}
           </p>
         </div>
         <div className={styles.howtoTxt4}>
-          <h2>Win your dream watch!</h2>
+          <h2>{
+              t("winawatch")
+            }</h2>
           <p>
-            And that&apos;s it! You could walk away with a new £20,000 watch –
-            for as little as £25.
+            {
+              t("winawatchdesc")
+            }
           </p>
         </div>
         <button
@@ -100,7 +115,9 @@ const HowToPlay = () => {
             })
           }
         >
-          enter competition
+          {
+            t("enter")
+          }
         </button>
       </div>
     </div>

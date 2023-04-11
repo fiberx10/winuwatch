@@ -4,8 +4,11 @@ import { Skeleton } from "@mui/material";
 import Link from "next/link";
 import { api } from "@/utils/api";
 import { useEffect } from "react";
+import { useTranslations } from "next-intl";
+
 
 const TheCompetition = () => {
+  const t = useTranslations("home");
   useEffect(() => {
     const handleScroll = () => {
       const background = document.querySelector(
@@ -25,10 +28,11 @@ const TheCompetition = () => {
   return (
     <div id="theComp" style={{ marginBottom: "280px" }} className={styles.Comp}>
       <p className={styles.CompP}>
-        “An assured winner who will achieve his dream or simply that of his
-        partner”
+        {t("subtitle2")}
       </p>
-      <h1 className={styles.background2}>The Competition</h1>
+      <h1 className={styles.background2}>{
+        t("competitions")
+}</h1>
       <div className={styles.compWatches}>
         {data && data.length > 0 ? (
           data.map((watch) => {
@@ -57,10 +61,10 @@ const TheCompetition = () => {
                   className={styles.watchCon}
                 >
                   <div className={styles.watchContent}>
-                    <Link href={`/Competition/${watch.id}`}>Start now</Link>
+                    <Link href={`/Competition/${watch.id}`}>{t("start")}</Link>
                     <h3>{watch.name}</h3>
                     <p>
-                      Only <b>{watch.remaining_tickets}</b> tickets left!
+                      Only <b>{watch.remaining_tickets}</b> {t("tickets")}
                     </p>
                   </div>
                 </div>
@@ -69,7 +73,9 @@ const TheCompetition = () => {
             );
           })
         ) : data?.length === 0 ? (
-          <h1>No Competition Available</h1>
+          <h1>{
+            t("nocompval")
+            }</h1>
         ) : (
           <div className={styles.watches}>
             <Skeleton

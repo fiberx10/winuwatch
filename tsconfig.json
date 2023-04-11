@@ -31,6 +31,6 @@
     "src/components/Store.ts",
     "src/components/NavBar.jsx",
     "src/pages/api/index.ts"
-  ],
+, "src/pages/Philosophy.jsx"  ],
   "exclude": ["node_modules"]
 }

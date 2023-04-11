@@ -8,21 +8,25 @@ import type {
   GetServerSidePropsContext,
   InferGetServerSidePropsType,
 } from "next";
+import { GetStaticPropsContext } from "next";
 import styles from "@/styles/CompetitionPage.module.css";
 import { useCart } from "@/components/Store";
 import ToggleButton from "@mui/material/ToggleButton";
-import { Formater, DateFormater,  MAX_TICKETS, TICKETREDUC } from "@/utils";
+import { Formater, DateFormater, MAX_TICKETS, TICKETREDUC } from "@/utils";
 import { useState } from "react";
 import Image from "next/image";
 import Loader from "@/components/Loader";
 import Timer from "@/components/Timer";
+import { useTranslations } from "next-intl";
 
-export const getServerSideProps = (context: GetServerSidePropsContext) => {
+export async function getServerSideProps(context: GetServerSidePropsContext) {
   try {
     const compID = z.string().parse(context.params?.id);
     return {
       props: {
         compID,
+        messages: (await import(`../../../messages/${context?.locale}.json`))
+          .default,
       },
     };
   } catch (e) {
@@ -34,18 +38,17 @@ export const getServerSideProps = (context: GetServerSidePropsContext) => {
       },
     };
   }
-};
-
+}
 
 export default function Competition({
   compID,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const t = useTranslations("competition");
   const { data, isLoading } = api.Competition.byID.useQuery(compID);
   const [counter, setCounter] = useState({
-      value: 1,
-      reduction: 0,
-    }
-  );
+    value: 1,
+    reduction: 0,
+  });
   const [filter, setFilter] = useState(5);
   const { addComp, updateComp, competitions } = useCart();
   const [image, setImage] = useState<string | undefined>(undefined);
@@ -219,15 +222,15 @@ export default function Competition({
                             data.ticket_price
                           )}`}
                         </p>
-                        {
-                          counter.reduction > 0 && (
-                            <p>
-                              {` Discount: ${Formater(
-                                data.ticket_price * counter.reduction * counter.value
-                              )}`}
-                            </p>
-                          )
-                        }
+                        {counter.reduction > 0 && (
+                          <p>
+                            {` Discount: ${Formater(
+                              data.ticket_price *
+                                counter.reduction *
+                                counter.value
+                            )}`}
+                          </p>
+                        )}
                         <span>
                           {Formater(
                             counter.value * data.ticket_price -

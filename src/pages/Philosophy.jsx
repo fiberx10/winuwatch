@@ -18,3 +18,13 @@ export default function Philosopht() {
     </div>
   );
 }
+
+
+// @ts-ignore
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      messages: (await import(`../../messages/${locale}.json`)).default,
+    },
+  };
+}

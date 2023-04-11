@@ -1,0 +1,65 @@
+{
+  "home": {
+    "title": "WIN YOUR DREAM WATCH",
+    "subtitle": "Our team select the most beautiful watches, with a focus on elegance. With more than 260 partners around the world.",
+    "subtitle2": "“An assured winner who will achieve his dream or simply that of his partner”",
+    "competitions": "THE COMPETITIONS",
+    "days": "Days",
+    "hours": "Hours",
+    "minutes": "Minutes",
+    "seconds": "Seconds",
+    "start": "START NOW",
+    "only": "ONLY",
+    "tickets": "TICKETS LEFT!",
+    "nocompval": "No competitions available",
+    "howtoplay": "HOW TO PLAY",
+    "chooseyourtickets": "CHOOSE YOUR TICKETS",
+    "chooseyourticketsdesc": "Choose how many tickets you want - up to 25 per person - and you're on the way to winning the luxury timepiece.",
+    "playthegame": "PLAY THE GAME ONLINE",
+    "playthegamedesc": "Test your watch knowledge in our online game – built to sort the connoisseurs from the pretenders.",
+    "buytickets": "BUY YOUR TICKETS",
+    "buyticketsdesc": "Pay securely to submit your entry. We use a third party Random Number Generator called Randomdraws to choose the winner.",
+    "winawatch": "WIN YOUR DREAM WATCH!",
+    "winawatchdesc": "And that's it! You could walk away with a new £20,000 watch – for as little as £25.",
+    "enter": "ENTER COMPETITION",
+
+    "certiftitle": "WE USE TPAL ELECTRONIC RANDOM DRAW COMPUTERIZED SYSTEM",
+    "certifdesc": "randomdraws certificate system randomdraws certificate system  randomdraws certificate system",
+    "reviews": "reviews",
+    "upcoming": "THE UPCOMING COMPETITIONS",
+    "followus": "FOLLOW US",
+    "followusdesc": "Don't miss the live draw and the announcement of the next competitions on Instagram !",
+    "follow": "FOLLOW",
+    "competitions2": "THE COMPETITIONS, HOW TO PLAY, CONTACT, PHILOSOPHY, TRUSTPILOT, CHARITY, ACCEPTABLE USE POLICY, FAQ, RETURN POLICY, TERMS & CONDITIONS, PRIVACY POLICY",
+    "enquiries": "For enquiries, please email ",
+    "securepay": "100% Secure payment",
+    "cart": "CART"
+  },
+  "philosophy": {
+    "philoheader": "THERE IS NO GENIUS, ONLY “KNOW-HOW” IN OUR INDEPENDENT FAMILY BUSINESS.",
+    "philoheaderdesc": " We are a family company where everyone works every day to find you the most sought after watch models that are available to you, we launched WIN U WATCH to allow anyone dreaming of owning a luxury watch, no longer remains a dream but a real chance.",
+    "philotext": "YOU SHOULD KNOW THAT WE ARE THE NUMBER 1 SITE IN THE WORLD IN TERMS OF PROBABILITY OF WINNING ",
+    "philotextdesc": "we are the number 1 site in the world in terms of probability of winning because we publish a limited number of tickets aligned with the number of participants makes us the best probability of winning."
+  },
+  "charity": {
+    "charityheader": "TOTAL RAISED FOR CHARITY",
+    "donation": "DONATION",
+    "readmore": "READ MORE",
+    "inassociation": "YOU ARE AN ASSOCIATION ?",
+    "contactus": "WANT TO BE IN THIS LIST - CONTACT US"
+  },
+  "cart": {
+    "emptycart": "NO ITEMS IN THE CART",
+    "remove": "REMOVE",
+    "total": "TOTAL",
+    "checkout": "Check Out",
+    "cartempty": "Cart is empty",
+    "tocontinue": "In Order to continue to the checkout page you must answer  this question:",
+    "wronganswer": "Wrong answer"
+  },
+  "competition": {
+    "marketvalue" : "Market Value" ,
+    "howmany" : "HOW MANY TICKETS WOULD YOU LIKE?" 
+    
+  }
+}

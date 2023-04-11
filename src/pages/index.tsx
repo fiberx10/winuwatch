@@ -1,7 +1,6 @@
 import { type NextPage } from "next";
-
+import { GetStaticPropsContext } from "next";
 import "react-alice-carousel/lib/alice-carousel.css";
-
 import Head from "next/head";
 import Header from "@/components/Header";
 import TheCompetition from "@/components/TheCompetition";
@@ -12,6 +11,8 @@ import Footer from "@/components/Footer";
 //import OurWinner from "@/components/OurWinner";
 import UpComing from "@/components/UpComing";
 //import { api } from "@/utils/api";
+import { useTranslations } from "next-intl";
+
 
 const Home: NextPage = () => {
   /*const {
@@ -116,3 +117,11 @@ const Home: NextPage = () => {
 };
 
 export default Home;
+
+export async function getStaticProps({ locale }: GetStaticPropsContext) {
+  return {
+    props: {
+      messages: (await import(`../../messages/${locale}.json`)).default,
+    },
+  };
+}

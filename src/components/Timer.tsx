@@ -1,12 +1,15 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import styles from "../styles/Home.module.css";
+import { useTranslations } from "next-intl";
 
 const Timer = ({ date, displayFlex }: { date: Date; displayFlex: boolean }) => {
   const [days, setDays] = useState(0);
   const [hours, setHours] = useState(0);
   const [minutes, setMinutes] = useState(0);
   const [seconds, setSeconds] = useState(0);
+
+  const t = useTranslations("home");
 
   useEffect(() => {
     const getTime = () => {
@@ -21,6 +24,7 @@ const Timer = ({ date, displayFlex }: { date: Date; displayFlex: boolean }) => {
 
     return () => clearInterval(interval);
   }, [date]);
+
   return (
     <div
       style={{
@@ -31,19 +35,19 @@ const Timer = ({ date, displayFlex }: { date: Date; displayFlex: boolean }) => {
     >
       <div className={styles.timerItem}>
         <p>{days}</p>
-        <h6>Days</h6>
+        <h6>{t("days")}</h6>
       </div>
       <div className={styles.timerItem}>
         <p>{hours}</p>
-        <h6>Hours</h6>
+        <h6>{t("hours")}</h6>
       </div>
       <div className={styles.timerItem}>
         <p>{minutes}</p>
-        <h6>Minutes</h6>
+        <h6>{t("minutes")}</h6>
       </div>
       <div className={styles.timerItem}>
         <p>{seconds}</p>
-        <h6>Seconds</h6>
+        <h6>{t("seconds")}</h6>
       </div>
     </div>
   );

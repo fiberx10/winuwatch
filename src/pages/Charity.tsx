@@ -2,6 +2,7 @@ import Charit from "@/components/Charit";
 import Footer from "@/components/Footer";
 import NavBar from "@/components/NavBar";
 import Head from "next/head";
+import { GetStaticPropsContext } from "next";
 
 export default function Charity() {
   return (
@@ -17,4 +18,13 @@ export default function Charity() {
       <Footer />
     </div>
   );
+}
+
+
+export async function getStaticProps({ locale }: GetStaticPropsContext) {
+  return {
+    props: {
+      messages: (await import(`../../messages/${locale}.json`)).default,
+    },
+  };
 }

@@ -7,7 +7,9 @@ import { Formater, api } from "@/utils";
 import { useState } from "react";
 import { Backdrop, Box, Fade, Modal } from "@mui/material";
 import { CloseOutlined } from "@ant-design/icons";
+import {useTranslations} from "next-intl";
 const CartComp = () => {
+  const t = useTranslations("cart");
   const [open, setOpen] = useState(false);
   const [wrong, setWrong] = useState(false);
   const handleClose = () => setOpen(false);
@@ -125,7 +127,9 @@ const CartComp = () => {
                         </p>
                       )
                   }
-                  <p onClick={() => removeComp(comp.compID)}>REMOVE</p>
+                  <p onClick={() => removeComp(comp.compID)}>{
+                    t("remove")
+                  }</p>
                 </div>
               </div>
             </div>
@@ -138,7 +142,9 @@ const CartComp = () => {
             textTransform: "uppercase",
           }}
         >
-          No Items in the Cart
+          {
+            t("emptycart")
+          }
         </h1>
       )}
 
@@ -147,7 +153,9 @@ const CartComp = () => {
         <span>{Formater(totalCost)}</span>
       </div>
       <div className={styles.cartCheckoutCon}>
-        <button onClick={() => setOpen(true)}>Check Out</button>
+        <button onClick={() => setOpen(true)}>{
+          t("checkout")
+        }</button>
         <Modal
           aria-labelledby="spring-modal-title"
           aria-describedby="spring-modal-description"
@@ -164,7 +172,9 @@ const CartComp = () => {
             <Box className={styles.ModalBox} sx={style}>
               {competitions.length === 0 ? (
                 <div className={styles.ModalBoxTopFlex}>
-                  <p id="spring-modal-description">Cart is empty</p>
+                  <p id="spring-modal-description">{
+                    t("cartempty")
+                  }</p>
                   <span onClick={handleClose}>
                     <CloseOutlined />
                   </span>
@@ -173,8 +183,9 @@ const CartComp = () => {
                 <>
                   <div className={styles.ModalBoxTopFlex}>
                     <p id="spring-modal-description">
-                      In Order to continue to the checkout page you must answer
-                      this question:
+                      {
+                        t("tocontinue")
+                      }
                     </p>
                     <span onClick={handleClose}>
                       <CloseOutlined />
@@ -196,7 +207,9 @@ const CartComp = () => {
                   <h2
                     style={{ display: wrong ? "flex" : "none", color: "red" }}
                   >
-                    Wrong Answer
+                    {
+                      t("wronganswer")
+                    }
                   </h2>
                   <div className={styles.questionsCon}>
                     {question?.answers.map((quest, i) => {

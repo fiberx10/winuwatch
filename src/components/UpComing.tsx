@@ -10,6 +10,8 @@ import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 import { useEffect, useRef } from "react";
 import { BsArrowRight, BsArrowLeft } from "react-icons/bs";
+import { useTranslations } from "next-intl";
+
 
 const UpComing: React.FC<{
   slides: {
@@ -19,6 +21,7 @@ const UpComing: React.FC<{
     text: string;
   }[];
 }> = (props) => {
+  const t = useTranslations("home");
   const { slides } = props;
   const swiperRef = useRef<SwiperCore>();
   const sliderSettings = {
@@ -54,7 +57,9 @@ const UpComing: React.FC<{
   }, []);
   return (
     <div className={styles.upComingMain}>
-      <h1 className={styles.background6}>the upcoming Competitions</h1>
+      <h1 className={styles.background6}>{
+        t("upcoming")
+      }</h1>
       <Swiper
         breakpoints={sliderSettings}
         slidesPerView={5}

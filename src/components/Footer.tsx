@@ -3,8 +3,11 @@ import styles from "../styles/Home.module.css";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useTranslations } from "next-intl";
+
 
 const Footer = () => {
+  const t = useTranslations("home");
   const [windowLocation, setLocation] = useState("");
   const data = [
     { names: ["COMPETITIONS", "how to play", "contact"] },
@@ -48,10 +51,13 @@ const Footer = () => {
         }}
         className={styles.FooterInsta}
       >
-        <h1 className={styles.background5}>Follow us</h1>
+        <h1 className={styles.background5}>{
+          t("followus")
+        }</h1>
         <p>
-          Don&apos;t miss the live draw and the announcement of the next
-          competitions on Instagram !
+          {
+            t("followusdesc")
+          }
         </p>
         <Link href="https://www.instagram.com/winuwatch/">
           <Image
@@ -171,13 +177,15 @@ const Footer = () => {
           </div>
           <div className={styles.FooterTopRight}>
             <div className={styles.emails}>
-              <p>For enquiries, please email</p>
+              <p>{
+                t("enquiries")
+                }</p>
               <a href="mailto:info@winuwatch.uk">
                 <u>info@winuwatch.uk</u>
               </a>
             </div>
             <div className={styles.payment}>
-              <p>100% Secure payment</p>
+              <p>{t("securepay")}</p>
               <div className={styles.paymentIcons}>
                 <div className={styles.visa}>visa</div>
                 <div className={styles.visaicons}>

@@ -2,8 +2,11 @@ import NavBar from "./NavBar";
 import styles from "@/styles/Home.module.css";
 import Image from "next/image";
 import { useEffect } from "react";
+import { useTranslations } from "next-intl";
+
 
 export default function Header() {
+  const t = useTranslations("home");
   const theComp =
     typeof window !== "undefined" && document.getElementById("theComp");
   useEffect(() => {
@@ -51,12 +54,13 @@ export default function Header() {
       </div>
       <div className={styles.HeaderTit}>
         <h2 className={styles.background}>winuwatch</h2>
-        <h1>win your dream watch</h1>
+        <h1>{
+          t("title")
+}</h1>
       </div>
       <div className={styles.HeaderDesc}>
         <p>
-          Our team select the most beautiful watches, with a focus on elegance.
-          With more than 260 partners around the world.
+         { t("subtitle")}
         </p>
         <Image
           onClick={() =>
