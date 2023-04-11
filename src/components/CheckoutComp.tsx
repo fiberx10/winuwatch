@@ -13,9 +13,10 @@ import "react-datetime/css/react-datetime.css";
 
 const CheckoutComp = () => {
   const router = useRouter();
-
+  
   const { mutateAsync: createOrder } = api.Order.createStripe.useMutation();
   const { competitions, cardDetails, updateComp, reset } = useCart();
+
 
   const { data: items } = api.Competition.getAll.useQuery({
     ids: competitions.map((comp) => comp.compID),
@@ -275,6 +276,7 @@ const CheckoutComp = () => {
                         return (
                           <div className={styles.orderItem} key={i}>
                             <Image
+                            
                               width={106}
                               height={105}
                               className={styles.orderImg}
