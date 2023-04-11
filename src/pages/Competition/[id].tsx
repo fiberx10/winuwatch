@@ -38,7 +38,8 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       },
     };
   }
-}
+};
+
 
 export default function Competition({
   compID,
@@ -119,7 +120,8 @@ export default function Competition({
                   <p>market value {Formater(data.price)}</p>
                 </div>
                 <div className={styles.CompTicketSelec}>
-                  {data.remaining_tickets === 0 ? (
+                  {data.remaining_tickets === 0 ||
+                  data.end_date < new Date() ? (
                     <>
                       <h3>Drawing Date for this competition in :</h3>
                       <Timer displayFlex={true} date={data.drawing_date} />
@@ -128,7 +130,8 @@ export default function Competition({
                     <h3>How many tickets would you like?</h3>
                   )}
                   <div className={styles.tickets}>
-                    {data.remaining_tickets === 0 ? (
+                    {data.remaining_tickets === 0 ||
+                    data.end_date < new Date() ? (
                       <p>No Tickets Left!</p>
                     ) : (
                       TICKETREDUC.filter(
@@ -181,7 +184,12 @@ export default function Competition({
                     )}
                     <button
                       style={{
-                        display: filter === MAX_TICKETS ? "none" : "flex",
+                        display:
+                          filter === MAX_TICKETS ||
+                          data.remaining_tickets === 0 ||
+                          data.end_date < new Date()
+                            ? "none"
+                            : "flex",
                       }}
                       onClick={() => setFilter(MAX_TICKETS)}
                       className={styles.showMore}
@@ -212,7 +220,8 @@ export default function Competition({
                       />
                     </div>
                   </div>
-                  {data.remaining_tickets === 0 ? (
+                  {data.remaining_tickets === 0 ||
+                  data.end_date < new Date() ? (
                     ""
                   ) : (
                     <div className={styles.addtoCart}>
@@ -281,7 +290,7 @@ export default function Competition({
                       ", new digital warranty card "}
                     {data.Watches.has_box && "& fully boxed"}.
                   </p>
-                  {data.max_space_in_final_draw && (
+                  {data.max_space_in_final_draw > 0 && (
                     <p>
                       Maximum spaces in the final draw:{" "}
                       {data.max_space_in_final_draw}

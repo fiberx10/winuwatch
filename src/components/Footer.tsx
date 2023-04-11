@@ -70,7 +70,13 @@ const Footer = () => {
       </div>
       <div className={styles.Footer}>
         <div className={styles.FooterTop}>
-          <Image width={144} height={76} src="/images/newLogo.png" alt="logo" />
+          <Image
+            className={styles.footerLogo}
+            width={144}
+            height={76}
+            src="/images/newLogo.png"
+            alt="logo"
+          />
 
           <div className={styles.menusGrid}>
             {data.map((menu, i) => {
