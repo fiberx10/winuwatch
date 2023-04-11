@@ -2,7 +2,6 @@ import { z } from "zod";
 import { OrderSchema } from "./zodSchemas";
 export * from "./api";
 
-
 export const CreateOrderSchema = OrderSchema.extend({
   comps: z.array(
     z.object({
@@ -26,8 +25,8 @@ export const DateFormater = (value: Date) =>
   new Intl.DateTimeFormat(LOCAL, {
     dateStyle: "full",
     timeStyle: "long",
+    timeZone: "Europe/London",
   }).format(value);
-
 
 export const MAX_TICKETS = 25;
 export const TICKETREDUC = [
