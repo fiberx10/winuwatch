@@ -33,6 +33,7 @@ const CheckoutComp = () => {
     );
   };
   const [error, setError] = useState<string | undefined>();
+  const [isNotConfirmed  , setIsNotConfirmed] = useState<boolean>(false)
   const { totalCost } = cardDetails();
 
   return (
@@ -57,6 +58,8 @@ const CheckoutComp = () => {
               checkedTerms: false,
             }}
             onSubmit={async (values, actions) => {
+              // disable the confirm button to prevent duplicate messages
+              setIsNotConfirmed(true)
               //if a value in the object values is undefined, it will not be sent to the server
               console.log("Form submitted:", values);
 
@@ -82,7 +85,6 @@ const CheckoutComp = () => {
               }
               setError(error || "Error in the creating the order");
               console.log(error);
-
               // const res = CreateOrderSchema.safeParse(values);
 
               // if (res.success) {
@@ -480,7 +482,7 @@ const CheckoutComp = () => {
                         </PayPalScriptProvider>
                       ) : (
                         <>
-                          <button type="submit">Confirm Order</button>
+                          <button disabled={isNotConfirmed} type="submit">Confirm Order</button>
                         </>
                       )}
                     </div>
