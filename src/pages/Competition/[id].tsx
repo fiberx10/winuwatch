@@ -11,7 +11,7 @@ import type {
 import styles from "@/styles/CompetitionPage.module.css";
 import { useCart } from "@/components/Store";
 import ToggleButton from "@mui/material/ToggleButton";
-import { Formater, DateFormater,  MAX_TICKETS, TICKETREDUC } from "@/utils";
+import { Formater, DateFormater, MAX_TICKETS, TICKETREDUC } from "@/utils";
 import { useState } from "react";
 import Image from "next/image";
 import Loader from "@/components/Loader";
@@ -36,16 +36,14 @@ export const getServerSideProps = (context: GetServerSidePropsContext) => {
   }
 };
 
-
 export default function Competition({
   compID,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const { data, isLoading } = api.Competition.byID.useQuery(compID);
   const [counter, setCounter] = useState({
-      value: 1,
-      reduction: 0,
-    }
-  );
+    value: 1,
+    reduction: 0,
+  });
   const [filter, setFilter] = useState(5);
   const { addComp, updateComp, competitions } = useCart();
   const [image, setImage] = useState<string | undefined>(undefined);
@@ -116,7 +114,8 @@ export default function Competition({
                   <p>market value {Formater(data.price)}</p>
                 </div>
                 <div className={styles.CompTicketSelec}>
-                  {data.remaining_tickets === 0 ? (
+                  {data.remaining_tickets === 0 ||
+                  data.end_date < new Date() ? (
                     <>
                       <h3>Drawing Date for this competition in :</h3>
                       <Timer displayFlex={true} date={data.drawing_date} />
@@ -125,7 +124,8 @@ export default function Competition({
                     <h3>How many tickets would you like?</h3>
                   )}
                   <div className={styles.tickets}>
-                    {data.remaining_tickets === 0 ? (
+                    {data.remaining_tickets === 0 ||
+                    data.end_date < new Date() ? (
                       <p>No Tickets Left!</p>
                     ) : (
                       TICKETREDUC.filter(
@@ -178,7 +178,12 @@ export default function Competition({
                     )}
                     <button
                       style={{
-                        display: filter === MAX_TICKETS ? "none" : "flex",
+                        display:
+                          filter === MAX_TICKETS ||
+                          data.remaining_tickets === 0 ||
+                          data.end_date < new Date()
+                            ? "none"
+                            : "flex",
                       }}
                       onClick={() => setFilter(MAX_TICKETS)}
                       className={styles.showMore}
@@ -209,7 +214,8 @@ export default function Competition({
                       />
                     </div>
                   </div>
-                  {data.remaining_tickets === 0 ? (
+                  {data.remaining_tickets === 0 ||
+                  data.end_date < new Date() ? (
                     ""
                   ) : (
                     <div className={styles.addtoCart}>
@@ -219,15 +225,15 @@ export default function Competition({
                             data.ticket_price
                           )}`}
                         </p>
-                        {
-                          counter.reduction > 0 && (
-                            <p>
-                              {` Discount: ${Formater(
-                                data.ticket_price * counter.reduction * counter.value
-                              )}`}
-                            </p>
-                          )
-                        }
+                        {counter.reduction > 0 && (
+                          <p>
+                            {` Discount: ${Formater(
+                              data.ticket_price *
+                                counter.reduction *
+                                counter.value
+                            )}`}
+                          </p>
+                        )}
                         <span>
                           {Formater(
                             counter.value * data.ticket_price -

@@ -6,9 +6,16 @@ import type {
   Watches,
 } from "@prisma/client";
 import React from "react";
-import { getBaseUrl } from "@/utils";
+import { Formater, getBaseUrl } from "@/utils";
 import { renderToString } from "react-dom/server";
+const data = [
+  { names: ["COMPETITIONS", "how to play", "contact"] },
+  { names: ["PHILOSOPHY", "trustpilot", "Charity"] },
+  { names: ["Acceptable Use Policy", "faq"] },
+  { names: ["Return Policy", "terms & conditions", "Privacy Policy"] },
+];
 
+import styles from "@/styles/Home.module.css";
 const mail = (
   order:
     | (Order & {
@@ -23,7 +30,13 @@ const mail = (
       })
     | null
 ) => (
-  <div>
+  <div
+    style={{
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+    }}
+  >
     <head>
       <link rel="preconnect" href="https://fonts.googleapis.com" />
 
@@ -57,8 +70,7 @@ const mail = (
               align="center"
               width="100%"
               style={{
-                marginTop: "32px",
-                backgroundColor: "#a8957e",
+                backgroundColor: "#cbb9ac",
                 padding: "20px",
               }}
               border={0}
@@ -69,62 +81,46 @@ const mail = (
               <tbody>
                 <tr>
                   <td>
-                    <div
-                    
+                    <img
+                      alt="Slack"
+                      src="https://www.win-u-watch.uk/images/newLogo.png"
+                      width={200}
+                      height={100}
                       style={{
-                        width: "100%",
-                        alignContent: "center",
-                        justifyContent: "center",
-                        display: "grid",
-                        placeItems: "center",
+                        display: "block",
+                        outline: "none",
+                        alignSelf: "center",
+                        border: "none",
+                        textDecoration: "none",
+                        margin: "0  auto",
                         marginBottom: "20px",
-                        textAlign: "center",
                       }}
-
-                      
-                    >
-                      <img
-                        alt="Slack"
-                        src="https://www.win-u-watch.uk/images/newLogo.png"
-                        width={200}
-                        height={100}
-                        style={{
-                          display: "block",
-                          outline: "none",
-                          border: "none",
-                          alignItems: "center",
-                          textDecoration: "none",
-                          margin: "0  auto",
-                        }}
-                      />
-                    </div>
-
-                    <p
+                    />
+                    <div
                       style={{
                         fontSize: "16px",
-                        lineHeight: "24px",
                         margin: "5px 0px",
                         textTransform: "uppercase",
                         color: "white",
-                        textAlign: "left",
+                        textAlign: "center",
+                        fontWeight: "300",
+                        letterSpacing: "0.1rem",
                       }}
                     >
-                      {order?.first_name}, Thank you!
-                    </p>
-                    <p
-                      style={{
-                        fontSize: "17px",
-                        lineHeight: "28px",
-                        margin: "5px 0px",
-                        // textTransform: "uppercase",
-                        color: "whitesmoke",
-                        textAlign: "left",
-                      }}
-                    >
-                      We are pleased to inform you that your registration has
-                      been successfully received and processed. you have now
-                      officially entered in the competition
-                    </p>
+                      <p style={{ margin: "0" }}>
+                        {order?.first_name}, Thank you!
+                      </p>
+                      <p style={{ margin: "0" }}>
+                        We are pleased to inform you that your
+                      </p>
+                      <p style={{ margin: "0" }}>
+                        registration has been successfully received and
+                      </p>
+                      <p style={{ margin: "0" }}>
+                        processed. you have now officially entered in the{" "}
+                      </p>
+                      <p style={{ margin: "0" }}>competition</p>
+                    </div>
                   </td>
                 </tr>
               </tbody>
@@ -162,7 +158,7 @@ const mail = (
                       style={{
                         textAlign: "left",
                         textTransform: "uppercase",
-                        backgroundColor: "#a8957e",
+                        backgroundColor: "#cbb9ac",
                         color: "white",
                       }}
                       border={0}
@@ -175,15 +171,17 @@ const mail = (
                           <td>
                             <p
                               style={{
-                                fontSize: "14px",
-                                lineHeight: "24px",
-                                margin: "16px 0",
+                                fontSize: "16px",
+                                margin: "5px 0px",
+                                textTransform: "uppercase",
+                                color: "white",
+                                textAlign: "left",
+                                fontWeight: "300",
+                                letterSpacing: "0.1rem",
                                 padding: "0px 0px 0px 20px",
                               }}
                             >
-                              {
-                                order?.Competition[0]?.name
-                              }
+                              {order?.Competition[0]?.name}
                             </p>
                             <table
                               align="center"
@@ -200,7 +198,13 @@ const mail = (
                                     style={{
                                       width: "66%",
                                       padding: "0px 0px 0px 20px",
+                                      fontSize: "16px",
+                                      margin: "5px 0px",
+                                      textTransform: "uppercase",
+                                      color: "white",
                                       textAlign: "left",
+                                      fontWeight: "300",
+                                      letterSpacing: "0.1rem",
                                     }}
                                   >
                                     <p
@@ -220,7 +224,8 @@ const mail = (
                                       }}
                                     >
                                       QUANTITY: {order?.Ticket.length} - TOTAL:
-                                      £{order?.totalPrice}
+                                      {order?.totalPrice &&
+                                        Formater(order.totalPrice)}
                                     </p>
                                   </td>
 
@@ -356,7 +361,7 @@ const mail = (
             <table
               align="center"
               width="100%"
-              style={{ padding: "20px", fontWeight: 500 }}
+              style={{ fontWeight: 500 }}
               border={0}
               cellPadding={0}
               cellSpacing={0}
@@ -372,10 +377,13 @@ const mail = (
                         margin: "5px 0px",
                         textTransform: "uppercase",
                         color: "black",
-                        textAlign: "left",
+                        textAlign: "center",
+                        letterSpacing: "0.05rem",
+                        padding: "20px",
                       }}
                     >
-                      What happens now? the contest will end on{" "}
+                      What happens now?
+                      <br /> the contest will end on{" "}
                       {order?.Competition[0]?.end_date.toDateString()} at{" "}
                       {order
                         ? order?.Competition[0]?.end_date.toTimeString()
@@ -384,48 +392,61 @@ const mail = (
                       {order?.Competition[0]?.winner_announcement_date?.toDateString()}
                       at
                       {order?.Competition[0]?.winner_announcement_date?.toTimeString()}
-                      please make sure to follow us on instagram where we host a
-                      live for each competition. we wish you the best of luck!
+                      <br /> please make sure to follow us on instagram where we{" "}
+                      <br />
+                      host a live for each competition. <br /> we wish you the
+                      best of luck!
                     </p>
-                    <table
-                      align="center"
-                      width="100%"
+                    <a
                       style={{
                         width: "100%",
                         display: "flex",
                         justifyContent: "center",
-                        marginBottom: "20px",
-                        cursor: "pointer",
+                        margin: "0  auto",
                       }}
-                      border={0}
-                      cellPadding={0}
-                      cellSpacing={0}
-                      role="presentation"
+                      href="https://www.instagram.com/winuwatch/"
                     >
-                      <tbody>
-                        <tr>
-                          <td>
-                            <a
-                              style={{ textDecoration: "none" }}
-                              href="https://www.instagram.com/winuwatch/"
-                            >
-                              <img
-                                alt="Slack"
-                                src="https://www.win-u-watch.uk/images/InstaFooter.png"
-                                width={200}
-                                height={100}
-                                style={{
-                                  display: "block",
-                                  outline: "none",
-                                  border: "none",
-                                  textDecoration: "none",
-                                }}
-                              />
-                            </a>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
+                      <img
+                        alt="instaFollow"
+                        src="https://www.win-u-watch.uk/images/InstaFooter.png"
+                        style={{ margin: "0  auto" }}
+                      />
+                    </a>
+                    <h4
+                      style={{
+                        width: "100%",
+                        textAlign: "center",
+                        fontWeight: "400",
+                        background: "lightgrey",
+                      }}
+                    >
+                      LISAM WATCH 86-90 PAUL STREET LONDON, CITY OF LONDON EC2A
+                      4NE
+                    </h4>
+                    <div style={{ display: "flex" }}>
+                      <h5
+                        style={{
+                          margin: "0",
+                          fontWeight: "300",
+                          marginRight: "auto",
+                        }}
+                      >
+                        NO LONGER WANT TO RECEIVE THESE EMAILS? UNSUBSCRIBE
+                      </h5>
+                      <a
+                        style={{ textDecoration: "none", color: "black" }}
+                        href="https://www.win-u-watch.uk/Privacy_Policy"
+                      >
+                        <h5
+                          style={{
+                            margin: "0",
+                            fontWeight: "300",
+                          }}
+                        >
+                          PRIVACY POLICY
+                        </h5>
+                      </a>
+                    </div>
                   </td>
                 </tr>
               </tbody>

@@ -360,7 +360,7 @@ const DashboardOrders = () => {
                                                       )}
                                                     </TableCell>
                                                     <TableCell align="right">
-                                                      {row.id.toUpperCase()}
+                                                      {ticket.id.toUpperCase()}
                                                     </TableCell>
                                                   </TableRow>
                                                 ))}
