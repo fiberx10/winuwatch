@@ -26,7 +26,9 @@ export const DateFormater = (value: Date) =>
     dateStyle: "full",
     timeStyle: "long",
     timeZone: "Europe/London",
-  }).format(value);
+  })
+    .format(value)
+    .replace("BST", "LONDON TIME");
 
 export const MAX_TICKETS = 25;
 export const TICKETREDUC = [
