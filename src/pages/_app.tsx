@@ -1,10 +1,20 @@
-import { type AppType } from "next/app";
+import { AppProps, type AppType } from "next/app";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { api } from "@/utils/api";
 import "@/styles/globals.css";
-import { NextIntlProvider } from "next-intl";
-import { GetStaticPropsContext } from "next";
+import { AbstractIntlMessages, NextIntlProvider } from "next-intl";
+
+
+
+type PageProps = {
+  messages:  AbstractIntlMessages;
+  now: number;
+};
+
+type Props = Omit<AppProps<PageProps>, 'pageProps'> & {
+  pageProps: PageProps;
+};
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -15,7 +25,7 @@ const queryClient = new QueryClient({
   },
 });
 
-const MyApp: AppType = ({ Component, pageProps }) => {
+function MyApp({Component, pageProps}: Props) {
   return (
     <NextIntlProvider messages={pageProps.messages }>
       <QueryClientProvider client={queryClient}>
@@ -24,7 +34,7 @@ const MyApp: AppType = ({ Component, pageProps }) => {
       </QueryClientProvider>
     </NextIntlProvider>
   );
-};
+}
 
 
 

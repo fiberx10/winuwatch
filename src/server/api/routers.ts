@@ -5,7 +5,6 @@ import { getBaseUrl, CreateOrderSchema } from "@/utils";
 import {
   WatchesSchema,
   CompetitionSchema,
-  ImagesUrlSchema,
 } from "@/utils/zodSchemas";
 import { env } from "@/env.mjs";
 import Email from "@/components/emails";

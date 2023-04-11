@@ -25,7 +25,8 @@ export default function Cart() {
 }
 
 
-export async function getStaticProps({ locale }: GetStaticPropsContext) {
+// @ts-ignore
+export async function getStaticProps({ locale }) {
   return {
     props: {
       messages: (await import(`../../messages/${locale}.json`)).default,

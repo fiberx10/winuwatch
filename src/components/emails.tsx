@@ -8,6 +8,7 @@ import type {
 import React from "react";
 import { Formater, getBaseUrl } from "@/utils";
 import { renderToString } from "react-dom/server";
+
 const data = [
   { names: ["COMPETITIONS", "how to play", "contact"] },
   { names: ["PHILOSOPHY", "trustpilot", "Charity"] },
@@ -143,8 +144,8 @@ const mail = (
                           ? order?.Competition[0]?.Watches?.images_url[0]?.url
                           : ""
                       }
-                      width="100%"
-                      height="100%"
+                      width="80%"
+                      //height="100%"
                       style={{
                         display: "block",
                         outline: "none",

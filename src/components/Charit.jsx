@@ -44,7 +44,7 @@ const Charit = () => {
               <div className={styles.CharityBot}>
                 <div>
                   <h4>{
-                    t("donnation")
+                    t("donation")
                     }</h4>
                   <p className={styles.amount}>${charity.amount}</p>
                 </div>

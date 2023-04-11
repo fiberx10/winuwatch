@@ -58,8 +58,7 @@
     "wronganswer": "Wrong answer"
   },
   "competition": {
-    "marketvalue" : "Market Value" ,
-    "howmany" : "HOW MANY TICKETS WOULD YOU LIKE?" 
-    
+    "marketvalue": "Market Value",
+    "howmany": "HOW MANY TICKETS WOULD YOU LIKE?"
   }
 }

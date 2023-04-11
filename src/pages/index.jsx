@@ -1,4 +1,3 @@
-import { type NextPage } from "next";
 import { GetStaticPropsContext } from "next";
 import "react-alice-carousel/lib/alice-carousel.css";
 import Head from "next/head";
@@ -14,8 +13,7 @@ import UpComing from "@/components/UpComing";
 import { useTranslations } from "next-intl";
 
 
-const Home: NextPage = () => {
-  /*const {
+export default function Philosopht() {  /*const {
     data: Watches,
   } = api.Watches.getAll.useQuery();
   /*const { mutateAsync } = api.Payment.create.useMutation();
@@ -114,14 +112,13 @@ const Home: NextPage = () => {
       <Footer />
     </>
   );
-};
+}
 
-export default Home;
 
-export async function getStaticProps({ locale }: GetStaticPropsContext) {
+export async function getStaticProps({locale}) {
   return {
     props: {
-      messages: (await import(`../../messages/${locale}.json`)).default,
-    },
+      messages: (await import(`../../messages/${locale}.json`)).default
+    }
   };
 }

@@ -1,3 +1,64 @@
 {
-    
+  "home": {
+    "title": "GANE EL RELOJ DE SUS SUEÑOS",
+    "subtitle": "Nuestro equipo selecciona los relojes más bonitos y más elegantes. Con más de 260 socios en todo el mundo.",
+    "subtitle2": "“Un ganador seguro que logrará su sueño o el de su pareja”",
+    "competitions": "EL CONCURSO",
+    "days": "Días",
+    "hours": "Horas",
+    "minutes": "Minutos",
+    "seconds": "Segundos",
+    "start": "COMENZAR AHORA",
+    "only": "SOLO",
+    "tickets": "QUEDAN ENTRADAS!",
+    "nocompval": "No hay competiciones disponibles",
+    "howtoplay": "CÓMO JUGAR",
+    "chooseyourtickets": "ELIGE TUS ENTRADAS",
+    "chooseyourticketsdesc": "Elige cuántas entradas quieres -hasta 25 por persona- y podrás ganar un reloj de lujo.",
+    "playthegame": "JUGAR AL JUEGO EN LÍNEA",
+    "playthegamedesc":"Pon a prueba tus conocimientos sobre relojes en nuestro juego en línea para comprobar si distingues los originales de las copias.",
+    "buytickets": "COMPRA TUS ENTRADAS",
+    "buyticketsdesc": "Paga de forma segura para enviar tu inscripción. Utilizamos un generador de números aleatorios de terceros llamado Randomdraws para elegir al ganador.",
+    "winawatch": "¡GANA EL RELOJ DE SUS SUEÑOS¡",
+    "winawatchdesc": "Y ya está! Podrías llevarte un reloj nuevo de 20.000 £ por tan solo 25 £.¡GANA EL RELOJ DE SUS SUEÑOS¡Y ya está! Podrías llevarte un reloj nuevo de 20.000 £ por tan solo 25 £.",
+    "enter": "PARTICIPAR EN EL CONCURSO",
+
+    "certiftitle": "UTILIZAMOS EL SISTEMA INFORMATIZADO DE SORTEO ELECTRÓNICO TPAL",
+    "certifdesc": "SISTEMA DE CERTIFICADOS RANDOMDRAW",
+    "reviews": "reviews",
+    "upcoming": "LOS PRÓXIMOS CONCURSOS",
+    "followus": "SÍGUENOS",
+    "followusdesc": " ¡No te pierdas el sorteo en directo y el anuncio de los próximos concursos en Instagram!",
+    "follow": "SEGUIR",
+    "competitions2": "LOS CONCURSOS, CÓMO JUGAR, CONTACTO, FILOSOFÍA, TRUSTPILOT, BENEFICENCIA, POLÍTICA DE USO ACEPTABLE, FAQ, POLÍTICA DE DEVOLUCIONES, TÉRMINOS Y CONDICIONES, POLÍTICA DE PRIVACIDAD",
+    "enquiries": "Para cualquier consulta, envía un correo electrónico a ", 
+    "securepay": "Pago 100% seguro.",
+    "cart": "Carrito"
+  },
+  "philosophy": {
+    "philoheader": "EN NUESTRA EMPRESA FAMILIAR INDEPENDIENTE NO HAY GENIOS, SOLO PROFESIONALES.",
+    "philoheaderdesc": " Somos una empresa familiar donde todo el mundo trabaja cada día para encontrarle los modelos de relojes más codiciados que están a su alcance, lanzamos WIN U WATCH para permitir que cualquier persona que sueñe con poseer un reloj de lujo, deje de ser un sueño para convertirse en una oportunidad real.",
+    "philotext": "DEBE SABER QUE SOMOS EL SITIO NÚMERO 1 DEL MUNDO EN CUANTO A PROBABILIDAD DE GANAR",
+    "philotextdesc": "somos el sitio número 1 en el mundo en términos de probabilidad de ganar porque publicamos un número limitado de boletos alineados con el número de participantes nos hace la mejor probabilidad de ganar."
+  },
+  "charity": {
+    "charityheader": "TOTAL RECAUDADO PARA FINES BENÉFICOS ",
+    "donation": "DONACIONES",
+    "readmore": "LEER MÁS",
+    "inassociation": "¿ERES UNA ASOCIACIÓN?",
+    "contactus": "QUIERE ESTAR EN ESTA LISTA - PÓNGASE EN CONTACTO CON NOSOTROS"
+  },
+  "cart": {
+    "emptycart": "NO HAY ARTÍCULOS EN LA CESTA",
+    "remove": "QUITAR",
+    "total": "TOTAL",
+    "checkout": "COMPROBAR",
+    "cartempty": "Su carrito está vacío",
+    "tocontinue": "PARA CONTINUAR CON LA PÁGINA DE PAGO DEBE RESPONDER A ESTA PREGUNTA:",
+    "wronganswer": "RESPUESTA INCORRECTA"
+  },
+  "competition": {
+    "marketvalue": "Valor de mercado",
+    "howmany": "¿CUÁNTAS ENTRADAS QUIERES?"
+  }
 }
