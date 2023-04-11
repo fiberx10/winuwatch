@@ -287,7 +287,7 @@ export default function Competition({
                   {data.max_space_in_final_draw > 0 && (
                     <p>
                       Maximum spaces in the final draw:{" "}
-                      {data.max_space_in_final_draw}
+                      {data.total_tickets}
                     </p>
                   )}
                   {data.max_watch_number && (
