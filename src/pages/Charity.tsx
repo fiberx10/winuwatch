@@ -1,8 +1,12 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable  @typescript-eslint/restrict-template-expressions */
 import Charit from "@/components/Charit";
 import Footer from "@/components/Footer";
 import NavBar from "@/components/NavBar";
 import Head from "next/head";
-import { GetStaticPropsContext } from "next";
+import type { GetStaticPropsContext } from "next";
 
 export default function Charity() {
   return (

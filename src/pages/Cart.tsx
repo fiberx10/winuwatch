@@ -3,8 +3,7 @@ import Footer from "@/components/Footer";
 import NavBar from "@/components/NavBar";
 import Head from "next/head";
 import styles from "@/styles/Cart.module.css";
-import { GetStaticPropsContext } from "next";
-
+import type { GetStaticPropsContext } from "next";
 
 export default function Cart() {
   return (
@@ -24,11 +23,10 @@ export default function Cart() {
   );
 }
 
-
-// @ts-ignore
-export async function getStaticProps({ locale }) {
+export async function getStaticProps({ locale }: GetStaticPropsContext) {
   return {
     props: {
+      //eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/restrict-template-expressions
       messages: (await import(`../../messages/${locale}.json`)).default,
     },
   };

@@ -1,10 +1,14 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable  @typescript-eslint/restrict-template-expressions */
 import Footer from "@/components/Footer";
 import NavBar from "@/components/NavBar";
 import Head from "next/head";
 import styles from "@/styles/Philosophy.module.css";
 import { Fade } from "@mui/material";
 import { useTranslations } from "next-intl";
-
+import type {GetStaticPropsContext} from "next";
 export default function Philosopht() {
   const t = useTranslations("philosophy");
   return (
@@ -37,8 +41,7 @@ export default function Philosopht() {
 }
 
 
-// @ts-ignore
-export async function getStaticProps({locale}) {
+export async function getStaticProps({locale}: GetStaticPropsContext) {
   return {
     props: {
       messages: (await import(`../../messages/${locale}.json`)).default

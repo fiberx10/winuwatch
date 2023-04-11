@@ -1,18 +1,16 @@
-import { AppProps, type AppType } from "next/app";
+import type { AppProps } from "next/app";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { api } from "@/utils/api";
 import "@/styles/globals.css";
-import { AbstractIntlMessages, NextIntlProvider } from "next-intl";
-
-
+import { type AbstractIntlMessages, NextIntlProvider } from "next-intl";
 
 type PageProps = {
-  messages:  AbstractIntlMessages;
+  messages: AbstractIntlMessages;
   now: number;
 };
 
-type Props = Omit<AppProps<PageProps>, 'pageProps'> & {
+type Props = Omit<AppProps<PageProps>, "pageProps"> & {
   pageProps: PageProps;
 };
 
@@ -25,9 +23,9 @@ const queryClient = new QueryClient({
   },
 });
 
-function MyApp({Component, pageProps}: Props) {
+function MyApp({ Component, pageProps }: Props) {
   return (
-    <NextIntlProvider messages={pageProps.messages }>
+    <NextIntlProvider messages={pageProps.messages}>
       <QueryClientProvider client={queryClient}>
         <Component {...pageProps} />
         <ReactQueryDevtools />
@@ -35,9 +33,5 @@ function MyApp({Component, pageProps}: Props) {
     </NextIntlProvider>
   );
 }
-
-
-
-
 
 export default api.withTRPC(MyApp);

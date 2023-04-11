@@ -1,13 +1,14 @@
+/* eslint-disable  @typescript-eslint/no-misused-promises */
 import styles from "../styles/Home.module.css";
 import Timer from "./Timer";
 import { Skeleton } from "@mui/material";
-import Link from "next/link";
 import { api } from "@/utils/api";
 import { useEffect } from "react";
+import { useRouter } from "next/router";
 import { useTranslations } from "next-intl";
 
-
 const TheCompetition = () => {
+  const router = useRouter();
   const t = useTranslations("home");
   useEffect(() => {
     const handleScroll = () => {
@@ -27,12 +28,8 @@ const TheCompetition = () => {
   });
   return (
     <div id="theComp" style={{ marginBottom: "280px" }} className={styles.Comp}>
-      <p className={styles.CompP}>
-        {t("subtitle2")}
-      </p>
-      <h1 className={styles.background2}>{
-        t("competitions")
-}</h1>
+      <p className={styles.CompP}>{t("subtitle2")}</p>
+      <h1 className={styles.background2}>{t("competitions")}</h1>
       <div className={styles.compWatches}>
         {data && data.length > 0 ? (
           data.map((watch) => {
@@ -61,7 +58,14 @@ const TheCompetition = () => {
                   className={styles.watchCon}
                 >
                   <div className={styles.watchContent}>
-                    <Link href={`/Competition/${watch.id}`}>{t("start")}</Link>
+                    <a
+                      onClick={async () =>
+                        await router.push(`/Competition/${watch.id}`)
+                      }
+                      className={styles.watchBtn}
+                    >
+                      {t("start")}
+                    </a>
                     <h3>{watch.name}</h3>
                     <p>
                       Only <b>{watch.remaining_tickets}</b> {t("tickets")}
@@ -73,9 +77,7 @@ const TheCompetition = () => {
             );
           })
         ) : data?.length === 0 ? (
-          <h1>{
-            t("nocompval")
-            }</h1>
+          <h1>{t("nocompval")}</h1>
         ) : (
           <div className={styles.watches}>
             <Skeleton

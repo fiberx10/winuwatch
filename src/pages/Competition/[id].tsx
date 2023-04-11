@@ -1,3 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable  @typescript-eslint/restrict-template-expressions */
 import Footer from "@/components/Footer";
 import NavBar from "@/components/NavBar";
 import Head from "next/head";
@@ -8,7 +12,6 @@ import type {
   GetServerSidePropsContext,
   InferGetServerSidePropsType,
 } from "next";
-import { GetStaticPropsContext } from "next";
 import styles from "@/styles/CompetitionPage.module.css";
 import { useCart } from "@/components/Store";
 import ToggleButton from "@mui/material/ToggleButton";
@@ -17,7 +20,6 @@ import { useState } from "react";
 import Image from "next/image";
 import Loader from "@/components/Loader";
 import Timer from "@/components/Timer";
-import { useTranslations } from "next-intl";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   try {
@@ -25,8 +27,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     return {
       props: {
         compID,
-        messages: (await import(`../../../messages/${context?.locale}.json`))
-          .default,
+        messages: (await import(`../../../messages/${context.locale}.json`)).default,
       },
     };
   } catch (e) {
@@ -38,13 +39,12 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       },
     };
   }
-};
+}
 
 
 export default function Competition({
   compID,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const t = useTranslations("competition");
   const { data, isLoading } = api.Competition.byID.useQuery(compID);
   const [counter, setCounter] = useState({
     value: 1,
