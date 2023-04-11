@@ -9,7 +9,7 @@ import Link from "next/link";
 
 export default function NavBar() {
   const [open, setOpen] = useState(false);
-  const [navColor, setNavColor] = useState("");
+  const [navColor, setNavColor] = useState("white");
   const router = useRouter();
   const { cardDetails } = useCart();
 
@@ -32,10 +32,18 @@ export default function NavBar() {
         }}
         className={styles.flexStart}
       >
-        <Link href={"/#theComp"} className={styles.mobile}>
+        <Link
+          style={{ color: navColor }}
+          href={"/#theComp"}
+          className={styles.mobile}
+        >
           The competition
         </Link>
-        <Link className={styles.mobile} href={"/#Howtoplay"}>
+        <Link
+          style={{ color: navColor }}
+          className={styles.mobile}
+          href={"/#Howtoplay"}
+        >
           How to play
         </Link>
         <Image
