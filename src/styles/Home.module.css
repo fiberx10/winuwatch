@@ -34,6 +34,10 @@
   gap: 3rem;
 }
 
+.NavBarContainer a {
+  color: white;
+  text-decoration: none;
+}
 .NavBarContainer span {
   cursor: pointer;
 }
@@ -145,9 +149,10 @@
   text-transform: uppercase;
   color: grey;
 }
-.DrawerCon span {
+.DrawerCon a {
   font-weight: 400;
   font-size: 30px;
+  text-decoration: none;
   font-family: "Iskry", sans-serif;
   text-align: center;
   letter-spacing: 0.05em;

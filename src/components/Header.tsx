@@ -1,11 +1,10 @@
 import NavBar from "./NavBar";
 import styles from "@/styles/Home.module.css";
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect } from "react";
 
 export default function Header() {
-  const theComp =
-    typeof window !== "undefined" && document.getElementById("theComp");
   useEffect(() => {
     const handleScroll = () => {
       const background = document.querySelector(
@@ -26,28 +25,21 @@ export default function Header() {
       <div className={styles.vid}>
         <div className={styles.headerback}></div>
 
-        <video
-            width="100%"
-            height="100%"
-            autoPlay
-            playsInline
-            muted
-            loop
-         >
-           <source
-             src="/images/professional-watches-cosmograph-daytona-cover-video_portrait.webm"
-             type="video/webm"
-           />
-           <source
-             src="/images/professional-watches-cosmograph-daytona-cover-video_portrait.mp4"
-             type="video/mp4"
-           />
-           <source
-             src="/images/professional-watches-cosmograph-daytona-cover-video_portrait.mov"
-             type="video/quicktime"
-           />
-           Your browser does not support the video tag.
-         </video>
+        <video width="100%" height="100%" autoPlay playsInline muted loop>
+          <source
+            src="/images/professional-watches-cosmograph-daytona-cover-video_portrait.webm"
+            type="video/webm"
+          />
+          <source
+            src="/images/professional-watches-cosmograph-daytona-cover-video_portrait.mp4"
+            type="video/mp4"
+          />
+          <source
+            src="/images/professional-watches-cosmograph-daytona-cover-video_portrait.mov"
+            type="video/quicktime"
+          />
+          Your browser does not support the video tag.
+        </video>
       </div>
       <div className={styles.HeaderTit}>
         <h2 className={styles.background}>winuwatch</h2>
@@ -58,22 +50,9 @@ export default function Header() {
           Our team select the most beautiful watches, with a focus on elegance.
           With more than 260 partners around the world.
         </p>
-        <Image
-          onClick={() =>
-            typeof window !== "undefined" &&
-            window.scrollTo({
-              top:
-                theComp !== null && theComp instanceof HTMLElement
-                  ? theComp.offsetTop
-                  : 400,
-              behavior: "smooth",
-            })
-          }
-          width={19}
-          height={10}
-          alt="vector"
-          src="/images/Vector.svg"
-        />
+        <Link href={"/#theComp"}>
+          <Image width={19} height={10} alt="vector" src="/images/Vector.svg" />
+        </Link>
       </div>
     </div>
   );

@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useCart } from "./Store";
 import { useRouter } from "next/router";
 import { MdClose } from "react-icons/md";
+import Link from "next/link";
 
 export default function NavBar() {
   const [open, setOpen] = useState(false);
@@ -12,10 +13,6 @@ export default function NavBar() {
   const router = useRouter();
   const { cardDetails } = useCart();
 
-  const howTo =
-    typeof window !== "undefined" && document.getElementById("Howtoplay");
-  const theComp =
-    typeof window !== "undefined" && document.getElementById("theComp");
   useEffect(() => {
     typeof window !== "undefined" && location.pathname !== "/"
       ? setNavColor("#927C66")
@@ -35,38 +32,12 @@ export default function NavBar() {
         }}
         className={styles.flexStart}
       >
-        <span
-          onClick={() =>
-            typeof window !== "undefined" && location.pathname !== "/"
-              ? router.push("/")
-              : window.scrollTo({
-                  top:
-                    theComp !== null && theComp instanceof HTMLElement
-                      ? theComp.offsetTop
-                      : 400,
-                  behavior: "smooth",
-                })
-          }
-          className={styles.mobile}
-        >
+        <Link href={"/#theComp"} className={styles.mobile}>
           The competition
-        </span>
-        <span
-          className={styles.mobile}
-          onClick={() =>
-            typeof window !== "undefined" && location.pathname !== "/"
-              ? router.push("/")
-              : window.scrollTo({
-                  top:
-                    howTo !== null && howTo instanceof HTMLElement
-                      ? howTo.offsetTop
-                      : 400,
-                  behavior: "smooth",
-                })
-          }
-        >
+        </Link>
+        <Link className={styles.mobile} href={"/#Howtoplay"}>
           How to play
-        </span>
+        </Link>
         <Image
           style={{
             cursor: "pointer",
@@ -82,38 +53,10 @@ export default function NavBar() {
         <Drawer className={styles.Drawer} anchor="left" open={open}>
           <div className={styles.DrawerCon}>
             <MdClose className={styles.closeBut} />
-            <span
-              onClick={() =>
-                typeof window !== "undefined" && location.pathname !== "/"
-                  ? router.push("/")
-                  : window.scrollTo({
-                      top:
-                        theComp !== null && theComp instanceof HTMLElement
-                          ? theComp.offsetTop
-                          : 400,
-                      behavior: "smooth",
-                    })
-              }
-            >
-              The competition
-            </span>
-            <span onClick={() => router.push("/Philosophy")}>philosophy</span>
-            <span onClick={() => router.push("/Charity")}>Charity</span>
-            <span
-              onClick={() =>
-                typeof window !== "undefined" && location.pathname !== "/"
-                  ? router.push("/")
-                  : window.scrollTo({
-                      top:
-                        howTo !== null && howTo instanceof HTMLElement
-                          ? howTo.offsetTop
-                          : 400,
-                      behavior: "smooth",
-                    })
-              }
-            >
-              How to play
-            </span>
+            <Link href={"/#theComp"}>The competition</Link>
+            <Link href={"/Philosophy"}>philosophy</Link>
+            <Link href={"/Charity"}>Charity</Link>
+            <Link href={"/#Howtoplay"}>How to play</Link>
           </div>
         </Drawer>
       </div>
