@@ -6,7 +6,8 @@ import type {
   Watches,
 } from "@prisma/client";
 import React from "react";
-import { Formater, getBaseUrl } from "@/utils";
+import { Formater, getBaseUrl , DateFormater } from "@/utils";
+
 import { renderToString } from "react-dom/server";
 const data = [
   { names: ["COMPETITIONS", "how to play", "contact"] },
@@ -129,9 +130,6 @@ const mail = (
               align="center"
               width="100%"
               border={0}
-              cellPadding={0}
-              cellSpacing={0}
-              role="presentation"
             >
               <tbody>
                 <tr>
@@ -144,7 +142,8 @@ const mail = (
                           : ""
                       }
                       width="100%"
-                      height="100%"
+                      height="auto"
+                      max-height="200px"
                       style={{
                         display: "block",
                         outline: "none",
@@ -194,7 +193,7 @@ const mail = (
                               <tbody>
                                 <tr>
                                   <td
-                                    data-id="__react-email-column"
+                                    
                                     style={{
                                       width: "66%",
                                       padding: "0px 0px 0px 20px",
@@ -384,14 +383,13 @@ const mail = (
                     >
                       What happens now?
                       <br /> the contest will end on{" "}
-                      {order?.Competition[0]?.end_date.toDateString()} at{" "}
-                      {order
-                        ? order?.Competition[0]?.end_date.toTimeString()
-                        : null}{" "}
+                      {
+                         DateFormater(order?.Competition[0]?.end_date as Date)
+                      }
                       , the winners will be announced on{" "}
-                      {order?.Competition[0]?.winner_announcement_date?.toDateString()}
-                      at{" "}
-                      {order?.Competition[0]?.winner_announcement_date?.toTimeString()}
+                      {
+                        DateFormater(order?.Competition[0]?.drawing_date as Date)
+                      }
                       <br /> please make sure to follow us on instagram where we{" "}
                       <br />
                       host a live for each competition. <br /> we wish you the
