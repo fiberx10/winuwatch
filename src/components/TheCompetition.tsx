@@ -28,6 +28,7 @@ const TheCompetition = () => {
   const { data } = api.Competition.getAll.useQuery({
     status: "ACTIVE",
   });
+
   return (
     <div id="theComp" style={{ marginBottom: "280px" }} className={styles.Comp}>
       <p className={styles.CompP}>{t("subtitle2")}</p>

@@ -261,11 +261,12 @@
     flex-direction: column;
   }
   .orderImg {
-    width: 83.7px;
-    height: 82.91px;
+    width: 100%;
+    height: auto;
   }
   .orderItem {
     justify-content: space-between;
+    flex-wrap: wrap;
   }
   .orderTit h3 {
     font-weight: 500;

@@ -129,6 +129,7 @@ const CartComp = () => {
                     </p>
                   )}
                   <p onClick={() => removeComp(comp.compID)}>{t("remove")}</p>
+
                 </div>
               </div>
             </div>
@@ -184,6 +185,9 @@ const CartComp = () => {
                     {question?.imageURL ? (
                       <Image
                         src={question?.imageURL}
+                        style={{
+                          objectFit: "contain",
+                        }}
                         width={70}
                         height={70}
                         alt="questionImage"
