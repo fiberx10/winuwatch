@@ -118,16 +118,19 @@ const CartComp = () => {
                       comp.number_tickets * ComptetionData.ticket_price
                     )}
                   </h2>
-                  {comp.reduction > 0 && (
-                    <p>
-                      Discount:{" "}
-                      {"\t" +
-                        Formater(
-                          comp.reduction *
-                            (comp.number_tickets * ComptetionData.ticket_price)
-                        )}
-                    </p>
-                  )}
+                  <p>
+                    {comp.reduction > 0 && (
+                      <>
+                        Discount:{" "}
+                        {"\t" +
+                          Formater(
+                            comp.reduction *
+                              (comp.number_tickets *
+                                ComptetionData.ticket_price)
+                          )}
+                      </>
+                    )}
+                  </p>
                   <p onClick={() => removeComp(comp.compID)}>{t("remove")}</p>
 
                 </div>

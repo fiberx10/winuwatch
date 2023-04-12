@@ -296,18 +296,20 @@ export default function Competition({
                       {data.total_tickets}
                     </p>
                   )}
-                  {data.max_watch_number && (
-                    <p>Maximum watch winners: {data.max_watch_number}</p>
+                  {data.max_watch_number ? (
+                    <p>Maximum watch winners: {data.max_watch_number}</p>)
+                    :( <p>Maximum watch winners: 1</p>
                   )}
-                  {data.end_date.toString() && (
+                  {data.end_date.toString() ? (
                     <p>End of competition: {DateFormater(data.end_date)}</p>
-                  )}
-                  {data.end_date.toString() && (
+                  ) : null
+                  }
+                  {data.drawing_date.toString() ?(
                     <p>
                       Winner announcement: {DateFormater(data.drawing_date)} in
                       direct live on instagram @winuwatch
                     </p>
-                  )}
+                  ): null}
 
                   <p>
                     Runner-Up prizes: 4 players will win {Formater(25)} credit
