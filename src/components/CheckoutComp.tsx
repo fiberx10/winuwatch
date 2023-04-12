@@ -294,6 +294,17 @@ const CheckoutComp = () => {
                                 {ComptetionData?.Watches.brand}{" "}
                                 {ComptetionData?.Watches.model}
                               </h3>
+                              {order.reduction > 0 && (
+                                <p>
+                                  Discount:{" "}
+                                  {"\t" +
+                                    Formater(
+                                      order.reduction *
+                                        (order.number_tickets *
+                                          ComptetionData.ticket_price)
+                                    )}
+                                </p>
+                              )}
                               <span>
                                 {values.comps.map((comp, i) => {
                                   return (
@@ -423,7 +434,11 @@ const CheckoutComp = () => {
                         <span>
                           {Formater(
                             values.comps.reduce(
-                              (acc, c) => acc + c.number_tickets * c.price_per_ticket * (1 - c.reduction),
+                              (acc, c) =>
+                                acc +
+                                c.number_tickets *
+                                  c.price_per_ticket *
+                                  (1 - c.reduction),
                               0
                             )
                           )}
