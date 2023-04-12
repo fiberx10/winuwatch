@@ -1,8 +1,12 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable  @typescript-eslint/restrict-template-expressions */
 import CheckoutComp from "@/components/CheckoutComp";
 import Footer from "@/components/Footer";
 import NavBar from "@/components/NavBar";
 import Head from "next/head";
-
+import type { GetStaticPropsContext } from "next";
 export default function CheckoutPage() {
   return (
     <div>
@@ -17,4 +21,13 @@ export default function CheckoutPage() {
       <Footer />
     </div>
   );
+}
+
+
+export async function getStaticProps({ locale }: GetStaticPropsContext) {
+  return {
+    props: {
+      messages: (await import(`../../messages/${locale}.json`)).default,
+    },
+  };
 }
