@@ -7,12 +7,62 @@ import { useTranslations } from "next-intl";
 
 const Footer = () => {
   const t = useTranslations("home");
+  const t_footer = useTranslations("footeritems");
   const [windowLocation, setLocation] = useState("");
-  const data = [
-    { names: ["COMPETITIONS", "how to play", "contact"] },
-    { names: ["PHILOSOPHY", "trustpilot", "Charity"] },
-    { names: ["Acceptable Use Policy", "faq"] },
-    { names: ["Return Policy", "terms & conditions", "Privacy Policy"] },
+  const router = useRouter();
+  const Tabs = [
+    [
+      {
+        name: t_footer("comp"),
+        link: "/#theComp",
+      },
+      {
+        name: t_footer("howto"),
+        link: "/#Howtoplay",
+      },
+      {
+        name: t_footer("contact"),
+        mail: "mailto:info@winuwatch.uk",
+      },
+    ],
+    [
+      {
+        name: t_footer("phil"),
+        link: "/Philosophy",
+      },
+      {
+        name: t_footer("trustpilot"),
+        link: "/#trustpilot",
+      },
+      {
+        name: t_footer("charity"),
+        link: "/Charity",
+      },
+    ],
+    [
+      {
+        name: t_footer("acceptableuse"),
+        link: "/Acceptable_Use_Policy",
+      },
+      {
+        name: t_footer("faq"),
+        link: "/FAQ",
+      },
+    ],
+    [
+      {
+        name: t_footer("returnpolicy"),
+        link: "/Return_Policy",
+      },
+      {
+        name: t_footer("terms"),
+        link: "/TermsAndConditions",
+      },
+      {
+        name: t_footer("privacypolicy"),
+        link: "/PrivacyPolicy",
+      },
+    ],
   ];
   useEffect(() => {
     const handleScroll = () => {
@@ -27,7 +77,6 @@ const Footer = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-  const router = useRouter();
 
   const howTo =
     typeof window !== "undefined" && document.getElementById("Howtoplay");
@@ -72,107 +121,33 @@ const Footer = () => {
           />
 
           <div className={styles.menusGrid}>
-            {data.map((menu, i) => {
-              return (
+            {Tabs.map((menu, i) =>
+              menu.map(({ name, link, mail }, j) => (
                 <div
                   style={{
                     display: "flex",
                     flexDirection: "column",
                     gap: "0.4rem",
                   }}
-                  key={i}
+                  key={i + j}
                 >
-                  <span
-                    onClick={
-                      windowLocation !== "/" && menu.names[0] === "COMPETITIONS"
-                        ? async () => {
-                            await router.push("/#theComp");
-                          }
-                        : menu.names[0] === "PHILOSOPHY"
-                        ? async () => {
-                            await router.push("/Philosophy");
-                          }
-                        : menu.names[0] === "Acceptable Use Policy"
-                        ? async () => {
-                            await router.push("/Acceptable_Use_Policy");
-                          }
-                        : menu.names[0] === "Return Policy"
-                        ? async () => {
-                            await router.push("/Return_Policy");
-                          }
-                        : () => {
-                            window.scrollTo({
-                              top:
-                                theComp !== null &&
-                                theComp instanceof HTMLElement
-                                  ? theComp.offsetTop
-                                  : 400,
-                              behavior: "smooth",
-                            });
-                          }
-                    }
-                  >
-                    {menu.names[0]}
-                  </span>
-                  <span
-                    onClick={
-                      windowLocation !== "/" && menu.names[1] === "how to play"
-                        ? async () => {
-                            await router.push("/#Howtoplay");
-                          }
-                        : windowLocation !== "/" &&
-                          menu.names[1] === "trustpilot"
-                        ? async () => {
-                            await router.push("/#trustpilot");
-                          }
-                        : menu.names[1] === "faq"
-                        ? async () => {
-                            await router.push("/FAQ");
-                          }
-                        : menu.names[1] === "terms & conditions"
-                        ? async () => {
-                            await router.push("/TermsAndConditions");
-                          }
-                        : menu.names[1] === "trustpilot"
-                        ? () => {
-                            window.scrollTo({
-                              top:
-                                trustpilot !== null &&
-                                trustpilot instanceof HTMLElement
-                                  ? trustpilot.offsetTop
-                                  : 400,
-                              behavior: "smooth",
-                            });
-                          }
-                        : () => {
-                            window.scrollTo({
-                              top:
-                                howTo !== null && howTo instanceof HTMLElement
-                                  ? howTo.offsetTop
-                                  : 400,
-                              behavior: "smooth",
-                            });
-                          }
-                    }
-                  >
-                    {menu.names[1]}
-                  </span>
-                  <Link
-                    href={
-                      menu.names[2] === "Charity"
-                        ? "/Charity"
-                        : menu.names[2] === "Privacy Policy"
-                        ? "/Privacy_Policy"
-                        : menu.names[2] === "contact"
-                        ? "mailto:info@winuwatch.uk"
-                        : ""
-                    }
-                  >
-                    {menu.names[2]}
-                  </Link>
+                  {mail ? (
+                    <a href={mail}>{name}</a>
+                  ) : (
+                    link && (
+                      <span
+                        // eslint-disable-next-line @typescript-eslint/no-misused-promises
+                        onClick={async () => {
+                          await router.push(link);
+                        }}
+                      >
+                        {name}
+                      </span>
+                    )
+                  )}
                 </div>
-              );
-            })}
+              ))
+            )}
           </div>
           <div className={styles.FooterTopRight}>
             <div className={styles.emails}>
