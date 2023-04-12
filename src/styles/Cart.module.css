@@ -48,7 +48,9 @@
 .Counter {
   display: flex;
   align-items: center;
-  width: 137px;
+  width: 100px;
+  height: 40px;
+  text-align: center;
   justify-content: space-between;
   background: #ffffff;
   border: 1px solid rgba(152, 115, 88, 0.12);
@@ -63,9 +65,10 @@
   cursor: pointer;
 }
 .counterValue {
-  width: 50%;
+  width: 100%;
   display: grid;
   place-items: center;
+  text-align: center;
 }
 .CartPriceCon {
   display: flex;
@@ -213,10 +216,32 @@
   align-items: center;
   gap: 0.5rem;
 }
+
+.priceandnum {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
 @media only screen and (min-height: 667px) and (max-height: 740px) {
   .CartPriceCon {
     width: auto;
     gap: 2rem !important;
+    padding-top: 15px;
+    display: flex;
+  }
+  .CartPriceCon h2 {
+    font-size: 24px !important;
+    flex: 1;
+  }
+  .CartPriceCon p {
+    font-size: 14px !important;
+    flex: 1;
+    min-width: max-content;
+  }
+  .CartRight {
+    padding-top: 15px;
+    flex-direction: column;
   }
 }
 @media only screen and (max-width: 500px) {
