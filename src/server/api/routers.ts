@@ -207,7 +207,7 @@ export const OrderRouter = createTRPCRouter({
                     //automatic_tax : true,
                     currency: "gbp",
                     product_data: {
-                      name: comp.Watches.model + comp.Watches.movement,
+                      name: comp.Watches.model,
                       //images: [`${getBaseUrl()+comp.Watches.images_url[0]}`],
                     },
                     unit_amount: Math.floor(comp.ticket_price * 100), // in cents
