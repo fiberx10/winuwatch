@@ -58,8 +58,8 @@
   },
   "competition": {
     "marketvalue": "VALEUR MARCHANDE",
-    "howmany": "COMBIEN DE TICKETS VOULEZ-VOUS?"
-     "off": "off",
+    "howmany": "COMBIEN DE TICKETS VOULEZ-VOUS?",
+    "off": "off",
     "donatedto": "Une partie de l'argent est reversée aux associations suivantes",
     "tickets": "billets",
     "continue": "Continuer",

@@ -12,7 +12,6 @@ import { useEffect, useRef } from "react";
 import { BsArrowRight, BsArrowLeft } from "react-icons/bs";
 import { useTranslations } from "next-intl";
 
-
 const UpComing: React.FC<{
   slides: {
     img: string;
@@ -57,9 +56,7 @@ const UpComing: React.FC<{
   }, []);
   return (
     <div className={styles.upComingMain}>
-      <h1 className={styles.background6}>{
-        t("upcoming")
-      }</h1>
+      <h1 className={styles.background6}>{t("upcoming")}</h1>
       <Swiper
         breakpoints={sliderSettings}
         slidesPerView={5}

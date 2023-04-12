@@ -22,9 +22,7 @@ const Charit = () => {
     <div className={styles.CharityMain}>
       <div className={styles.CharityHeader}>
         <div className={styles.CharityH1}>
-          <h1>{
-            t("charityheader")
-            }</h1>
+          <h1>{t("charityheader")}</h1>
         </div>
         <h3>£594,828</h3>
       </div>
@@ -43,30 +41,20 @@ const Charit = () => {
               </div>
               <div className={styles.CharityBot}>
                 <div>
-                  <h4>{
-                    t("donation")
-                    }</h4>
+                  <h4>{t("donation")}</h4>
                   <p className={styles.amount}>${charity.amount}</p>
                 </div>
                 <h3>{charity.name}</h3>
                 <p>{charity.desc}</p>
-                <button>{
-                  t("readmore")
-                  }</button>
+                <button>{t("readmore")}</button>
               </div>
             </div>
           );
         })}
       </div>
       <div className={styles.Join}>
-        <h1>{
-          t("inassociation")
-          }</h1>
-        <h1>
-          - {
-            t("contactus")
-          }
-        </h1>
+        <h1>{t("inassociation")}</h1>
+        <h1>- {t("contactus")}</h1>
       </div>
     </div>
   );

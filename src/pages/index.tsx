@@ -15,8 +15,8 @@ import Footer from "@/components/Footer";
 import UpComing from "@/components/UpComing";
 //import { api } from "@/utils/api";
 
-
-export default function Philosopht() {  /*const {
+export default function Philosopht() {
+  /*const {
     data: Watches,
   } = api.Watches.getAll.useQuery();
   /*const { mutateAsync } = api.Payment.create.useMutation();
@@ -117,11 +117,10 @@ export default function Philosopht() {  /*const {
   );
 }
 
-
-export async function getStaticProps({locale}: GetStaticPropsContext) {
+export async function getStaticProps({ locale }: GetStaticPropsContext) {
   return {
     props: {
-      messages: (await import(`../../messages/${locale}.json`)).default
-    }
+      messages: (await import(`../../messages/${locale}.json`)).default,
+    },
   };
 }

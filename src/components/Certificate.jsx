@@ -7,9 +7,7 @@ const Certificate = () => {
   const t = useTranslations("home");
   return (
     <div className={styles.certifContainer}>
-      <h1>{
-        t("certiftitle")
-        }</h1>
+      <h1>{t("certiftitle")}</h1>
       <div className={styles.certifBox}>
         <Image
           width={238}

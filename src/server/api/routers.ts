@@ -2,10 +2,7 @@ import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { CompetitionStatus, OrderStatus } from "@prisma/client";
 import { getBaseUrl, CreateOrderSchema } from "@/utils";
-import {
-  WatchesSchema,
-  CompetitionSchema,
-} from "@/utils/zodSchemas";
+import { WatchesSchema, CompetitionSchema } from "@/utils/zodSchemas";
 import { env } from "@/env.mjs";
 import Email from "@/components/emails";
 import stripe from "stripe";
@@ -458,8 +455,7 @@ export const CompetitionRouter = createTRPCRouter({
       ? {
           ...Data[1],
           remaining_tickets:
-            Data[1].total_tickets -
-            (Data[0]?._count?.Ticket || 0),
+            Data[1].total_tickets - (Data[0]?._count?.Ticket || 0),
         }
       : undefined;
   }),

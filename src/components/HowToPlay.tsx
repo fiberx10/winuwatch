@@ -3,9 +3,8 @@ import styles from "../styles/Home.module.css";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 
-
 const HowToPlay = () => {
-  const  t = useTranslations("home");
+  const t = useTranslations("home");
   useEffect(() => {
     const handleScroll = () => {
       const background = document.querySelector(
@@ -23,29 +22,15 @@ const HowToPlay = () => {
     typeof window !== "undefined" && document.getElementById("theComp");
   return (
     <div id="Howtoplay" className={styles.howtoContainer}>
-      <h1 className={styles.background3}>{
-        t("howtoplay")
-      }</h1>
+      <h1 className={styles.background3}>{t("howtoplay")}</h1>
       <div className={styles.howtoText}>
         <div className={styles.howtoTxt1}>
-          <h2>{
-              t("chooseyourtickets")
-            }</h2>
-          <p>
-            {
-              t("chooseyourticketsdesc")
-            }
-          </p>
+          <h2>{t("chooseyourtickets")}</h2>
+          <p>{t("chooseyourticketsdesc")}</p>
         </div>
         <div className={styles.howtoTxt2}>
-          <h2>{
-              t("playthegame")
-}</h2>
-          <p>
-            {
-              t("playthegamedesc")
-            }
-          </p>
+          <h2>{t("playthegame")}</h2>
+          <p>{t("playthegamedesc")}</p>
         </div>
         <div className={styles.howtoLine}>
           <Image
@@ -85,23 +70,12 @@ const HowToPlay = () => {
           />
         </div>
         <div className={styles.howtoTxt3}>
-          <h2>{
-              t("buytickets")
-            }</h2>
-          <p>
-          
-           {t("buyticketsdesc")}
-          </p>
+          <h2>{t("buytickets")}</h2>
+          <p>{t("buyticketsdesc")}</p>
         </div>
         <div className={styles.howtoTxt4}>
-          <h2>{
-              t("winawatch")
-            }</h2>
-          <p>
-            {
-              t("winawatchdesc")
-            }
-          </p>
+          <h2>{t("winawatch")}</h2>
+          <p>{t("winawatchdesc")}</p>
         </div>
         <button
           onClick={() =>
@@ -115,9 +89,7 @@ const HowToPlay = () => {
             })
           }
         >
-          {
-            t("enter")
-          }
+          {t("enter")}
         </button>
       </div>
     </div>

@@ -419,7 +419,11 @@ const CheckoutComp = () => {
                         <span>
                           {Formater(
                             values.comps.reduce(
-                              (acc, c) => acc + c.number_tickets * c.price_per_ticket * (1 - c.reduction),
+                              (acc, c) =>
+                                acc +
+                                c.number_tickets *
+                                  c.price_per_ticket *
+                                  (1 - c.reduction),
                               0
                             )
                           )}

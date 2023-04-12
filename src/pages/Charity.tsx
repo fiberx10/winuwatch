@@ -24,7 +24,6 @@ export default function Charity() {
   );
 }
 
-
 export async function getStaticProps({ locale }: GetStaticPropsContext) {
   return {
     props: {

@@ -27,7 +27,8 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     return {
       props: {
         compID,
-        messages: (await import(`../../../messages/${context.locale}.json`)).default,
+        messages: (await import(`../../../messages/${context.locale}.json`))
+          .default,
       },
     };
   } catch (e) {
@@ -40,7 +41,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     };
   }
 }
-
 
 export default function Competition({
   compID,

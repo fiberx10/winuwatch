@@ -7,7 +7,7 @@ import { Formater, api } from "@/utils";
 import { useState } from "react";
 import { Backdrop, Box, Fade, Modal } from "@mui/material";
 import { CloseOutlined } from "@ant-design/icons";
-import {useTranslations} from "next-intl";
+import { useTranslations } from "next-intl";
 const CartComp = () => {
   const t = useTranslations("cart");
   const [open, setOpen] = useState(false);
@@ -69,7 +69,7 @@ const CartComp = () => {
                   <div
                     onClick={() =>
                       updateComp({
-                        reduction : 0,
+                        reduction: 0,
                         compID: comp.compID,
                         number_tickets:
                           comp.number_tickets > 1
@@ -93,7 +93,7 @@ const CartComp = () => {
                   <div
                     onClick={() =>
                       updateComp({
-                        reduction : 0,
+                        reduction: 0,
                         compID: comp.compID,
                         number_tickets:
                           comp.number_tickets < ComptetionData.remaining_tickets
@@ -118,18 +118,17 @@ const CartComp = () => {
                       comp.number_tickets * ComptetionData.ticket_price
                     )}
                   </h2>
-                  {
-                      comp.reduction > 0 && (
-                        <p>
-                          Discount: {'\t' + Formater(
-                            comp.reduction * (comp.number_tickets * ComptetionData.ticket_price) 
-                          )}
-                        </p>
-                      )
-                  }
-                  <p onClick={() => removeComp(comp.compID)}>{
-                    t("remove")
-                  }</p>
+                  {comp.reduction > 0 && (
+                    <p>
+                      Discount:{" "}
+                      {"\t" +
+                        Formater(
+                          comp.reduction *
+                            (comp.number_tickets * ComptetionData.ticket_price)
+                        )}
+                    </p>
+                  )}
+                  <p onClick={() => removeComp(comp.compID)}>{t("remove")}</p>
                 </div>
               </div>
             </div>
@@ -142,9 +141,7 @@ const CartComp = () => {
             textTransform: "uppercase",
           }}
         >
-          {
-            t("emptycart")
-          }
+          {t("emptycart")}
         </h1>
       )}
 
@@ -153,9 +150,7 @@ const CartComp = () => {
         <span>{Formater(totalCost)}</span>
       </div>
       <div className={styles.cartCheckoutCon}>
-        <button onClick={() => setOpen(true)}>{
-          t("checkout")
-        }</button>
+        <button onClick={() => setOpen(true)}>{t("checkout")}</button>
         <Modal
           aria-labelledby="spring-modal-title"
           aria-describedby="spring-modal-description"
@@ -172,9 +167,7 @@ const CartComp = () => {
             <Box className={styles.ModalBox} sx={style}>
               {competitions.length === 0 ? (
                 <div className={styles.ModalBoxTopFlex}>
-                  <p id="spring-modal-description">{
-                    t("cartempty")
-                  }</p>
+                  <p id="spring-modal-description">{t("cartempty")}</p>
                   <span onClick={handleClose}>
                     <CloseOutlined />
                   </span>
@@ -182,11 +175,7 @@ const CartComp = () => {
               ) : (
                 <>
                   <div className={styles.ModalBoxTopFlex}>
-                    <p id="spring-modal-description">
-                      {
-                        t("tocontinue")
-                      }
-                    </p>
+                    <p id="spring-modal-description">{t("tocontinue")}</p>
                     <span onClick={handleClose}>
                       <CloseOutlined />
                     </span>
@@ -207,9 +196,7 @@ const CartComp = () => {
                   <h2
                     style={{ display: wrong ? "flex" : "none", color: "red" }}
                   >
-                    {
-                      t("wronganswer")
-                    }
+                    {t("wronganswer")}
                   </h2>
                   <div className={styles.questionsCon}>
                     {question?.answers.map((quest, i) => {

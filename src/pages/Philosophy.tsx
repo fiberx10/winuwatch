@@ -8,7 +8,7 @@ import Head from "next/head";
 import styles from "@/styles/Philosophy.module.css";
 import { Fade } from "@mui/material";
 import { useTranslations } from "next-intl";
-import type {GetStaticPropsContext} from "next";
+import type { GetStaticPropsContext } from "next";
 export default function Philosopht() {
   const t = useTranslations("philosophy");
   return (
@@ -40,11 +40,10 @@ export default function Philosopht() {
   );
 }
 
-
-export async function getStaticProps({locale}: GetStaticPropsContext) {
+export async function getStaticProps({ locale }: GetStaticPropsContext) {
   return {
     props: {
-      messages: (await import(`../../messages/${locale}.json`)).default
-    }
+      messages: (await import(`../../messages/${locale}.json`)).default,
+    },
   };
 }

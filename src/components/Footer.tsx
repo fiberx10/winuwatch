@@ -5,7 +5,6 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useTranslations } from "next-intl";
 
-
 const Footer = () => {
   const t = useTranslations("home");
   const [windowLocation, setLocation] = useState("");
@@ -51,14 +50,8 @@ const Footer = () => {
         }}
         className={styles.FooterInsta}
       >
-        <h1 className={styles.background5}>{
-          t("followus")
-        }</h1>
-        <p>
-          {
-            t("followusdesc")
-          }
-        </p>
+        <h1 className={styles.background5}>{t("followus")}</h1>
+        <p>{t("followusdesc")}</p>
         <Link href="https://www.instagram.com/winuwatch/">
           <Image
             width={250}
@@ -183,9 +176,7 @@ const Footer = () => {
           </div>
           <div className={styles.FooterTopRight}>
             <div className={styles.emails}>
-              <p>{
-                t("enquiries")
-                }</p>
+              <p>{t("enquiries")}</p>
               <a href="mailto:info@winuwatch.uk">
                 <u>info@winuwatch.uk</u>
               </a>
