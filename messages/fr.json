@@ -47,7 +47,8 @@
     "inassociation": "VOUS ÊTES UNE ASSOCIATION?",
     "contactus": "VOULEZ-VOUS FIGURER DANS CETTE LISTE? CONTACTEZ-NOUS"
   },
-  "cart": {
+  "cart": { 
+    "discount": "Remise",
     "emptycart": "PANIER VIDE",
     "remove": "SUPPRIMER",
     "total": "TOTAL",

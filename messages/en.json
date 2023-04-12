@@ -49,6 +49,7 @@
     "contactus": "WANT TO BE IN THIS LIST - CONTACT US"
   },
   "cart": {
+    "discount": "Discount",
     "emptycart": "NO ITEMS IN THE CART",
     "remove": "REMOVE",
     "total": "TOTAL",
