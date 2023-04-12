@@ -67,7 +67,7 @@ const CartComp = () => {
                   <div
                     onClick={() =>
                       updateComp({
-                        reduction : 0,
+                        reduction: 0,
                         compID: comp.compID,
                         number_tickets:
                           comp.number_tickets > 1
@@ -91,7 +91,7 @@ const CartComp = () => {
                   <div
                     onClick={() =>
                       updateComp({
-                        reduction : 0,
+                        reduction: 0,
                         compID: comp.compID,
                         number_tickets:
                           comp.number_tickets < ComptetionData.remaining_tickets
@@ -116,15 +116,16 @@ const CartComp = () => {
                       comp.number_tickets * ComptetionData.ticket_price
                     )}
                   </h2>
-                  {
-                      comp.reduction > 0 && (
-                        <p>
-                          Discount: {'\t' + Formater(
-                            comp.reduction * (comp.number_tickets * ComptetionData.ticket_price) 
-                          )}
-                        </p>
-                      )
-                  }
+                  {comp.reduction > 0 && (
+                    <p>
+                      Discount:{" "}
+                      {"\t" +
+                        Formater(
+                          comp.reduction *
+                            (comp.number_tickets * ComptetionData.ticket_price)
+                        )}
+                    </p>
+                  )}
                   <p onClick={() => removeComp(comp.compID)}>REMOVE</p>
                 </div>
               </div>
@@ -184,6 +185,9 @@ const CartComp = () => {
                     {question?.imageURL ? (
                       <Image
                         src={question?.imageURL}
+                        style={{
+                          objectFit: "contain",
+                        }}
                         width={70}
                         height={70}
                         alt="questionImage"
