@@ -1,3 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable  @typescript-eslint/restrict-template-expressions */
 import Footer from "@/components/Footer";
 import NavBar from "@/components/NavBar";
 import Head from "next/head";
@@ -17,12 +21,14 @@ import Image from "next/image";
 import Loader from "@/components/Loader";
 import Timer from "@/components/Timer";
 
-export const getServerSideProps = (context: GetServerSidePropsContext) => {
+export async function getServerSideProps(context: GetServerSidePropsContext) {
   try {
     const compID = z.string().parse(context.params?.id);
     return {
       props: {
         compID,
+        messages: (await import(`../../../messages/${context.locale}.json`))
+          .default,
       },
     };
   } catch (e) {
@@ -34,7 +40,7 @@ export const getServerSideProps = (context: GetServerSidePropsContext) => {
       },
     };
   }
-};
+}
 
 export default function Competition({
   compID,
@@ -287,21 +293,23 @@ export default function Competition({
                   {data.max_space_in_final_draw > 0 && (
                     <p>
                       Maximum spaces in the final draw:{" "}
-                      {data.max_space_in_final_draw}
+                      {data.total_tickets}
                     </p>
                   )}
-                  {data.max_watch_number && (
-                    <p>Maximum watch winners: {data.max_watch_number}</p>
+                  {data.max_watch_number ? (
+                    <p>Maximum watch winners: {data.max_watch_number}</p>)
+                    :( <p>Maximum watch winners: 1</p>
                   )}
-                  {data.end_date.toString() && (
+                  {data.end_date.toString() ? (
                     <p>End of competition: {DateFormater(data.end_date)}</p>
-                  )}
-                  {data.end_date.toString() && (
+                  ) : null
+                  }
+                  {data.drawing_date.toString() ?(
                     <p>
                       Winner announcement: {DateFormater(data.drawing_date)} in
                       direct live on instagram @winuwatch
                     </p>
-                  )}
+                  ): null}
 
                   <p>
                     Runner-Up prizes: 4 players will win {Formater(25)} credit

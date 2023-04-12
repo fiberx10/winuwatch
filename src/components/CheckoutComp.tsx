@@ -13,9 +13,10 @@ import "react-datetime/css/react-datetime.css";
 
 const CheckoutComp = () => {
   const router = useRouter();
-
+  
   const { mutateAsync: createOrder } = api.Order.createStripe.useMutation();
   const { competitions, cardDetails, updateComp, reset } = useCart();
+
 
   const { data: items } = api.Competition.getAll.useQuery({
     ids: competitions.map((comp) => comp.compID),
@@ -32,6 +33,7 @@ const CheckoutComp = () => {
     );
   };
   const [error, setError] = useState<string | undefined>();
+  const [isNotConfirmed  , setIsNotConfirmed] = useState<boolean>(false)
   const { totalCost } = cardDetails();
 
   return (
@@ -56,6 +58,8 @@ const CheckoutComp = () => {
               checkedTerms: false,
             }}
             onSubmit={async (values, actions) => {
+              // disable the confirm button to prevent duplicate messages
+              setIsNotConfirmed(true)
               //if a value in the object values is undefined, it will not be sent to the server
               console.log("Form submitted:", values);
 
@@ -81,7 +85,6 @@ const CheckoutComp = () => {
               }
               setError(error || "Error in the creating the order");
               console.log(error);
-
               // const res = CreateOrderSchema.safeParse(values);
 
               // if (res.success) {
@@ -275,6 +278,7 @@ const CheckoutComp = () => {
                         return (
                           <div className={styles.orderItem} key={i}>
                             <Image
+                            
                               width={106}
                               height={105}
                               className={styles.orderImg}
@@ -290,6 +294,17 @@ const CheckoutComp = () => {
                                 {ComptetionData?.Watches.brand}{" "}
                                 {ComptetionData?.Watches.model}
                               </h3>
+                              {order.reduction > 0 && (
+                                <p>
+                                  Discount:{" "}
+                                  {"\t" +
+                                    Formater(
+                                      order.reduction *
+                                        (order.number_tickets *
+                                          ComptetionData.ticket_price)
+                                    )}
+                                </p>
+                              )}
                               <span>
                                 {values.comps.map((comp, i) => {
                                   return (
@@ -419,7 +434,11 @@ const CheckoutComp = () => {
                         <span>
                           {Formater(
                             values.comps.reduce(
-                              (acc, c) => acc + c.number_tickets * c.price_per_ticket * (1 - c.reduction),
+                              (acc, c) =>
+                                acc +
+                                c.number_tickets *
+                                  c.price_per_ticket *
+                                  (1 - c.reduction),
                               0
                             )
                           )}
@@ -478,7 +497,7 @@ const CheckoutComp = () => {
                         </PayPalScriptProvider>
                       ) : (
                         <>
-                          <button type="submit">Confirm Order</button>
+                          <button disabled={isNotConfirmed} type="submit">Confirm Order</button>
                         </>
                       )}
                     </div>

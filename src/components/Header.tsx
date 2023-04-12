@@ -1,10 +1,14 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
 import NavBar from "./NavBar";
 import styles from "@/styles/Home.module.css";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect } from "react";
+import { useTranslations } from "next-intl";
 
 export default function Header() {
+  const t = useTranslations("home");
   useEffect(() => {
     const handleScroll = () => {
       const background = document.querySelector(
@@ -43,13 +47,10 @@ export default function Header() {
       </div>
       <div className={styles.HeaderTit}>
         <h2 className={styles.background}>winuwatch</h2>
-        <h1>win your dream watch</h1>
+        <h1>{t("title")}</h1>
       </div>
       <div className={styles.HeaderDesc}>
-        <p>
-          Our team select the most beautiful watches, with a focus on elegance.
-          With more than 260 partners around the world.
-        </p>
+        <p>{t("subtitle")}</p>
         <Link href={"/#theComp"}>
           <Image width={19} height={10} alt="vector" src="/images/Vector.svg" />
         </Link>

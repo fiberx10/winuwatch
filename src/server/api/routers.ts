@@ -2,11 +2,7 @@ import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { CompetitionStatus, OrderStatus } from "@prisma/client";
 import { getBaseUrl, CreateOrderSchema } from "@/utils";
-import {
-  WatchesSchema,
-  CompetitionSchema,
-  ImagesUrlSchema,
-} from "@/utils/zodSchemas";
+import { WatchesSchema, CompetitionSchema } from "@/utils/zodSchemas";
 import { env } from "@/env.mjs";
 import Email from "@/components/emails";
 import stripe from "stripe";
@@ -367,6 +363,25 @@ export const CompetitionRouter = createTRPCRouter({
           },
         }),
       ]);
+      // Get the list of competitions to update
+      const finishedComps = Data[1]
+        .filter(
+          (comp) =>
+            comp.status !== CompetitionStatus.COMPLETED &&
+            comp.total_tickets -
+              (Data[0].find((item) => item.id === comp.id)?._count?.Ticket ||
+                0) <=
+              0 &&
+            comp.end_date < new Date()
+        )
+        .map(({ id }) => id);
+
+      // Update the status of the selected competitions to "COMPLETE"
+      await ctx.prisma.competition.updateMany({
+        where: { id: { in: finishedComps } },
+        data: { status: CompetitionStatus.COMPLETED },
+      });
+
       return Data[1].map((comp) => ({
         ...comp,
         remaining_tickets:
@@ -459,8 +474,7 @@ export const CompetitionRouter = createTRPCRouter({
       ? {
           ...Data[1],
           remaining_tickets:
-            Data[1].total_tickets -
-            (Data[0]?._count?.Ticket || 0),
+            Data[1].total_tickets - (Data[0]?._count?.Ticket || 0),
         }
       : undefined;
   }),
@@ -476,6 +490,24 @@ export const CompetitionRouter = createTRPCRouter({
         data,
         where: {
           id,
+        },
+      });
+    }),
+  updateStatus: publicProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        status: z.nativeEnum(CompetitionStatus),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { id, status } = input;
+      return await ctx.prisma.competition.updateMany({
+        where: {
+          id,
+        },
+        data: {
+          status: status,
         },
       });
     }),

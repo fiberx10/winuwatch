@@ -7,7 +7,9 @@ import { Formater, api } from "@/utils";
 import { useState } from "react";
 import { Backdrop, Box, Fade, Modal } from "@mui/material";
 import { CloseOutlined } from "@ant-design/icons";
+import { useTranslations } from "next-intl";
 const CartComp = () => {
+  const t = useTranslations("cart");
   const [open, setOpen] = useState(false);
   const [wrong, setWrong] = useState(false);
   const handleClose = () => setOpen(false);
@@ -67,7 +69,7 @@ const CartComp = () => {
                   <div
                     onClick={() =>
                       updateComp({
-                        reduction : 0,
+                        reduction: 0,
                         compID: comp.compID,
                         number_tickets:
                           comp.number_tickets > 1
@@ -91,7 +93,7 @@ const CartComp = () => {
                   <div
                     onClick={() =>
                       updateComp({
-                        reduction : 0,
+                        reduction: 0,
                         compID: comp.compID,
                         number_tickets:
                           comp.number_tickets < ComptetionData.remaining_tickets
@@ -116,16 +118,21 @@ const CartComp = () => {
                       comp.number_tickets * ComptetionData.ticket_price
                     )}
                   </h2>
-                  {
-                      comp.reduction > 0 && (
-                        <p>
-                          Discount: {'\t' + Formater(
-                            comp.reduction * (comp.number_tickets * ComptetionData.ticket_price) 
+                  <p>
+                    {comp.reduction > 0 && (
+                      <>
+                        Discount:{" "}
+                        {"\t" +
+                          Formater(
+                            comp.reduction *
+                              (comp.number_tickets *
+                                ComptetionData.ticket_price)
                           )}
-                        </p>
-                      )
-                  }
-                  <p onClick={() => removeComp(comp.compID)}>REMOVE</p>
+                      </>
+                    )}
+                  </p>
+                  <p onClick={() => removeComp(comp.compID)}>{t("remove")}</p>
+
                 </div>
               </div>
             </div>
@@ -138,7 +145,7 @@ const CartComp = () => {
             textTransform: "uppercase",
           }}
         >
-          No Items in the Cart
+          {t("emptycart")}
         </h1>
       )}
 
@@ -147,7 +154,7 @@ const CartComp = () => {
         <span>{Formater(totalCost)}</span>
       </div>
       <div className={styles.cartCheckoutCon}>
-        <button onClick={() => setOpen(true)}>Check Out</button>
+        <button onClick={() => setOpen(true)}>{t("checkout")}</button>
         <Modal
           aria-labelledby="spring-modal-title"
           aria-describedby="spring-modal-description"
@@ -164,7 +171,7 @@ const CartComp = () => {
             <Box className={styles.ModalBox} sx={style}>
               {competitions.length === 0 ? (
                 <div className={styles.ModalBoxTopFlex}>
-                  <p id="spring-modal-description">Cart is empty</p>
+                  <p id="spring-modal-description">{t("cartempty")}</p>
                   <span onClick={handleClose}>
                     <CloseOutlined />
                   </span>
@@ -172,10 +179,7 @@ const CartComp = () => {
               ) : (
                 <>
                   <div className={styles.ModalBoxTopFlex}>
-                    <p id="spring-modal-description">
-                      In Order to continue to the checkout page you must answer
-                      this question:
-                    </p>
+                    <p id="spring-modal-description">{t("tocontinue")}</p>
                     <span onClick={handleClose}>
                       <CloseOutlined />
                     </span>
@@ -184,6 +188,9 @@ const CartComp = () => {
                     {question?.imageURL ? (
                       <Image
                         src={question?.imageURL}
+                        style={{
+                          objectFit: "contain",
+                        }}
                         width={70}
                         height={70}
                         alt="questionImage"
@@ -196,7 +203,7 @@ const CartComp = () => {
                   <h2
                     style={{ display: wrong ? "flex" : "none", color: "red" }}
                   >
-                    Wrong Answer
+                    {t("wronganswer")}
                   </h2>
                   <div className={styles.questionsCon}>
                     {question?.answers.map((quest, i) => {

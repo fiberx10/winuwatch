@@ -9,6 +9,7 @@ import React from "react";
 import { Formater, getBaseUrl , DateFormater } from "@/utils";
 
 import { renderToString } from "react-dom/server";
+
 const data = [
   { names: ["COMPETITIONS", "how to play", "contact"] },
   { names: ["PHILOSOPHY", "trustpilot", "Charity"] },
@@ -383,13 +384,11 @@ const mail = (
                     >
                       What happens now?
                       <br /> the contest will end on{" "}
-                      {
-                         DateFormater(order?.Competition[0]?.end_date as Date)
-                      }
-                      , the winners will be announced on{" "}
-                      {
-                        DateFormater(order?.Competition[0]?.drawing_date as Date)
-                      }
+                      {DateFormater(order?.Competition[0]?.end_date as Date)},
+                      the winners will be announced on{" "}
+                      {DateFormater(
+                        order?.Competition[0]?.drawing_date as Date
+                      )}
                       <br /> please make sure to follow us on instagram where we{" "}
                       <br />
                       host a live for each competition. <br /> we wish you the
@@ -418,8 +417,7 @@ const mail = (
                         background: "lightgrey",
                       }}
                     >
-                      LISAM WATCH 86-90 PAUL STREET LONDON, CITY OF LONDON EC2A
-                      4NE
+                                           Lisam Watch Ltd 63-66 Hatton Gardens, London, EC1N 8LE, UK
                     </h4>
                     <div style={{ display: "flex" }}>
                       <h5
