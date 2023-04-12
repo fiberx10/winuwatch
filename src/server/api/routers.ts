@@ -367,6 +367,20 @@ export const CompetitionRouter = createTRPCRouter({
           },
         }),
       ]);
+      // Get the list of competitions to update
+      const finishedComps = await ctx.prisma.competition.findMany({
+        where: { drawing_date: { lt: new Date() } },
+      });
+
+      // Extract the IDs of the competitions to update
+      const competitionIds = finishedComps.map((comp) => comp.id);
+
+      // Update the status of the selected competitions to "COMPLETE"
+      await ctx.prisma.competition.updateMany({
+        where: { id: { in: competitionIds } },
+        data: { status: "COMPLETED" },
+      });
+
       return Data[1].map((comp) => ({
         ...comp,
         remaining_tickets:
@@ -459,8 +473,7 @@ export const CompetitionRouter = createTRPCRouter({
       ? {
           ...Data[1],
           remaining_tickets:
-            Data[1].total_tickets -
-            (Data[0]?._count?.Ticket || 0),
+            Data[1].total_tickets - (Data[0]?._count?.Ticket || 0),
         }
       : undefined;
   }),
@@ -476,6 +489,24 @@ export const CompetitionRouter = createTRPCRouter({
         data,
         where: {
           id,
+        },
+      });
+    }),
+  updateStatus: publicProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        status: z.nativeEnum(CompetitionStatus),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { id, status } = input;
+      return await ctx.prisma.competition.updateMany({
+        where: {
+          id,
+        },
+        data: {
+          status: status,
         },
       });
     }),
