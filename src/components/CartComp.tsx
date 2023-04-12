@@ -21,7 +21,7 @@ const CartComp = () => {
   const { data: question } = api.Question.getOneRandom.useQuery();
 
   const router = useRouter();
-  console.log(question);
+  //console.log(question);
 
   const { totalCost } = cardDetails();
   const style = {
