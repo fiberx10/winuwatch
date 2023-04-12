@@ -6,7 +6,7 @@ import type {
   Watches,
 } from "@prisma/client";
 import React from "react";
-import { Formater, getBaseUrl , DateFormater } from "@/utils";
+import { Formater, getBaseUrl, DateFormater } from "@/utils";
 
 import { renderToString } from "react-dom/server";
 const data = [
@@ -126,11 +126,7 @@ const mail = (
                 </tr>
               </tbody>
             </table>
-            <table
-              align="center"
-              width="100%"
-              border={0}
-            >
+            <table align="center" width="100%" border={0}>
               <tbody>
                 <tr>
                   <td>
@@ -193,7 +189,6 @@ const mail = (
                               <tbody>
                                 <tr>
                                   <td
-                                    
                                     style={{
                                       width: "66%",
                                       padding: "0px 0px 0px 20px",
@@ -383,13 +378,11 @@ const mail = (
                     >
                       What happens now?
                       <br /> the contest will end on{" "}
-                      {
-                         DateFormater(order?.Competition[0]?.end_date as Date)
-                      }
-                      , the winners will be announced on{" "}
-                      {
-                        DateFormater(order?.Competition[0]?.drawing_date as Date)
-                      }
+                      {DateFormater(order?.Competition[0]?.end_date as Date)},
+                      the winners will be announced on{" "}
+                      {DateFormater(
+                        order?.Competition[0]?.drawing_date as Date
+                      )}
                       <br /> please make sure to follow us on instagram where we{" "}
                       <br />
                       host a live for each competition. <br /> we wish you the
@@ -416,10 +409,10 @@ const mail = (
                         textAlign: "center",
                         fontWeight: "400",
                         background: "lightgrey",
+                        textTransform: "uppercase",
                       }}
                     >
-                      LISAM WATCH 86-90 PAUL STREET LONDON, CITY OF LONDON EC2A
-                      4NE
+                      Lisam Watch Ltd 63-66 Hatton Gardens, London, EC1N 8LE, UK
                     </h4>
                     <div style={{ display: "flex" }}>
                       <h5
