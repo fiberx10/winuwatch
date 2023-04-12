@@ -22,12 +22,13 @@ export const Formater = (value: number | bigint) =>
     currency: "GBP",
   }).format(value);
 
-export const DateFormater = (value: Date) =>
-  new Intl.DateTimeFormat(LOCAL, {
+export const  DateFormater = (value :Date) => new Intl.DateTimeFormat(LOCAL, {
     dateStyle: "full",
     timeStyle: "long",
-  }).format(value);
-
+    timeZone: "Europe/London",
+  })
+    .format(value)
+    .replace("BST", "LONDON TIME");
 
 export const MAX_TICKETS = 25;
 export const TICKETREDUC = [
