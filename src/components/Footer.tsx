@@ -121,33 +121,35 @@ const Footer = () => {
           />
 
           <div className={styles.menusGrid}>
-            {Tabs.map((menu, i) =>
-              menu.map(({ name, link, mail }, j) => (
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: "0.4rem",
-                  }}
-                  key={i + j}
-                >
-                  {mail ? (
-                    <a href={mail}>{name}</a>
-                  ) : (
-                    link && (
-                      <span
-                        // eslint-disable-next-line @typescript-eslint/no-misused-promises
-                        onClick={async () => {
-                          await router.push(link);
-                        }}
-                      >
-                        {name}
-                      </span>
-                    )
-                  )}
-                </div>
-              ))
-            )}
+            {Tabs.map((menu, i) => (
+              <div className={styles.menusGridItem} key={i}>
+                {menu.map(({ name, link, mail }, j) => (
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "0.4rem",
+                    }}
+                    key={i + j}
+                  >
+                    {mail ? (
+                      <a href={mail}>{name}</a>
+                    ) : (
+                      link && (
+                        <span
+                          // eslint-disable-next-line @typescript-eslint/no-misused-promises
+                          onClick={async () => {
+                            await router.push(link);
+                          }}
+                        >
+                          {name}
+                        </span>
+                      )
+                    )}
+                  </div>
+                ))}
+              </div>
+            ))}
           </div>
           <div className={styles.FooterTopRight}>
             <div className={styles.emails}>

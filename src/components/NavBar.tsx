@@ -18,15 +18,21 @@ export default function NavBar() {
   const [anchorLanguageEl, setAnchorLanguageEl] = useState<null | HTMLElement>(
     null
   );
-
   const howTo =
     typeof window !== "undefined" && document.getElementById("Howtoplay");
   const theComp =
     typeof window !== "undefined" && document.getElementById("theComp");
   useEffect(() => {
-    typeof window !== "undefined" && location.pathname !== "/"
-      ? setNavColor("#927C66")
-      : setNavColor("white");
+    if (
+      typeof window !== "undefined" &&
+      (location.pathname === "/es" || location.pathname === "/fr")
+    ) {
+      setNavColor("white");
+    } else if (typeof window !== "undefined" && location.pathname !== "/") {
+      setNavColor("#927C66");
+    } else {
+      setNavColor("white");
+    }
   }, []);
   return (
     <div
