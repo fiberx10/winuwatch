@@ -15,7 +15,7 @@ import Footer from "@/components/Footer";
 import UpComing from "@/components/UpComing";
 //import { api } from "@/utils/api";
 
-export default function Philosopht() {
+export default function Index() {
   /*const {
     data: Watches,
   } = api.Watches.getAll.useQuery();
