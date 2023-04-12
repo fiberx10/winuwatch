@@ -64,30 +64,67 @@ const CartComp = () => {
               </div>
               <div className={styles.CartRight}>
                 <div className={styles.Counter}>
+                  <div
+                    onClick={() =>
+                      updateComp({
+                        reduction : 0,
+                        compID: comp.compID,
+                        number_tickets:
+                          comp.number_tickets > 1
+                            ? comp.number_tickets - 1
+                            : comp.number_tickets,
+                        price_per_ticket: ComptetionData.ticket_price,
+                      })
+                    }
+                    className={styles.CounterSelec}
+                  >
+                    <Image
+                      width={13}
+                      height={1}
+                      src="/images/Minus.png"
+                      alt="minus"
+                    />
+                  </div>
                   <div className={styles.counterValue}>
                     {comp.number_tickets}
                   </div>
+                  <div
+                    onClick={() =>
+                      updateComp({
+                        reduction : 0,
+                        compID: comp.compID,
+                        number_tickets:
+                          comp.number_tickets < ComptetionData.remaining_tickets
+                            ? comp.number_tickets + 1
+                            : comp.number_tickets,
+                        price_per_ticket: ComptetionData.ticket_price,
+                      })
+                    }
+                    className={styles.CounterSelec}
+                  >
+                    <Image
+                      width={11}
+                      height={11}
+                      src="/images/plus.png"
+                      alt="plus"
+                    />
+                  </div>
                 </div>
-
                 <div className={styles.CartPriceCon}>
                   <h2>
                     {Formater(
                       comp.number_tickets * ComptetionData.ticket_price
                     )}
                   </h2>
-                  <p>
-                    {comp.reduction > 0 && (
-                      <>
-                        Discount:{" "}
-                        {"\t" +
-                          Formater(
-                            comp.reduction *
-                              (comp.number_tickets *
-                                ComptetionData.ticket_price)
+                  {
+                      comp.reduction > 0 && (
+                        <p>
+                          Discount: {'\t' + Formater(
+                            comp.reduction * (comp.number_tickets * ComptetionData.ticket_price) 
                           )}
-                      </>
-                    )}
-                  </p>
+                        </p>
+                      )
+                  }
                   <p onClick={() => removeComp(comp.compID)}>REMOVE</p>
                 </div>
               </div>
