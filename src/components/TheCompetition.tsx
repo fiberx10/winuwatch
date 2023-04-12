@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable  @typescript-eslint/no-misused-promises */
 import styles from "../styles/Home.module.css";
 import Timer from "./Timer";
@@ -67,9 +69,13 @@ const TheCompetition = () => {
                       {t("start")}
                     </a>
                     <h3>{watch.name}</h3>
-                    <p>
-                      Only <b>{watch.remaining_tickets}</b> {t("tickets")}
-                    </p>
+                    {watch.end_date < new Date() ? (
+                      ""
+                    ) : (
+                      <p>
+                        Only <b>{watch.remaining_tickets}</b> {t("tickets")}
+                      </p>
+                    )}
                   </div>
                 </div>
                 <Timer displayFlex={false} date={watch.end_date} />
