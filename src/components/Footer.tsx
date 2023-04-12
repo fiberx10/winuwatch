@@ -78,12 +78,6 @@ const Footer = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const howTo =
-    typeof window !== "undefined" && document.getElementById("Howtoplay");
-  const theComp =
-    typeof window !== "undefined" && document.getElementById("theComp");
-  const trustpilot =
-    typeof window !== "undefined" && document.getElementById("trustpilot");
   useEffect(() => {
     typeof window !== "undefined" && setLocation(window.location.pathname);
   }, [windowLocation]);
@@ -93,9 +87,14 @@ const Footer = () => {
       <div
         style={{
           background:
-            typeof window !== "undefined" && location.pathname !== "/Philosophy"
-              ? "#cbb9ac"
-              : "#a8957e",
+            typeof window !== "undefined" &&
+            (windowLocation === "/es/Philosophy" ||
+              windowLocation === "/fr/Philosophy")
+              ? "#a8957e"
+              : typeof window !== "undefined" &&
+                windowLocation === "/Philosophy"
+              ? "#a8957e"
+              : "#cbb9ac",
         }}
         className={styles.FooterInsta}
       >
