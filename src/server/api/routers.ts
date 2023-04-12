@@ -368,17 +368,22 @@ export const CompetitionRouter = createTRPCRouter({
         }),
       ]);
       // Get the list of competitions to update
-      const finishedComps = await ctx.prisma.competition.findMany({
-        where: { drawing_date: { lt: new Date() } },
-      });
-
-      // Extract the IDs of the competitions to update
-      const competitionIds = finishedComps.map((comp) => comp.id);
+      const finishedComps = Data[1]
+        .filter(
+          (comp) =>
+            comp.status !== CompetitionStatus.COMPLETED &&
+            comp.total_tickets -
+              (Data[0].find((item) => item.id === comp.id)?._count?.Ticket ||
+                0) <=
+              0 &&
+            comp.end_date < new Date()
+        )
+        .map(({ id }) => id);
 
       // Update the status of the selected competitions to "COMPLETE"
       await ctx.prisma.competition.updateMany({
-        where: { id: { in: competitionIds } },
-        data: { status: "COMPLETED" },
+        where: { id: { in: finishedComps } },
+        data: { status: CompetitionStatus.COMPLETED },
       });
 
       return Data[1].map((comp) => ({
