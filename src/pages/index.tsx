@@ -1,7 +1,9 @@
-import { type NextPage } from "next";
-
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable  @typescript-eslint/restrict-template-expressions */
+import type { GetStaticPropsContext } from "next";
 import "react-alice-carousel/lib/alice-carousel.css";
-
 import Head from "next/head";
 import Header from "@/components/Header";
 import TheCompetition from "@/components/TheCompetition";
@@ -13,7 +15,7 @@ import Footer from "@/components/Footer";
 import UpComing from "@/components/UpComing";
 //import { api } from "@/utils/api";
 
-const Home: NextPage = () => {
+export default function Index() {
   /*const {
     data: Watches,
   } = api.Watches.getAll.useQuery();
@@ -113,6 +115,12 @@ const Home: NextPage = () => {
       <Footer />
     </>
   );
-};
+}
 
-export default Home;
+export async function getStaticProps({ locale }: GetStaticPropsContext) {
+  return {
+    props: {
+      messages: (await import(`../../messages/${locale}.json`)).default,
+    },
+  };
+}

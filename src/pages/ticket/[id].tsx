@@ -1,5 +1,3 @@
-import Footer from "@/components/Footer";
-import NavBar from "@/components/NavBar";
 import Head from "next/head";
 import { api } from "@/utils/api";
 import styles from "@/styles/Ticket.module.css";

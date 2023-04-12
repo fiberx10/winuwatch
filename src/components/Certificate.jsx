@@ -1,11 +1,13 @@
 import React from "react";
 import styles from "../styles/Home.module.css";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 
 const Certificate = () => {
+  const t = useTranslations("home");
   return (
     <div className={styles.certifContainer}>
-      <h1>we use TPAL electronic random draw computerized system</h1>
+      <h1>{t("certiftitle")}</h1>
       <div className={styles.certifBox}>
         <Image
           width={238}
@@ -15,6 +17,7 @@ const Certificate = () => {
         />
       </div>
       <h2>
+        {t("certifdesc")}
         randomdraws certificate system randomdraws certificate system
         randomdraws certificate system
       </h2>

@@ -36,13 +36,12 @@ export default async function send(req: NextApiRequest, res: NextApiResponse) {
     },
   });
   const EmailRender = Email(order);
-  /*
+
   await Transporter.sendMail({
     from: "noreply@winuwatch.uk",
     to: "iliassjabali@gmail.com",
     subject: `Order Confirmation - Winuwatch #${order?.id || "000000"}`,
     html: EmailRender,
   });
-  */
   res.send(EmailRender);
 }

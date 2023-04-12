@@ -9,6 +9,7 @@ import React from "react";
 import { Formater, getBaseUrl , DateFormater } from "@/utils";
 
 import { renderToString } from "react-dom/server";
+
 const data = [
   { names: ["COMPETITIONS", "how to play", "contact"] },
   { names: ["PHILOSOPHY", "trustpilot", "Charity"] },

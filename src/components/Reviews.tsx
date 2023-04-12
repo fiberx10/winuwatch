@@ -2,8 +2,10 @@ import { Rating } from "@mui/material";
 import React, { useEffect } from "react";
 import AliceCarousel from "react-alice-carousel";
 import styles from "../styles/Home.module.css";
+import { useTranslations } from "next-intl";
 
 const Reviews = () => {
+  const t = useTranslations("home");
   const data = [
     {
       name: "trustpilot",
@@ -79,7 +81,9 @@ const Reviews = () => {
                     <div className={styles.RevTopTxt}>
                       <p>/ TrustScore {rev.score}</p>
                       <p>
-                        <u>/ {rev.numberOfRev} reviews</u>
+                        <u>
+                          / {rev.numberOfRev} {t("reviews")}
+                        </u>
                       </p>
                       <div className={styles.Rating}>
                         /

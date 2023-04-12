@@ -149,7 +149,7 @@
   text-transform: uppercase;
   color: grey;
 }
-.DrawerCon a {
+.DrawerCon span {
   font-weight: 400;
   font-size: 30px;
   text-decoration: none;
@@ -357,12 +357,12 @@
   justify-content: flex-start;
 }
 .watchCon a {
-  width: 12rem;
+  width: 14rem;
   height: 50px;
   background-color: #cbb9ac;
   border: none;
   font-weight: 700;
-  font-size: 20px;
+  font-size: 15px;
   text-transform: uppercase;
   color: white;
   font-family: "Montserrat", sans-serif;
@@ -636,7 +636,7 @@
 }
 .certifContainer h1 {
   font-weight: 700;
-  font-size: 32px;
+  font-size: 30px;
   color: white;
   text-transform: uppercase;
 }
@@ -778,27 +778,32 @@
 .menusGrid {
   display: grid;
   grid-template-columns: repeat(4, auto);
-  column-gap: 0rem;
-  row-gap: 0.4rem;
+  column-gap: 2rem;
   place-items: center;
+}
+.menusGridItem {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  height: 70px;
 }
 .menusGrid a {
   text-decoration: none;
   color: white;
-  width: 150px;
+  width: fit-content;
   text-transform: uppercase;
   font-weight: 300;
-  font-size: 14px;
+  font-size: 12px;
   letter-spacing: 0.05em;
 }
 .menusGrid span {
   text-decoration: none;
   cursor: pointer;
   color: white;
-  width: 150px;
+  width: fit-content;
   text-transform: uppercase;
   font-weight: 300;
-  font-size: 14px;
+  font-size: 12px;
   letter-spacing: 0.05em;
 }
 .emails {
@@ -1218,6 +1223,7 @@
   .certifContainer h2 {
     text-align: center;
     bottom: 5rem;
+    font-size: 15px;
   }
   .certifBox {
     width: 345px;
@@ -1263,7 +1269,12 @@
     grid-template-columns: repeat(1, 1fr);
     width: 100%;
     text-align: center;
-    row-gap: 2rem;
+    row-gap: 1.5rem;
+  }
+  .menusGridItem {
+    width: 200px;
+    align-items: center;
+    height: auto;
   }
 }
 @media only screen and (min-width: 442px) {
