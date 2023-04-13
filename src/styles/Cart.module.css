@@ -65,7 +65,8 @@
   cursor: pointer;
 }
 .counterValue {
-  width: 100%;  display: grid;
+  width: 100%;
+  display: grid;
   place-items: center;
 }
 .CartPriceCon {
@@ -250,6 +251,16 @@
   .modalQuestion {
     flex-direction: column;
   }
+  .CartPriceCon {
+    align-items: center;
+  }
+  /* .CartPriceCon {
+    align-items: center;
+    flex-direction: row !important;
+  }
+  .CartRight {
+    justify-content: center !important;
+  } */
   .ModalBox {
     padding: 20px;
     position: relative;
