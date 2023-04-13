@@ -37,7 +37,12 @@ const CartComp = () => {
     borderRadius: "10px",
   };
   //TODO: Loading
-
+  const questionImgs = [
+    "Rolex_Sky-Dweller",
+    "ROLEX_COSMOGRAPH_DAYTONA_40MM_-_PANDA",
+    "Audemars_Piguet_Royal_Oak",
+    "ROLEX_SUBMARINER_40MM_-_HULK_DIAMOND__EMERALD",
+  ];
   return (
     <div className={styles.CartMain}>
       {data && competitions.length > 0 ? (
@@ -132,7 +137,6 @@ const CartComp = () => {
                     )}
                   </p>
                   <p onClick={() => removeComp(comp.compID)}>{t("remove")}</p>
-
                 </div>
               </div>
             </div>
@@ -191,14 +195,14 @@ const CartComp = () => {
                         style={{
                           objectFit: "contain",
                         }}
-                        width={70}
-                        height={70}
+                        width={90}
+                        height={90}
                         alt="questionImage"
                       />
                     ) : (
                       ""
                     )}
-                    <h1>{question?.question}</h1>
+                    <h1>What watch is this ?</h1>
                   </div>
                   <h2
                     style={{ display: wrong ? "flex" : "none", color: "red" }}
@@ -206,11 +210,11 @@ const CartComp = () => {
                     {t("wronganswer")}
                   </h2>
                   <div className={styles.questionsCon}>
-                    {question?.answers.map((quest, i) => {
+                    {questionImgs.map((quest, i) => {
                       return (
                         <button
                           onClick={() => {
-                            quest === question?.correctAnswer
+                            question?.imageURL?.includes(quest)
                               ? router
                                   .push("/CheckoutPage")
                                   .then(() => {

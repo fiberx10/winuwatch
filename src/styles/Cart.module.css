@@ -194,7 +194,7 @@
   justify-content: space-between;
 }
 .questionsCon button {
-  width: 452px;
+  width: 405px;
   height: 93px;
   background: #ffffff;
   border: 1px solid #987358;
@@ -247,9 +247,15 @@
     width: 100%;
   }
   .modalQuestion {
-    flex-direction: column;
+    flex-direction: row;
   }
 
+  .questionsCon button {
+    font-size: 12px !important;
+  }
+  .ModalBox h2 {
+    font-size: 15px;
+  }
   .CartPriceCon {
     align-items: center;
     flex-direction: row !important;
@@ -333,6 +339,21 @@
     align-items: center;
     justify-content: center;
   }
+  .questionsCon button {
+    font-size: 10px !important;
+  }
+}
+@media only screen and (max-width: 1023px) {
+  .questionsCon {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+  }
+  .questionsCon button {
+    width: 350px;
+    font-size: 15px;
+  }
 }
 @media only screen and (max-width: 1024px) {
   .questionsCon {
@@ -349,17 +370,8 @@
   .ModalBox h1 {
     font-size: 30px;
   }
-  .questionsCon button {
-    width: 70%;
-    font-size: 13px;
-  }
 }
 @media only screen and (max-width: 728px) {
-  .questionsCon button {
-    height: 125px;
-    font-size: 10px;
-    width: 100%;
-  }
 }
 
 @media only screen and (min-width: 1641px) {
