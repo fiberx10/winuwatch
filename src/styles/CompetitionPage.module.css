@@ -1,3 +1,7 @@
+.instaLink {
+  color: #987358;
+  cursor: pointer;
+}
 .compWrapper {
   display: flex;
   flex-direction: column;
