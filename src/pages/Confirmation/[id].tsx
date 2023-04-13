@@ -8,23 +8,27 @@ import type {
   GetServerSidePropsContext,
   InferGetServerSidePropsType,
 } from "next";
+import { useTranslations } from "next-intl";
 
 import { useCart } from "@/components/Store";
 import { useEffect } from "react";
-export const getServerSideProps = (context: GetServerSidePropsContext) => {
+export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { id } = context.query;
   return {
     props: {
       id: z.string().parse(id),
+      messages: (await import(`../../../messages/${context.locale}.json`))
+        .default,
     },
   };
-};
+}
 
 export default function Confirmation({
   id,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const { data } = api.Order.getOrder.useQuery(id);
   const { reset } = useCart();
+  const t = useTranslations("thanku");
 
   useEffect(() => {
     reset();
@@ -41,10 +45,9 @@ export default function Confirmation({
       <div className={styles.confirmwrapper}></div>
       <div className={styles.confirmwrapper}>
         <div className={styles.confirm_text}>
-          <h1>Thank you {data ? data[0]?.first_name : null} for your order!</h1>
+          <h1>{t("thank")} {data ? data[0]?.first_name : null}{t("foryourorder")}</h1>
           <p>
-            Your order has been confirmed . <br /> You will receive an email
-            confirmation shortly.
+           {t("confirm")} <br /> {t("confemail")}
           </p>
         </div>
       </div>
