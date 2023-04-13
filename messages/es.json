@@ -49,6 +49,7 @@
     "contactus": "QUIERE ESTAR EN ESTA LISTA - PÓNGASE EN CONTACTO CON NOSOTROS"
   },
   "cart": {
+    "discount": "DESCUENTO",
     "emptycart": "NO HAY ARTÍCULOS EN LA CESTA",
     "remove": "QUITAR",
     "total": "TOTAL",
@@ -95,6 +96,7 @@
     "confemail": "Recibirás una confirmación por correo electrónico en breve."
   },
   "confirder": {
+    "discount": "DESCUENTO",
     "text": "Nos complace informarle que su registro ha sido recibido y procesado con éxito. Ahora ha entrado oficialmente en la competición.",
     "watchinfo": "INFORMACIÓN DEL RELOJ",
     "order": "PEDIDO:",

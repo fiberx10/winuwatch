@@ -46,8 +46,12 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 export default function Competition({
   compID,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+<<<<<<< HEAD
   const t = useTranslations("competition");
   const { data, isLoading } = api.Competition.byID.useQuery(compID);
+=======
+  const { data, isLoading } = api.Competition.GetUniqueByID.useQuery(compID);
+>>>>>>> 4e7b67ef5542caa0d0595adf406d9c5fc0fdd3f5
   const [counter, setCounter] = useState({
     value: 1,
     reduction: 0,
@@ -128,77 +132,86 @@ export default function Competition({
                       <h3>Drawing Date for this competition in :</h3>
                       <Timer displayFlex={true} date={data.drawing_date} />
                     </>
+                  ) : data.start_date > new Date() ? (
+                    <>
+                      <h3>Competition will start in :</h3>
+                      <Timer displayFlex={true} date={data.start_date} />
+                    </>
                   ) : (
                     <h3>{ t("howmany") }</h3>
                   )}
-                  <div className={styles.tickets}>
-                    {data.remaining_tickets === 0 ||
-                    data.end_date < new Date() ? (
-                      <p>No Tickets Left!</p>
-                    ) : (
-                      TICKETREDUC.filter(
-                        ({ value }) =>
-                          value <= data.remaining_tickets && value <= filter
-                      ).map(({ value: item, reduction }, i) => (
-                        <ToggleButton
-                          key={i}
-                          onClick={() => setCounter({ value: item, reduction })}
-                          disabled={item > data.remaining_tickets}
-                          sx={{
-                            cursor:
-                              item > data.remaining_tickets
-                                ? "help"
-                                : "pointer",
-                            width: "55px",
-                            height: "55px",
-                            backgroundColor:
-                              counter.value === item
-                                ? "rgb(146, 124, 102, 0.5)"
-                                : "initial",
-                            color:
-                              counter.value === item
-                                ? "white !important"
-                                : "initial",
-                            border:
-                              counter.value === item
-                                ? "2px solid rgb(146, 124, 102) !important"
-                                : "initial",
-                          }}
-                          value={item}
-                          aria-label="left aligned"
-                        >
-                          <span
-                            style={{
-                              fontSize: reduction > 0 ? "18px" : "24px",
-                              height: reduction > 0 ? "23px" : "initial",
+                  {data.start_date < new Date() && (
+                    <div className={styles.tickets}>
+                      {data.remaining_tickets === 0 ||
+                      data.end_date < new Date() ? (
+                        <p>No Tickets Left!</p>
+                      ) : (
+                        TICKETREDUC.filter(
+                          ({ value }) =>
+                            value <= data.remaining_tickets && value <= filter
+                        ).map(({ value: item, reduction }, i) => (
+                          <ToggleButton
+                            key={i}
+                            onClick={() =>
+                              setCounter({ value: item, reduction })
+                            }
+                            disabled={item > data.remaining_tickets}
+                            sx={{
+                              cursor:
+                                item > data.remaining_tickets
+                                  ? "help"
+                                  : "pointer",
+                              width: "55px",
+                              height: "55px",
+                              backgroundColor:
+                                counter.value === item
+                                  ? "rgb(146, 124, 102, 0.5)"
+                                  : "initial",
+                              color:
+                                counter.value === item
+                                  ? "white !important"
+                                  : "initial",
+                              border:
+                                counter.value === item
+                                  ? "2px solid rgb(146, 124, 102) !important"
+                                  : "initial",
                             }}
+                            value={item}
+                            aria-label="left aligned"
                           >
-                            {item}
-                          </span>
-                          <p
-                            style={{ fontSize: "10px" }}
-                            className={styles.sold}
-                          >
-                            {reduction > 0 && `-${reduction * 100}%`}
-                          </p>
-                        </ToggleButton>
-                      ))
-                    )}
-                    <button
-                      style={{
-                        display:
-                          filter === MAX_TICKETS ||
-                          data.remaining_tickets === 0 ||
-                          data.end_date < new Date()
-                            ? "none"
-                            : "flex",
-                      }}
-                      onClick={() => setFilter(MAX_TICKETS)}
-                      className={styles.showMore}
-                    >
-                      +
-                    </button>
-                  </div>
+                            <span
+                              style={{
+                                fontSize: reduction > 0 ? "18px" : "24px",
+                                height: reduction > 0 ? "23px" : "initial",
+                              }}
+                            >
+                              {item}
+                            </span>
+                            <p
+                              style={{ fontSize: "10px" }}
+                              className={styles.sold}
+                            >
+                              {reduction > 0 && `-${reduction * 100}%`}
+                            </p>
+                          </ToggleButton>
+                        ))
+                      )}
+                      <button
+                        style={{
+                          display:
+                            filter === MAX_TICKETS ||
+                            data.remaining_tickets === 0 ||
+                            data.end_date < new Date()
+                              ? "none"
+                              : "flex",
+                        }}
+                        onClick={() => setFilter(MAX_TICKETS)}
+                        className={styles.showMore}
+                      >
+                        +
+                      </button>
+                    </div>
+                  )}
                 </div>
                 <div className={styles.CompBot}>
                   <div className={styles.donations}>
@@ -223,47 +236,54 @@ export default function Competition({
                       />
                     </div>
                   </div>
-                  {data.remaining_tickets === 0 ||
-                  data.end_date < new Date() ? (
-                    ""
-                  ) : (
-                    <div className={styles.addtoCart}>
-                      <div className={styles.prices}>
-                        <p>
-                          {` Tickets: ${counter.value} x ${Formater(
-                            data.ticket_price
-                          )}`}
-                        </p>
-                        {counter.reduction > 0 && (
-                          <p>
-                            {` Discount: ${Formater(
-                              data.ticket_price *
-                                counter.reduction *
-                                counter.value
-                            )}`}
-                          </p>
-                        )}
-                        <span>
-                          {Formater(
-                            counter.value * data.ticket_price -
-                              counter.value *
-                                data.ticket_price *
-                                counter.reduction
-                          )}
-                        </span>
-                      </div>
-                      <button
-                        onClick={() => {
-                          competitions.length > 0
-                            ? competitions.filter(
-                                (comp) =>
-                                  comp.compID === data.id &&
-                                  updateComp({
+                  {data.remaining_tickets === 0 || data.end_date < new Date()
+                    ? ""
+                    : data.start_date < new Date() && (
+                        <div className={styles.addtoCart}>
+                          <div className={styles.prices}>
+                            <p>
+                              {` Tickets: ${counter.value} x ${Formater(
+                                data.ticket_price
+                              )}`}
+                            </p>
+                            {counter.reduction > 0 && (
+                              <p>
+                                {` Discount: ${Formater(
+                                  data.ticket_price *
+                                    counter.reduction *
+                                    counter.value
+                                )}`}
+                              </p>
+                            )}
+                            <span>
+                              {Formater(
+                                counter.value * data.ticket_price -
+                                  counter.value *
+                                    data.ticket_price *
+                                    counter.reduction
+                              )}
+                            </span>
+                          </div>
+                          <button
+                            onClick={() => {
+                              competitions.length > 0
+                                ? competitions.filter(
+                                    (comp) =>
+                                      comp.compID === data.id &&
+                                      updateComp({
+                                        reduction: counter.reduction,
+                                        compID: data.id,
+                                        number_tickets:
+                                          counter.value + comp.number_tickets,
+                                        price_per_ticket: data.ticket_price,
+                                      })
+                                  )
+                                : addComp({
                                     reduction: counter.reduction,
                                     compID: data.id,
-                                    number_tickets:
-                                      counter.value + comp.number_tickets,
+                                    number_tickets: counter.value,
                                     price_per_ticket: data.ticket_price,
+<<<<<<< HEAD
                                   })
                               )
                             : addComp({
@@ -281,6 +301,16 @@ export default function Competition({
                       </button>
                     </div>
                   )}
+=======
+                                  });
+                              void router.push("/Cart");
+                            }}
+                          >
+                            CONTINUE
+                          </button>
+                        </div>
+                      )}
+>>>>>>> 4e7b67ef5542caa0d0595adf406d9c5fc0fdd3f5
                 </div>
               </div>
             </div>
@@ -297,6 +327,7 @@ export default function Competition({
                   </p>
                   {data.total_tickets > 0 && (
                     <p>
+<<<<<<< HEAD
                      {
                       t("maxspace")
                      } {" "}
@@ -312,11 +343,26 @@ export default function Competition({
                   ) : null
                   }
                   {data.drawing_date.toString() ?(
+=======
+                      Maximum spaces in the final draw:{" "}
+                      {data.max_space_in_final_draw}
+                    </p>
+                  )}
+                  {data.max_watch_number ? (
+                    <p>Maximum watch winners: {data.max_watch_number}</p>
+                  ) : (
+                    <p>Maximum watch winners: 1</p>
+                  )}
+                  {data.end_date.toString() ? (
+                    <p>End of competition: {DateFormater(data.end_date)}</p>
+                  ) : null}
+                  {data.drawing_date.toString() ? (
+>>>>>>> 4e7b67ef5542caa0d0595adf406d9c5fc0fdd3f5
                     <p>
                       {t("winannon")} {DateFormater(data.drawing_date)} in
                      {t("liveinsta")} @winuwatch
                     </p>
-                  ): null}
+                  ) : null}
 
                   <p>
                    {t("runup")} 4 {t('willwin')} {Formater(25)} {t("creditto")}

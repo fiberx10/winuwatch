@@ -19,10 +19,9 @@ import { GetServerSidePropsContext, GetStaticPropsContext } from "next";
 
 const CheckoutComp = () => {
   const router = useRouter();
-  
+  const t = useTranslations("checkout");
   const { mutateAsync: createOrder } = api.Order.createStripe.useMutation();
   const { competitions, cardDetails, updateComp, reset } = useCart();
-
 
   const { data: items } = api.Competition.getAll.useQuery({
     ids: competitions.map((comp) => comp.compID),
@@ -39,9 +38,9 @@ const CheckoutComp = () => {
     );
   };
   const [error, setError] = useState<string | undefined>();
-  const [isNotConfirmed  , setIsNotConfirmed] = useState<boolean>(false)
+  const [isNotConfirmed, setIsNotConfirmed] = useState<boolean>(false);
   const { totalCost } = cardDetails();
-  const t = useTranslations("checkout");
+ 
 
   return (
     <div className={styles.CheckoutMain}>
@@ -66,7 +65,7 @@ const CheckoutComp = () => {
             }}
             onSubmit={async (values, actions) => {
               // disable the confirm button to prevent duplicate messages
-              setIsNotConfirmed(true)
+              setIsNotConfirmed(true);
               //if a value in the object values is undefined, it will not be sent to the server
               console.log("Form submitted:", values);
 
@@ -192,9 +191,9 @@ const CheckoutComp = () => {
                             utc={true}
                             input={true}
                             timeFormat={false}
-                            isValidDate={(currentDate) => {
-                              return IsLegal(new Date(currentDate as Date));
-                            }}
+                            isValidDate={(currentDate) =>
+                              IsLegal(new Date(currentDate as Date))
+                            }
                             inputProps={{
                               name: "date",
                               placeholder: "Enter Date",
@@ -204,12 +203,15 @@ const CheckoutComp = () => {
                             onChange={(value) => setFieldValue("date", value)}
                           />
 
-                          {error ===
-                          "You must be 18 years old to purchase a ticket" ? (
-                            <p style={{ color: "red" }}>{error}</p>
-                          ) : (
-                            ""
-                          )}
+                          {
+                            //TODO: THis should be translated
+                            error ===
+                            "You must be 18 years old to purchase a ticket" ? (
+                              <p style={{ color: "red" }}>{error}</p>
+                            ) : (
+                              ""
+                            )
+                          }
                         </div>
                       </div>
                     </div>
@@ -262,8 +264,7 @@ const CheckoutComp = () => {
                       </label>
                       <label>
                         <Field name="checkedEmail" type="checkbox" />
-                        <p>                        {t("terms")}
-</p>
+                        <p>{t("terms")}</p>
                       </label>
                     </div>
                   </div>
@@ -282,7 +283,6 @@ const CheckoutComp = () => {
                         return (
                           <div className={styles.orderItem} key={i}>
                             <Image
-                            
                               width={106}
                               height={105}
                               className={styles.orderImg}
@@ -300,13 +300,11 @@ const CheckoutComp = () => {
                               </h3>
                               {order.reduction > 0 && (
                                 <p>
-                                  Discount:{" "}
-                                  {"\t" +
-                                    Formater(
-                                      order.reduction *
-                                        (order.number_tickets *
-                                          ComptetionData.ticket_price)
-                                    )}
+                                  {`${t("discount")}\t${Formater(
+                                    order.reduction *
+                                      (order.number_tickets *
+                                        ComptetionData.ticket_price)
+                                  )}`}
                                 </p>
                               )}
                               <span>
@@ -329,8 +327,8 @@ const CheckoutComp = () => {
                                     ComptetionData.remaining_tickets &&
                                     ComptetionData.remaining_tickets -
                                       comp.number_tickets
-                                  );
-                                })}
+                                  )
+                                  })}
                               </h3>
                             </div>
                             <div className={styles.Counter}>

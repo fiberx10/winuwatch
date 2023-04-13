@@ -48,9 +48,11 @@
     "inassociation": "VOUS ÊTES UNE ASSOCIATION ?",
     "contactus": "VOUS VOULEZ ÊTRE DANS CETTE LISTE - CONTACTEZ-NOUS"
   },
-  "cart": {
+  "cart": { 
+    "discount": "Remise",
     "emptycart": "AUCUN ARTICLE DANS LE PANIER",
     "remove": "RETIRER",
+
     "total": "TOTAL",
     "checkout": "PAYER",
     "cartempty": "AUCUN ARTICLE DANS LE PANIER",
@@ -112,6 +114,7 @@
     "bottomtext7": "NOUS VOUS SOUHAITONS BONNE CHANCE !"
   },
   "checkout": {
+    "discount": "Remise",
     "billinginfo": "DÉTAILS DE FACTURATION",
     "ordersum": "RÉCAPITULATIF DE LA COMMANDE",
     "firstname": "PRÉNOM",
@@ -149,7 +152,7 @@
     "faq": "FAQ",
     "privacy": "POLITIQUE DE CONFIDENTIALITÉ",
     "charity": "CHARITÉ",
-    "acceptableuse": "POLITIQUE D'UTILISATION ACCEPTABLE",
+    "acceptableuse": "POLITIQUE D'UTILISATION",
     "trustpilot": "TRUSTPILOT",
     "returnpolicy": "POLITIQUE DE RETOUR",
     "policy": "POLITIQUE",

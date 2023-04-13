@@ -65,7 +65,8 @@
   cursor: pointer;
 }
 .counterValue {
-  width: 100%;  display: grid;
+  width: 100%;
+  display: grid;
   place-items: center;
 }
 .CartPriceCon {
@@ -193,7 +194,7 @@
   justify-content: space-between;
 }
 .questionsCon button {
-  width: 452px;
+  width: 405px;
   height: 93px;
   background: #ffffff;
   border: 1px solid #987358;
@@ -225,12 +226,16 @@
   }
   .CartPriceCon h2 {
     font-size: 24px !important;
-    flex: 1;
   }
   .CartPriceCon p {
     font-size: 14px !important;
-    flex: 1;
     min-width: max-content;
+  }
+  .modalQuestion img {
+    height: 30% !important;
+  }
+  .questionsCon {
+    grid-gap: 1rem !important;
   }
   .CartRight {
     padding-top: 15px;
@@ -248,7 +253,28 @@
     width: 100%;
   }
   .modalQuestion {
-    flex-direction: column;
+    flex-direction: column-reverse;
+  }
+  .modalQuestion img {
+    width: 50%;
+  }
+
+  .questionsCon button {
+    font-size: 12px !important;
+  }
+  .ModalBox h2 {
+    font-size: 15px;
+  }
+  .CartPriceCon {
+    align-items: center;
+    flex-direction: row !important;
+    width: 100%;
+    text-align: right;
+    gap: 0 !important;
+    justify-content: space-between !important;
+  }
+  .CartRight {
+    align-items: center !important;
   }
   .ModalBox {
     padding: 20px;
@@ -322,6 +348,21 @@
     align-items: center;
     justify-content: center;
   }
+  .questionsCon button {
+    font-size: 10px !important;
+  }
+}
+@media only screen and (max-width: 1023px) {
+  .questionsCon {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+  }
+  .questionsCon button {
+    width: 350px;
+    font-size: 15px;
+  }
 }
 @media only screen and (max-width: 1024px) {
   .questionsCon {
@@ -338,17 +379,8 @@
   .ModalBox h1 {
     font-size: 30px;
   }
-  .questionsCon button {
-    width: 70%;
-    font-size: 13px;
-  }
 }
 @media only screen and (max-width: 728px) {
-  .questionsCon button {
-    height: 125px;
-    font-size: 10px;
-    width: 100%;
-  }
 }
 
 @media only screen and (min-width: 1641px) {

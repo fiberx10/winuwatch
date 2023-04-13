@@ -18,8 +18,6 @@ const Certificate = () => {
       </div>
       <h2>
         {t("certifdesc")}
-        randomdraws certificate system randomdraws certificate system
-        randomdraws certificate system
       </h2>
     </div>
   );
