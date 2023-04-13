@@ -46,7 +46,9 @@
     "donation": "DONACIONES",
     "readmore": "LEER MÁS",
     "inassociation": "¿ERES UNA ASOCIACIÓN?",
-    "contactus": "QUIERE ESTAR EN ESTA LISTA - PÓNGASE EN CONTACTO CON NOSOTROS"
+    "contactus": "QUIERE ESTAR EN ESTA LISTA - PÓNGASE EN CONTACTO CON NOSOTROS",
+    "woodland" :  "Win u watch dona el 10% de sus ingresos a la Asociación Woodland en el Reino Unido"
+
   },
   "cart": {
     "whatwatch" : "¿qué reloj es este?",

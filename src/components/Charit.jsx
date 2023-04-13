@@ -1,5 +1,6 @@
 import styles from "@/styles/Charity.module.css";
 import Image from "next/image";
+import { Formater } from "@/utils";
 import { useTranslations } from "next-intl";
 
 const Charit = () => {
@@ -9,7 +10,7 @@ const Charit = () => {
       img: "/images/woodland.png",
       name: "Woodland trust UK",
       amount: 2346,
-      desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur et sollicitudin eros. ",
+      desc: t("woodland")
     },
     // {
     //   img: "/images/cancerRes.png",
@@ -24,7 +25,7 @@ const Charit = () => {
         <div className={styles.CharityH1}>
           <h1>{t("charityheader")}</h1>
         </div>
-        <h3>£594,828</h3>
+        <h3> {Formater(594828)}</h3>
       </div>
       <div className={styles.CharityGrid}>
         {data.map((charity, i) => (
