@@ -48,7 +48,8 @@
     "inassociation": "VOUS ÊTES UNE ASSOCIATION ?",
     "contactus": "VOUS VOULEZ ÊTRE DANS CETTE LISTE - CONTACTEZ-NOUS"
   },
-  "cart": { 
+  "cart": {
+    "whatwatch" : "Quelle est cette montre ?", 
     "discount": "Remise",
     "emptycart": "AUCUN ARTICLE DANS LE PANIER",
     "remove": "RETIRER",

@@ -18,7 +18,6 @@ const CartComp = () => {
   const { data } = api.Competition.getAll.useQuery({
     ids: competitions.map(({ compID }) => compID),
   });
-  const { data: question } = api.Question.getOneRandom.useQuery();
 
   const router = useRouter();
   //console.log(question);
@@ -38,11 +37,28 @@ const CartComp = () => {
   };
   //TODO: Loading
   const questionImgs = [
-    "Rolex_Sky-Dweller",
-    "ROLEX_COSMOGRAPH_DAYTONA_40MM_-_PANDA",
-    "Audemars_Piguet_Royal_Oak",
-    "ROLEX_SUBMARINER_40MM_-_HULK_DIAMOND__EMERALD",
+    {
+      img: "/images/Rolex_Sky-Dweller.jpg",
+      name: "Rolex_Sky-Dweller",
+    },
+    {
+      img: "/images/ROLEX_COSMOGRAPH_DAYTONA_40MM_-_PANDA.png",
+      name: "ROLEX_COSMOGRAPH_DAYTONA_40MM_-_PANDA",
+    },
+    {
+      img: "/images/Audemars_Piguet_Royal_Oak.png",
+      name: "Audemars_Piguet_Royal_Oak",
+    },
+    {
+      img: "/images/ROLEX_SUBMARINER_40MM_-_HULK_DIAMOND__EMERALD.jpg",
+      name: "ROLEX_SUBMARINER_40MM_-_HULK_DIAMOND__EMERALD",
+    },
   ];
+  function getRandomImage() {
+    const randomIndex = Math.floor(Math.random() * questionImgs.length);
+    return questionImgs[randomIndex];
+  }
+  const randomImage = getRandomImage();
   return (
     <div className={styles.CartMain}>
       {data && competitions.length > 0 ? (
@@ -180,9 +196,9 @@ const CartComp = () => {
                     </span>
                   </div>
                   <div className={styles.modalQuestion}>
-                    {question?.imageURL ? (
+                    {randomImage && (
                       <Image
-                        src={question?.imageURL}
+                        src={randomImage.img}
                         style={{
                           objectFit: "contain",
                         }}
@@ -190,10 +206,11 @@ const CartComp = () => {
                         height={90}
                         alt="questionImage"
                       />
-                    ) : (
-                      ""
                     )}
-                    <h1>What watch is this ?</h1>
+
+                    <h1>
+                      {t("whatwatch")}
+                    </h1>
                   </div>
                   <h2
                     style={{ display: wrong ? "flex" : "none", color: "red" }}
@@ -205,7 +222,7 @@ const CartComp = () => {
                       return (
                         <button
                           onClick={() => {
-                            question?.imageURL?.includes(quest)
+                            randomImage?.img.includes(quest.name)
                               ? router
                                   .push("/CheckoutPage")
                                   .then(() => {
@@ -218,7 +235,7 @@ const CartComp = () => {
                           }}
                           key={i}
                         >
-                          {quest.replaceAll("_", " ")}
+                          {quest.name.replaceAll("_", " ")}
                         </button>
                       );
                     })}
