@@ -10,14 +10,6 @@ import { Formater, getBaseUrl, DateFormater } from "@/utils";
 
 import { renderToString } from "react-dom/server";
 
-const data = [
-  { names: ["COMPETITIONS", "how to play", "contact"] },
-  { names: ["PHILOSOPHY", "trustpilot", "Charity"] },
-  { names: ["Acceptable Use Policy", "faq"] },
-  { names: ["Return Policy", "terms & conditions", "Privacy Policy"] },
-];
-
-import styles from "@/styles/Home.module.css";
 const mail = (
   order:
     | (Order & {
@@ -379,11 +371,11 @@ const mail = (
                     >
                       What happens now?
                       <br /> the contest will end on{" "}
-                      {DateFormater(order?.Competition[0]?.end_date as Date)},
+                      {DateFormater(order?.Competition[0]?.end_date as Date) + " (Local Time in London) "},
                       the winners will be announced on{" "}
                       {DateFormater(
                         order?.Competition[0]?.drawing_date as Date
-                      )}
+                      ) + " (Local Time in London) "}
                       <br /> please make sure to follow us on instagram where we{" "}
                       <br />
                       host a live for each competition. <br /> we wish you the
