@@ -1,6 +1,5 @@
 import { z } from "zod";
 import { OrderSchema } from "./zodSchemas";
-import { useRouter } from "next/router";
 export * from "./api";
 
 export const CreateOrderSchema = OrderSchema.extend({
@@ -16,23 +15,19 @@ export const CreateOrderSchema = OrderSchema.extend({
   id: true,
 });
 const DEFAULTLOCAL = "en-UK";
-export const Formater = (value: number | bigint) =>
-  new Intl.NumberFormat(DEFAULTLOCAL, {
+
+export const Formater = (value: number | bigint, local = DEFAULTLOCAL) =>
+  new Intl.NumberFormat(local, {
     style: "currency",
     currency: "GBP",
   }).format(value);
 
-export const DateFormater = (
-  value: Date,
-  local: string = useRouter().locale || DEFAULTLOCAL
-  ) =>
+export const DateFormater = (value: Date, local = DEFAULTLOCAL) =>
   new Intl.DateTimeFormat(local, {
     dateStyle: "full",
     timeStyle: "short",
     timeZone: "Europe/London",
-  })
-    .format(value)
-    .replace("BST", "LONDON TIME");
+  }).format(value);
 
 export const MAX_TICKETS = 25;
 export const TICKETREDUC = [

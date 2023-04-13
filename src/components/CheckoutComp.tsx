@@ -11,7 +11,7 @@ import { Formik, Form, Field } from "formik";
 import Datetime from "react-datetime";
 import "react-datetime/css/react-datetime.css";
 import { useTranslations } from "next-intl";
-import { GetServerSidePropsContext, GetStaticPropsContext } from "next";
+import type { GetStaticPropsContext } from "next";
 
 const CheckoutComp = () => {
   const router = useRouter();
@@ -296,7 +296,8 @@ const CheckoutComp = () => {
                                   {`${t("discount")}\t${Formater(
                                     order.reduction *
                                       (order.number_tickets *
-                                        ComptetionData.ticket_price)
+                                        ComptetionData.ticket_price),
+                                    router.locale
                                   )}`}
                                 </p>
                               )}
@@ -435,7 +436,8 @@ const CheckoutComp = () => {
                                   c.price_per_ticket *
                                   (1 - c.reduction),
                               0
-                            )
+                            ),
+                            router.locale
                           )}
                         </span>
                       </div>

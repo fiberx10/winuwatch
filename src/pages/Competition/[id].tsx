@@ -120,7 +120,7 @@ export default function Competition({
                 <div className={styles.CompTit}>
                   <h1>{data.name}</h1>
                   <p>
-                    {t("marketvalue")} {Formater(data.price)}
+                    {t("marketvalue")} {Formater(data.price, router.locale)}
                   </p>
                 </div>
                 <div className={styles.CompTicketSelec}>
@@ -237,7 +237,8 @@ export default function Competition({
                           <div className={styles.prices}>
                             <p>
                               {` Tickets: ${counter.value} x ${Formater(
-                                data.ticket_price
+                                data.ticket_price,
+                                router.locale
                               )}`}
                             </p>
                             {counter.reduction > 0 && (
@@ -245,7 +246,8 @@ export default function Competition({
                                 {` Discount: ${Formater(
                                   data.ticket_price *
                                     counter.reduction *
-                                    counter.value
+                                    counter.value,
+                                    router.locale
                                 )}`}
                               </p>
                             )}
@@ -254,7 +256,8 @@ export default function Competition({
                                 counter.value * data.ticket_price -
                                   counter.value *
                                     data.ticket_price *
-                                    counter.reduction
+                                    counter.reduction,
+                                    router.locale
                               )}
                             </span>
                           </div>
@@ -304,11 +307,11 @@ export default function Competition({
                   )}
                   <p>{`${t("maxwatchwinner")} ${data.max_watch_number}`}</p>
                   <p>
-                    {t("endcomp")} {DateFormater(data.end_date)}
+                    {t("endcomp")} {DateFormater(data.end_date, router.locale)}
                   </p>
 
                   <p>
-                    {`${t("winannon")} ${DateFormater(data.drawing_date)} ${t(
+                    {`${t("winannon")} ${DateFormater(data.drawing_date, router.locale)} ${t(
                       "liveinsta"
                     )} `}
                     <a href="https://www.instagram.com/winuwatch/">
@@ -317,7 +320,7 @@ export default function Competition({
                   </p>
 
                   <p>
-                    {t("runup")} 4 {t("willwin")} {Formater(25)} {t("creditto")}
+                    {t("runup")} 4 {t("willwin")} {Formater(25, router.locale)} {t("creditto")}
                   </p>
                 </div>
               </div>
