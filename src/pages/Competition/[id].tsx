@@ -46,12 +46,8 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 export default function Competition({
   compID,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-<<<<<<< HEAD
   const t = useTranslations("competition");
-  const { data, isLoading } = api.Competition.byID.useQuery(compID);
-=======
   const { data, isLoading } = api.Competition.GetUniqueByID.useQuery(compID);
->>>>>>> 4e7b67ef5542caa0d0595adf406d9c5fc0fdd3f5
   const [counter, setCounter] = useState({
     value: 1,
     reduction: 0,
@@ -283,34 +279,16 @@ export default function Competition({
                                     compID: data.id,
                                     number_tickets: counter.value,
                                     price_per_ticket: data.ticket_price,
-<<<<<<< HEAD
-                                  })
-                              )
-                            : addComp({
-                                reduction: counter.reduction,
-                                compID: data.id,
-                                number_tickets: counter.value,
-                                price_per_ticket: data.ticket_price,
-                              });
-                          void router.push("/Cart");
-                        }}
-                      >
-                        {
-                          t("continue")
-                        }
-                      </button>
-                    </div>
-                  )}
-=======
                                   });
                               void router.push("/Cart");
                             }}
                           >
-                            CONTINUE
+                            {
+                              t("continue")
+                            }
                           </button>
                         </div>
                       )}
->>>>>>> 4e7b67ef5542caa0d0595adf406d9c5fc0fdd3f5
                 </div>
               </div>
             </div>
@@ -327,7 +305,6 @@ export default function Competition({
                   </p>
                   {data.total_tickets > 0 && (
                     <p>
-<<<<<<< HEAD
                      {
                       t("maxspace")
                      } {" "}
@@ -343,21 +320,6 @@ export default function Competition({
                   ) : null
                   }
                   {data.drawing_date.toString() ?(
-=======
-                      Maximum spaces in the final draw:{" "}
-                      {data.max_space_in_final_draw}
-                    </p>
-                  )}
-                  {data.max_watch_number ? (
-                    <p>Maximum watch winners: {data.max_watch_number}</p>
-                  ) : (
-                    <p>Maximum watch winners: 1</p>
-                  )}
-                  {data.end_date.toString() ? (
-                    <p>End of competition: {DateFormater(data.end_date)}</p>
-                  ) : null}
-                  {data.drawing_date.toString() ? (
->>>>>>> 4e7b67ef5542caa0d0595adf406d9c5fc0fdd3f5
                     <p>
                       {t("winannon")} {DateFormater(data.drawing_date)} in
                      {t("liveinsta")} @winuwatch
