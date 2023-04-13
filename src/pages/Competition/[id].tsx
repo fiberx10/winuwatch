@@ -293,36 +293,28 @@ export default function Competition({
                 <h1>{t("details")}</h1>
                 <div className={styles.compDetails}>
                   <p>
-                    Prize: {data.Watches.brand} {data.Watches.model}{" "}
-                    {data.Watches.reference_number} - {t("paperwork")}
-                    {data.Watches.has_certificate}
-                    {data.Watches.has_box}.
+                    {`${t("prize")} ${data.Watches.brand} ${
+                      data.Watches.model
+                    } ${data.Watches.reference_number} - ${t("paperwork")}`}
                   </p>
                   {data.total_tickets > 0 && (
                     <p>
                       {t("maxspace")} {data.total_tickets}
                     </p>
                   )}
-                  {data.max_watch_number ? (
-                    <p>
-                      {" "}
-                      {t("maxwatchwinner")} {data.max_watch_number}
-                    </p>
-                  ) : (
-                    <p> {t("maxwatchwinner")}: 1</p>
-                  )}
-                  {data.end_date.toString() ? (
-                    <p>
-                      {t("endcomp")} {DateFormater(data.end_date)}
-                    </p>
-                  ) : null}
-                  {data.drawing_date.toString() ? (
-                    <p>
-                      {`${t("winannon")} ${DateFormater(data.drawing_date)} ${t(
-                        "liveinsta"
-                      )} @winuwatch`}
-                    </p>
-                  ) : null}
+                  <p>{`${t("maxwatchwinner")} ${data.max_watch_number}`}</p>
+                  <p>
+                    {t("endcomp")} {DateFormater(data.end_date)}
+                  </p>
+
+                  <p>
+                    {`${t("winannon")} ${DateFormater(data.drawing_date)} ${t(
+                      "liveinsta"
+                    )} `}
+                    <a href="https://www.instagram.com/winuwatch/">
+                      @winuwatch
+                    </a>
+                  </p>
 
                   <p>
                     {t("runup")} 4 {t("willwin")} {Formater(25)} {t("creditto")}
@@ -337,25 +329,30 @@ export default function Competition({
                       {
                         item: "Brand",
                         translation: t("brand"),
+                        value: data.Watches.brand,
                       },
                       {
                         item: "Model",
                         translation: t("model"),
+                        value: data.Watches.model,
                       },
                       {
                         item: "Reference number",
                         translation: t("refnumber"),
+                        value: data.Watches.reference_number,
                       },
                       {
                         item: "Movement",
                         translation: t("mov"),
+                        value: data.Watches.movement,
                       },
                       {
                         item: "Bracelet material",
                         translation: t("bracematerial"),
+                        value: data.Watches.Bracelet_material,
                       },
-                    ].map(({ item, translation }, i) => {
-                      return (
+                    ].map(
+                      ({ item, value, translation }, i) =>
                         data.Watches && (
                           <span key={i}>
                             <b>{translation}</b>
@@ -369,22 +366,11 @@ export default function Competition({
                                     : "none",
                               }}
                             >
-                              {item === "Brand"
-                                ? data.Watches.brand
-                                : item === "Model"
-                                ? data.Watches.model
-                                : item === "Reference number"
-                                ? data.Watches.reference_number
-                                : item === "Movement"
-                                ? data.Watches.movement
-                                : item === "Bracelet material"
-                                ? data.Watches.Bracelet_material
-                                : ""}
+                              {value}
                             </p>
                           </span>
                         )
-                      );
-                    })}
+                    )}
                   </div>
                   <div className={styles.left}>
                     {[

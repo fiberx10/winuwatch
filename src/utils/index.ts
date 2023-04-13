@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { OrderSchema } from "./zodSchemas";
+import { useRouter } from "next/router";
 export * from "./api";
 
 export const CreateOrderSchema = OrderSchema.extend({
@@ -14,15 +15,18 @@ export const CreateOrderSchema = OrderSchema.extend({
   status: true,
   id: true,
 });
-const LOCAL = "en-UK";
+const DEFAULTLOCAL = "en-UK";
 export const Formater = (value: number | bigint) =>
-  new Intl.NumberFormat(LOCAL, {
+  new Intl.NumberFormat(DEFAULTLOCAL, {
     style: "currency",
     currency: "GBP",
   }).format(value);
 
-export const DateFormater = (value: Date) =>
-  new Intl.DateTimeFormat(LOCAL, {
+export const DateFormater = (
+  value: Date,
+  local: string = useRouter().locale || DEFAULTLOCAL
+  ) =>
+  new Intl.DateTimeFormat(local, {
     dateStyle: "full",
     timeStyle: "short",
     timeZone: "Europe/London",
