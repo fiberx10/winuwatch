@@ -20,6 +20,7 @@ import { useState } from "react";
 import Image from "next/image";
 import Loader from "@/components/Loader";
 import Timer from "@/components/Timer";
+import { useTranslations } from "next-intl";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   try {
@@ -45,6 +46,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 export default function Competition({
   compID,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const t = useTranslations("competition");
   const { data, isLoading } = api.Competition.byID.useQuery(compID);
   const [counter, setCounter] = useState({
     value: 1,
@@ -117,7 +119,7 @@ export default function Competition({
               <div className={styles.CompRight}>
                 <div className={styles.CompTit}>
                   <h1>{data.name}</h1>
-                  <p>market value {Formater(data.price)}</p>
+                  <p>{t('marketvalue')} {Formater(data.price)}</p>
                 </div>
                 <div className={styles.CompTicketSelec}>
                   {data.remaining_tickets === 0 ||
@@ -127,7 +129,7 @@ export default function Competition({
                       <Timer displayFlex={true} date={data.drawing_date} />
                     </>
                   ) : (
-                    <h3>How many tickets would you like?</h3>
+                    <h3>{ t("howmany") }</h3>
                   )}
                   <div className={styles.tickets}>
                     {data.remaining_tickets === 0 ||
@@ -201,8 +203,9 @@ export default function Competition({
                 <div className={styles.CompBot}>
                   <div className={styles.donations}>
                     <p>
-                      A part of the money is donated to the following
-                      associations
+                      {
+                        t("donatedto")
+                      }
                     </p>
                     <div className={styles.compSponsors}>
                       {/* <Image
@@ -272,7 +275,9 @@ export default function Competition({
                           void router.push("/Cart");
                         }}
                       >
-                        CONTINUE
+                        {
+                          t("continue")
+                        }
                       </button>
                     </div>
                   )}
@@ -281,52 +286,54 @@ export default function Competition({
             </div>
             <div className={styles.compDesc}>
               <div className={styles.compDet}>
-                <h1>Competition details</h1>
+                <h1>{t("details")}</h1>
                 <div className={styles.compDetails}>
                   <p>
                     Prize: {data.Watches.brand} {data.Watches.model}{" "}
-                    {data.Watches.reference_number} - Comes with full paperwork
+                    {data.Watches.reference_number} - {t("paperwork")}
                     {data.Watches.has_certificate &&
                       ", new digital warranty card "}
                     {data.Watches.has_box && "& fully boxed"}.
                   </p>
                   {data.total_tickets > 0 && (
                     <p>
-                      Maximum spaces in the final draw:{" "}
+                     {
+                      t("maxspace")
+                     } {" "}
                       {data.total_tickets}
                     </p>
                   )}
                   {data.max_watch_number ? (
-                    <p>Maximum watch winners: {data.max_watch_number}</p>)
-                    :( <p>Maximum watch winners: 1</p>
+                    <p> {t("maxwatchwinner")} {data.max_watch_number}</p>)
+                    :( <p> {t("maxwatchwinner")}: 1</p>
                   )}
                   {data.end_date.toString() ? (
-                    <p>End of competition: {DateFormater(data.end_date)}</p>
+                    <p>{t("endcomp")} {DateFormater(data.end_date)}</p>
                   ) : null
                   }
                   {data.drawing_date.toString() ?(
                     <p>
-                      Winner announcement: {DateFormater(data.drawing_date)} in
-                      direct live on instagram @winuwatch
+                      {t("winannon")} {DateFormater(data.drawing_date)} in
+                     {t("liveinsta")} @winuwatch
                     </p>
                   ): null}
 
                   <p>
-                    Runner-Up prizes: 4 players will win {Formater(25)} credit
-                    into our next competition.
+                   {t("runup")} 4 {t('willwin')} {Formater(25)} {t("creditto")}
                   </p>
                 </div>
               </div>
               <div className={styles.compDet}>
-                <h1>Watch information</h1>
+                <h1>{t("watchinfo")}</h1>
                 <div className={styles.watchInfo}>
                   <div className={styles.left}>
                     {[
-                      "Brand",
-                      "Model",
-                      "Reference number",
-                      "Movement",
-                      "Bracelet material",
+                      `${t("brand")}`,
+                      `${t("model")}`,
+                      `${t("refnumber")}`,
+                      `${t("mov")}`,
+                      `${t("bracematerial")}`,
+
                     ].map((item, i) => {
                       return (
                         data.Watches && (
@@ -361,11 +368,11 @@ export default function Competition({
                   </div>
                   <div className={styles.left}>
                     {[
-                      "Year of manufacture",
-                      "Caliber/Gear",
-                      "Number of stones",
-                      "Glass",
-                      "Bezel material",
+                      `${t("ymanifacture")}`,
+                      `${t("calibregear")}`,
+                      `${t("stonesnumber")}`,
+                      `${t("glass")}`,
+                      `${t("bezelmeterial")}`,
                     ].map(
                       (item, i) =>
                         data.Watches &&
@@ -400,3 +407,5 @@ export default function Competition({
     </div>
   );
 }
+
+
