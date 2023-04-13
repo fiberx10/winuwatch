@@ -17,6 +17,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   return {
     props: {
       id: z.string().parse(id),
+      //eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/restrict-template-expressions
       messages: (await import(`../../../messages/${context.locale}.json`))
         .default,
     },
