@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-html-link-for-pages */
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import styles from "@/styles/Checkout.module.css";
 import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js";
 import { useRouter } from "next/router";
@@ -37,6 +37,7 @@ const CheckoutComp = () => {
   const [error, setError] = useState<string | undefined>();
   const [isNotConfirmed, setIsNotConfirmed] = useState<boolean>(false);
   const { totalCost } = cardDetails();
+  const [isTermsChecked, setIsTermsChecked] = useState<boolean>(false);
 
   return (
     <div className={styles.CheckoutMain}>
@@ -60,6 +61,8 @@ const CheckoutComp = () => {
               checkedTerms: false,
             }}
             onSubmit={async (values, actions) => {
+              console.log("terms and conditions", isTermsChecked);
+             
               // disable the confirm button to prevent duplicate messages
               setIsNotConfirmed(true);
               //if a value in the object values is undefined, it will not be sent to the server
@@ -248,7 +251,14 @@ const CheckoutComp = () => {
                     </div>
                     <div className={styles.SignMeUp}>
                       <label>
-                        <Field required name="checkedTerms" type="checkbox" />
+                        <Field
+                          required
+                          name="checkedTerms"
+                          onChange={(e:ChangeEvent<HTMLInputElement>) => {
+                            setIsTermsChecked(e.target.checked);
+                          }}
+                          type="checkbox"
+                        />
                         <p className={styles.termsTxt}>
                           {`${t("condition")} `}
                           <a href="/TermsAndConditions">{t("terms&conds")}</a>
@@ -505,7 +515,9 @@ const CheckoutComp = () => {
                         </PayPalScriptProvider>
                       ) : (
                         <>
-                          <button disabled={isNotConfirmed} type="submit">
+                          <button disabled={isNotConfirmed} type="submit" onClick={()=>{
+                             if(!isTermsChecked) return alert(`${t("shouldacceptterms")}`);
+                          }}>
                             {t("confirmorder")}
                           </button>
                         </>
