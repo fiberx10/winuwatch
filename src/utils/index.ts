@@ -2,7 +2,6 @@ import { z } from "zod";
 import { OrderSchema } from "./zodSchemas";
 export * from "./api";
 
-
 export const CreateOrderSchema = OrderSchema.extend({
   comps: z.array(
     z.object({
@@ -22,7 +21,8 @@ export const Formater = (value: number | bigint) =>
     currency: "GBP",
   }).format(value);
 
-export const  DateFormater = (value :Date) => new Intl.DateTimeFormat(LOCAL, {
+export const DateFormater = (value: Date) =>
+  new Intl.DateTimeFormat(LOCAL, {
     dateStyle: "full",
     timeStyle: "short",
     timeZone: "Europe/London",

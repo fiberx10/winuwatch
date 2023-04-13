@@ -10,7 +10,7 @@ const Charit = () => {
       img: "/images/woodland.png",
       name: "Woodland trust UK",
       amount: 2346,
-      desc: t("woodland")
+      desc: t("woodland"),
     },
     // {
     //   img: "/images/cancerRes.png",

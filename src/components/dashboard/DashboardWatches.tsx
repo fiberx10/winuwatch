@@ -191,11 +191,7 @@ const DashboardWatches = () => {
                         has_certificate: watch.has_certificate,
                       }}
                     >
-                      {({
-                        values,
-                        handleSubmit,
-                        handleChange,
-                      }) => (
+                      {({ values, handleSubmit, handleChange }) => (
                         <Form onSubmit={handleSubmit}>
                           <Modal.Body>
                             <Row className="mb-3">
@@ -203,14 +199,13 @@ const DashboardWatches = () => {
                                 <Form.Label>Watch Images</Form.Label>
                                 <FilePond
                                   server={{
-                                    process: (
-                                      fieldName,
-                                      file,
-                                    ) => {
+                                    process: (fieldName, file) => {
                                       /* store file somewhere and call `load` when done */
                                       if (!file) return;
 
-                                      const fileName = `images/${watch.id}/${faker.datatype.uuid()}`;
+                                      const fileName = `images/${
+                                        watch.id
+                                      }/${faker.datatype.uuid()}`;
 
                                       uploadBytes(ref(storage, fileName), file)
                                         .then(

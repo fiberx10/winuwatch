@@ -119,7 +119,9 @@ export default function Competition({
               <div className={styles.CompRight}>
                 <div className={styles.CompTit}>
                   <h1>{data.name}</h1>
-                  <p>{t('marketvalue')} {Formater(data.price)}</p>
+                  <p>
+                    {t("marketvalue")} {Formater(data.price)}
+                  </p>
                 </div>
                 <div className={styles.CompTicketSelec}>
                   {data.remaining_tickets === 0 ||
@@ -134,7 +136,7 @@ export default function Competition({
                       <Timer displayFlex={true} date={data.start_date} />
                     </>
                   ) : (
-                    <h3>{ t("howmany") }</h3>
+                    <h3>{t("howmany")}</h3>
                   )}
                   {data.start_date < new Date() && (
                     <div className={styles.tickets}>
@@ -211,11 +213,7 @@ export default function Competition({
                 </div>
                 <div className={styles.CompBot}>
                   <div className={styles.donations}>
-                    <p>
-                      {
-                        t("donatedto")
-                      }
-                    </p>
+                    <p>{t("donatedto")}</p>
                     <div className={styles.compSponsors}>
                       {/* <Image
                         width={130}
@@ -283,9 +281,7 @@ export default function Competition({
                               void router.push("/Cart");
                             }}
                           >
-                            {
-                              t("continue")
-                            }
+                            {t("continue")}
                           </button>
                         </div>
                       )}
@@ -304,29 +300,31 @@ export default function Competition({
                   </p>
                   {data.total_tickets > 0 && (
                     <p>
-                     {
-                      t("maxspace")
-                     } {" "}
-                      {data.total_tickets}
+                      {t("maxspace")} {data.total_tickets}
                     </p>
                   )}
                   {data.max_watch_number ? (
-                    <p> {t("maxwatchwinner")} {data.max_watch_number}</p>)
-                    :( <p> {t("maxwatchwinner")}: 1</p>
+                    <p>
+                      {" "}
+                      {t("maxwatchwinner")} {data.max_watch_number}
+                    </p>
+                  ) : (
+                    <p> {t("maxwatchwinner")}: 1</p>
                   )}
                   {data.end_date.toString() ? (
-                    <p>{t("endcomp")} {DateFormater(data.end_date)}</p>
-                  ) : null
-                  }
-                  {data.drawing_date.toString() ?(
+                    <p>
+                      {t("endcomp")} {DateFormater(data.end_date)}
+                    </p>
+                  ) : null}
+                  {data.drawing_date.toString() ? (
                     <p>
                       {t("winannon")} {DateFormater(data.drawing_date)} in
-                     {t("liveinsta")} @winuwatch
+                      {t("liveinsta")} @winuwatch
                     </p>
                   ) : null}
 
                   <p>
-                   {t("runup")} 4 {t('willwin')} {Formater(25)} {t("creditto")}
+                    {t("runup")} 4 {t("willwin")} {Formater(25)} {t("creditto")}
                   </p>
                 </div>
               </div>
@@ -336,27 +334,26 @@ export default function Competition({
                   <div className={styles.left}>
                     {[
                       {
-                        item : "Brand",
-                        translation : t("brand") 
+                        item: "Brand",
+                        translation: t("brand"),
                       },
                       {
-                        item : "Model",
-                        translation : t("model")
+                        item: "Model",
+                        translation: t("model"),
                       },
                       {
-                        item : "Reference number",
-                        translation : t("refnumber")
+                        item: "Reference number",
+                        translation: t("refnumber"),
                       },
                       {
-                        item : "Movement",
-                        translation : t("mov")
+                        item: "Movement",
+                        translation: t("mov"),
                       },
                       {
-                        item : "Bracelet material",
-                        translation : t("bracematerial")
-                      }
-
-                    ].map(({item, translation}, i) => {
+                        item: "Bracelet material",
+                        translation: t("bracematerial"),
+                      },
+                    ].map(({ item, translation }, i) => {
                       return (
                         data.Watches && (
                           <span key={i}>
@@ -390,31 +387,29 @@ export default function Competition({
                   </div>
                   <div className={styles.left}>
                     {[
-                     { 
-                      item : t("ymanifacture"),
-                      value :  data.Watches.year_of_manifacture
+                      {
+                        item: t("ymanifacture"),
+                        value: data.Watches.year_of_manifacture,
                       },
-                        {
-                        item : t("calibregear"),
-                        value : data.Watches.caliber_grear
-                        },
-                        {
-                        item : t("glass"),
-                        value : data.Watches.glass
-                        },
-                        {
-                          item : t("bezelmeterial"),
-                          value : data.Watches.bezel_material
-                        }
+                      {
+                        item: t("calibregear"),
+                        value: data.Watches.caliber_grear,
+                      },
+                      {
+                        item: t("glass"),
+                        value: data.Watches.glass,
+                      },
+                      {
+                        item: t("bezelmeterial"),
+                        value: data.Watches.bezel_material,
+                      },
                     ].map(
-                      ({item, value}, i) =>
+                      ({ item, value }, i) =>
                         data.Watches &&
                         data.Watches !== null && (
                           <span key={i}>
                             <b>{item}</b>
-                            <p>
-                              {value}
-                            </p>
+                            <p>{value}</p>
                           </span>
                         )
                     )}
@@ -430,5 +425,3 @@ export default function Competition({
     </div>
   );
 }
-
-
