@@ -201,7 +201,12 @@
 }
 /* remove later */
 .termsTxt {
-  width: 60%;
+  width: 90%;
+  font-size: 14px;
+}
+.emailTxt {
+  width: 90%;
+  font-size: 14px;
 }
 .SignMeUp a {
   color: #987358;

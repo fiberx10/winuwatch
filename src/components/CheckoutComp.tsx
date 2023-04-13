@@ -266,7 +266,7 @@ const CheckoutComp = () => {
                       </label>
                       <label>
                         <Field name="checkedEmail" type="checkbox" />
-                        <p>{t("terms")}</p>
+                        <p className={styles.emailTxt}>{t("terms")}</p>
                       </label>
                     </div>
                   </div>
