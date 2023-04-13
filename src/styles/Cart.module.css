@@ -247,6 +247,16 @@
   align-items: center;
   gap: 1rem;
 }
+@media only screen and (max-width: 553px) {
+  .questionsCon button {
+    height: auto;
+  }
+  .ModalBox img {
+  }
+  .modalQuestion {
+    flex-direction: column-reverse;
+  }
+}
 @media only screen and (max-width: 500px) {
   .ModalBox h1 {
     font-size: 23px !important;
@@ -254,9 +264,6 @@
   }
   .modalQuestion {
     flex-direction: column-reverse;
-  }
-  .modalQuestion img {
-    width: 50%;
   }
 
   .questionsCon button {
@@ -327,6 +334,7 @@
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
+    gap: 0.3rem;
   }
   .questionsCon button {
     width: 350px;
@@ -361,6 +369,9 @@
   }
   .questionsCon button {
     font-size: 10px !important;
+  }
+  .modalQuestion img {
+    width: 100%;
   }
 }
 @media only screen and (max-width: 1023px) {
