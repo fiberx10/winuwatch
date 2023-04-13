@@ -36,10 +36,9 @@
   },
   "philosophy": {
     "philoheader": "IL N'Y A PAS DE GÉNIE, QUE DU 'SAVOIR-FAIRE' DANS NOTRE ENTREPRISE FAMILIALE INDÉPENDANTE.",
-
-    "philotext": "Nous sommes une entreprise familiale où chacun travaille tous les jours pour vous trouver les modèles de montres les plus recherchés à vous proposer, nous avons lancé WIN U WATCH pour permettre à toute personne rêvant de posséder une montre de luxe, ne soit plus un rêve mais une réalité.",
-    "philoheaderdesc": " VOUS DEVEZ SAVOIR QUE NOUS SOMMES LE PREMIER SITE AU MONDE EN TERME DE PROBABILITÉ DE GAGNER    ",
-    "philotextdesc": "nous sommes le premier site au monde en termes de probabilité de gagner car nous publions un nombre limité de tickets aligné avec le nombre de participants, ce qui nous donne la meilleure probabilité de gagner."
+    "philotext": "VOUS DEVEZ SAVOIR QUE NOUS SOMMES LE PREMIER SITE AU MONDE EN TERME DE PROBABILITÉ DE GAGNER.",
+    "philoheaderdesc": "Nous sommes une entreprise familiale où chacun travaille tous les jours pour vous trouver les modèles de montres les plus recherchés à vous proposer, nous avons lancé WIN U WATCH pour permettre à toute personne rêvant de posséder une montre de luxe, ne soit plus un rêve mais une réalité.",
+    "philotextdesc": "Nous sommes le premier site au monde en termes de probabilité de gagner car nous publions un nombre limité de tickets aligné avec le nombre de participants, ce qui nous donne la meilleure probabilité de gagner."
   },
   "charity": {
     "charityheader": "TOTAL COLLECTÉ POUR DES OEUVRES DE CHARITÉ",
@@ -62,7 +61,7 @@
     "wronganswer": "MAUVAISE RÉPONSE"
   },
   "competition": {
-    "marketvalue": "Valeur sur le marché",
+    "marketvalue": "Valeur de marché",
     "howmany": "COMBIEN DE TICKETS SOUHAITEZ-VOUS ?",
     "off": "de réduction",
     "donatedto": "Une partie de l'argent est reversée aux associations suivantes",
