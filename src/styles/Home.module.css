@@ -1294,6 +1294,9 @@
     align-items: center;
     height: auto;
   }
+  .menusGridItem div {
+    align-items: center;
+  }
 }
 @media only screen and (min-width: 442px) {
   .HeaderTit {
