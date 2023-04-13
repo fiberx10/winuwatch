@@ -247,7 +247,7 @@ export default function Competition({
                                   data.ticket_price *
                                     counter.reduction *
                                     counter.value,
-                                    router.locale
+                                  router.locale
                                 )}`}
                               </p>
                             )}
@@ -257,7 +257,7 @@ export default function Competition({
                                   counter.value *
                                     data.ticket_price *
                                     counter.reduction,
-                                    router.locale
+                                router.locale
                               )}
                             </span>
                           </div>
@@ -307,23 +307,27 @@ export default function Competition({
                   )}
                   <p>{`${t("maxwatchwinner")} ${data.max_watch_number}`}</p>
                   <p>
-                    {t("endcomp")} {DateFormater(data.end_date, router.locale)} {t("timezone")}
+                    {t("endcomp")} {DateFormater(data.end_date, router.locale)}{" "}
+                    {t("timezone")}
                   </p>
 
                   <p>
-                    {`${t("winannon")} ${DateFormater(data.drawing_date, router.locale)} ${t(
-                      "liveinsta"
-                    )} `}
-                    <a 
+                    {`${t("winannon")} ${DateFormater(
+                      data.drawing_date,
+                      router.locale
+                    )} ${t("liveinsta")} `}
+                    <a
                       className={styles.instaLink}
-                    href="https://www.instagram.com/winuwatch/">
+                      href="https://www.instagram.com/winuwatch/"
+                    >
                       @winuwatch
                     </a>
-                    {" "+t("timezone")}
+                    {" " + t("timezone")}
                   </p>
 
                   <p>
-                    {t("runup")} 4 {t("willwin")} {Formater(25, router.locale)} {t("creditto")}
+                    {t("runup")} 4 {t("willwin")} {Formater(25, router.locale)}{" "}
+                    {t("creditto")}
                   </p>
                 </div>
               </div>
@@ -351,11 +355,6 @@ export default function Competition({
                         item: "Movement",
                         translation: t("mov"),
                         value: data.Watches.movement,
-                      },
-                      {
-                        item: "Bracelet material",
-                        translation: t("bracematerial"),
-                        value: data.Watches.Bracelet_material,
                       },
                     ].map(
                       ({ item, value, translation }, i) =>
@@ -395,6 +394,11 @@ export default function Competition({
                       {
                         item: t("bezelmeterial"),
                         value: data.Watches.bezel_material,
+                      },
+                      {
+                        item: "Bracelet material",
+                        translation: t("bracematerial"),
+                        value: data.Watches.Bracelet_material,
                       },
                     ].map(
                       ({ item, value }, i) =>
