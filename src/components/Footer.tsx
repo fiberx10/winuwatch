@@ -158,7 +158,13 @@ const Footer = () => {
           </div>
           <div className={styles.FooterTopRight}>
             <div className={styles.emails}>
-              <p>{t("enquiries")}</p>
+              <p
+                style={{
+                  width: "59.7%",
+                }}
+              >
+                {t("enquiries")}
+              </p>
               <a href="mailto:info@winuwatch.uk">
                 <u>info@winuwatch.uk</u>
               </a>
