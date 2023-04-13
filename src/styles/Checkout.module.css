@@ -196,7 +196,12 @@
 .SignMeUp label {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 1rem;
+}
+/* remove later */
+.termsTxt {
+  width: 60%;
 }
 .SignMeUp a {
   color: #987358;
