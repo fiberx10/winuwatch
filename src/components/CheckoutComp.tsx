@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-html-link-for-pages */
 import { useState } from "react";
 import styles from "@/styles/Checkout.module.css";
 import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js";
@@ -250,7 +251,18 @@ const CheckoutComp = () => {
                     <div className={styles.SignMeUp}>
                       <label>
                         <Field required name="checkedTerms" type="checkbox" />
-                        <p>{t("condition")}</p>
+                        <p>
+                          { `${t("condition")} `}
+                          <a href="/TermsAndConditions">{t("terms&conds")}</a>
+                          { `, ${t("including") } `}
+                          <a href="/Return_Policy">{t("return")}</a>
+                          {", "}
+                          <a href="/FAQ">{t("faq")}</a>
+                          {", "}
+                          <a href="/Acceptable_Use_Policy">{t("acc_use_policy")}</a>
+                          {`, ${t("and")} `}
+                          <a href="/Privacy_Policy">{t("privacy_police")}</a>.
+                        </p>
                       </label>
                       <label>
                         <Field name="checkedEmail" type="checkbox" />

@@ -22,7 +22,6 @@
     "winawatch": "¡GANA EL RELOJ DE SUS SUEÑOS¡",
     "winawatchdesc": "Y ya está! Podrías llevarte un reloj nuevo de 20.000 £ por tan solo 25 £.¡GANA EL RELOJ DE SUS SUEÑOS¡Y ya está! Podrías llevarte un reloj nuevo de 20.000 £ por tan solo 25 £.",
     "enter": "PARTICIPAR EN EL CONCURSO",
-
     "certiftitle": "UTILIZAMOS EL SISTEMA INFORMATIZADO DE SORTEO ELECTRÓNICO TPAL",
     "certifdesc": "SISTEMA DE CERTIFICADOS RANDOMDRAW",
     "reviews": "reviews",
@@ -134,7 +133,14 @@
     "confirmorder": "CONFIRMAR PEDIDO",
     "paymethod": "MÉTODO DE PAGO",
     "creditcard": "TARJETA DE CRÉDITO",
-    "condition": "POR LA PRESENTE DECLARO QUE HE LEÍDO DETENIDAMENTE, ENTENDIDO COMPLETAMENTE Y ACEPTADO INCONDICIONALMENTE LOS TÉRMINOS Y CONDICIONES, INCLUYENDO LA POLÍTICA DE DEVOLUCIÓN, PREGUNTAS FRECUENTES, POLÍTICA DE USO ACEPTABLE Y POLÍTICA DE PRIVACIDAD.",
+    "condition": "POR LA PRESENTE DECLARO QUE HE LEÍDO DETENIDAMENTE, ENTENDIDO COMPLETAMENTE Y ACEPTADO INCONDICIONALMENTE",
+    "terms&conds": "LOS TÉRMINOS Y CONDICIONES",
+    "including" :  "INCLUYENDO",
+    "return" : "LA POLÍTICA DE DEVOLUCIÓN",
+    "faq": "PREGUNTAS FRECUENTES",
+    "and" : "Y",
+    "acc_use_policy" : "POLÍTICA DE USO ACEPTABLE",
+    "privacy_police" : "POLÍTICA DE PRIVACIDAD",
     "terms": "ACEPTO RECIBIR ACTUALIZACIONES Y NOTICIAS POR CORREO ELECTRÓNICO",
     "remaingtickets": "ENTRADAS RESTANTES",
     "error": "Error al crear la orden"
