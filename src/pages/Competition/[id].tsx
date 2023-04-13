@@ -236,14 +236,14 @@ export default function Competition({
                         <div className={styles.addtoCart}>
                           <div className={styles.prices}>
                             <p>
-                              {` Tickets: ${counter.value} x ${Formater(
+                              {`Tickets: ${counter.value} x ${Formater(
                                 data.ticket_price,
                                 router.locale
                               )}`}
                             </p>
                             {counter.reduction > 0 && (
                               <p>
-                                {` Discount: ${Formater(
+                                {`Discount: ${Formater(
                                   data.ticket_price *
                                     counter.reduction *
                                     counter.value,
@@ -307,7 +307,7 @@ export default function Competition({
                   )}
                   <p>{`${t("maxwatchwinner")} ${data.max_watch_number}`}</p>
                   <p>
-                    {t("endcomp")} {DateFormater(data.end_date, router.locale)}
+                    {t("endcomp")} {DateFormater(data.end_date, router.locale)} {t("timezone")}
                   </p>
 
                   <p>
@@ -317,6 +317,7 @@ export default function Competition({
                     <a href="https://www.instagram.com/winuwatch/">
                       @winuwatch
                     </a>
+                    {" "+t("timezone")}
                   </p>
 
                   <p>

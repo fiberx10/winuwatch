@@ -74,7 +74,7 @@
     "maxwatchwinner": "Máximo de ganadores de relojes:",
     "endcomp": "Fin de la competición:",
     "winannon": "Anuncio del ganador:",
-    "liveinsta": " en directo en Instagram",
+    "liveinsta": " en directo en",
     "runup": "Premios para los subcampeones:",
     "willwin": "los jugadores ganarán",
     "creditto": "crédito en nuestra próxima competición.",
@@ -89,7 +89,8 @@
     "calibregear": "Calibre/Mecanismo",
     "stonesnumber": "Número de piedras",
     "glass": "Cristal",
-    "bezelmeterial": "Material del bisel"
+    "bezelmeterial": "Material del bisel",
+    "timezone" : "(Hora Local en Londres)"
   },
   "thanku": {
     "thank": "¡GRACIAS!",

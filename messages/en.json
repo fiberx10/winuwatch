@@ -74,7 +74,7 @@
     "maxwatchwinner": "Maximum watch winners",
     "endcomp": "End of competition:",
     "winannon": "Winner announcement: ",
-    "liveinsta": "in direct live on instagram",
+    "liveinsta": "in direct live on",
     "runup": "Runner-Up prizes:",
     "willwin": "players will win",
     "creditto": "credit into our next competition.",
@@ -89,7 +89,8 @@
     "calibregear": "Caliber/Gear",
     "stonesnumber": "Number of stones",
     "glass": "Glass",
-    "bezelmeterial": "Bezel material"
+    "bezelmeterial": "Bezel material",
+    "timezone" : "(Local Time in London)"
   },
   "thanku": {
     "thank": "THANK YOU",

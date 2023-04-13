@@ -74,7 +74,7 @@
     "maxwatchwinner": "Gagnants maximum de la montre :",
     "endcomp": "Fin du concours :",
     "winannon": "Annonce du gagnant :",
-    "liveinsta": "en direct sur instagram ",
+    "liveinsta": "en direct sur",
     "runup": "Prix des finalistes:",
     "willwin": " joueurs gagneront un crédit de",
     "creditto": "pour notre prochain concours.",
@@ -89,7 +89,9 @@
     "calibregear": "Calibre",
     "stonesnumber": "Nombre de pierres",
     "glass": "Verre",
-    "bezelmeterial": "Matériau de la lunette"
+    "bezelmeterial": "Matériau de la lunette",
+    "timezone" : "(Heure Locale à Londres)"
+
   },
   "thanku": {
     "thank": "MERCI",
@@ -137,7 +139,6 @@
     "terms": "J'ACCEPTE DE RECEVOIR LES NEWSLETTERS PAR E-MAIL",
     "remaingtickets": "TICKETS  RESTANTS",
     "error": "Erreur lors de la création de la commande"
-
   },
   "navitems": {
     "phil": "PHILOSOPHIE",
