@@ -202,15 +202,13 @@ const CartComp = () => {
                         style={{
                           objectFit: "contain",
                         }}
-                        width={90}
-                        height={90}
+                        width={150}
+                        height={150}
                         alt="questionImage"
                       />
                     )}
 
-                    <h1>
-                      {t("whatwatch")}
-                    </h1>
+                    <h1>{t("whatwatch")}</h1>
                   </div>
                   <h2
                     style={{ display: wrong ? "flex" : "none", color: "red" }}
