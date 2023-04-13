@@ -249,7 +249,7 @@ const CheckoutComp = () => {
                     <div className={styles.SignMeUp}>
                       <label>
                         <Field required name="checkedTerms" type="checkbox" />
-                        <p>
+                        <p className={styles.termsTxt}>
                           {`${t("condition")} `}
                           <a href="/TermsAndConditions">{t("terms&conds")}</a>
                           {`, ${t("including")} `}
