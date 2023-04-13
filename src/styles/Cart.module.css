@@ -226,11 +226,9 @@
   }
   .CartPriceCon h2 {
     font-size: 24px !important;
-    flex: 1;
   }
   .CartPriceCon p {
     font-size: 14px !important;
-    flex: 1;
     min-width: max-content;
   }
   .CartRight {
@@ -255,6 +253,10 @@
   .CartPriceCon {
     align-items: center;
     flex-direction: row !important;
+    width: 100%;
+    text-align: right;
+    gap: 0 !important;
+    justify-content: space-between !important;
   }
   .CartRight {
     align-items: center !important;
