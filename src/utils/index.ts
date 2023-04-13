@@ -24,7 +24,7 @@ export const Formater = (value: number | bigint) =>
 
 export const  DateFormater = (value :Date) => new Intl.DateTimeFormat(LOCAL, {
     dateStyle: "full",
-    timeStyle: "long",
+    timeStyle: "short",
     timeZone: "Europe/London",
   })
     .format(value)
