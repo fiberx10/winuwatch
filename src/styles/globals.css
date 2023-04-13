@@ -45,7 +45,9 @@ input::-webkit-inner-spin-button {
 input[type="number"] {
   -moz-appearance: textfield;
 }
-
+input[type="checkbox"] {
+  -webkit-appearance: checkbox;
+}
 .css-pdct74-MuiTablePagination-selectLabel {
   margin-bottom: 0 !important;
 }

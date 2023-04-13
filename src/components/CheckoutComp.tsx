@@ -248,14 +248,7 @@ const CheckoutComp = () => {
                     </div>
                     <div className={styles.SignMeUp}>
                       <label>
-                        <Field
-                          onClick={() => {
-                            ("");
-                          }}
-                          required
-                          name="checkedTerms"
-                          type="checkbox"
-                        />
+                        <Field required name="checkedTerms" type="checkbox" />
                         <p>
                           {`${t("condition")} `}
                           <a href="/TermsAndConditions">{t("terms&conds")}</a>
