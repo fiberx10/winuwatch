@@ -336,17 +336,32 @@ export default function Competition({
                 <div className={styles.watchInfo}>
                   <div className={styles.left}>
                     {[
-                      `${t("brand")}`,
-                      `${t("model")}`,
-                      `${t("refnumber")}`,
-                      `${t("mov")}`,
-                      `${t("bracematerial")}`,
+                      {
+                        item : "Brand",
+                        translation : t("brand") 
+                      },
+                      {
+                        item : "Model",
+                        translation : t("model")
+                      },
+                      {
+                        item : "Reference number",
+                        translation : t("refnumber")
+                      },
+                      {
+                        item : "Movement",
+                        translation : t("mov")
+                      },
+                      {
+                        item : "Bracelet material",
+                        translation : t("bracematerial")
+                      }
 
-                    ].map((item, i) => {
+                    ].map(({item, translation}, i) => {
                       return (
                         data.Watches && (
                           <span key={i}>
-                            <b>{item}</b>
+                            <b>{translation}</b>
                             <p
                               style={{
                                 textDecoration:
@@ -376,29 +391,30 @@ export default function Competition({
                   </div>
                   <div className={styles.left}>
                     {[
-                      `${t("ymanifacture")}`,
-                      `${t("calibregear")}`,
-                      `${t("stonesnumber")}`,
-                      `${t("glass")}`,
-                      `${t("bezelmeterial")}`,
+                     { 
+                      item : t("ymanifacture"),
+                      value :  data.Watches.year_of_manifacture
+                      },
+                        {
+                        item : t("calibregear"),
+                        value : data.Watches.caliber_grear
+                        },
+                        {
+                        item : t("glass"),
+                        value : data.Watches.glass
+                        },
+                        {
+                          item : t("bezelmeterial"),
+                          value : data.Watches.bezel_material
+                        }
                     ].map(
-                      (item, i) =>
+                      ({item, value}, i) =>
                         data.Watches &&
                         data.Watches !== null && (
                           <span key={i}>
                             <b>{item}</b>
                             <p>
-                              {item === "Year of manufacture"
-                                ? data.Watches.year_of_manifacture
-                                : item === "Caliber/Gear"
-                                ? data.Watches.caliber_grear
-                                : item === "Number of stones"
-                                ? data.Watches.number_of_stones
-                                : item === "Glass"
-                                ? data.Watches.glass
-                                : item === "Bezel material"
-                                ? data.Watches.bezel_material
-                                : ""}
+                              {value}
                             </p>
                           </span>
                         )
