@@ -27,30 +27,28 @@ const Charit = () => {
         <h3>£594,828</h3>
       </div>
       <div className={styles.CharityGrid}>
-        {data.map((charity, i) => {
-          return (
-            <div className={styles.charity} key={i}>
-              <div className={styles.charityTop}>
-                <Image
-                  width={300}
-                  height={300}
-                  alt="charity"
-                  src={charity.img}
-                  style={{ objectFit: "cover" }}
-                />
-              </div>
-              <div className={styles.CharityBot}>
-                <div>
-                  <h4>{t("donation")}</h4>
-                  <p className={styles.amount}>${charity.amount}</p>
-                </div>
-                <h3>{charity.name}</h3>
-                <p>{charity.desc}</p>
-                <button>{t("readmore")}</button>
-              </div>
+        {data.map((charity, i) => (
+          <div className={styles.charity} key={i}>
+            <div className={styles.charityTop}>
+              <Image
+                width={300}
+                height={300}
+                alt="charity"
+                src={charity.img}
+                style={{ objectFit: "cover" }}
+              />
             </div>
-          );
-        })}
+            <div className={styles.CharityBot}>
+              <div>
+                <h4>{t("donation")}</h4>
+                <p className={styles.amount}>${charity.amount}</p>
+              </div>
+              <h3>{charity.name}</h3>
+              <p>{charity.desc}</p>
+              <button>{t("readmore")}</button>
+            </div>
+          </div>
+        ))}
       </div>
       <div className={styles.Join}>
         <h1>{t("inassociation")}</h1>

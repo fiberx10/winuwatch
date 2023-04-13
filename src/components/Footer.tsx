@@ -78,12 +78,6 @@ const Footer = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const howTo =
-    typeof window !== "undefined" && document.getElementById("Howtoplay");
-  const theComp =
-    typeof window !== "undefined" && document.getElementById("theComp");
-  const trustpilot =
-    typeof window !== "undefined" && document.getElementById("trustpilot");
   useEffect(() => {
     typeof window !== "undefined" && setLocation(window.location.pathname);
   }, [windowLocation]);

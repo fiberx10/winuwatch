@@ -113,6 +113,7 @@
     "bottomtext7": "WE WISH YOU THE BEST OF LUCK!"
   },
   "checkout": {
+    "discount": "Discount",
     "billinginfo": "BILLING INFORMATION",
     "ordersum": "ORDER SUMMARY",
     "firstname": "FIRST NAME",
@@ -130,7 +131,7 @@
     "confirmorder": "CONFIRM ORDER",
     "paymethod": "PAYMENT METHOD",
     "creditcard": "CREDIT CARD",
-    "condition": "I HEREBY DECLARE THAT I HAVE THOROUGHLY READ, COMPLETELY UNDERSTOOD, AND UNCONDITIONALLY ACCEPTED THE TERMS & CONDITIONS, INCLUDING THE RETURN POLICY, FAQ, ACCEPTABLE USE POLICY, AND PRIVACY POLICY.",
+    "condition": "<p>I hereby declare that I have thoroughly read,completely understood, and unconditionally accepted The <u>Terms & Conditions</u>, including the <u>Return Policy, FAQ, Acceptable Use Policy,</u> and <u>privacy policy.</u><p>",
     "terms": "I AGREE TO RECEIVE EMAIL UPDATES AND NEWS",
     "remaingtickets": "REMAINING TICKETS"
   },
