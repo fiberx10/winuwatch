@@ -147,7 +147,14 @@
 .DrawerCon a {
   text-decoration: none;
   text-transform: uppercase;
-  color: grey;
+  font-weight: 400;
+  font-size: 30px;
+  text-decoration: none;
+  font-family: "Iskry", sans-serif;
+  text-align: center;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #987358;
 }
 .DrawerCon span {
   font-weight: 400;

@@ -18,7 +18,6 @@ const CartComp = () => {
   const { data } = api.Competition.getAll.useQuery({
     ids: competitions.map(({ compID }) => compID),
   });
-  const { data: question } = api.Question.getOneRandom.useQuery();
 
   const router = useRouter();
   //console.log(question);
@@ -37,7 +36,29 @@ const CartComp = () => {
     borderRadius: "10px",
   };
   //TODO: Loading
-
+  const questionImgs = [
+    {
+      img: "/images/Rolex_Sky-Dweller.jpg",
+      name: "Rolex_Sky-Dweller",
+    },
+    {
+      img: "/images/ROLEX_COSMOGRAPH_DAYTONA_40MM_-_PANDA.png",
+      name: "ROLEX_COSMOGRAPH_DAYTONA_40MM_-_PANDA",
+    },
+    {
+      img: "/images/Audemars_Piguet_Royal_Oak.png",
+      name: "Audemars_Piguet_Royal_Oak",
+    },
+    {
+      img: "/images/ROLEX_SUBMARINER_40MM_-_HULK_DIAMOND__EMERALD.jpg",
+      name: "ROLEX_SUBMARINER_40MM_-_HULK_DIAMOND__EMERALD",
+    },
+  ];
+  function getRandomImage() {
+    const randomIndex = Math.floor(Math.random() * questionImgs.length);
+    return questionImgs[randomIndex];
+  }
+  const randomImage = getRandomImage();
   return (
     <div className={styles.CartMain}>
       {data && competitions.length > 0 ? (
@@ -119,20 +140,10 @@ const CartComp = () => {
                     )}
                   </h2>
                   <p>
-                    {comp.reduction > 0 && (
-                      <>
-                        Discount:{" "}
-                        {"\t" +
-                          Formater(
-                            comp.reduction *
-                              (comp.number_tickets *
-                                ComptetionData.ticket_price)
-                          )}
-                      </>
-                    )}
+                    {comp.reduction > 0 &&
+                      `${t("discount")}: \t${Formater(comp.reduction)}`}
                   </p>
                   <p onClick={() => removeComp(comp.compID)}>{t("remove")}</p>
-
                 </div>
               </div>
             </div>
@@ -185,20 +196,21 @@ const CartComp = () => {
                     </span>
                   </div>
                   <div className={styles.modalQuestion}>
-                    {question?.imageURL ? (
+                    {randomImage && (
                       <Image
-                        src={question?.imageURL}
+                        src={randomImage.img}
                         style={{
                           objectFit: "contain",
                         }}
-                        width={70}
-                        height={70}
+                        width={90}
+                        height={90}
                         alt="questionImage"
                       />
-                    ) : (
-                      ""
                     )}
-                    <h1>{question?.question}</h1>
+
+                    <h1>
+                      {t("whatwatch")}
+                    </h1>
                   </div>
                   <h2
                     style={{ display: wrong ? "flex" : "none", color: "red" }}
@@ -206,11 +218,11 @@ const CartComp = () => {
                     {t("wronganswer")}
                   </h2>
                   <div className={styles.questionsCon}>
-                    {question?.answers.map((quest, i) => {
+                    {questionImgs.map((quest, i) => {
                       return (
                         <button
                           onClick={() => {
-                            quest === question?.correctAnswer
+                            randomImage?.img.includes(quest.name)
                               ? router
                                   .push("/CheckoutPage")
                                   .then(() => {
@@ -223,7 +235,7 @@ const CartComp = () => {
                           }}
                           key={i}
                         >
-                          {quest}
+                          {quest.name.replaceAll("_", " ")}
                         </button>
                       );
                     })}

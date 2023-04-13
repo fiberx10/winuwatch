@@ -10,13 +10,14 @@ import Image from "next/image";
 import { Formik, Form, Field } from "formik";
 import Datetime from "react-datetime";
 import "react-datetime/css/react-datetime.css";
+import { useTranslations } from "next-intl";
+import { GetServerSidePropsContext, GetStaticPropsContext } from "next";
 
 const CheckoutComp = () => {
   const router = useRouter();
-  
+  const t = useTranslations("checkout");
   const { mutateAsync: createOrder } = api.Order.createStripe.useMutation();
   const { competitions, cardDetails, updateComp, reset } = useCart();
-
 
   const { data: items } = api.Competition.getAll.useQuery({
     ids: competitions.map((comp) => comp.compID),
@@ -33,7 +34,7 @@ const CheckoutComp = () => {
     );
   };
   const [error, setError] = useState<string | undefined>();
-  const [isNotConfirmed  , setIsNotConfirmed] = useState<boolean>(false)
+  const [isNotConfirmed, setIsNotConfirmed] = useState<boolean>(false);
   const { totalCost } = cardDetails();
 
   return (
@@ -59,7 +60,7 @@ const CheckoutComp = () => {
             }}
             onSubmit={async (values, actions) => {
               // disable the confirm button to prevent duplicate messages
-              setIsNotConfirmed(true)
+              setIsNotConfirmed(true);
               //if a value in the object values is undefined, it will not be sent to the server
               console.log("Form submitted:", values);
 
@@ -98,11 +99,11 @@ const CheckoutComp = () => {
               <Form>
                 <div className={styles.CheckoutLeft}>
                   <div className={styles.leftFormItem}>
-                    <h1>Billing Information</h1>
+                    <h1>{t("billinginfo")}</h1>
                     <div className={styles.CheckoutForm}>
                       <div className={styles.formRow}>
                         <div className={styles.formField}>
-                          <label htmlFor="firstName">First Name</label>
+                          <label htmlFor="firstName">{t("firstname")}</label>
                           <Field
                             required
                             id="first_name"
@@ -111,7 +112,7 @@ const CheckoutComp = () => {
                           />
                         </div>
                         <div className={styles.formField}>
-                          <label htmlFor="lastName">Last Name</label>
+                          <label htmlFor="lastName">{t("lastname")}</label>
                           <Field
                             required
                             id="last_name"
@@ -122,7 +123,7 @@ const CheckoutComp = () => {
                       </div>
                       <div className={styles.formRow}>
                         <div className={styles.formField}>
-                          <label htmlFor="Country">Country/Region</label>
+                          <label htmlFor="Country">{t("country")}</label>
                           <Field
                             className={styles.countryList}
                             as="select"
@@ -138,7 +139,7 @@ const CheckoutComp = () => {
                           </Field>
                         </div>
                         <div className={styles.formField}>
-                          <label htmlFor="lastName">Address</label>
+                          <label htmlFor="lastName">{t("address")}</label>
                           <Field
                             required
                             id="address"
@@ -149,11 +150,11 @@ const CheckoutComp = () => {
                       </div>
                       <div className={styles.formRow}>
                         <div className={styles.formField}>
-                          <label htmlFor="Town">Town/City</label>
+                          <label htmlFor="Town">{t("city")}</label>
                           <Field required id="town" type="text" name="town" />
                         </div>
                         <div className={styles.formField}>
-                          <label htmlFor="lastName">ZIP</label>
+                          <label htmlFor="lastName">{t("zip")}</label>
                           <Field
                             required
                             id="zip"
@@ -165,11 +166,11 @@ const CheckoutComp = () => {
                       </div>
                       <div className={styles.formRow}>
                         <div className={styles.formField}>
-                          <label htmlFor="Phone">Phone</label>
+                          <label htmlFor="Phone">{t("phone")}</label>
                           <Field required id="phone" type="text" name="phone" />
                         </div>
                         <div className={styles.formField}>
-                          <label htmlFor="Email">Email</label>
+                          <label htmlFor="Email">{t("email")}</label>
                           <Field
                             required
                             id="email"
@@ -180,14 +181,14 @@ const CheckoutComp = () => {
                       </div>
                       <div className={styles.FinalRow}>
                         <div className={styles.formField}>
-                          <label htmlFor="Date">Date of birth</label>
+                          <label htmlFor="Date">{t("dateofbirth")}</label>
                           <Datetime
                             utc={true}
                             input={true}
                             timeFormat={false}
-                            isValidDate={(currentDate) => {
-                              return IsLegal(new Date(currentDate as Date));
-                            }}
+                            isValidDate={(currentDate) =>
+                              IsLegal(new Date(currentDate as Date))
+                            }
                             inputProps={{
                               name: "date",
                               placeholder: "Enter Date",
@@ -197,18 +198,21 @@ const CheckoutComp = () => {
                             onChange={(value) => setFieldValue("date", value)}
                           />
 
-                          {error ===
-                          "You must be 18 years old to purchase a ticket" ? (
-                            <p style={{ color: "red" }}>{error}</p>
-                          ) : (
-                            ""
-                          )}
+                          {
+                            //TODO: THis should be translated
+                            error ===
+                            "You must be 18 years old to purchase a ticket" ? (
+                              <p style={{ color: "red" }}>{error}</p>
+                            ) : (
+                              ""
+                            )
+                          }
                         </div>
                       </div>
                     </div>
                   </div>
                   <div className={styles.leftFormItem}>
-                    <h1>Payment Method</h1>
+                    <h1>{t("paymethod")}</h1>
                     <div className={styles.PaymentMethod}>
                       <div className={styles.method}>
                         <Field
@@ -224,7 +228,7 @@ const CheckoutComp = () => {
                                 : "rgba(30, 30, 30, 0.6)",
                           }}
                         >
-                          Credit card
+                          {t("creditcard")}
                         </p>
                       </div>
                       {/* <div className={styles.method}>
@@ -249,23 +253,17 @@ const CheckoutComp = () => {
                     <div className={styles.SignMeUp}>
                       <label>
                         <Field required name="checkedTerms" type="checkbox" />
-                        <p>
-                          I hereby declare that I have thoroughly read,
-                          completely understood, and unconditionally accepted
-                          The <u>Terms & Conditions</u>, including the{" "}
-                          <u>Return Policy, FAQ, Acceptable Use Policy,</u> and{" "}
-                          <u>privacy policy.</u>
-                        </p>
+                        <p>{t("condition")}</p>
                       </label>
                       <label>
                         <Field name="checkedEmail" type="checkbox" />
-                        <p>I agree To Receive Email Updates And News</p>
+                        <p>{t("terms")}</p>
                       </label>
                     </div>
                   </div>
                 </div>
                 <div className={styles.CheckoutRight}>
-                  <h1> Order Summary</h1>
+                  <h1> {t("ordersum")} </h1>
                   <div className={styles.RightCon}>
                     <div className={styles.OrdersFlex}>
                       {values.comps.map((order, i) => {
@@ -278,7 +276,6 @@ const CheckoutComp = () => {
                         return (
                           <div className={styles.orderItem} key={i}>
                             <Image
-                            
                               width={106}
                               height={105}
                               className={styles.orderImg}
@@ -296,13 +293,11 @@ const CheckoutComp = () => {
                               </h3>
                               {order.reduction > 0 && (
                                 <p>
-                                  Discount:{" "}
-                                  {"\t" +
-                                    Formater(
-                                      order.reduction *
-                                        (order.number_tickets *
-                                          ComptetionData.ticket_price)
-                                    )}
+                                  {`${t("discount")}\t${Formater(
+                                    order.reduction *
+                                      (order.number_tickets *
+                                        ComptetionData.ticket_price)
+                                  )}`}
                                 </p>
                               )}
                               <span>
@@ -319,7 +314,7 @@ const CheckoutComp = () => {
                                 })}
                               </span>
                               <h3>
-                                Remaining Tickets:{" "}
+                                {t("remaingtickets")}:{" "}
                                 {values.comps.map((comp) => {
                                   return (
                                     ComptetionData.remaining_tickets &&
@@ -329,7 +324,7 @@ const CheckoutComp = () => {
                                 })}
                               </h3>
                             </div>
-                            <div className={styles.Counter}>
+                            {/* <div className={styles.Counter}>
                               <div
                                 onClick={() => {
                                   const number_tickets =
@@ -404,7 +399,7 @@ const CheckoutComp = () => {
                                   alt="plus"
                                 />
                               </div>
-                            </div>
+                            </div> */}
                           </div>
                         );
                       })}
@@ -426,7 +421,7 @@ const CheckoutComp = () => {
                         });
                       }}
                     >
-                      Clear Cart
+                      {t("clearcart")}
                     </p>
                     <div className={styles.orderSumBot}>
                       <div className={styles.orderSum}>
@@ -497,7 +492,9 @@ const CheckoutComp = () => {
                         </PayPalScriptProvider>
                       ) : (
                         <>
-                          <button disabled={isNotConfirmed} type="submit">Confirm Order</button>
+                          <button disabled={isNotConfirmed} type="submit">
+                            {t("confirmorder")}
+                          </button>
                         </>
                       )}
                     </div>
@@ -513,3 +510,12 @@ const CheckoutComp = () => {
 };
 
 export default CheckoutComp;
+
+export async function getStaticProps({ locale }: GetStaticPropsContext) {
+  return {
+    props: {
+      //eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/restrict-template-expressions
+      messages: (await import(`../../messages/${locale}.json`)).default,
+    },
+  };
+}

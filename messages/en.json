@@ -24,7 +24,7 @@
     "enter": "ENTER COMPETITION",
 
     "certiftitle": "WE USE TPAL ELECTRONIC RANDOM DRAW COMPUTERIZED SYSTEM",
-    "certifdesc": "randomdraws certificate system randomdraws certificate system  randomdraws certificate system",
+    "certifdesc": "randomdraws certificate system",
     "reviews": "reviews",
     "upcoming": "THE UPCOMING COMPETITIONS",
     "followus": "FOLLOW US",
@@ -40,15 +40,19 @@
     "philoheaderdesc": " We are a family company where everyone works every day to find you the most sought after watch models that are available to you, we launched WIN U WATCH to allow anyone dreaming of owning a luxury watch, no longer remains a dream but a real chance.",
     "philotext": "YOU SHOULD KNOW THAT WE ARE THE NUMBER 1 SITE IN THE WORLD IN TERMS OF PROBABILITY OF WINNING ",
     "philotextdesc": "we are the number 1 site in the world in terms of probability of winning because we publish a limited number of tickets aligned with the number of participants makes us the best probability of winning."
+ 
   },
   "charity": {
     "charityheader": "TOTAL RAISED FOR CHARITY",
     "donation": "DONATION",
     "readmore": "READ MORE",
     "inassociation": "YOU ARE AN ASSOCIATION ?",
-    "contactus": "WANT TO BE IN THIS LIST - CONTACT US"
+    "contactus": "WANT TO BE IN THIS LIST - CONTACT US",
+    "woodland" : "Win u watch are donated 10% of his revenue to the Woodland association in the UK"
   },
   "cart": {
+    "whatwatch" : "What watch is this",
+    "discount": "Discount",
     "emptycart": "NO ITEMS IN THE CART",
     "remove": "REMOVE",
     "total": "TOTAL",
@@ -112,6 +116,7 @@
     "bottomtext7": "WE WISH YOU THE BEST OF LUCK!"
   },
   "checkout": {
+    "discount": "Discount",
     "billinginfo": "BILLING INFORMATION",
     "ordersum": "ORDER SUMMARY",
     "firstname": "FIRST NAME",

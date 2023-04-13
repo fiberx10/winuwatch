@@ -36,7 +36,6 @@ import FilePondPluginFilePoster from "filepond-plugin-file-poster";
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
 import Loader from "../Loader";
-import { string } from "zod";
 
 // Register the plugins
 registerPlugin(
@@ -54,7 +53,7 @@ const DashboardWatches = () => {
   const { mutateAsync: removeWatchIMG } =
     api.Watches.removeWatchIMG.useMutation();
 
-  const [newimgs, setNewImgs] = useState<string[]>([]);
+  //const [newimgs, setNewImgs] = useState<string[]>([]);
   //REMOVE WATCH
   const [remove, setRemove] = useState({ modal: false, id: "" });
   // HANDLE REMOVE WATCH
@@ -77,7 +76,7 @@ const DashboardWatches = () => {
   // HANDLE UPDATE MODAL FORM
   const handleClose = () => {
     setShow({ modal: false, data: 0 });
-    setNewImgs([]);
+    //setNewImgs([]);
   };
   const handleShow = (i: number) => {
     setShow({
@@ -196,7 +195,6 @@ const DashboardWatches = () => {
                         values,
                         handleSubmit,
                         handleChange,
-                        setFieldValue,
                       }) => (
                         <Form onSubmit={handleSubmit}>
                           <Modal.Body>
@@ -208,14 +206,11 @@ const DashboardWatches = () => {
                                     process: (
                                       fieldName,
                                       file,
-                                      files,
-                                      metadata,
-                                      load
                                     ) => {
                                       /* store file somewhere and call `load` when done */
                                       if (!file) return;
 
-                                      const fileName = `test/${faker.datatype.uuid()}`;
+                                      const fileName = `images/${watch.id}/${faker.datatype.uuid()}`;
 
                                       uploadBytes(ref(storage, fileName), file)
                                         .then(
