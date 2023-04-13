@@ -23,6 +23,7 @@ import { IoIosArrowDown } from "react-icons/io";
 import TablePagination from "@mui/material/TablePagination";
 import { ExportToCsv } from "export-to-csv";
 import Loader from "../Loader";
+import { useRouter } from "next/router";
 
 const csvExporter = new ExportToCsv({
   fieldSeparator: ",",
@@ -38,6 +39,7 @@ const csvExporter = new ExportToCsv({
 });
 
 const DashboardOrders = () => {
+  const {locale} = useRouter()
   const [open, setOpen] = React.useState({
     opened: false,
     orderID: "",
@@ -356,7 +358,8 @@ const DashboardOrders = () => {
                                                     <TableCell align="right">
                                                       {Formater(
                                                         row.totalPrice /
-                                                          row.Ticket.length
+                                                          row.Ticket.length,
+                                                          locale
                                                       )}
                                                     </TableCell>
                                                     <TableCell align="right">

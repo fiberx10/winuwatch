@@ -46,7 +46,7 @@
     "readmore": "LIRE PLUS",
     "inassociation": "VOUS ÊTES UNE ASSOCIATION ?",
     "contactus": "VOUS VOULEZ ÊTRE DANS CETTE LISTE - CONTACTEZ-NOUS",
-    "woodland" :  "Win u watch fait don de 10 % de ses revenus à l'Association Woodland au Royaume-Uni."
+    "woodland": "Win u watch fait don de 10 % de ses revenus à l'Association Woodland au Royaume-Uni."
   },
   "cart": {
     "whatwatch": "Quelle est cette montre ?",
@@ -74,7 +74,7 @@
     "maxwatchwinner": "Gagnants maximum de la montre :",
     "endcomp": "Fin du concours :",
     "winannon": "Annonce du gagnant :",
-    "liveinsta": "en direct sur instagram ",
+    "liveinsta": "en direct sur",
     "runup": "Prix des finalistes:",
     "willwin": " joueurs gagneront un crédit de",
     "creditto": "pour notre prochain concours.",
@@ -89,7 +89,9 @@
     "calibregear": "Calibre",
     "stonesnumber": "Nombre de pierres",
     "glass": "Verre",
-    "bezelmeterial": "Matériau de la lunette"
+    "bezelmeterial": "Matériau de la lunette",
+    "timezone" : "(Heure Locale à Londres)"
+
   },
   "thanku": {
     "thank": "MERCI",
@@ -135,7 +137,8 @@
     "creditcard": "CARTE DE CRÉDIT",
     "condition": "JE DÉCLARE AVOIR LU ATTENTIVEMENT, COMPLÈTEMENT COMPRIS ET ACCEPTÉ INCONDITIONNELLEMENT LES TERMES ET CONDITIONS, Y COMPRIS LA POLITIQUE DE RETOUR, LA FAQ, LA POLITIQUE D'UTILISATION ACCEPTABLE ET LA POLITIQUE DE CONFIDENTIALITÉ.",
     "terms": "J'ACCEPTE DE RECEVOIR LES NEWSLETTERS PAR E-MAIL",
-    "remaingtickets": "TICKETS  RESTANTS"
+    "remaingtickets": "TICKETS  RESTANTS",
+    "error": "Erreur lors de la création de la commande"
   },
   "navitems": {
     "phil": "PHILOSOPHIE",

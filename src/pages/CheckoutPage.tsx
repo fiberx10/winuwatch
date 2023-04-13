@@ -23,7 +23,6 @@ export default function CheckoutPage() {
   );
 }
 
-
 export async function getStaticProps({ locale }: GetStaticPropsContext) {
   return {
     props: {

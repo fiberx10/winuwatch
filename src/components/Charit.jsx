@@ -1,16 +1,18 @@
 import styles from "@/styles/Charity.module.css";
 import Image from "next/image";
 import { Formater } from "@/utils";
+import { useRouter } from "next/router";
 import { useTranslations } from "next-intl";
 
 const Charit = () => {
   const t = useTranslations("charity");
+  const {locale} = useRouter()
   const data = [
     {
       img: "/images/woodland.png",
       name: "Woodland trust UK",
       amount: 2346,
-      desc: t("woodland")
+      desc: t("woodland"),
     },
     // {
     //   img: "/images/cancerRes.png",
@@ -25,7 +27,7 @@ const Charit = () => {
         <div className={styles.CharityH1}>
           <h1>{t("charityheader")}</h1>
         </div>
-        <h3> {Formater(594828)}</h3>
+        <h3> {Formater(594828,locale)}</h3>
       </div>
       <div className={styles.CharityGrid}>
         {data.map((charity, i) => (

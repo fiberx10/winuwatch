@@ -16,9 +16,7 @@ const Certificate = () => {
           alt="certificate"
         />
       </div>
-      <h2>
-        {t("certifdesc")}
-      </h2>
+      <h2>{t("certifdesc")}</h2>
     </div>
   );
 };

@@ -19,10 +19,6 @@ export default function NavBar() {
   const [anchorLanguageEl, setAnchorLanguageEl] = useState<null | HTMLElement>(
     null
   );
-  const howTo =
-    typeof window !== "undefined" && document.getElementById("Howtoplay");
-  const theComp =
-    typeof window !== "undefined" && document.getElementById("theComp");
   useEffect(() => {
     if (
       typeof window !== "undefined" &&

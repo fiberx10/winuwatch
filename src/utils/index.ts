@@ -2,7 +2,6 @@ import { z } from "zod";
 import { OrderSchema } from "./zodSchemas";
 export * from "./api";
 
-
 export const CreateOrderSchema = OrderSchema.extend({
   comps: z.array(
     z.object({
@@ -15,20 +14,20 @@ export const CreateOrderSchema = OrderSchema.extend({
   status: true,
   id: true,
 });
-const LOCAL = "en-UK";
-export const Formater = (value: number | bigint) =>
-  new Intl.NumberFormat(LOCAL, {
+const DEFAULTLOCAL = "en-UK";
+
+export const Formater = (value: number | bigint, local = DEFAULTLOCAL) =>
+  new Intl.NumberFormat(local, {
     style: "currency",
     currency: "GBP",
   }).format(value);
 
-export const  DateFormater = (value :Date) => new Intl.DateTimeFormat(LOCAL, {
+export const DateFormater = (value: Date, local = DEFAULTLOCAL) =>
+  new Intl.DateTimeFormat(local, {
     dateStyle: "full",
     timeStyle: "short",
     timeZone: "Europe/London",
-  })
-    .format(value)
-    .replace("BST", "LONDON TIME");
+  }).format(value);
 
 export const MAX_TICKETS = 25;
 export const TICKETREDUC = [
