@@ -77,21 +77,21 @@ const HowToPlay = () => {
           <h2>{t("winawatch")}</h2>
           <p>{t("winawatchdesc")}</p>
         </div>
-        <button
-          onClick={() =>
-            typeof window !== "undefined" &&
-            window.scrollTo({
-              top:
-                theComp !== null && theComp instanceof HTMLElement
-                  ? theComp.offsetTop
-                  : 400,
-              behavior: "smooth",
-            })
-          }
-        >
-          {t("enter")}
-        </button>
       </div>
+      <button
+        onClick={() =>
+          typeof window !== "undefined" &&
+          window.scrollTo({
+            top:
+              theComp !== null && theComp instanceof HTMLElement
+                ? theComp.offsetTop
+                : 400,
+            behavior: "smooth",
+          })
+        }
+      >
+        {t("enter")}
+      </button>
     </div>
   );
 };

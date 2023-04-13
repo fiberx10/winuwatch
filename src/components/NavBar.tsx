@@ -75,9 +75,9 @@ export default function NavBar() {
           <div className={styles.DrawerCon}>
             <MdClose className={styles.closeBut} />
             <Link href={"/#theComp"}>{t("comp")}</Link>
+            <Link href={"/#Howtoplay"}>{t("howto")}</Link>
             <Link href={"/Philosophy"}>{t("phil")}</Link>
             <Link href={"/Charity"}>{t("charity")}</Link>
-            <Link href={"/#Howtoplay"}>{t("howto")}</Link>
           </div>
         </Drawer>
       </div>

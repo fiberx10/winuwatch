@@ -128,6 +128,12 @@ const Footer = () => {
                       display: "flex",
                       flexDirection: "column",
                       gap: "0.4rem",
+                      width:
+                        link === "/Acceptable_Use_Policy"
+                          ? "79%"
+                          : link === "/FAQ"
+                          ? "100%"
+                          : "initial",
                     }}
                     key={i + j}
                   >
@@ -152,7 +158,13 @@ const Footer = () => {
           </div>
           <div className={styles.FooterTopRight}>
             <div className={styles.emails}>
-              <p>{t("enquiries")}</p>
+              <p
+                style={{
+                  width: "59.7%",
+                }}
+              >
+                {t("enquiries")}
+              </p>
               <a href="mailto:info@winuwatch.uk">
                 <u>info@winuwatch.uk</u>
               </a>
