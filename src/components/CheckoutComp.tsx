@@ -13,10 +13,6 @@ import "react-datetime/css/react-datetime.css";
 import { useTranslations } from "next-intl";
 import { GetServerSidePropsContext, GetStaticPropsContext } from "next";
 
-
-
-
-
 const CheckoutComp = () => {
   const router = useRouter();
   const t = useTranslations("checkout");
@@ -40,7 +36,6 @@ const CheckoutComp = () => {
   const [error, setError] = useState<string | undefined>();
   const [isNotConfirmed, setIsNotConfirmed] = useState<boolean>(false);
   const { totalCost } = cardDetails();
- 
 
   return (
     <div className={styles.CheckoutMain}>
@@ -258,9 +253,7 @@ const CheckoutComp = () => {
                     <div className={styles.SignMeUp}>
                       <label>
                         <Field required name="checkedTerms" type="checkbox" />
-                        <p>
-                        {t("condition")}
-                        </p>
+                        <p>{t("condition")}</p>
                       </label>
                       <label>
                         <Field name="checkedEmail" type="checkbox" />
@@ -321,17 +314,17 @@ const CheckoutComp = () => {
                                 })}
                               </span>
                               <h3>
-                              {t("remaingtickets")}:{" "}
+                                {t("remaingtickets")}:{" "}
                                 {values.comps.map((comp) => {
                                   return (
                                     ComptetionData.remaining_tickets &&
                                     ComptetionData.remaining_tickets -
                                       comp.number_tickets
-                                  )
-                                  })}
+                                  );
+                                })}
                               </h3>
                             </div>
-                            <div className={styles.Counter}>
+                            {/* <div className={styles.Counter}>
                               <div
                                 onClick={() => {
                                   const number_tickets =
@@ -406,7 +399,7 @@ const CheckoutComp = () => {
                                   alt="plus"
                                 />
                               </div>
-                            </div>
+                            </div> */}
                           </div>
                         );
                       })}
@@ -428,9 +421,7 @@ const CheckoutComp = () => {
                         });
                       }}
                     >
-                      {
-                        t("clearcart")
-                      }
+                      {t("clearcart")}
                     </p>
                     <div className={styles.orderSumBot}>
                       <div className={styles.orderSum}>
@@ -501,7 +492,9 @@ const CheckoutComp = () => {
                         </PayPalScriptProvider>
                       ) : (
                         <>
-                          <button disabled={isNotConfirmed} type="submit">{t("confirmorder")}</button>
+                          <button disabled={isNotConfirmed} type="submit">
+                            {t("confirmorder")}
+                          </button>
                         </>
                       )}
                     </div>
@@ -517,7 +510,6 @@ const CheckoutComp = () => {
 };
 
 export default CheckoutComp;
-
 
 export async function getStaticProps({ locale }: GetStaticPropsContext) {
   return {
