@@ -253,10 +253,7 @@ const CheckoutComp = () => {
                         <Field required name="checkedTerms" type="checkbox" />
                         <p>
                           {
-                            t.rich("condition",{
-                              p: (text) => <p>{text}</p>,
-
-                            })
+                            t("condition")
                             /*
                           I hereby declare that I have thoroughly read,
                           completely understood, and unconditionally accepted
