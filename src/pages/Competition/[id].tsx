@@ -318,8 +318,9 @@ export default function Competition({
                   ) : null}
                   {data.drawing_date.toString() ? (
                     <p>
-                      {t("winannon")} {DateFormater(data.drawing_date)} in
-                      {t("liveinsta")} @winuwatch
+                      {`${t("winannon")} ${DateFormater(data.drawing_date)} ${t(
+                        "liveinsta"
+                      )} @winuwatch`}
                     </p>
                   ) : null}
 

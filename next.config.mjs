@@ -17,6 +17,7 @@ const config = {
   i18n: {
     locales: ["en", "es", "fr"],
     defaultLocale: "en",
+    localeDetection: false,
   },
   images: {
     remotePatterns: [
