@@ -200,9 +200,9 @@ const CartComp = () => {
                       <Image
                         src={randomImage.img}
                         style={{
-                          objectFit: "contain",
+                          objectFit: "cover",
                         }}
-                        width={150}
+                        width={300}
                         height={150}
                         alt="questionImage"
                       />
