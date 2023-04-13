@@ -314,7 +314,9 @@ export default function Competition({
                     {`${t("winannon")} ${DateFormater(data.drawing_date, router.locale)} ${t(
                       "liveinsta"
                     )} `}
-                    <a href="https://www.instagram.com/winuwatch/">
+                    <a 
+                      className={styles.instaLink}
+                    href="https://www.instagram.com/winuwatch/">
                       @winuwatch
                     </a>
                     {" "+t("timezone")}

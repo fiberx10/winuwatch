@@ -53,7 +53,6 @@
     "discount": "Remise",
     "emptycart": "AUCUN ARTICLE DANS LE PANIER",
     "remove": "RETIRER",
-
     "total": "TOTAL",
     "checkout": "PAYER",
     "cartempty": "AUCUN ARTICLE DANS LE PANIER",
@@ -90,8 +89,7 @@
     "stonesnumber": "Nombre de pierres",
     "glass": "Verre",
     "bezelmeterial": "Matériau de la lunette",
-    "timezone" : "(Heure Locale à Londres)"
-
+    "timezone": "(Heure Locale à Londres)"
   },
   "thanku": {
     "thank": "MERCI",
@@ -135,7 +133,14 @@
     "confirmorder": "CONFIRMER LA COMMANDE",
     "paymethod": "MODE DE PAIEMENT",
     "creditcard": "CARTE DE CRÉDIT",
-    "condition": "JE DÉCLARE AVOIR LU ATTENTIVEMENT, COMPLÈTEMENT COMPRIS ET ACCEPTÉ INCONDITIONNELLEMENT LES TERMES ET CONDITIONS, Y COMPRIS LA POLITIQUE DE RETOUR, LA FAQ, LA POLITIQUE D'UTILISATION ACCEPTABLE ET LA POLITIQUE DE CONFIDENTIALITÉ.",
+    "condition": "JE DÉCLARE AVOIR LU ATTENTIVEMENT, COMPLÈTEMENT COMPRIS ET ACCEPTÉ INCONDITIONNELLEMENT",
+    "terms&conds": "LES TERMES ET CONDITIONS",
+    "including" : "Y COMPRIS",
+    "return" : "LA POLITIQUE DE RETOUR",
+    "faq": "LA FAQ",
+    "and" : "ET",
+    "acc_use_policy" : "LA POLITIQUE D'UTILISATION ACCEPTABLE",
+    "privacy_police" : "LA POLITIQUE DE CONFIDENTIALITÉ.",
     "terms": "J'ACCEPTE DE RECEVOIR LES NEWSLETTERS PAR E-MAIL",
     "remaingtickets": "TICKETS  RESTANTS",
     "error": "Erreur lors de la création de la commande"
