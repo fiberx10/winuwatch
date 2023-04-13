@@ -128,6 +128,12 @@ const Footer = () => {
                       display: "flex",
                       flexDirection: "column",
                       gap: "0.4rem",
+                      width:
+                        link === "/Acceptable_Use_Policy"
+                          ? "79%"
+                          : link === "/FAQ"
+                          ? "100%"
+                          : "initial",
                     }}
                     key={i + j}
                   >
