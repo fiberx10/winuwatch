@@ -139,7 +139,19 @@
   .CharityMain {
     margin-top: 3rem;
   }
-
+  .CharityHeader {
+    width: 100%;
+  }
+  .CharityHeader h3 {
+    width: 100%;
+    font-size: 40px;
+  }
+  .charityTop {
+    width: 100%;
+  }
+  .charityTop img {
+    width: 100%;
+  }
   .charity {
     flex-direction: column;
     height: fit-content;

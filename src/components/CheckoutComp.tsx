@@ -201,9 +201,7 @@ const CheckoutComp = () => {
 
                           {
                             //TODO: THis should be translated
-                            error &&  (
-                              <p style={{ color: "red" }}>{error}</p>
-                            )
+                            error && <p style={{ color: "red" }}>{error}</p>
                           }
                         </div>
                       </div>
@@ -252,14 +250,16 @@ const CheckoutComp = () => {
                       <label>
                         <Field required name="checkedTerms" type="checkbox" />
                         <p>
-                          { `${t("condition")} `}
+                          {`${t("condition")} `}
                           <a href="/TermsAndConditions">{t("terms&conds")}</a>
-                          { `, ${t("including") } `}
+                          {`, ${t("including")} `}
                           <a href="/Return_Policy">{t("return")}</a>
                           {", "}
                           <a href="/FAQ">{t("faq")}</a>
                           {", "}
-                          <a href="/Acceptable_Use_Policy">{t("acc_use_policy")}</a>
+                          <a href="/Acceptable_Use_Policy">
+                            {t("acc_use_policy")}
+                          </a>
                           {`, ${t("and")} `}
                           <a href="/Privacy_Policy">{t("privacy_police")}</a>.
                         </p>
@@ -301,7 +301,11 @@ const CheckoutComp = () => {
                                 {ComptetionData?.Watches.model}
                               </h3>
                               {order.reduction > 0 && (
-                                <p>
+                                <p
+                                  style={{
+                                    color: "#a8957e",
+                                  }}
+                                >
                                   {`${t("discount")}\t${Formater(
                                     order.reduction *
                                       (order.number_tickets *
@@ -311,22 +315,24 @@ const CheckoutComp = () => {
                                 </p>
                               )}
                               <span>
-                                {values.comps.map(({
-                                number_tickets,  
-                                price_per_ticket
-                              }, i) => (
-                                <p key={i}>
-                                    {Formater(number_tickets*price_per_ticket, router.locale)}
-                                  </p>
-                                ))}
+                                {values.comps.map(
+                                  ({ number_tickets, price_per_ticket }, i) => (
+                                    <p key={i}>
+                                      {Formater(
+                                        number_tickets * price_per_ticket,
+                                        router.locale
+                                      )}
+                                    </p>
+                                  )
+                                )}
                               </span>
                               <h3>
                                 {t("remaingtickets")}:{" "}
-                                {values.comps.map((comp) => (
+                                {values.comps.map(
+                                  (comp) =>
                                     ComptetionData.remaining_tickets &&
                                     ComptetionData.remaining_tickets -
                                       comp.number_tickets
-                                  )
                                 )}
                               </h3>
                             </div>

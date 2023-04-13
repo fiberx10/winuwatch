@@ -354,13 +354,13 @@
   justify-content: flex-end;
 }
 .watchContent {
-  margin-bottom: -47vh;
+  margin-bottom: -18rem;
   gap: 0.7rem;
   display: -webkit-flex;
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 50vh;
+  height: 20rem;
   justify-content: flex-start;
 }
 .watchCon a {
@@ -498,9 +498,10 @@
 .howtoContainer {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
   padding: 0px 80px;
   margin-bottom: 100px;
+  gap: 2rem;
 }
 .howtoContainer h1 {
   font-weight: 600;
@@ -515,9 +516,8 @@
   justify-content: center;
   position: relative;
 }
-.howtoText button {
+.howtoContainer button {
   font-family: "Montserrat", sans-serif;
-  position: absolute;
   bottom: 0;
   right: 10rem;
   border: 1px solid #000000;
@@ -792,6 +792,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  max-width: 190px;
   height: 70px;
 }
 .menusGrid a {
@@ -1023,7 +1024,17 @@
     background-position: unset !important;
   }
 }
+
 @media only screen and (min-width: 320px) and (max-width: 930px) {
+  .howLine {
+    height: 100%;
+  }
+  .dot3 {
+    top: 24%;
+  }
+  .dot4 {
+    top: 49%;
+  }
   .AliceContainer h1 {
     margin-left: 10px;
     top: -4%;
@@ -1185,20 +1196,20 @@
   .howtoLine {
     position: absolute;
     left: 0;
+    height: 100%;
   }
   .howtoText {
     display: flex;
     flex-direction: column;
-    height: 40rem;
+    height: fit-content;
     gap: 4rem;
     justify-content: space-between;
     margin-top: 30px;
     padding-left: 20px;
   }
-  .howtoText button {
+  .howtoContainer button {
     position: initial;
     width: 95%;
-    margin-top: -2rem;
     padding: 10px 0px;
     font-size: 14px;
   }
@@ -1282,6 +1293,9 @@
     width: 200px;
     align-items: center;
     height: auto;
+  }
+  .menusGridItem div {
+    align-items: center;
   }
 }
 @media only screen and (min-width: 442px) {
@@ -1458,7 +1472,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    row-gap: 14rem !important;
+    row-gap: 20rem !important;
   }
   .emails {
     width: 250px;
