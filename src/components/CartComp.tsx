@@ -208,7 +208,9 @@ const CartComp = () => {
                       />
                     )}
 
-                    <h1>What watch is this ?</h1>
+                    <h1>
+                      {t("whatwatch")}
+                    </h1>
                   </div>
                   <h2
                     style={{ display: wrong ? "flex" : "none", color: "red" }}
