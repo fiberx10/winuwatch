@@ -231,6 +231,12 @@
     font-size: 14px !important;
     min-width: max-content;
   }
+  .modalQuestion img {
+    height: 30% !important;
+  }
+  .questionsCon {
+    grid-gap: 1rem !important;
+  }
   .CartRight {
     padding-top: 15px;
     flex-direction: column;
@@ -247,7 +253,10 @@
     width: 100%;
   }
   .modalQuestion {
-    flex-direction: row;
+    flex-direction: column-reverse;
+  }
+  .modalQuestion img {
+    width: 50%;
   }
 
   .questionsCon button {
