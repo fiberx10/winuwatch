@@ -135,7 +135,8 @@
     "creditcard": "CREDIT CARD",
     "condition": "I HEREBY DECLARE THAT I HAVE THOROUGHLY READ, COMPLETELY UNDERSTOOD, AND UNCONDITIONALLY ACCEPTED THE TERMS & CONDITIONS, INCLUDING THE RETURN POLICY, FAQ, ACCEPTABLE USE POLICY, AND PRIVACY POLICY.",
     "terms": "I AGREE TO RECEIVE EMAIL UPDATES AND NEWS",
-    "remaingtickets": "REMAINING TICKETS"
+    "remaingtickets": "REMAINING TICKETS",
+    "error": "Error in the creating the order"
   },
   "navitems": {
     "phil": "PHILOSOPHY",

@@ -17,7 +17,7 @@ const CheckoutComp = () => {
   const router = useRouter();
   const t = useTranslations("checkout");
   const { mutateAsync: createOrder } = api.Order.createStripe.useMutation();
-  const { competitions, cardDetails, updateComp, reset } = useCart();
+  const { competitions, cardDetails, reset } = useCart();
 
   const { data: items } = api.Competition.getAll.useQuery({
     ids: competitions.map((comp) => comp.compID),
@@ -84,7 +84,7 @@ const CheckoutComp = () => {
                 // })
                 await router.push(url);
               }
-              setError(error || "Error in the creating the order");
+              setError(error || t("error"));
               console.log(error);
               // const res = CreateOrderSchema.safeParse(values);
 
@@ -200,11 +200,8 @@ const CheckoutComp = () => {
 
                           {
                             //TODO: THis should be translated
-                            error ===
-                            "You must be 18 years old to purchase a ticket" ? (
+                            error &&  (
                               <p style={{ color: "red" }}>{error}</p>
-                            ) : (
-                              ""
                             )
                           }
                         </div>
@@ -302,27 +299,23 @@ const CheckoutComp = () => {
                                 </p>
                               )}
                               <span>
-                                {values.comps.map((comp, i) => {
-                                  return (
-                                    <p key={i}>
-                                      $
-                                      {(
-                                        comp.number_tickets *
-                                        comp.price_per_ticket
-                                      ).toFixed(2)}
-                                    </p>
-                                  );
-                                })}
+                                {values.comps.map(({
+                                number_tickets,  
+                                price_per_ticket
+                              }, i) => (
+                                <p key={i}>
+                                    {Formater(number_tickets*price_per_ticket, router.locale)}
+                                  </p>
+                                ))}
                               </span>
                               <h3>
                                 {t("remaingtickets")}:{" "}
-                                {values.comps.map((comp) => {
-                                  return (
+                                {values.comps.map((comp) => (
                                     ComptetionData.remaining_tickets &&
                                     ComptetionData.remaining_tickets -
                                       comp.number_tickets
-                                  );
-                                })}
+                                  )
+                                )}
                               </h3>
                             </div>
                             {/* <div className={styles.Counter}>
