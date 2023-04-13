@@ -299,9 +299,8 @@ export default function Competition({
                   <p>
                     Prize: {data.Watches.brand} {data.Watches.model}{" "}
                     {data.Watches.reference_number} - {t("paperwork")}
-                    {data.Watches.has_certificate &&
-                      ", new digital warranty card "}
-                    {data.Watches.has_box && "& fully boxed"}.
+                    {data.Watches.has_certificate}
+                    {data.Watches.has_box}.
                   </p>
                   {data.total_tickets > 0 && (
                     <p>
