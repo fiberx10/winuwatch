@@ -49,6 +49,7 @@
     "contactus": "WANT TO BE IN THIS LIST - CONTACT US"
   },
   "cart": {
+    "discount": "Discount",
     "emptycart": "NO ITEMS IN THE CART",
     "remove": "REMOVE",
     "total": "TOTAL",
@@ -112,6 +113,7 @@
     "bottomtext7": "WE WISH YOU THE BEST OF LUCK!"
   },
   "checkout": {
+    "discount": "Discount",
     "billinginfo": "BILLING INFORMATION",
     "ordersum": "ORDER SUMMARY",
     "firstname": "FIRST NAME",
