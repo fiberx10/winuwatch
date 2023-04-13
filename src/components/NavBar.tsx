@@ -7,6 +7,7 @@ import { useCart } from "./Store";
 import { useRouter } from "next/router";
 import { MdClose } from "react-icons/md";
 import { useTranslations } from "next-intl";
+import Link from "next/link";
 
 export default function NavBar() {
   const t = useTranslations("navitems");
@@ -48,38 +49,20 @@ export default function NavBar() {
         }}
         className={styles.flexStart}
       >
-        <span
-          onClick={async () =>
-            typeof window !== "undefined" && location.pathname !== "/"
-              ? await router.push("/")
-              : window.scrollTo({
-                  top:
-                    theComp !== null && theComp instanceof HTMLElement
-                      ? theComp.offsetTop
-                      : 400,
-                  behavior: "smooth",
-                })
-          }
+        <Link
+          style={{ color: navColor }}
+          href={"/#theComp"}
           className={styles.mobile}
         >
           {t("comp")}
-        </span>
-        <span
+        </Link>
+        <Link
+          style={{ color: navColor }}
           className={styles.mobile}
-          onClick={() =>
-            typeof window !== "undefined" && location.pathname !== "/"
-              ? router.push("/")
-              : window.scrollTo({
-                  top:
-                    howTo !== null && howTo instanceof HTMLElement
-                      ? howTo.offsetTop
-                      : 400,
-                  behavior: "smooth",
-                })
-          }
+          href={"/#Howtoplay"}
         >
           {t("howto")}
-        </span>
+        </Link>
         <Image
           style={{
             cursor: "pointer",
@@ -95,38 +78,10 @@ export default function NavBar() {
         <Drawer className={styles.Drawer} anchor="left" open={open}>
           <div className={styles.DrawerCon}>
             <MdClose className={styles.closeBut} />
-            <span
-              onClick={() =>
-                typeof window !== "undefined" && location.pathname !== "/"
-                  ? router.push("/")
-                  : window.scrollTo({
-                      top:
-                        theComp !== null && theComp instanceof HTMLElement
-                          ? theComp.offsetTop
-                          : 400,
-                      behavior: "smooth",
-                    })
-              }
-            >
-              {t("comp")}
-            </span>
-            <span onClick={() => router.push("/Philosophy")}>{t("phil")}</span>
-            <span onClick={() => router.push("/Charity")}>{t("charity")}</span>
-            <span
-              onClick={() =>
-                typeof window !== "undefined" && location.pathname !== "/"
-                  ? router.push("/")
-                  : window.scrollTo({
-                      top:
-                        howTo !== null && howTo instanceof HTMLElement
-                          ? howTo.offsetTop
-                          : 400,
-                      behavior: "smooth",
-                    })
-              }
-            >
-              {t("howto")}
-            </span>
+            <Link href={"/#theComp"}>{t("comp")}</Link>
+            <Link href={"/Philosophy"}>{t("phil")}</Link>
+            <Link href={"/Charity"}>{t("charity")}</Link>
+            <Link href={"/#Howtoplay"}>{t("howto")}</Link>
           </div>
         </Drawer>
       </div>
@@ -151,32 +106,20 @@ export default function NavBar() {
         }}
         className={styles.flexEnd}
       >
-        <span
-          style={{
-            fontWeight:
-              typeof window !== "undefined" &&
-              window.location.pathname === "/Philosophy"
-                ? "600"
-                : "initial",
-          }}
+        <Link
           className={styles.mobile}
-          onClick={() => router.push("/Philosophy")}
+          style={{ color: navColor }}
+          href={"/Philosophy"}
         >
           {t("phil")}
-        </span>
-        <span
-          style={{
-            fontWeight:
-              typeof window !== "undefined" &&
-              window.location.pathname === "/Charity"
-                ? "600"
-                : "initial",
-          }}
+        </Link>
+        <Link
           className={styles.mobile}
-          onClick={() => router.push("/Charity")}
+          style={{ color: navColor }}
+          href={"/Charity"}
         >
           {t("charity")}
-        </span>
+        </Link>
         <span
           style={{
             fontWeight:

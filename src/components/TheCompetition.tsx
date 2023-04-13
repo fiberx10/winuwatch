@@ -74,7 +74,8 @@ const TheCompetition = () => {
                       ""
                     ) : (
                       <p>
-                        {t("only")} <b>{watch.remaining_tickets}</b> {t("tickets")}
+                        {t("only")} <b>{watch.remaining_tickets}</b>{" "}
+                        {t("tickets")}
                       </p>
                     )}
                   </div>

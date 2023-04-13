@@ -87,9 +87,23 @@
   }
   .philoHeader h1 {
     font-size: 35px;
+    line-height: 50px;
   }
   .philoHeader p {
-    font-size: 16px;
+    font-size: 20px;
+    line-height: 2rem;
+    padding: 0px 10px;
+  }
+  .Philo {
+    background: linear-gradient(
+      180deg,
+      #faf8f6 30%,
+      rgba(206, 198, 189, 0) 50.83%,
+      #a8957e 100%
+    );
+  }
+  .philoImg {
+    top: 10%;
   }
   .philoBotTxt {
     width: 100%;
@@ -98,7 +112,9 @@
     font-size: 35px;
   }
   .philoBotTxt p {
-    font-size: 16px;
+    font-size: 22px;
+    line-height: 2rem;
+    padding: 0px 10px;
   }
 }
 @media only screen and (max-height: 667px) {
