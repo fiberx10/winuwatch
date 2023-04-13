@@ -49,7 +49,7 @@
     "contactus": "VOUS VOULEZ ÊTRE DANS CETTE LISTE - CONTACTEZ-NOUS"
   },
   "cart": {
-    "whatwatch" : "Quelle est cette montre ?", 
+    "whatwatch": "Quelle est cette montre ?",
     "discount": "Remise",
     "emptycart": "AUCUN ARTICLE DANS LE PANIER",
     "remove": "RETIRER",
@@ -57,7 +57,7 @@
     "total": "TOTAL",
     "checkout": "PAYER",
     "cartempty": "AUCUN ARTICLE DANS LE PANIER",
-    "tocontinue": "AFIN DE FINALISER, VOUS DEVEZ RÉPONDRE À CETTE QUESTION ::",
+    "tocontinue": "AFIN DE FINALISER, VOUS DEVEZ RÉPONDRE À CETTE QUESTION :",
     "wronganswer": "MAUVAISE RÉPONSE"
   },
   "competition": {
