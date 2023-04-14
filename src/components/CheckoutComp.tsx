@@ -188,6 +188,7 @@ const CheckoutComp = () => {
                             utc={true}
                             input={true}
                             timeFormat={false}
+                            initialValue={new Date("2000-01-01")}
                             isValidDate={(currentDate) =>
                               IsLegal(new Date(currentDate as Date))
                             }
