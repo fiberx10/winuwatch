@@ -254,9 +254,9 @@ const CheckoutComp = () => {
                         <Field
                           required
                           name="checkedTerms"
-                          onChange={(e:ChangeEvent<HTMLInputElement>) => {
+                          /*onChange={(e:ChangeEvent<HTMLInputElement>) => {
                             setIsTermsChecked(e.target.checked);
-                          }}
+                          }}*/
                           type="checkbox"
                         />
                         <p className={styles.termsTxt}>
