@@ -143,7 +143,8 @@
     "privacy_police" : "POLÍTICA DE PRIVACIDAD",
     "terms": "ACEPTO RECIBIR ACTUALIZACIONES Y NOTICIAS POR CORREO ELECTRÓNICO",
     "remaingtickets": "ENTRADAS RESTANTES",
-    "error": "Error al crear la orden"
+    "error": "Error al crear la orden" , 
+    "shouldacceptterms" : "Debe aceptar los términos y condiciones" 
   },
   "navitems": {
     "phil": "FILOSOFÍA",

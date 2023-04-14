@@ -70,7 +70,7 @@
     "prize": "Prize:",
     "paperwork": "Comes with full paperwork, new digital warranty card & fully boxed.",
     "maxspace": "Maximum spaces in the final draw: ",
-    "maxwatchwinner": "Maximum watch winners",
+    "maxwatchwinner": "Maximum watch winners : ",
     "endcomp": "End of competition:",
     "winannon": "Winner announcement: ",
     "liveinsta": "in direct live on",
@@ -143,11 +143,12 @@
     "privacy_police": "PRIVACY POLICY.",
     "terms": "I AGREE TO RECEIVE EMAIL UPDATES AND NEWS",
     "remaingtickets": "REMAINING TICKETS",
-    "error": "Error in the creating the order"
+    "error": "Error in the creating the order" , 
+    "shouldacceptterms" : "You should accept the terms and conditions" 
   },
   "navitems": {
     "phil": "PHILOSOPHY",
-    "comp": "THE COMPETITION",
+    "comp": "THE COMPETITIONS",
     "howto": "HOW TO PLAY",
     "charity": "CHARITY",
     "cart": "CART"

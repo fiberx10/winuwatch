@@ -198,6 +198,7 @@
   align-items: center;
   gap: 1rem;
 }
+
 .SignMeUp a {
   color: #987358;
   cursor: pointer;
@@ -232,6 +233,21 @@
 }
 .countryList option:hover {
   background-color: #987358;
+}
+@media only screen and (max-width: 500px) {
+  /* remove later */
+  .SignMeUp label {
+    justify-content: space-between;
+  }
+  .termsTxt {
+    width: 90%;
+    font-size: 14px;
+  }
+  .emailTxt {
+    width: 90%;
+    font-size: 14px;
+  }
+  /*  */
 }
 @media only screen and (max-width: 768px) {
   .CheckoutMain {
