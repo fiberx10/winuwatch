@@ -37,7 +37,6 @@ const CheckoutComp = () => {
   const [error, setError] = useState<string | undefined>();
   const [isNotConfirmed, setIsNotConfirmed] = useState<boolean>(false);
   const { totalCost } = cardDetails();
-  const [isTermsChecked, setIsTermsChecked] = useState<boolean>(false);
 
   return (
     <div className={styles.CheckoutMain}>
@@ -61,7 +60,6 @@ const CheckoutComp = () => {
               checkedTerms: false,
             }}
             onSubmit={async (values, actions) => {
-              console.log("terms and conditions", isTermsChecked);
              
               // disable the confirm button to prevent duplicate messages
               setIsNotConfirmed(true);
@@ -254,9 +252,6 @@ const CheckoutComp = () => {
                         <Field
                           required
                           name="checkedTerms"
-                          /*onChange={(e:ChangeEvent<HTMLInputElement>) => {
-                            setIsTermsChecked(e.target.checked);
-                          }}*/
                           type="checkbox"
                         />
                         <p className={styles.termsTxt}>
@@ -516,7 +511,7 @@ const CheckoutComp = () => {
                       ) : (
                         <>
                           <button disabled={isNotConfirmed} type="submit" onClick={()=>{
-                             if(!isTermsChecked) return alert(`${t("shouldacceptterms")}`);
+                             if(!values.checkedTerms) return alert(`${t("shouldacceptterms")}`);
                           }}>
                             {t("confirmorder")}
                           </button>
