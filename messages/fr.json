@@ -45,7 +45,8 @@
     "donation": "DONS",
     "readmore": "LIRE PLUS",
     "inassociation": "VOUS ÊTES UNE ASSOCIATION ?",
-    "contactus": "VOUS VOULEZ ÊTRE DANS CETTE LISTE - CONTACTEZ-NOUS",
+    "beinlist" : "VOUS VOULEZ ÊTRE DANS CETTE LISTE - ",
+    "contactus": " CONTACTEZ-NOUS",
     "woodland": "Win u watch fait don de 10 % de ses revenus à l'Association Woodland au Royaume-Uni."
   },
   "cart": {
