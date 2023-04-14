@@ -124,7 +124,7 @@
     "address": "ADDRESS",
     "city": "TOWN/CITY",
     "country": "COUNTRY/REGION",
-    "zip": "ZIP",
+    "zip": "ZIP CODE",
     "phone": "PHONE",
     "dateofbirth": "DATE OF BIRTH",
     "enterdate": "Enter Date",
