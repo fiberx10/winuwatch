@@ -144,7 +144,8 @@
     "privacy_police" : "LA POLITIQUE DE CONFIDENTIALITÉ.",
     "terms": "J'ACCEPTE DE RECEVOIR LES NEWSLETTERS PAR E-MAIL",
     "remaingtickets": "TICKETS  RESTANTS",
-    "error": "Erreur lors de la création de la commande"
+    "error": "Erreur lors de la création de la commande" , 
+    "shouldacceptterms" : "Vous devez accepter les termes et conditions" 
   },
   "navitems": {
     "phil": "PHILOSOPHIE",
