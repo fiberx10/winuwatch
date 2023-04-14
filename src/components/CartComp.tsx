@@ -19,6 +19,25 @@ const CartComp = () => {
     ids: competitions.map(({ compID }) => compID),
   });
 
+  const checkModalValidity = () => {
+    const date = localStorage.getItem("date");
+    if (date) {
+      const dateNow = new Date().getTime();
+      const dateThen = new Date(date).getTime();
+      const diff = dateNow - dateThen;
+      if (diff < 10800000) {
+        return false;
+      } else {
+        return true;
+      }
+    } else {
+      return true;
+    }
+  };
+  const resetModalValidity = () => {
+    localStorage.setItem("date", new Date().toString());
+  };
+
   const router = useRouter();
   //console.log(question);
 
@@ -165,7 +184,26 @@ const CartComp = () => {
         <span>{Formater(totalCost)}</span>
       </div>
       <div className={styles.cartCheckoutCon}>
-        <button onClick={() => setOpen(true)}>{t("checkout")}</button>
+        <button
+          onClick={() => {
+            // check the validity date
+            if (checkModalValidity()) {
+              setOpen(true);
+              resetModalValidity();
+            } else {
+              router
+                .push("/CheckoutPage")
+                .then(() => {
+                  return null;
+                })
+                .catch(() => {
+                  return null;
+                });
+            }
+          }}
+        >
+          {t("checkout")}
+        </button>
         <Modal
           aria-labelledby="spring-modal-title"
           aria-describedby="spring-modal-description"
