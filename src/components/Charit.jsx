@@ -6,7 +6,7 @@ import { useTranslations } from "next-intl";
 
 const Charit = () => {
   const t = useTranslations("charity");
-  const {locale} = useRouter()
+  const { locale } = useRouter();
   const data = [
     {
       img: "/images/woodland.png",
@@ -27,7 +27,7 @@ const Charit = () => {
         <div className={styles.CharityH1}>
           <h1>{t("charityheader")}</h1>
         </div>
-        <h3> {Formater(594828,locale)}</h3>
+        <h3> {Formater(594828, locale)}</h3>
       </div>
       <div className={styles.CharityGrid}>
         {data.map((charity, i) => (
@@ -54,8 +54,22 @@ const Charit = () => {
         ))}
       </div>
       <div className={styles.Join}>
-        <h1>{t("inassociation")}</h1>
-        <h1>- {t("contactus")}</h1>
+        <h1>
+          {t("inassociation")}
+
+          <span style={{
+            display: "flex",
+          }}>
+            <h1>{t("beinlist")}</h1>
+            {" "}
+            <a
+              style={{ color: "#1e1e1e", textDecoration: "underline" }}
+              href="mailto:info@winuwatch.uk"
+            >
+              {t("contactus")}
+            </a>
+          </span>
+        </h1>
       </div>
     </div>
   );
