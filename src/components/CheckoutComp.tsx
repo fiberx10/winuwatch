@@ -38,6 +38,16 @@ const CheckoutComp = () => {
   const [isNotConfirmed, setIsNotConfirmed] = useState<boolean>(false);
   const { totalCost } = cardDetails();
 
+  function validateEmail(value: string) {
+    let error;
+    if (!value) {
+      error = "Required";
+    } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value)) {
+      error = "Invalid email address";
+    }
+    return error;
+  }
+
   return (
     <div className={styles.CheckoutMain}>
       {items && (
@@ -60,7 +70,6 @@ const CheckoutComp = () => {
               checkedTerms: false,
             }}
             onSubmit={async (values, actions) => {
-             
               // disable the confirm button to prevent duplicate messages
               setIsNotConfirmed(true);
               //if a value in the object values is undefined, it will not be sent to the server
@@ -97,7 +106,14 @@ const CheckoutComp = () => {
               actions.setSubmitting(false);
             }}
           >
-            {({ values, setValues, setFieldValue }) => (
+            {({
+              values,
+              setValues,
+              setFieldValue,
+              errors,
+              touched,
+              isValidating,
+            }) => (
               <Form>
                 <div className={styles.CheckoutLeft}>
                   <div className={styles.leftFormItem}>
@@ -178,7 +194,11 @@ const CheckoutComp = () => {
                             id="email"
                             name="email"
                             type="Email"
+                            validate={validateEmail}
                           />
+                          {errors.email && touched.email && (
+                            <div style={{ color: "red" }}>{errors.email}</div>
+                          )}
                         </div>
                       </div>
                       <div className={styles.FinalRow}>
@@ -250,11 +270,7 @@ const CheckoutComp = () => {
                     </div>
                     <div className={styles.SignMeUp}>
                       <label>
-                        <Field
-                          required
-                          name="checkedTerms"
-                          type="checkbox"
-                        />
+                        <Field required name="checkedTerms" type="checkbox" />
                         <p className={styles.termsTxt}>
                           {`${t("condition")} `}
                           <a href="/TermsAndConditions">{t("terms&conds")}</a>
@@ -511,9 +527,14 @@ const CheckoutComp = () => {
                         </PayPalScriptProvider>
                       ) : (
                         <>
-                          <button disabled={isNotConfirmed} type="submit" onClick={()=>{
-                             if(!values.checkedTerms) return alert(`${t("shouldacceptterms")}`);
-                          }}>
+                          <button
+                            disabled={isNotConfirmed}
+                            type="submit"
+                            onClick={() => {
+                              if (!values.checkedTerms)
+                                return alert(`${t("shouldacceptterms")}`);
+                            }}
+                          >
                             {t("confirmorder")}
                           </button>
                         </>

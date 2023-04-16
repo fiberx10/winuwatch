@@ -180,7 +180,7 @@ const CartComp = () => {
       )}
 
       <div className={styles.CartTotal}>
-        <p>Total</p>
+        <p>{t("total")}</p>
         <span>{Formater(totalCost)}</span>
       </div>
       <div className={styles.cartCheckoutCon}>
@@ -271,7 +271,9 @@ const CartComp = () => {
                           }}
                           key={i}
                         >
-                          {quest.name.replaceAll("_", " ")}
+                          {quest.name
+                            .replaceAll("_", " ")
+                            .replace(" DIAMOND  EMERALD", " ")}
                         </button>
                       );
                     })}
