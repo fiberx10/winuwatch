@@ -13,7 +13,6 @@ import Datetime from "react-datetime";
 import "react-datetime/css/react-datetime.css";
 import { useTranslations } from "next-intl";
 import type { GetStaticPropsContext } from "next";
-
 const CheckoutComp = () => {
   const router = useRouter();
   const t = useTranslations("checkout");
