@@ -46,9 +46,11 @@ export default function Confirmation({
       <div className={styles.confirmwrapper}></div>
       <div className={styles.confirmwrapper}>
         <div className={styles.confirm_text}>
-          <h1>{t("thank")} {data ? data[0]?.first_name : null}{t("foryourorder")}</h1>
+          <h1>
+            {`${t("thank")} ${data ? data.first_name : ""} ${t("foryourorder")}`}
+          </h1>
           <p>
-           {t("confirm")} <br /> {t("confemail")}
+            {t("confirm")} <br /> {t("confemail")}
           </p>
         </div>
       </div>
