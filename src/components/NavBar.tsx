@@ -22,7 +22,9 @@ export default function NavBar() {
   useEffect(() => {
     if (
       typeof window !== "undefined" &&
-      (location.pathname === "/es" || location.pathname === "/fr")
+      (location.pathname === "/es" ||
+        location.pathname === "/fr" ||
+        location.pathname === "/ja")
     ) {
       setNavColor("white");
     } else if (typeof window !== "undefined" && location.pathname !== "/") {
@@ -169,7 +171,7 @@ export default function NavBar() {
                 //japenese
                 name: "🇯🇵\t日本語",
                 locale: "ja",
-              }
+              },
             ]
               .filter(({ locale }) => locale !== router.locale)
               .map(({ locale, name }, index) => (

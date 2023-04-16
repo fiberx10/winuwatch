@@ -89,7 +89,8 @@ const Footer = () => {
           background:
             typeof window !== "undefined" &&
             (windowLocation === "/es/Philosophy" ||
-              windowLocation === "/fr/Philosophy")
+              windowLocation === "/fr/Philosophy" ||
+              windowLocation === "/ja/Philosophy")
               ? "#a8957e"
               : typeof window !== "undefined" &&
                 windowLocation === "/Philosophy"
