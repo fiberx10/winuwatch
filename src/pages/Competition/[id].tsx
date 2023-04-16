@@ -132,9 +132,7 @@ export default function Competition({
                     </>
                   ) : data.start_date > new Date() ? (
                     <>
-                      <h3>
-                        {t("startcomp")}
-                      </h3>
+                      <h3>{t("startcomp")}</h3>
                       <Timer displayFlex={true} date={data.start_date} />
                     </>
                   ) : (
@@ -144,9 +142,7 @@ export default function Competition({
                     <div className={styles.tickets}>
                       {data.remaining_tickets === 0 ||
                       data.end_date < new Date() ? (
-                        <p>
-                          {t("noticketleft")}
-                        </p>
+                        <p>{t("noticketleft")}</p>
                       ) : (
                         TICKETREDUC.filter(
                           ({ value }) =>
@@ -280,7 +276,10 @@ export default function Competition({
                                       })
                                   )
                                 : addComp({
-                                    reduction: counter.reduction,
+                                    reduction:
+                                      data.ticket_price *
+                                      counter.reduction *
+                                      counter.value,
                                     compID: data.id,
                                     number_tickets: counter.value,
                                     price_per_ticket: data.ticket_price,
