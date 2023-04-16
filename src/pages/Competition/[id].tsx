@@ -127,12 +127,14 @@ export default function Competition({
                   {data.remaining_tickets === 0 ||
                   data.end_date < new Date() ? (
                     <>
-                      <h3>Drawing Date for this competition in :</h3>
+                      <h3>{t("drawDate")}</h3>
                       <Timer displayFlex={true} date={data.drawing_date} />
                     </>
                   ) : data.start_date > new Date() ? (
                     <>
-                      <h3>Competition will start in :</h3>
+                      <h3>
+                        {t("startcomp")}
+                      </h3>
                       <Timer displayFlex={true} date={data.start_date} />
                     </>
                   ) : (
@@ -142,7 +144,9 @@ export default function Competition({
                     <div className={styles.tickets}>
                       {data.remaining_tickets === 0 ||
                       data.end_date < new Date() ? (
-                        <p>No Tickets Left!</p>
+                        <p>
+                          {t("noticketleft")}
+                        </p>
                       ) : (
                         TICKETREDUC.filter(
                           ({ value }) =>
@@ -236,14 +240,14 @@ export default function Competition({
                         <div className={styles.addtoCart}>
                           <div className={styles.prices}>
                             <p>
-                              {`Tickets: ${counter.value} x ${Formater(
+                              {`${t("tickets")}: ${counter.value} x ${Formater(
                                 data.ticket_price,
                                 router.locale
                               )}`}
                             </p>
                             {counter.reduction > 0 && (
                               <p>
-                                {`Discount: ${Formater(
+                                {`${t("discount")}: ${Formater(
                                   data.ticket_price *
                                     counter.reduction *
                                     counter.value,
@@ -396,8 +400,7 @@ export default function Competition({
                         value: data.Watches.bezel_material,
                       },
                       {
-                        item: "Bracelet material",
-                        translation: t("bracematerial"),
+                        item: t("bracematerial"),
                         value: data.Watches.Bracelet_material,
                       },
                     ].map(

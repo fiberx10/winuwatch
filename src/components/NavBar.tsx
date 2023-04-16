@@ -168,7 +168,7 @@ export default function NavBar() {
               {
                 //japenese
                 name: "🇯🇵\t日本語",
-                locale: "jp",
+                locale: "ja",
               }
             ]
               .filter(({ locale }) => locale !== router.locale)
