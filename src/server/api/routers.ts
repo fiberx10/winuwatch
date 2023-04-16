@@ -2,24 +2,9 @@ import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { CompetitionStatus, OrderStatus } from "@prisma/client";
 import { getBaseUrl, CreateOrderSchema } from "@/utils";
+import { Transporter, Stripe } from "../utils";
 import { WatchesSchema, CompetitionSchema } from "@/utils/zodSchemas";
-import { env } from "@/env.mjs";
 import Email from "@/components/emails";
-import stripe from "stripe";
-import nodemailer from "nodemailer";
-
-const Transporter = nodemailer.createTransport({
-  host: "smtp.hostinger.com",
-  port: 465,
-  secure: true,
-  auth: {
-    user: "noreply@winuwatch.uk",
-    pass: "Password1!",
-  },
-});
-const Stripe = new stripe(env.STRIPE_SECRET_KEY, {
-  apiVersion: "2022-11-15",
-});
 
 export const WinnersRouter = createTRPCRouter({
   getCSV: publicProcedure.input(z.string()).mutation(async ({ ctx, input }) => {
@@ -137,19 +122,37 @@ export const OrderRouter = createTRPCRouter({
         },
       })
   ),
-  getOrder: publicProcedure.input(z.string()).query(
-    async ({ ctx, input }) =>
-      await ctx.prisma.order.findMany({
-        where: input
-          ? {
-              id: input,
-            }
-          : {},
-        include: {
-          Ticket: true,
-        },
-      })
-  ),
+  getOrder: publicProcedure.input(z.string()).query(async ({ ctx, input }) => {
+    const Order = await ctx.prisma.order.findFirst({
+      where: input
+        ? {
+            id: input,
+          }
+        : {},
+      include: {
+            Ticket: true,
+            Competition: {
+              include: {
+                Watches: {
+                  include: {
+                    images_url: true,
+                  },
+                },
+              },
+            },
+          },
+    });
+    if (!Order) {
+      throw new Error("Order not found");
+    }
+    await Transporter.sendMail({
+      from: "noreply@winuwatch.uk",
+      to: Order.email,
+      subject: `Order Confirmation - Winuwatch #${Order?.id || "000000"}`,
+      html: Email(Order),
+    });
+    return Order;
+  }),
   createStripe: publicProcedure
     .input(CreateOrderSchema)
     .mutation(async ({ ctx, input }) => {
@@ -221,7 +224,7 @@ export const OrderRouter = createTRPCRouter({
           success_url: `${getBaseUrl()}/Confirmation/${id}`,
           cancel_url: `${getBaseUrl()}/CheckoutPage`,
         });
-
+        /*
         const dataUp = await ctx.prisma.order.update({
           where: {
             id,
@@ -249,7 +252,7 @@ export const OrderRouter = createTRPCRouter({
           subject: `Order Confirmation - Winuwatch #${dataUp?.id || "000000"}`,
           html: Email(dataUp),
         });
-
+        */
         return {
           id,
           payment_intent,
