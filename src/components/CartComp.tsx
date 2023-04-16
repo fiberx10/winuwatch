@@ -271,7 +271,9 @@ const CartComp = () => {
                           }}
                           key={i}
                         >
-                          {quest.name.replaceAll("_", " ")}
+                          {quest.name
+                            .replaceAll("_", " ")
+                            .replace(" DIAMOND  EMERALD", " ")}
                         </button>
                       );
                     })}
