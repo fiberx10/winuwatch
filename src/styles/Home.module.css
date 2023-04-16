@@ -1560,47 +1560,23 @@
     width: 95%;
   }
 }
-@media only screen and (height: 851px) {
-  .compWatches {
-    row-gap: 15rem !important;
-  }
-}
+
 @media only screen and (height: 915px) {
   .compWatches {
-    row-gap: 15rem !important;
+    row-gap: 17rem !important;
   }
 }
 @media only screen and (height: 914px) {
   .compWatches {
-    row-gap: 15rem !important;
+    row-gap: 17rem !important;
   }
 }
-@media only screen and (height: 896px) {
-  .compWatches {
-    row-gap: 15rem !important;
-  }
-}
-@media only screen and (height: 800px) {
-  .compWatches {
-    row-gap: 15rem !important;
-  }
-}
+
 @media only screen and (height: 533px) {
   .compWatches {
     row-gap: 12rem !important;
   }
   .watchCon h3 {
     font-size: 33px;
-  }
-}
-@media only screen and (height: 820px) {
-  .compWatches {
-    row-gap: 15rem !important;
-  }
-}
-
-@media only screen and (height: 844px) {
-  .compWatches {
-    row-gap: 15rem !important;
   }
 }
