@@ -22,14 +22,7 @@ const CartComp = () => {
   const checkModalValidity = () => {
     const date = localStorage.getItem("date");
     if (date) {
-      const dateNow = new Date().getTime();
-      const dateThen = new Date(date).getTime();
-      const diff = dateNow - dateThen;
-      if (diff < 10800000) {
-        return false;
-      } else {
-        return true;
-      }
+      return (new Date().getTime() - new Date(date).getTime()) < 10800000; 
     } else {
       return true;
     }
@@ -74,11 +67,7 @@ const CartComp = () => {
     },
   ];
 
-  function getRandomImage() {
-    const randomIndex = Math.floor(Math.random() * questionImgs.length);
-    return questionImgs[randomIndex];
-  }
-  const randomImage = getRandomImage();
+  const [randomImage] = useState(questionImgs[Math.floor(Math.random() * questionImgs.length)])
   return (
     <div className={styles.CartMain}>
       {data && competitions.length > 0 ? (

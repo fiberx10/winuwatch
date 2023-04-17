@@ -11,12 +11,14 @@ import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import { Formik } from "formik";
-import type { Moment } from "moment";
+import moment, { type Moment } from "moment";
 import Datetime from "react-datetime";
 import "react-datetime/css/react-datetime.css";
-import moment from "moment-timezone";
 import UpcomingComps from "./UpcomingComps";
 import Loader from "../Loader";
+
+const FixDate = (date: moment.MomentInput) =>
+  moment(date).tz("Europe/London").toDate();
 
 const DashboardCompetitions = () => {
   //REMOVE COMPETITION
@@ -161,12 +163,12 @@ const DashboardCompetitions = () => {
                                 await activeFetch();
                                 await noActiveFetch();
                                 await completedFetch();
-                                actions.setSubmitting(false);
+                                actions.setSubmitting(false); 
                               }}
                               initialValues={{
                                 name: comp.name,
-                                start_date: comp.start_date,
-                                end_date: comp.end_date,
+                                start_date: FixDate(comp.start_date),
+                                end_date: FixDate(comp.end_date),
                                 location: comp.location,
                                 price: comp.price,
                                 max_space_in_final_draw:
@@ -180,7 +182,7 @@ const DashboardCompetitions = () => {
                                 total_tickets: comp.total_tickets,
                                 ticket_price: comp.ticket_price,
                                 status: comp.status,
-                                drawing_date: comp.drawing_date,
+                                drawing_date: FixDate(comp.drawing_date),
                                 remaining_tickets: comp.remaining_tickets,
                               }}
                             >
@@ -216,43 +218,17 @@ const DashboardCompetitions = () => {
                                             required: true,
                                           }}
                                           value={values.start_date}
-                                          onChange={(value: string | Moment) =>
+                                          onChange={(value) =>
                                             setFieldValue(
                                               "start_date",
                                               new Date(
-                                                moment(value)
-                                                  .tz("Europe/London")
-                                                  .format()
+                                                FixDate(value)
                                               )
                                             )
                                           }
                                         />
                                       </Form.Group>
-                                      <Form.Group className="mb-3">
-                                        <Form.Label>
-                                          Drawing Date of The Competition
-                                        </Form.Label>
-                                        <Datetime
-                                          utc={true}
-                                          input={true}
-                                          inputProps={{
-                                            name: "drawing_date",
-                                            placeholder: "Enter Date",
-                                            required: true,
-                                          }}
-                                          value={values.drawing_date}
-                                          onChange={(value) =>
-                                            setFieldValue(
-                                              "drawing_date",
-                                              new Date(
-                                                moment(value)
-                                                  .tz("Europe/London")
-                                                  .format()
-                                              )
-                                            )
-                                          }
-                                        />
-                                      </Form.Group>
+
                                       <Form.Group className="mb-3">
                                         <Form.Label>
                                           End Date Competition
@@ -269,15 +245,34 @@ const DashboardCompetitions = () => {
                                             setFieldValue(
                                               "end_date",
                                               new Date(
-                                                moment(value)
-                                                  .tz("Europe/London")
-                                                  .format()
+                                                FixDate(value)
                                               )
                                             )
                                           }
                                         />
                                       </Form.Group>
-
+                                      <Form.Group className="mb-3">
+                                        <Form.Label>
+                                          Drawing Date of The Competition
+                                        </Form.Label>
+                                        <Datetime
+                                          input={true}
+                                          inputProps={{
+                                            name: "drawing_date",
+                                            placeholder: "Enter Date",
+                                            required: true,
+                                          }}
+                                          value={values.drawing_date}
+                                          onChange={(value) =>
+                                            setFieldValue(
+                                              "drawing_date",
+                                              new Date(
+                                                FixDate(value)
+                                              )
+                                            )
+                                          }
+                                        />
+                                      </Form.Group>
                                       <Form.Group
                                         as={Col}
                                         controlId="formGridPassword"
@@ -468,8 +463,8 @@ const DashboardCompetitions = () => {
                               }}
                               initialValues={{
                                 name: comp.name,
-                                start_date: comp.start_date,
-                                end_date: comp.end_date,
+                                start_date: FixDate(comp.start_date),
+                                end_date: FixDate(comp.end_date),
                                 location: comp.location,
                                 price: comp.price,
                                 max_space_in_final_draw:
@@ -480,7 +475,7 @@ const DashboardCompetitions = () => {
                                 total_tickets: comp.total_tickets,
                                 ticket_price: comp.ticket_price,
                                 status: comp.status,
-                                drawing_date: comp.drawing_date,
+                                drawing_date: FixDate(comp.drawing_date),
                                 remaining_tickets: comp.remaining_tickets,
                               }}
                             >
@@ -520,9 +515,7 @@ const DashboardCompetitions = () => {
                                             setFieldValue(
                                               "start_date",
                                               new Date(
-                                                moment(value)
-                                                  .tz("Europe/London")
-                                                  .format()
+                                                FixDate(value)
                                               )
                                             )
                                           }
@@ -545,9 +538,7 @@ const DashboardCompetitions = () => {
                                             setFieldValue(
                                               "drawing_date",
                                               new Date(
-                                                moment(value)
-                                                  .tz("Europe/London")
-                                                  .format()
+                                                FixDate(value)
                                               )
                                             )
                                           }
@@ -569,9 +560,7 @@ const DashboardCompetitions = () => {
                                             setFieldValue(
                                               "end_date",
                                               new Date(
-                                                moment(value)
-                                                  .tz("Europe/London")
-                                                  .format()
+                                                FixDate(value)
                                               )
                                             )
                                           }
@@ -766,6 +755,7 @@ const DashboardCompetitions = () => {
                                 await noActiveFetch();
                                 await completedFetch();
                                 actions.setSubmitting(false);
+ 
                               }}
                               initialValues={{
                                 name: comp.name,
