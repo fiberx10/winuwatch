@@ -743,7 +743,6 @@ const DashboardCompetitions = () => {
                             </Modal.Header>
                             <Formik
                               onSubmit={async (values, actions) => {
-                                /*
                                 setShow({ modal: false, data: "" });
 
                                 console.log("Form submitted:", values);
@@ -756,12 +755,7 @@ const DashboardCompetitions = () => {
                                 await noActiveFetch();
                                 await completedFetch();
                                 actions.setSubmitting(false);
-                                */
-                                console.log(
-                                  values.drawing_date,
-                                  values.end_date,
-                                  values.start_date
-                                );
+ 
                               }}
                               initialValues={{
                                 name: comp.name,
