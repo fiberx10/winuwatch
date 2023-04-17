@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import Email from "@/components/emails";
+import Email from "@/components/newsLetter1";
 import { PrismaClient } from "@prisma/client";
 import nodemailer from "nodemailer";
 
@@ -39,7 +39,7 @@ export default async function send(req: NextApiRequest, res: NextApiResponse) {
 
   await Transporter.sendMail({
     from: "noreply@winuwatch.uk",
-    to: "iliassjabali@gmail.com",
+    to: "louihranim@gmail.com",
     subject: `Order Confirmation - Winuwatch #${order?.id || "000000"}`,
     html: EmailRender,
   });
