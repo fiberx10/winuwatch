@@ -6,12 +6,10 @@ import Timer from "./Timer";
 import { Skeleton } from "@mui/material";
 import { api } from "@/utils/api";
 import { useEffect } from "react";
-import { useRouter } from "next/router";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 
 const TheCompetition = () => {
-  const router = useRouter();
   const t = useTranslations("home");
   useEffect(() => {
     const handleScroll = () => {

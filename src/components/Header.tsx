@@ -52,7 +52,15 @@ export default function Header() {
       <div className={styles.HeaderDesc}>
         <p>{t("subtitle")}</p>
         <Link href={"/#theComp"}>
-          <Image width={19} height={10} alt="vector" src="/images/Vector.svg" />
+          <svg
+            width="19"
+            height="10"
+            viewBox="0 0 23 15"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path d="M2 2L11.5 12L21 2" stroke="white" strokeWidth="3" />
+          </svg>
         </Link>
       </div>
     </div>

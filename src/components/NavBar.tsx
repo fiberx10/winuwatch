@@ -61,18 +61,23 @@ export default function NavBar() {
         >
           {t("howto")}
         </Link>
-        <Image
+        <svg
+          width="38"
+          height="8"
+          viewBox="0 0 38 9"
+          fill="none"
           style={{
             cursor: "pointer",
             filter: navColor === "white" ? "brightness(0) invert(1)" : "",
           }}
           onClick={() => setOpen(!open)}
           className={styles.burger}
-          alt="menu"
-          width={38}
-          height={7}
-          src="/images/burgerMenu.svg"
-        />
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <line y1="8" x2="38" y2="8" stroke="#987358" stroke-width="2"/>
+<line y1="1" x2="38" y2="1" stroke="#987358" stroke-width="2"/>
+  </svg>
+
         <Drawer className={styles.Drawer} anchor="left" open={open}>
           <div className={styles.DrawerCon}>
             <MdClose className={styles.closeBut} />
@@ -89,6 +94,7 @@ export default function NavBar() {
         height={105.42}
         className={styles.Logo}
         onClick={() => router.push("/")}
+        priority
         alt="logo"
         style={{
           cursor: "pointer",
