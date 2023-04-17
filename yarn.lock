@@ -1629,9 +1629,9 @@
   integrity sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==
 
 "@types/lodash@^4.14.192":
-  version "4.14.192"
-  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.192.tgz#5790406361a2852d332d41635d927f1600811285"
-  integrity sha512-km+Vyn3BYm5ytMO13k9KTp27O75rbQ0NFw+U//g+PX7VZyjCioXaRFisqSIJRECljcTv73G3i6BpglNGHgUQ5A==
+  version "4.14.194"
+  resolved "https://registry.npmjs.org/@types/lodash/-/lodash-4.14.194.tgz"
+  integrity sha512-r22s9tAS7imvBt2lyHC9B8AGwWnXaYb1tY09oyLkXDs4vArpYJzw09nj8MLx5VfciBPGIb+ZwG0ssYnEPJxn/g==
 
 "@types/long@^4.0.1":
   version "4.0.2"
@@ -1830,11 +1830,6 @@ abbrev@^1.0.0:
   version "1.1.1"
   resolved "https://registry.npmjs.org/abbrev/-/abbrev-1.1.1.tgz"
   integrity sha512-nne9/IiQ/hzIhY6pdDnbBtz7DjPTKrY00P/zvPSm5pOFkl6xuGrGnXn/VtTNNfNtAfZ9/1RtehkszU9qcTii0Q==
-
-accept-language-parser@^1.5.0:
-  version "1.5.0"
-  resolved "https://registry.npmjs.org/accept-language-parser/-/accept-language-parser-1.5.0.tgz"
-  integrity sha512-QhyTbMLYo0BBGg1aWbeMG4ekWtds/31BrEU+DONOg/7ax23vxpL03Pb7/zBmha2v7vdD3AyzZVWBVGEZxKOXWw==
 
 acorn-jsx@^5.3.2:
   version "5.3.2"
@@ -2506,6 +2501,11 @@ cosmiconfig@^7.0.0:
     path-type "^4.0.0"
     yaml "^1.10.0"
 
+country-flag-icons@^1.5.4:
+  version "1.5.7"
+  resolved "https://registry.npmjs.org/country-flag-icons/-/country-flag-icons-1.5.7.tgz"
+  integrity sha512-AdvXhMcmSp7nBSkpGfW4qR/luAdRUutJqya9PuwRbsBzuoknThfultbv7Ib6fWsHXC43Es/4QJ8gzQQdBNm75A==
+
 cross-env@^7.0.3:
   version "7.0.3"
   resolved "https://registry.npmjs.org/cross-env/-/cross-env-7.0.3.tgz"
@@ -2821,9 +2821,9 @@ enhanced-resolve@^5.12.0:
     tapable "^2.2.0"
 
 entities@^4.2.0, entities@^4.3.0:
-  version "4.4.0"
-  resolved "https://registry.npmjs.org/entities/-/entities-4.4.0.tgz"
-  integrity sha512-oYp7156SP8LkeGD0GF85ad1X9Ai79WtRsZ2gxJqtBuzH+98YUV6jkHEKlZkMbcrjJjIVJNIDP/3WL9wQkoPbWA==
+  version "4.5.0"
+  resolved "https://registry.npmjs.org/entities/-/entities-4.5.0.tgz"
+  integrity sha512-V0hjH4dGPh9Ao5p0MoRY6BVqtwCjhz6vI5LT8AJ55H+4g9/4vbHx1I54fS0XuclLhDHArPQCiMjDxjaL8fPxhw==
 
 error-ex@^1.3.1:
   version "1.3.2"
@@ -3937,6 +3937,13 @@ inline-style-parser@0.1.1:
   resolved "https://registry.npmjs.org/inline-style-parser/-/inline-style-parser-0.1.1.tgz"
   integrity sha512-7NXolsK4CAS5+xvdj5OMMbI962hU/wvwoxk+LWR9Ek9bVtyuuYScDN6eS0rUm6TxApFpw7CX1o4uJzcd4AyD3Q==
 
+input-format@^0.3.8:
+  version "0.3.8"
+  resolved "https://registry.npmjs.org/input-format/-/input-format-0.3.8.tgz"
+  integrity sha512-tLR0XRig1xIcG1PtIpMd/uoltvkAI62CN9OIbtj4/tEJAkqTCQLNHUZ9N4M46w0dopny7Rlt/lRH5Xzp7e6F+g==
+  dependencies:
+    prop-types "^15.8.1"
+
 internal-slot@^1.0.3, internal-slot@^1.0.4, internal-slot@^1.0.5:
   version "1.0.5"
   resolved "https://registry.npmjs.org/internal-slot/-/internal-slot-1.0.5.tgz"
@@ -4376,6 +4383,11 @@ levn@~0.3.0:
     prelude-ls "~1.1.2"
     type-check "~0.3.2"
 
+libphonenumber-js@^1.10.20:
+  version "1.10.26"
+  resolved "https://registry.npmjs.org/libphonenumber-js/-/libphonenumber-js-1.10.26.tgz"
+  integrity sha512-oB3l4J5gEhMV+ymmlIjWedsbCpsNRqbEZ/E/MpN2QVyinKNra6DcuXywxSk/72M3DZDoH/6kzurOq1erznBMwQ==
+
 lilconfig@^2.0.5, lilconfig@^2.0.6:
   version "2.1.0"
   resolved "https://registry.npmjs.org/lilconfig/-/lilconfig-2.1.0.tgz"
@@ -4593,18 +4605,24 @@ natural-compare@^1.4.0:
   resolved "https://registry.npmjs.org/natural-compare/-/natural-compare-1.4.0.tgz"
   integrity sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==
 
+negotiator@0.6.3:
+  version "0.6.3"
+  resolved "https://registry.npmjs.org/negotiator/-/negotiator-0.6.3.tgz"
+  integrity sha512-+EUsqGPLsM+j/zdChZjsnX51g4XrHFOIXwfnCVPGlQk/k5giakcKsuxCObBRu6DSm9opw/O6slWbJdghQM4bBg==
+
 netmask@^2.0.2:
   version "2.0.2"
   resolved "https://registry.npmjs.org/netmask/-/netmask-2.0.2.tgz"
   integrity sha512-dBpDMdxv9Irdq66304OLfEmQ9tbNRFnFTuZiLo+bD+r332bBmMJ8GBLXklIXXgxd3+v9+KUnZaUR5PJMa75Gsg==
 
 next-intl@^2.12.0:
-  version "2.12.0"
-  resolved "https://registry.npmjs.org/next-intl/-/next-intl-2.12.0.tgz"
-  integrity sha512-UWKLA3BIsezFo/OJelGYmJL3BsztApo2mgvmwHMDbTsuBJx0x4SaIIPapnPHPzMhUbppZIbY70xNIULHwn++hg==
+  version "2.13.1"
+  resolved "https://registry.npmjs.org/next-intl/-/next-intl-2.13.1.tgz"
+  integrity sha512-3XUZ7c123QHgQGcz5UUkTtakJdLETBlcHcdHop43iVToOpsezxvMZW6jxWwuHTRvkElfNPy1fhHwzBo/mhVVvQ==
   dependencies:
-    accept-language-parser "^1.5.0"
-    use-intl "^2.12.0"
+    "@formatjs/intl-localematcher" "0.2.32"
+    negotiator "0.6.3"
+    use-intl "^2.13.1"
 
 next@^13.2.4:
   version "13.2.4"
@@ -5465,6 +5483,17 @@ react-number-format@^5.1.4:
   integrity sha512-QV7QHzHrk9ZS9V0bWkIwu6ywiXJt0www4/cXWEVEgwaNqthmOZl/Cf5O0ukEPlGZJJr06Jh3+CM4rZsvXn8cOg==
   dependencies:
     prop-types "^15.7.2"
+
+react-phone-number-input@^3.2.19:
+  version "3.2.19"
+  resolved "https://registry.npmjs.org/react-phone-number-input/-/react-phone-number-input-3.2.19.tgz"
+  integrity sha512-3peWqyFgJ3+IvkB0GHvhAzQ6LEfJw1/obG8KPvCcac8OKp9Ir+pLdyySgxbD56EYkaAwZbBwOQJaGNqIX0yrtg==
+  dependencies:
+    classnames "^2.3.1"
+    country-flag-icons "^1.5.4"
+    input-format "^0.3.8"
+    libphonenumber-js "^1.10.20"
+    prop-types "^15.8.1"
 
 react-popper@^2.2.5:
   version "2.3.0"
@@ -6505,10 +6534,10 @@ uri-js@^4.2.2:
   dependencies:
     punycode "^2.1.0"
 
-use-intl@^2.12.0:
-  version "2.12.0"
-  resolved "https://registry.npmjs.org/use-intl/-/use-intl-2.12.0.tgz"
-  integrity sha512-LcmAqn78o6Ii9wsLERKAXI9QfiSVBzY3u+mSh6YCLUKhDhr7WHqTBfhEV1gZvdwy7mydhwWQUyQ9Zy5XHuUOAQ==
+use-intl@^2.13.1:
+  version "2.13.1"
+  resolved "https://registry.npmjs.org/use-intl/-/use-intl-2.13.1.tgz"
+  integrity sha512-za8vb9UtKyFuDWbc+Iceqnz1KOAGwm9cTaBjW5af6e7ZcAdwADUwsz9M/8M9VDl5gKKQ/o+3TJcKdi+ieOKhfQ==
   dependencies:
     "@formatjs/ecma402-abstract" "^1.11.4"
     intl-messageformat "^9.3.18"
