@@ -6,11 +6,10 @@ import Timer from "./Timer";
 import { Skeleton } from "@mui/material";
 import { api } from "@/utils/api";
 import { useEffect } from "react";
-import { useRouter } from "next/router";
 import { useTranslations } from "next-intl";
+import Link from "next/link";
 
 const TheCompetition = () => {
-  const router = useRouter();
   const t = useTranslations("home");
   useEffect(() => {
     const handleScroll = () => {
@@ -61,14 +60,8 @@ const TheCompetition = () => {
                   className={styles.watchCon}
                 >
                   <div className={styles.watchContent}>
-                    <a
-                      onClick={async () =>
-                        await router.push(`/Competition/${watch.id}`)
-                      }
-                      className={styles.watchBtn}
-                    >
-                      {t("start")}
-                    </a>
+                    <Link href={`/Competition/${watch.id}`}
+                      >{t("start")}</Link>
                     <h3>{watch.name}</h3>
                     {watch.end_date < new Date() ? (
                       ""

@@ -149,14 +149,11 @@ const Footer = () => {
                       <a href={mail}>{name}</a>
                     ) : (
                       link && (
-                        <span
-                          // eslint-disable-next-line @typescript-eslint/no-misused-promises
-                          onClick={async () => {
-                            await router.push(link);
-                          }}
-                        >
+                        <Link href={link}>
+                        <span>
                           {name}
                         </span>
+                        </Link>
                       )
                     )}
                   </div>

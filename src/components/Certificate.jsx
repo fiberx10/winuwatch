@@ -12,6 +12,7 @@ const Certificate = () => {
         <Image
           width={238}
           height={363}
+          priority={true}
           src="/images/certificate.svg"
           alt="certificate"
         />
