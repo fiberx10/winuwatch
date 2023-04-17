@@ -13,23 +13,18 @@ const CartComp = () => {
   const [open, setOpen] = useState(false);
   const [wrong, setWrong] = useState(false);
   const handleClose = () => setOpen(false);
-  const { cardDetails, updateComp, removeComp, competitions } = useCart();
+  const {
+    cardDetails,
+    updateComp,
+    removeComp,
+    competitions,
+    modeleDate,
+    setModeleDate,
+  } = useCart();
 
   const { data } = api.Competition.getAll.useQuery({
     ids: competitions.map(({ compID }) => compID),
   });
-
-  const checkModalValidity = () => {
-    const date = localStorage.getItem("date");
-    if (date) {
-      return (new Date().getTime() - new Date(date).getTime()) < 10800000; 
-    } else {
-      return true;
-    }
-  };
-  const resetModalValidity = () => {
-    localStorage.setItem("date", new Date().toString());
-  };
 
   const router = useRouter();
   //console.log(question);
@@ -67,7 +62,9 @@ const CartComp = () => {
     },
   ];
 
-  const [randomImage] = useState(questionImgs[Math.floor(Math.random() * questionImgs.length)])
+  const [randomImage] = useState(
+    questionImgs[Math.floor(Math.random() * questionImgs.length)]
+  );
   return (
     <div className={styles.CartMain}>
       {data && competitions.length > 0 ? (
@@ -150,7 +147,11 @@ const CartComp = () => {
                   </h2>
                   <p>
                     {comp.reduction > 0 &&
-                      `${t("discount")}: \t${Formater(comp.reduction *comp.number_tickets* comp.price_per_ticket)}`}
+                      `${t("discount")}: \t${Formater(
+                        comp.reduction *
+                          comp.number_tickets *
+                          comp.price_per_ticket
+                      )}`}
                   </p>
                   <p onClick={() => removeComp(comp.compID)}>{t("remove")}</p>
                 </div>
@@ -177,10 +178,13 @@ const CartComp = () => {
         <button
           onClick={() => {
             // check the validity date
-            if (checkModalValidity()) {
-              setOpen(true);
-              resetModalValidity();
-            } else {
+            if (
+              modeleDate !== null
+                ? new Date().getTime() - new Date(modeleDate).getTime() <
+                  10800000
+                : false
+            ) {
+              setModeleDate(new  Date())
               router
                 .push("/CheckoutPage")
                 .then(() => {
@@ -189,6 +193,9 @@ const CartComp = () => {
                 .catch(() => {
                   return null;
                 });
+            } else {
+              setOpen(true);
+              setModeleDate(null);
             }
           }}
         >
@@ -248,16 +255,12 @@ const CartComp = () => {
                       <button
                         key={i}
                         onClick={() => {
-                          randomImage?.img.includes(name)
-                            ? router
-                                .push("/CheckoutPage")
-                                .then(() => {
-                                  return null;
-                                })
-                                .catch(() => {
-                                  return null;
-                                })
-                            : setWrong(true);
+                          if (randomImage?.name.includes(name)){
+                            setModeleDate(new Date())
+                            router.push("/CheckoutPage")
+                          }else {
+                            setWrong(true)
+                          }
                         }}
                       >
                         {name}
