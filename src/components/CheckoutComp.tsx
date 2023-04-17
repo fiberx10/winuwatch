@@ -20,9 +20,10 @@ import "react-phone-number-input/style.css";
 const CheckoutComp = () => {
   const router = useRouter();
   const t = useTranslations("checkout");
-  const { mutateAsync: createOrder } = api.Order.createStripe.useMutation();
+  const { mutateAsync: createOrder 
+  } = api.Order.createStripe.useMutation();
   const { competitions, cardDetails, reset } = useCart();
-
+  const [loading, setLoading] = useState(false);
   const { data: items } = api.Competition.getAll.useQuery({
     ids: competitions.map((comp) => comp.compID),
   });
@@ -46,8 +47,8 @@ const CheckoutComp = () => {
     last_name: Yup.string().required("Required"),
     country: Yup.string().required("Required"),
     town: Yup.string().required("Required"),
-    zip: Yup.number().required("Required"),
-    phone: Yup.string().required("Required"),
+    zip: Yup.string().required("Required"),
+    phone: Yup.string(),
     email: Yup.string().email("Invalid email").required("Required"),
   });
 
@@ -78,7 +79,7 @@ const CheckoutComp = () => {
               setIsNotConfirmed(true);
               //if a value in the object values is undefined, it will not be sent to the server
               console.log("Form submitted:", values);
-
+              setLoading(true);  
               const { url, error } = await createOrder({
                 ...values,
                 paymentMethod: values.paymentMethod as "PAYPAL" | "STRIPE",
@@ -97,6 +98,7 @@ const CheckoutComp = () => {
                 //     />
                 //   ),
                 // })
+                setLoading(false);
                 await router.push(url);
               }
               setError(error || t("error"));
@@ -550,9 +552,8 @@ const CheckoutComp = () => {
                           />
                         </PayPalScriptProvider>
                       ) : (
-                        <>
                           <button
-                            disabled={isNotConfirmed}
+                            disabled={loading}
                             type="submit"
                             onClick={() => {
                               if (!values.checkedTerms)
@@ -561,7 +562,7 @@ const CheckoutComp = () => {
                           >
                             {t("confirmorder")}
                           </button>
-                        </>
+
                       )}
                     </div>
                   </div>
