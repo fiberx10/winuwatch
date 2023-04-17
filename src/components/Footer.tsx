@@ -122,7 +122,14 @@ const Footer = () => {
 
           <div className={styles.menusGrid}>
             {Tabs.map((menu, i) => (
-              <div className={styles.menusGridItem} key={i}>
+              <div
+                style={{
+                  marginRight: i === 2 ? "30px" : "initial",
+                  width: i === 3 ? "fit-content" : "130px",
+                }}
+                className={styles.menusGridItem}
+                key={i}
+              >
                 {menu.map(({ name, link, mail }, j) => (
                   <div
                     style={{

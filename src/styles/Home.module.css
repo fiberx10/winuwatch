@@ -785,7 +785,7 @@
 .menusGrid {
   display: grid;
   grid-template-columns: repeat(4, auto);
-  column-gap: 2rem;
+  column-gap: 0rem;
   place-items: center;
 }
 .menusGridItem {
@@ -793,6 +793,7 @@
   flex-direction: column;
   gap: 0.5rem;
   max-width: 190px;
+  width: 150px;
   height: 70px;
 }
 .menusGrid a {
@@ -1293,6 +1294,7 @@
     width: 200px;
     align-items: center;
     height: auto;
+    margin-right: 0 !important;
   }
   .menusGridItem div {
     align-items: center;
