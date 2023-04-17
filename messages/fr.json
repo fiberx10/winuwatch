@@ -62,6 +62,10 @@
     "wronganswer": "MAUVAISE RÉPONSE"
   },
   "competition": {
+    "drawDate" :"Date du tirage au sort pour cette compétition dans :",
+    "startcomp" : "La compétition va commencer dans :",
+    "noticketleft" : "Aucun ticket restant",
+    "discount": "Remise",
     "marketvalue": "Valeur de marché",
     "howmany": "COMBIEN DE TICKETS SOUHAITEZ-VOUS ?",
     "off": "de réduction",

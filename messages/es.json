@@ -61,6 +61,10 @@
     "wronganswer": "RESPUESTA INCORRECTA"
   },
   "competition": {
+    "drawDate" :"Fecha del sorteo para esta competición en:",
+    "startcomp" : "La competición comenzará en:",
+    "noticketleft" : "NO QUEDAN ENTRADAS",
+    "discount": "DESCUENTO",
     "marketvalue": "Valor de mercado",
     "howmany": "¿CUÁNTAS ENTRADAS QUIERES?",
     "off": "apagado",

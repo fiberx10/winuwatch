@@ -62,6 +62,10 @@
   },
 
   "competition": {
+    "drawDate" :"この競争の抽選日：",
+    "startcomp" : "競争はここから始まります：",
+    "noticketleft" : "チケットがありません",
+    "discount": "割引",
     "marketvalue": "市場価値",
     "howmany": "いくつのチケットが欲しいですか？",
     "off": "オフ",

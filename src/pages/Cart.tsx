@@ -7,7 +7,7 @@ import type { GetStaticPropsContext } from "next";
 
 export default function Cart() {
   return (
-    <div>
+    <div className={styles.CartPageWrapper}>
       <Head>
         <title>Win u Watch - Cart</title>
         <meta name="description" content="Win u Watch Cart" />

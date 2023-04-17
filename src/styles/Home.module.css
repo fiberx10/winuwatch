@@ -785,7 +785,7 @@
 .menusGrid {
   display: grid;
   grid-template-columns: repeat(4, auto);
-  column-gap: 2rem;
+  column-gap: 0rem;
   place-items: center;
 }
 .menusGridItem {
@@ -793,6 +793,7 @@
   flex-direction: column;
   gap: 0.5rem;
   max-width: 190px;
+  width: 150px;
   height: 70px;
 }
 .menusGrid a {
@@ -1293,6 +1294,7 @@
     width: 200px;
     align-items: center;
     height: auto;
+    margin-right: 0 !important;
   }
   .menusGridItem div {
     align-items: center;
@@ -1560,110 +1562,23 @@
     width: 95%;
   }
 }
-@media only screen and (height: 851px) {
-  .watchContent {
-    margin-bottom: -400px !important;
-  }
-  .compWatches {
-    row-gap: 15rem !important;
-  }
-}
+
 @media only screen and (height: 915px) {
-  .watchContent {
-    margin-bottom: -400px !important;
-  }
   .compWatches {
-    row-gap: 15rem !important;
+    row-gap: 17rem !important;
   }
 }
 @media only screen and (height: 914px) {
-  .watchContent {
-    margin-bottom: -400px !important;
-  }
   .compWatches {
-    row-gap: 15rem !important;
+    row-gap: 17rem !important;
   }
 }
-@media only screen and (height: 896px) {
-  .watchContent {
-    margin-bottom: -400px !important;
-  }
-  .compWatches {
-    row-gap: 15rem !important;
-  }
-}
-@media only screen and (height: 800px) {
-  .watchContent {
-    margin-bottom: -350px !important;
-  }
-  .compWatches {
-    row-gap: 15rem !important;
-  }
-}
+
 @media only screen and (height: 533px) {
-  .watchContent {
-    margin-bottom: -200px !important;
-  }
   .compWatches {
     row-gap: 12rem !important;
   }
   .watchCon h3 {
     font-size: 33px;
-  }
-}
-@media only screen and (height: 820px) {
-  .watchContent {
-    margin-bottom: -350px !important;
-  }
-  .compWatches {
-    row-gap: 15rem !important;
-  }
-}
-@media only screen and (height: 1180px) {
-  .watchContent {
-    margin-bottom: -550px !important;
-  }
-}
-@media only screen and (height: 1200px) {
-  .watchContent {
-    margin-bottom: -550px !important;
-  }
-}
-@media only screen and (height: 1050px) {
-  .watchContent {
-    margin-bottom: -500px !important;
-  }
-}
-@media only screen and (height: 1080px) {
-  .watchContent {
-    margin-bottom: -500px !important;
-  }
-}
-@media only screen and (height: 1366px) {
-  .watchContent {
-    margin-bottom: -600px !important;
-  }
-}
-@media only screen and (height: 1440px) {
-  .watchContent {
-    margin-bottom: -650px !important;
-  }
-}
-@media only screen and (height: 2160px) {
-  .watchContent {
-    margin-bottom: -1050px !important;
-  }
-}
-@media only screen and (height: 2304px) {
-  .watchContent {
-    margin-bottom: -1100px !important;
-  }
-}
-@media only screen and (height: 844px) {
-  .watchContent {
-    margin-bottom: -350px !important;
-  }
-  .compWatches {
-    row-gap: 15rem !important;
   }
 }

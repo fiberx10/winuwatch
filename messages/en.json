@@ -61,6 +61,10 @@
     "wronganswer": "Wrong answer"
   },
   "competition": {
+    "drawDate" :"Drawing Date for this competition in :",
+    "startcomp" : "Competition will start in :",
+    "noticketleft" : "No tickets left",
+    "discount": "Discount",
     "marketvalue": "Market Value",
     "howmany": "HOW MANY TICKETS WOULD YOU LIKE?",
     "off": "off",

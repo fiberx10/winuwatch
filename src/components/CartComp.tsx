@@ -13,30 +13,18 @@ const CartComp = () => {
   const [open, setOpen] = useState(false);
   const [wrong, setWrong] = useState(false);
   const handleClose = () => setOpen(false);
-  const { cardDetails, updateComp, removeComp, competitions } = useCart();
+  const {
+    cardDetails,
+    updateComp,
+    removeComp,
+    competitions,
+    modeleDate,
+    setModeleDate,
+  } = useCart();
 
   const { data } = api.Competition.getAll.useQuery({
     ids: competitions.map(({ compID }) => compID),
   });
-
-  const checkModalValidity = () => {
-    const date = localStorage.getItem("date");
-    if (date) {
-      const dateNow = new Date().getTime();
-      const dateThen = new Date(date).getTime();
-      const diff = dateNow - dateThen;
-      if (diff < 10800000) {
-        return false;
-      } else {
-        return true;
-      }
-    } else {
-      return true;
-    }
-  };
-  const resetModalValidity = () => {
-    localStorage.setItem("date", new Date().toString());
-  };
 
   const router = useRouter();
   //console.log(question);
@@ -58,26 +46,25 @@ const CartComp = () => {
   const questionImgs = [
     {
       img: "/images/Rolex_Sky-Dweller.jpg",
-      name: "Rolex_Sky-Dweller",
+      name: "Rolex Sky-Dweller",
     },
     {
       img: "/images/ROLEX_COSMOGRAPH_DAYTONA_40MM_-_PANDA.png",
-      name: "ROLEX_COSMOGRAPH_DAYTONA_40MM_-_PANDA",
+      name: "ROLEX COSMOGRAPH DAYTONA 40MM - PANDA",
     },
     {
       img: "/images/Audemars_Piguet_Royal_Oak.png",
-      name: "Audemars_Piguet_Royal_Oak",
+      name: "Audemars Piguet Royal Oak",
     },
     {
       img: "/images/ROLEX_SUBMARINER_40MM_-_HULK_DIAMOND__EMERALD.jpg",
-      name: "ROLEX_SUBMARINER_40MM_-_HULK_DIAMOND__EMERALD",
+      name: "ROLEX SUBMARINER 40MM - HULK",
     },
   ];
-  function getRandomImage() {
-    const randomIndex = Math.floor(Math.random() * questionImgs.length);
-    return questionImgs[randomIndex];
-  }
-  const randomImage = getRandomImage();
+
+  const [randomImage] = useState(
+    questionImgs[Math.floor(Math.random() * questionImgs.length)]
+  );
   return (
     <div className={styles.CartMain}>
       {data && competitions.length > 0 ? (
@@ -160,7 +147,11 @@ const CartComp = () => {
                   </h2>
                   <p>
                     {comp.reduction > 0 &&
-                      `${t("discount")}: \t${Formater(comp.reduction)}`}
+                      `${t("discount")}: \t${Formater(
+                        comp.reduction *
+                          comp.number_tickets *
+                          comp.price_per_ticket
+                      )}`}
                   </p>
                   <p onClick={() => removeComp(comp.compID)}>{t("remove")}</p>
                 </div>
@@ -180,17 +171,20 @@ const CartComp = () => {
       )}
 
       <div className={styles.CartTotal}>
-        <p>Total</p>
+        <p>{t("total")}</p>
         <span>{Formater(totalCost)}</span>
       </div>
       <div className={styles.cartCheckoutCon}>
         <button
           onClick={() => {
             // check the validity date
-            if (checkModalValidity()) {
-              setOpen(true);
-              resetModalValidity();
-            } else {
+            if (
+              modeleDate !== null
+                ? new Date().getTime() - new Date(modeleDate).getTime() <
+                  10800000
+                : false
+            ) {
+              setModeleDate(new  Date())
               router
                 .push("/CheckoutPage")
                 .then(() => {
@@ -199,6 +193,9 @@ const CartComp = () => {
                 .catch(() => {
                   return null;
                 });
+            } else {
+              setOpen(true);
+              setModeleDate(null);
             }
           }}
         >
@@ -254,27 +251,26 @@ const CartComp = () => {
                     {t("wronganswer")}
                   </h2>
                   <div className={styles.questionsCon}>
-                    {questionImgs.map((quest, i) => {
-                      return (
-                        <button
-                          onClick={() => {
-                            randomImage?.img.includes(quest.name)
-                              ? router
-                                  .push("/CheckoutPage")
-                                  .then(() => {
-                                    return null;
-                                  })
-                                  .catch(() => {
-                                    return null;
-                                  })
-                              : setWrong(true);
-                          }}
-                          key={i}
-                        >
-                          {quest.name.replaceAll("_", " ")}
-                        </button>
-                      );
-                    })}
+                    {questionImgs.map(({ name }, i) => (
+                      <button
+                        key={i}
+                        onClick={ () => {
+                          if (randomImage?.name.includes(name)){
+                            setModeleDate(new Date());
+                            router.push("/CheckoutPage").then(() => {
+                              return null;
+                            }).catch((e) => {
+                              console.log(e);
+                              return null;
+                            });
+                          }else {
+                            setWrong(true)
+                          }
+                        }}
+                      >
+                        {name}
+                      </button>
+                    ))}
                   </div>
                 </>
               )}

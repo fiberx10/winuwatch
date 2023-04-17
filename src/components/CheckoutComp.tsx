@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-html-link-for-pages */
-import { ChangeEvent, useState } from "react";
+import { useState } from "react";
 import styles from "@/styles/Checkout.module.css";
 import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js";
 import { useRouter } from "next/router";
@@ -13,6 +13,9 @@ import Datetime from "react-datetime";
 import "react-datetime/css/react-datetime.css";
 import { useTranslations } from "next-intl";
 import type { GetStaticPropsContext } from "next";
+import PhoneInput from "react-phone-number-input";
+import * as Yup from "yup";
+import "react-phone-number-input/style.css";
 
 const CheckoutComp = () => {
   const router = useRouter();
@@ -38,11 +41,22 @@ const CheckoutComp = () => {
   const [isNotConfirmed, setIsNotConfirmed] = useState<boolean>(false);
   const { totalCost } = cardDetails();
 
+  const FormSchema = Yup.object().shape({
+    first_name: Yup.string().required("Required"),
+    last_name: Yup.string().required("Required"),
+    country: Yup.string().required("Required"),
+    town: Yup.string().required("Required"),
+    zip: Yup.number().required("Required"),
+    phone: Yup.string().required("Required"),
+    email: Yup.string().email("Invalid email").required("Required"),
+  });
+
   return (
     <div className={styles.CheckoutMain}>
       {items && (
         <div className={styles.formMain}>
           <Formik
+            validationSchema={FormSchema}
             initialValues={{
               first_name: "",
               last_name: "",
@@ -60,7 +74,6 @@ const CheckoutComp = () => {
               checkedTerms: false,
             }}
             onSubmit={async (values, actions) => {
-             
               // disable the confirm button to prevent duplicate messages
               setIsNotConfirmed(true);
               //if a value in the object values is undefined, it will not be sent to the server
@@ -97,7 +110,7 @@ const CheckoutComp = () => {
               actions.setSubmitting(false);
             }}
           >
-            {({ values, setValues, setFieldValue }) => (
+            {({ values, setValues, setFieldValue, errors, touched }) => (
               <Form>
                 <div className={styles.CheckoutLeft}>
                   <div className={styles.leftFormItem}>
@@ -112,6 +125,11 @@ const CheckoutComp = () => {
                             type="text"
                             name="first_name"
                           />
+                          {errors.first_name && touched.first_name ? (
+                            <div style={{ color: "red" }}>
+                              {errors.first_name}
+                            </div>
+                          ) : null}
                         </div>
                         <div className={styles.formField}>
                           <label htmlFor="lastName">{t("lastname")}</label>
@@ -121,6 +139,11 @@ const CheckoutComp = () => {
                             type={"text"}
                             name="last_name"
                           />
+                          {errors.last_name && touched.last_name ? (
+                            <div style={{ color: "red" }}>
+                              {errors.last_name}
+                            </div>
+                          ) : null}
                         </div>
                       </div>
                       <div className={styles.formRow}>
@@ -148,12 +171,18 @@ const CheckoutComp = () => {
                             type="text"
                             name="address"
                           />
+                          {errors.address && touched.address ? (
+                            <div style={{ color: "red" }}>{errors.address}</div>
+                          ) : null}
                         </div>
                       </div>
                       <div className={styles.formRow}>
                         <div className={styles.formField}>
                           <label htmlFor="Town">{t("city")}</label>
                           <Field required id="town" type="text" name="town" />
+                          {errors.town && touched.town ? (
+                            <div style={{ color: "red" }}>{errors.town}</div>
+                          ) : null}
                         </div>
                         <div className={styles.formField}>
                           <label htmlFor="lastName">{t("zip")}</label>
@@ -161,15 +190,27 @@ const CheckoutComp = () => {
                             required
                             id="zip"
                             name="zip"
-                            type="text"
+                            type="number"
                             min={0}
                           />
+                          {errors.zip && touched.zip ? (
+                            <div style={{ color: "red" }}>{errors.zip}</div>
+                          ) : null}
                         </div>
                       </div>
                       <div className={styles.formRow}>
                         <div className={styles.formField}>
                           <label htmlFor="Phone">{t("phone")}</label>
-                          <Field required id="phone" type="text" name="phone" />
+                          <PhoneInput
+                            placeholder="Enter phone number"
+                            name="phone"
+                            id="phone"
+                            onChange={(value) => setFieldValue("phone", value)}
+                          />
+
+                          {errors.phone && touched.phone ? (
+                            <div style={{ color: "red" }}>{errors.phone}</div>
+                          ) : null}
                         </div>
                         <div className={styles.formField}>
                           <label htmlFor="Email">{t("email")}</label>
@@ -179,6 +220,9 @@ const CheckoutComp = () => {
                             name="email"
                             type="Email"
                           />
+                          {errors.email && touched.email && (
+                            <div style={{ color: "red" }}>{errors.email}</div>
+                          )}
                         </div>
                       </div>
                       <div className={styles.FinalRow}>
@@ -250,11 +294,7 @@ const CheckoutComp = () => {
                     </div>
                     <div className={styles.SignMeUp}>
                       <label>
-                        <Field
-                          required
-                          name="checkedTerms"
-                          type="checkbox"
-                        />
+                        <Field required name="checkedTerms" type="checkbox" />
                         <p className={styles.termsTxt}>
                           {`${t("condition")} `}
                           <a href="/TermsAndConditions">{t("terms&conds")}</a>
@@ -511,9 +551,14 @@ const CheckoutComp = () => {
                         </PayPalScriptProvider>
                       ) : (
                         <>
-                          <button disabled={isNotConfirmed} type="submit" onClick={()=>{
-                             if(!values.checkedTerms) return alert(`${t("shouldacceptterms")}`);
-                          }}>
+                          <button
+                            disabled={isNotConfirmed}
+                            type="submit"
+                            onClick={() => {
+                              if (!values.checkedTerms)
+                                return alert(`${t("shouldacceptterms")}`);
+                            }}
+                          >
                             {t("confirmorder")}
                           </button>
                         </>
