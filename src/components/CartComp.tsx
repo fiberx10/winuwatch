@@ -254,10 +254,15 @@ const CartComp = () => {
                     {questionImgs.map(({ name }, i) => (
                       <button
                         key={i}
-                        onClick={() => {
+                        onClick={ () => {
                           if (randomImage?.name.includes(name)){
-                            setModeleDate(new Date())
-                            router.push("/CheckoutPage")
+                            setModeleDate(new Date());
+                            router.push("/CheckoutPage").then(() => {
+                              return null;
+                            }).catch((e) => {
+                              console.log(e);
+                              return null;
+                            });
                           }else {
                             setWrong(true)
                           }
