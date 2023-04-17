@@ -74,9 +74,9 @@ export default function NavBar() {
           className={styles.burger}
           xmlns="http://www.w3.org/2000/svg"
         >
-          <line y1="8" x2="38" y2="8" stroke="#987358" stroke-width="2"/>
-<line y1="1" x2="38" y2="1" stroke="#987358" stroke-width="2"/>
-  </svg>
+          <line y1="8" x2="38" y2="8" stroke="#987358" strokeWidth="2" />
+          <line y1="1" x2="38" y2="1" stroke="#987358" strokeWidth="2" />
+        </svg>
 
         <Drawer className={styles.Drawer} anchor="left" open={open}>
           <div className={styles.DrawerCon}>

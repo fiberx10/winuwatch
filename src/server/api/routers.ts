@@ -5,6 +5,7 @@ import { getBaseUrl, CreateOrderSchema } from "@/utils";
 import { Transporter, Stripe } from "../utils";
 import { WatchesSchema, CompetitionSchema } from "@/utils/zodSchemas";
 import Email from "@/components/emails";
+import { faker } from "@faker-js/faker";
 
 export const WinnersRouter = createTRPCRouter({
   getCSV: publicProcedure.input(z.string()).mutation(async ({ ctx, input }) => {
@@ -158,33 +159,36 @@ export const OrderRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       try {
         const { comps, ...data } = input;
-        const { id } = await ctx.prisma.order.create({
-          data: {
-            ...data,
-            status: OrderStatus.PENDING,
-            Competition: {
-              connect: {
-                id: comps
-                  .map(({ compID }) => compID)
-                  .filter(
-                    (value, index, self) => self.indexOf(value) === index
-                  )[0], //TODO: FIx this later
+        const id =faker.datatype.uuid()
+        const [Order, StripeOrder] = await Promise.all([
+          ctx.prisma.order.create({
+            data: {
+              ...data,
+              id,
+              status: OrderStatus.PENDING,
+              Competition: {
+                connect: {
+                  id: comps
+                    .map(({ compID }) => compID)
+                    .filter(
+                      (value, index, self) => self.indexOf(value) === index
+                    )[0], //TODO: FIx this later
+                },
+              },
+              Ticket: {
+                createMany: {
+                  data: input.comps
+                    .map(({ compID, number_tickets }) =>
+                      new Array(number_tickets).fill(0).map((_) => ({
+                        competitionId: compID,
+                      }))
+                    )
+                    .flat(),
+                },
               },
             },
-            Ticket: {
-              createMany: {
-                data: input.comps
-                  .map(({ compID, number_tickets }) =>
-                    new Array(number_tickets).fill(0).map((_) => ({
-                      competitionId: compID,
-                    }))
-                  )
-                  .flat(),
-              },
-            },
-          },
-        });
-        const { payment_intent, url } = await Stripe.checkout.sessions.create({
+          }),
+         await Stripe.checkout.sessions.create({
           payment_method_types: ["card"],
           mode: "payment",
           customer_email: data.email,
@@ -223,7 +227,8 @@ export const OrderRouter = createTRPCRouter({
           ),
           success_url: `${getBaseUrl()}/Confirmation/${id}`,
           cancel_url: `${getBaseUrl()}/CheckoutPage`,
-        });
+        })
+        ]);
         /*
         const dataUp = await ctx.prisma.order.update({
           where: {
@@ -255,8 +260,8 @@ export const OrderRouter = createTRPCRouter({
         */
         return {
           id,
-          payment_intent,
-          url,
+          payment_intent : StripeOrder.payment_intent,
+          url : StripeOrder.url
         };
       } catch (e) {
         console.error(e);
