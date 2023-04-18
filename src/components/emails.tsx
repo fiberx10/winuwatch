@@ -371,8 +371,9 @@ const mail = (
                     >
                       What happens now?
                       <br /> the contest will end on{" "}
-                      {DateFormater(order?.Competition[0]?.end_date as Date) + " (Local Time in London) "},
-                      the winners will be announced on{" "}
+                      {DateFormater(order?.Competition[0]?.end_date as Date) +
+                        " (Local Time in London) "}
+                      , the winners will be announced on{" "}
                       {DateFormater(
                         order?.Competition[0]?.drawing_date as Date
                       ) + " (Local Time in London) "}

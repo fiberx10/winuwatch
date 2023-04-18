@@ -45,7 +45,7 @@
     "donation": "DONACIONES",
     "readmore": "LEER MÁS",
     "inassociation": "¿ERES UNA ASOCIACIÓN?",
-    "beinlist" : "QUIERE ESTAR EN ESTA LISTA - " ,
+    "beinlist": "QUIERE ESTAR EN ESTA LISTA - ",
     "contactus": " PÓNGASE EN CONTACTO CON NOSOTROS",
     "woodland": "Win u watch dona el 10% de sus ingresos a la Asociación Woodland en el Reino Unido"
   },
@@ -61,9 +61,9 @@
     "wronganswer": "RESPUESTA INCORRECTA"
   },
   "competition": {
-    "drawDate" :"Fecha del sorteo para esta competición en:",
-    "startcomp" : "La competición comenzará en:",
-    "noticketleft" : "NO QUEDAN ENTRADAS",
+    "drawDate": "Fecha del sorteo para esta competición en:",
+    "startcomp": "La competición comenzará en:",
+    "noticketleft": "NO QUEDAN ENTRADAS",
     "discount": "DESCUENTO",
     "marketvalue": "Valor de mercado",
     "howmany": "¿CUÁNTAS ENTRADAS QUIERES?",
@@ -94,7 +94,7 @@
     "stonesnumber": "Número de piedras",
     "glass": "Cristal",
     "bezelmeterial": "Material del bisel",
-    "timezone" : "(Hora Local en Londres)"
+    "timezone": "(Hora Local en Londres)"
   },
   "thanku": {
     "thank": "¡GRACIAS!",
@@ -140,16 +140,16 @@
     "creditcard": "TARJETA DE CRÉDITO",
     "condition": "POR LA PRESENTE DECLARO QUE HE LEÍDO DETENIDAMENTE, ENTENDIDO COMPLETAMENTE Y ACEPTADO INCONDICIONALMENTE",
     "terms&conds": "LOS TÉRMINOS Y CONDICIONES",
-    "including" :  "INCLUYENDO",
-    "return" : "LA POLÍTICA DE DEVOLUCIÓN",
+    "including": "INCLUYENDO",
+    "return": "LA POLÍTICA DE DEVOLUCIÓN",
     "faq": "PREGUNTAS FRECUENTES",
-    "and" : "Y",
-    "acc_use_policy" : "POLÍTICA DE USO ACEPTABLE",
-    "privacy_police" : "POLÍTICA DE PRIVACIDAD",
+    "and": "Y",
+    "acc_use_policy": "POLÍTICA DE USO ACEPTABLE",
+    "privacy_police": "POLÍTICA DE PRIVACIDAD",
     "terms": "ACEPTO RECIBIR ACTUALIZACIONES Y NOTICIAS POR CORREO ELECTRÓNICO",
     "remaingtickets": "ENTRADAS RESTANTES",
-    "error": "Error al crear la orden" , 
-    "shouldacceptterms" : "Debe aceptar los términos y condiciones" 
+    "error": "Error al crear la orden",
+    "shouldacceptterms": "Debe aceptar los términos y condiciones"
   },
   "navitems": {
     "phil": "FILOSOFÍA",

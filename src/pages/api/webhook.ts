@@ -42,67 +42,74 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
     } catch (error) {
       return (
         console.error(`⚠️ Webhook signature verification failed.`, error),
-        response
-          .status(400)
-          .send(`Webhook Error`)
+        response.status(400).send(`Webhook Error`)
       );
     }
+    const { id } = event.data.object as Stripe.PaymentIntent;
     switch (event.type) {
-        
+      /*case "checkout.session.payment_failed" || "checkout.session.cancelled" :
+				console.log("id: ",id);
+				break;
+				*/
       case "checkout.session.completed":
-        const checkoutSessionCompleted = event.data.object;
-        // const {id,payment_intent } = checkoutSessionCompleted;
-        // Then define and call a function to handle the event payment_intent.succeeded
+        if (
+          await prisma.order.update({
+            where: {
+              paymentId: id,
+            },
+            data: {
+              status: "CONFIRMED",
+            },
+          })
+        ) {
+          return response.json({});
+        }
+        console.error("error: checkout.session.completed\t", id);
         break;
-      case "payment_intent.succeeded":
-        const paymentIntentSucceeded = event.data.object;
-        // const {id } = paymentIntentSucceeded;
-        // Then define and call a function to handle the event payment_intent.succeeded
-        console.log(JSON.stringify(paymentIntentSucceeded, null, 2));
 
         /*
-        await prisma.order.updateMany({
-          where: {
-            //@ts-ignore
-            intentId: paymentIntentSucceeded.id as string,
-          },
-          //@ts-ignore
-          data: {
-            //@ts-ignore
-            status: "CONFIRMED",
-          },
-        });
-        const dataUp = await prisma.order.findMany({
-          where: {
-            //@ts-ignore
-            intentId: paymentIntentSucceeded.id as string,
-          },
-          include: {
-            Ticket: true,
-            Competition: {
-              include: {
-                Watches: {
-                  include: {
-                    images_url: true,
-                  },
-                },
-              },
-            },
-          },
-        });
-
-        await Transporter.sendMail({
-          from: "noreply@winuwatch.uk",
-          to: dataUp.email,
-          subject: `Order Confirmation - Winuwatch #${dataUp?.id || "000000"}`,
-          html: Email(dataUp),
-        });*/
+						await prisma.order.updateMany({
+						  where: {
+							//@ts-ignore
+							intentId: paymentIntentSucceeded.id as string,
+						  },
+						  //@ts-ignore
+						  data: {
+							//@ts-ignore
+							status: "CONFIRMED",
+						  },
+						});
+						const dataUp = await prisma.order.findMany({
+						  where: {
+							//@ts-ignore
+							intentId: paymentIntentSucceeded.id as string,
+						  },
+						  include: {
+							Ticket: true,
+							Competition: {
+							  include: {
+								Watches: {
+								  include: {
+									images_url: true,
+								  },
+								},
+							  },
+							},
+						  },
+						});
+				
+						await Transporter.sendMail({
+						  from: "noreply@winuwatch.uk",
+						  to: dataUp.email,
+						  subject: `Order Confirmation - Winuwatch #${dataUp?.id || "000000"}`,
+						  html: Email(dataUp),
+						});*/
         break;
       // ... handle other event types
       default:
         console.log(`Unhandled event type ${event.type}`);
     }
-    console.log(event.data);
+    //console.log(event.data);
     return response.json({});
   }
 };

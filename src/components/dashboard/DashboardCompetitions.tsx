@@ -163,7 +163,7 @@ const DashboardCompetitions = () => {
                                 await activeFetch();
                                 await noActiveFetch();
                                 await completedFetch();
-                                actions.setSubmitting(false); 
+                                actions.setSubmitting(false);
                               }}
                               initialValues={{
                                 name: comp.name,
@@ -221,9 +221,7 @@ const DashboardCompetitions = () => {
                                           onChange={(value) =>
                                             setFieldValue(
                                               "start_date",
-                                              new Date(
-                                                FixDate(value)
-                                              )
+                                              new Date(FixDate(value))
                                             )
                                           }
                                         />
@@ -244,9 +242,7 @@ const DashboardCompetitions = () => {
                                           onChange={(value) =>
                                             setFieldValue(
                                               "end_date",
-                                              new Date(
-                                                FixDate(value)
-                                              )
+                                              new Date(FixDate(value))
                                             )
                                           }
                                         />
@@ -266,9 +262,7 @@ const DashboardCompetitions = () => {
                                           onChange={(value) =>
                                             setFieldValue(
                                               "drawing_date",
-                                              new Date(
-                                                FixDate(value)
-                                              )
+                                              new Date(FixDate(value))
                                             )
                                           }
                                         />
@@ -514,9 +508,7 @@ const DashboardCompetitions = () => {
                                           onChange={(value: string | Moment) =>
                                             setFieldValue(
                                               "start_date",
-                                              new Date(
-                                                FixDate(value)
-                                              )
+                                              new Date(FixDate(value))
                                             )
                                           }
                                         />
@@ -537,9 +529,7 @@ const DashboardCompetitions = () => {
                                           onChange={(value) =>
                                             setFieldValue(
                                               "drawing_date",
-                                              new Date(
-                                                FixDate(value)
-                                              )
+                                              new Date(FixDate(value))
                                             )
                                           }
                                         />
@@ -559,9 +549,7 @@ const DashboardCompetitions = () => {
                                           onChange={(value) =>
                                             setFieldValue(
                                               "end_date",
-                                              new Date(
-                                                FixDate(value)
-                                              )
+                                              new Date(FixDate(value))
                                             )
                                           }
                                         />
@@ -755,7 +743,6 @@ const DashboardCompetitions = () => {
                                 await noActiveFetch();
                                 await completedFetch();
                                 actions.setSubmitting(false);
- 
                               }}
                               initialValues={{
                                 name: comp.name,

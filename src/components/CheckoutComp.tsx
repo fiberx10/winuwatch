@@ -20,8 +20,7 @@ import "react-phone-number-input/style.css";
 const CheckoutComp = () => {
   const router = useRouter();
   const t = useTranslations("checkout");
-  const { mutateAsync: createOrder 
-  } = api.Order.createStripe.useMutation();
+  const { mutateAsync: createOrder } = api.Order.createStripe.useMutation();
   const { competitions, cardDetails, reset } = useCart();
   const [loading, setLoading] = useState(false);
   const { data: items } = api.Competition.getAll.useQuery({
@@ -79,7 +78,7 @@ const CheckoutComp = () => {
               setIsNotConfirmed(true);
               //if a value in the object values is undefined, it will not be sent to the server
               console.log("Form submitted:", values);
-              setLoading(true);  
+              setLoading(true);
               const { url, error } = await createOrder({
                 ...values,
                 paymentMethod: values.paymentMethod as "PAYPAL" | "STRIPE",
@@ -552,17 +551,16 @@ const CheckoutComp = () => {
                           />
                         </PayPalScriptProvider>
                       ) : (
-                          <button
-                            disabled={loading}
-                            type="submit"
-                            onClick={() => {
-                              if (!values.checkedTerms)
-                                return alert(`${t("shouldacceptterms")}`);
-                            }}
-                          >
-                            {t("confirmorder")}
-                          </button>
-
+                        <button
+                          disabled={loading}
+                          type="submit"
+                          onClick={() => {
+                            if (!values.checkedTerms)
+                              return alert(`${t("shouldacceptterms")}`);
+                          }}
+                        >
+                          {t("confirmorder")}
+                        </button>
                       )}
                     </div>
                   </div>
