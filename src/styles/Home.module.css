@@ -392,6 +392,7 @@
 .watchCon p {
   font-weight: 400;
   font-size: 18px;
+  margin-top: 5px !important;
   color: #987358;
   text-transform: uppercase;
 }
