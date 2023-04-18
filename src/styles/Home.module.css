@@ -1530,6 +1530,11 @@
     gap: 6rem;
   }
 }
+@media only screen and (min-height: 1072px) {
+  .FooterInsta {
+    height: 22%;
+  }
+}
 @media only screen and (min-width: 1900px) {
   .flexEnd {
     min-width: none;
