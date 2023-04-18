@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-html-link-for-pages */
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "@/styles/Checkout.module.css";
 import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js";
 import { useRouter } from "next/router";
@@ -55,6 +55,14 @@ const CheckoutComp = () => {
     email: Yup.string().email("Invalid email").required("Required"),
   });
 
+  useEffect(() => {
+    void (async () => {
+      if (items && items.length === 0) {
+        return await router.push("/Cart");
+      }
+    })();
+  }, [items]);
+
   return (
     <div className={styles.CheckoutMain}>
       {isLoading ? (
@@ -66,6 +74,19 @@ const CheckoutComp = () => {
             placeItems: "center",
           }}
         >
+          <Loader />
+        </div>
+      ) : items?.length === 0 ? (
+        <div>
+          <h1
+            style={{
+              fontFamily: "Iskry, sans-serif",
+              textTransform: "uppercase",
+            }}
+          >
+            Your Cart is Empty
+          </h1>
+          <p>you are being redirected shorly...</p>
           <Loader />
         </div>
       ) : (
@@ -251,6 +272,13 @@ const CheckoutComp = () => {
                         <div className={styles.FinalRow}>
                           <div className={styles.formField}>
                             <label htmlFor="Date">{t("dateofbirth")}</label>
+                            <label
+                              style={{
+                                fontSize: "12px",
+                              }}
+                            >
+                              (MM/DD/YYYY)
+                            </label>
                             <Datetime
                               utc={true}
                               input={true}
