@@ -1,7 +1,6 @@
 import stripe from "stripe";
 import { env } from "@/env.mjs";
 
-
 import nodemailer from "nodemailer";
 
 export const Transporter = nodemailer.createTransport({
@@ -13,9 +12,6 @@ export const Transporter = nodemailer.createTransport({
     pass: "Password1!",
   },
 });
-
-
-
 
 export const Stripe = new stripe(env.STRIPE_SECRET_KEY, {
   apiVersion: "2022-11-15",

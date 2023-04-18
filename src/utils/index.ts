@@ -8,6 +8,7 @@ export const CreateOrderSchema = OrderSchema.extend({
       compID: z.string(),
       number_tickets: z.number().default(1),
       price_per_ticket: z.number(),
+      reduction: z.number().default(0),
     })
   ),
 }).omit({

@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider     = "mysql"
-  url          = "mysql://wdwuknnzs4f66zn9palj:pscale_pw_N75DyHGPirpB80uON4TnmpVEhZi6wRX5yG5em6jcbkY@aws.connect.psdb.cloud/win-u-wath?sslaccept=strict"
+  url          = env("DATABASE_URL")
   relationMode = "prisma"
 }
 
@@ -12,9 +12,9 @@ model ImagesUrl {
   id        String   @id @default(cuid())
   url       String
   WatchesId String
-  Watches   Watches  @relation(fields: [WatchesId], references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  Watches   Watches  @relation(fields: [WatchesId], references: [id])
 
   @@index([WatchesId])
   @@map("images_url")
@@ -35,10 +35,10 @@ model Watches {
   has_box             Boolean      @default(false)
   has_certificate     Boolean      @default(false)
   condition           String
-  images_url          ImagesUrl[]
-  Competition         Competition?
   createdAt           DateTime     @default(now())
   updatedAt           DateTime     @updatedAt
+  images_url          ImagesUrl[]
+  Competition         Competition?
 
   @@index([id])
   @@map("watches")
@@ -85,13 +85,14 @@ model Order {
   email         String
   date          DateTime
   paymentMethod PaymentMethod
-  paymentId     String?
   checkedEmail  Boolean
   checkedTerms  Boolean
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
   totalPrice    Float
   status        OrderStatus
+  paymentId     String?
+  intentId      String?
   Competition   Competition[]
   Ticket        Ticket[]
 
@@ -114,11 +115,11 @@ model Ticket {
 
 model Question {
   id            String   @id @default(cuid())
-  imageURL      String?
   question      String
   correctAnswer String
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
+  imageURL      String?
   answers       answer[]
 
   @@map("question")
@@ -128,12 +129,21 @@ model answer {
   id         String   @id @default(cuid())
   answer     String
   questionId String
-  Question   Question @relation(fields: [questionId], references: [id])
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
+  Question   Question @relation(fields: [questionId], references: [id])
 
   @@index([questionId])
   @@map("answers")
+}
+
+model CompetitionToOrder {
+  A String
+  B String
+
+  @@unique([A, B], map: "_CompetitionToOrder_AB_unique")
+  @@index([B], map: "_CompetitionToOrder_B_index")
+  @@map("_CompetitionToOrder")
 }
 
 enum OrderStatus {

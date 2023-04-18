@@ -39,7 +39,7 @@ const csvExporter = new ExportToCsv({
 });
 
 const DashboardOrders = () => {
-  const {locale} = useRouter()
+  const { locale } = useRouter();
   const [open, setOpen] = React.useState({
     opened: false,
     orderID: "",
@@ -359,7 +359,7 @@ const DashboardOrders = () => {
                                                       {Formater(
                                                         row.totalPrice /
                                                           row.Ticket.length,
-                                                          locale
+                                                        locale
                                                       )}
                                                     </TableCell>
                                                     <TableCell align="right">
