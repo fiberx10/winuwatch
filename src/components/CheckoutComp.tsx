@@ -45,7 +45,10 @@ const CheckoutComp = () => {
   const FormSchema = Yup.object().shape({
     first_name: Yup.string().required("Required"),
     last_name: Yup.string().required("Required"),
-    country: Yup.string().required("Required"),
+    country: Yup.string()
+      .required("Required")
+      .notOneOf(["0"])
+      .label("Field empty"),
     town: Yup.string().required("Required"),
     zip: Yup.string().required("Required"),
     phone: Yup.string(),
@@ -58,6 +61,7 @@ const CheckoutComp = () => {
         <div
           style={{
             height: "80vh",
+            width: "100%",
             display: "grid",
             placeItems: "center",
           }}
@@ -82,7 +86,7 @@ const CheckoutComp = () => {
                 totalPrice: totalCost,
                 comps: competitions,
                 date: new Date(),
-                checkedEmail: false,
+                checkedEmail: true,
                 checkedTerms: false,
               }}
               onSubmit={async (values, actions) => {
@@ -169,12 +173,18 @@ const CheckoutComp = () => {
                               id="country"
                               name="country"
                             >
+                              <option value="0">Select a Country</option>
                               {countryList.map((country, i) => (
                                 <option key={i} value={country}>
                                   {country}
                                 </option>
                               ))}
                             </Field>
+                            {errors.country && touched.country ? (
+                              <div style={{ color: "red" }}>
+                                {errors.country}
+                              </div>
+                            ) : null}
                           </div>
                           <div className={styles.formField}>
                             <label htmlFor="lastName">{t("address")}</label>
@@ -224,10 +234,6 @@ const CheckoutComp = () => {
                                 setFieldValue("phone", value)
                               }
                             />
-
-                            {errors.phone && touched.phone ? (
-                              <div style={{ color: "red" }}>{errors.phone}</div>
-                            ) : null}
                           </div>
                           <div className={styles.formField}>
                             <label htmlFor="Email">{t("email")}</label>
@@ -328,7 +334,11 @@ const CheckoutComp = () => {
                           </p>
                         </label>
                         <label>
-                          <Field name="checkedEmail" type="checkbox" />
+                          <Field
+                            checked={values.checkedEmail}
+                            name="checkedEmail"
+                            type="checkbox"
+                          />
                           <p className={styles.emailTxt}>{t("terms")}</p>
                         </label>
                       </div>
