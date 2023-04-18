@@ -184,7 +184,7 @@ const CartComp = () => {
                   10800000
                 : false
             ) {
-              setModeleDate(new  Date())
+              setModeleDate(new Date());
               router
                 .push("/CheckoutPage")
                 .then(() => {
@@ -254,17 +254,20 @@ const CartComp = () => {
                     {questionImgs.map(({ name }, i) => (
                       <button
                         key={i}
-                        onClick={ () => {
-                          if (randomImage?.name.includes(name)){
+                        onClick={() => {
+                          if (randomImage?.name.includes(name)) {
                             setModeleDate(new Date());
-                            router.push("/CheckoutPage").then(() => {
-                              return null;
-                            }).catch((e) => {
-                              console.log(e);
-                              return null;
-                            });
-                          }else {
-                            setWrong(true)
+                            router
+                              .push("/CheckoutPage")
+                              .then(() => {
+                                return null;
+                              })
+                              .catch((e) => {
+                                console.log(e);
+                                return null;
+                              });
+                          } else {
+                            setWrong(true);
                           }
                         }}
                       >

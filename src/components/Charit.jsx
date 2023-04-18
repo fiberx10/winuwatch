@@ -57,11 +57,12 @@ const Charit = () => {
         <h1>
           {t("inassociation")}
 
-          <span style={{
-            display: "flex",
-          }}>
-            <h1>{t("beinlist")}</h1>
-            {" "}
+          <span
+            style={{
+              display: "flex",
+            }}
+          >
+            <h1>{t("beinlist")}</h1>{" "}
             <a
               style={{ color: "#1e1e1e", textDecoration: "underline" }}
               href="mailto:info@winuwatch.uk"

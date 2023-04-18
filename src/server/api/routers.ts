@@ -131,17 +131,17 @@ export const OrderRouter = createTRPCRouter({
           }
         : {},
       include: {
-            Ticket: true,
-            Competition: {
+        Ticket: true,
+        Competition: {
+          include: {
+            Watches: {
               include: {
-                Watches: {
-                  include: {
-                    images_url: true,
-                  },
-                },
+                images_url: true,
               },
             },
           },
+        },
+      },
     });
     if (!Order) {
       throw new Error("Order not found");
@@ -159,7 +159,7 @@ export const OrderRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       try {
         const { comps, ...data } = input;
-        const id =faker.datatype.uuid()
+        const id = faker.datatype.uuid();
         const [Order, StripeOrder] = await Promise.all([
           ctx.prisma.order.create({
             data: {
@@ -188,46 +188,46 @@ export const OrderRouter = createTRPCRouter({
               },
             },
           }),
-         await Stripe.checkout.sessions.create({
-          payment_method_types: ["card"],
-          mode: "payment",
-          customer_email: data.email,
-          line_items: (
-            await ctx.prisma.competition.findMany({
-              where: {
-                id: {
-                  in: comps.map(({ compID }) => compID),
-                },
-              },
-              include: {
-                Watches: {
-                  include: {
-                    images_url: true,
+          await Stripe.checkout.sessions.create({
+            payment_method_types: ["card"],
+            mode: "payment",
+            customer_email: data.email,
+            line_items: (
+              await ctx.prisma.competition.findMany({
+                where: {
+                  id: {
+                    in: comps.map(({ compID }) => compID),
                   },
                 },
-              },
-            })
-          ).map((comp) =>
-            comp.Watches
-              ? {
-                  price_data: {
-                    //automatic_tax : true,
-                    currency: "gbp",
-                    product_data: {
-                      name: comp.Watches.model,
-                      //images: [`${getBaseUrl()+comp.Watches.images_url[0]}`],
+                include: {
+                  Watches: {
+                    include: {
+                      images_url: true,
                     },
-                    unit_amount: Math.floor(comp.ticket_price * 100), // in cents
                   },
-                  quantity:
-                    input.comps.find((item) => item.compID === comp.id)
-                      ?.number_tickets || 0,
-                }
-              : {}
-          ),
-          success_url: `${getBaseUrl()}/Confirmation/${id}`,
-          cancel_url: `${getBaseUrl()}/CheckoutPage`,
-        })
+                },
+              })
+            ).map((comp) =>
+              comp.Watches
+                ? {
+                    price_data: {
+                      //automatic_tax : true,
+                      currency: "gbp",
+                      product_data: {
+                        name: comp.Watches.model,
+                        //images: [`${getBaseUrl()+comp.Watches.images_url[0]}`],
+                      },
+                      unit_amount: Math.floor(comp.ticket_price * 100), // in cents
+                    },
+                    quantity:
+                      input.comps.find((item) => item.compID === comp.id)
+                        ?.number_tickets || 0,
+                  }
+                : {}
+            ),
+            success_url: `${getBaseUrl()}/Confirmation/${id}`,
+            cancel_url: `${getBaseUrl()}/CheckoutPage`,
+          }),
         ]);
         /*
         const dataUp = await ctx.prisma.order.update({
@@ -258,10 +258,18 @@ export const OrderRouter = createTRPCRouter({
           html: Email(dataUp),
         });
         */
+        await ctx.prisma.order.update({
+          where: {
+            id,
+          },
+          data: {
+            paymentId: StripeOrder.payment_intent as string,
+          },
+        });
         return {
           id,
-          payment_intent : StripeOrder.payment_intent,
-          url : StripeOrder.url
+          payment_intent: StripeOrder.payment_intent,
+          url: StripeOrder.url,
         };
       } catch (e) {
         console.error(e);

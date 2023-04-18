@@ -8,11 +8,11 @@ const server = z.object({
   DATABASE_URL: z.string().url(),
   NODE_ENV: z.enum(["development", "test", "production"]),
   STRIPE_SECRET_KEY: z.string().min(1),
+  STRIPE_ENDPOINT_SECRET: z.string().min(1),
   SMTP_HOST: z.string().min(1),
   SMTP_PORT: z.string().min(1),
   SMTP_USER: z.string().min(1),
   SMTP_PASSWORD: z.string().min(1),
-  SMTP_FROM_NAME: z.string().min(1),
 });
 
 /**
@@ -25,9 +25,6 @@ const client = z.object({
   NODE_ENV: z.enum(["development", "test", "production"]),
 
   NEXT_PUBLIC_PAYPAL_ID: z.string().min(1),
-
-  // stripe :
-  NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: z.string().min(1),
 });
 
 /**
@@ -40,18 +37,13 @@ const processEnv = {
   // DATABASE :
   DATABASE_URL: process.env.DATABASE_URL,
   NODE_ENV: process.env.NODE_ENV,
-
   NEXT_PUBLIC_PAYPAL_ID: process.env.NEXT_PUBLIC_PAYPAL_ID,
-
-  // STRIPE KEYS
-  NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY:
-    process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,
+  STRIPE_ENDPOINT_SECRET: process.env.STRIPE_ENDPOINT_SECRET,
   STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
   SMTP_HOST: process.env.SMTP_HOST,
   SMTP_PORT: process.env.SMTP_PORT,
   SMTP_USER: process.env.SMTP_USER,
   SMTP_PASSWORD: process.env.SMTP_PASSWORD,
-  SMTP_FROM_NAME: process.env.SMTP_FROM_NAME,
 };
 
 // Don't touch the part below

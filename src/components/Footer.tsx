@@ -150,9 +150,7 @@ const Footer = () => {
                     ) : (
                       link && (
                         <Link href={link}>
-                        <span>
-                          {name}
-                        </span>
+                          <span>{name}</span>
                         </Link>
                       )
                     )}
