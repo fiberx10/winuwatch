@@ -216,11 +216,15 @@
   align-items: center;
   gap: 0.5rem;
 }
-@media only screen and (min-height: 1080px) {
+@media only screen and (min-height: 1072px) {
   .CartPageWrapper {
     display: flex;
+    height: 100vh;
     flex-direction: column;
     justify-content: space-between;
+  }
+  .FooterInsta {
+    height: 22%;
   }
 }
 @media only screen and (min-height: 667px) and (max-height: 740px) {
