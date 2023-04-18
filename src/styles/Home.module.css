@@ -1506,7 +1506,7 @@
     align-items: center;
   }
 }
-@media only screen and (min-width: 1441px) and (max-width: 2560px) {
+@media only screen and (min-width: 1441px) {
   .flexEnd {
     min-width: none;
     width: 35.3%;
@@ -1525,9 +1525,20 @@
     gap: 1rem;
   }
 }
-@media only screen and (min-width: 1600px) and (max-width: 2560px) {
+@media only screen and (min-width: 1600px) {
   .menusGrid {
     gap: 6rem;
+  }
+}
+@media only screen and (min-width: 1900px) {
+  .flexEnd {
+    min-width: none;
+    width: 39.3%;
+  }
+  .flexStart {
+    min-width: none;
+
+    width: 39.3%;
   }
 }
 @media only screen and (max-width: 500px) and (max-height: 915px) {
