@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider     = "mysql"
-  url          = "mysql://wdwuknnzs4f66zn9palj:pscale_pw_N75DyHGPirpB80uON4TnmpVEhZi6wRX5yG5em6jcbkY@aws.connect.psdb.cloud/win-u-wath?sslaccept=strict"
+  url          = env("DATABASE_URL")
   relationMode = "prisma"
 }
 
@@ -91,7 +91,8 @@ model Order {
   updatedAt     DateTime      @updatedAt
   totalPrice    Float
   status        OrderStatus
-  paymentId     String? @unique 
+  paymentId     String?
+  intentId      String?
   Competition   Competition[]
   Ticket        Ticket[]
 

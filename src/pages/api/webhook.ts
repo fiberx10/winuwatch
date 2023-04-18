@@ -52,6 +52,7 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
 				break;
 				*/
       case "checkout.session.completed":
+		/*
         if (
           await prisma.order.update({
             where: {
@@ -63,7 +64,7 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
           })
         ) {
           return response.json({});
-        }
+        }*/
         console.error("error: checkout.session.completed\t", id);
         break;
 

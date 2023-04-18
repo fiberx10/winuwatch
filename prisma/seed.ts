@@ -304,7 +304,7 @@ const GenWatch = async () => {
   });
 })();
 */
-
+/*
 const order = async (CompID = "clfx6mr1o000amb7gx0fobsnx") => {
   return await prisma.order.create({
     data: {
@@ -351,3 +351,6 @@ const order = async (CompID = "clfx6mr1o000amb7gx0fobsnx") => {
     await order(CompID);
   }
 })();
+*/
+
+
