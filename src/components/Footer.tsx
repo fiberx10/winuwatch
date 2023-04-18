@@ -9,6 +9,7 @@ const Footer = () => {
   const t = useTranslations("home");
   const t_footer = useTranslations("footeritems");
   const [windowLocation, setLocation] = useState("");
+  const [size, setSize] = useState("45px");
   const router = useRouter();
   const Tabs = [
     [
@@ -80,7 +81,16 @@ const Footer = () => {
 
   useEffect(() => {
     typeof window !== "undefined" && setLocation(window.location.pathname);
-  }, [windowLocation]);
+    typeof window !== "undefined" && window.location.pathname === "/ja"
+      ? setSize("25px")
+      : typeof window !== "undefined" &&
+        window.location.pathname === "/ja/Philosophy"
+      ? setSize("25px")
+      : setSize("45px");
+  }, [
+    windowLocation,
+    typeof window !== "undefined" && window.location.pathname,
+  ]);
 
   return (
     <>
@@ -99,7 +109,14 @@ const Footer = () => {
         }}
         className={styles.FooterInsta}
       >
-        <h1 className={styles.background5}>{t("followus")}</h1>
+        <h1
+          style={{
+            fontSize: size,
+          }}
+          className={styles.background5}
+        >
+          {t("followus")}
+        </h1>
         <p>{t("followusdesc")}</p>
         <Link href="https://www.instagram.com/winuwatch/">
           <Image
