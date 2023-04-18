@@ -73,6 +73,8 @@ const CartComp = () => {
             (compData) => compData.id === comp.compID
           );
           if (!ComptetionData || ComptetionData.Watches === null) return null;
+          console.log(comp);
+
           return (
             <div className={styles.Watch} key={index}>
               <div className={styles.watchLeft}>
@@ -94,17 +96,24 @@ const CartComp = () => {
               <div className={styles.CartRight}>
                 <div className={styles.Counter}>
                   <div
-                    onClick={() =>
+                    onClick={() => {
                       updateComp({
-                        reduction: 0,
+                        reduction:
+                          comp.number_tickets === 6
+                            ? 0.1
+                            : comp.number_tickets === 11
+                            ? 0.15
+                            : comp.number_tickets === 21
+                            ? 0.2
+                            : 0,
                         compID: comp.compID,
                         number_tickets:
                           comp.number_tickets > 1
                             ? comp.number_tickets - 1
                             : comp.number_tickets,
                         price_per_ticket: ComptetionData.ticket_price,
-                      })
-                    }
+                      });
+                    }}
                     className={styles.CounterSelec}
                   >
                     <Image
@@ -118,17 +127,24 @@ const CartComp = () => {
                     {comp.number_tickets}
                   </div>
                   <div
-                    onClick={() =>
+                    onClick={() => {
                       updateComp({
-                        reduction: 0,
+                        reduction:
+                          comp.number_tickets === 4
+                            ? 0.1
+                            : comp.number_tickets === 9
+                            ? 0.15
+                            : comp.number_tickets === 19
+                            ? 0.2
+                            : 0,
                         compID: comp.compID,
                         number_tickets:
                           comp.number_tickets < ComptetionData.remaining_tickets
                             ? comp.number_tickets + 1
                             : comp.number_tickets,
                         price_per_ticket: ComptetionData.ticket_price,
-                      })
-                    }
+                      });
+                    }}
                     className={styles.CounterSelec}
                   >
                     <Image
@@ -184,7 +200,7 @@ const CartComp = () => {
                   10800000
                 : false
             ) {
-              setModeleDate(new  Date())
+              setModeleDate(new Date());
               router
                 .push("/CheckoutPage")
                 .then(() => {
@@ -254,17 +270,20 @@ const CartComp = () => {
                     {questionImgs.map(({ name }, i) => (
                       <button
                         key={i}
-                        onClick={ () => {
-                          if (randomImage?.name.includes(name)){
+                        onClick={() => {
+                          if (randomImage?.name.includes(name)) {
                             setModeleDate(new Date());
-                            router.push("/CheckoutPage").then(() => {
-                              return null;
-                            }).catch((e) => {
-                              console.log(e);
-                              return null;
-                            });
-                          }else {
-                            setWrong(true)
+                            router
+                              .push("/CheckoutPage")
+                              .then(() => {
+                                return null;
+                              })
+                              .catch((e) => {
+                                console.log(e);
+                                return null;
+                              });
+                          } else {
+                            setWrong(true);
                           }
                         }}
                       >

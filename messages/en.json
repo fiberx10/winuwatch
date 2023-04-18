@@ -9,8 +9,8 @@
     "minutes": "Minutes",
     "seconds": "Seconds",
     "start": "START NOW",
-    "only": "ONLY",
-    "tickets": "TICKETS LEFT!",
+    "only": "",
+    "tickets": "entries maximum",
     "nocompval": "No competitions available",
     "howtoplay": "HOW TO PLAY",
     "chooseyourtickets": "CHOOSE YOUR TICKETS",
@@ -45,7 +45,7 @@
     "donation": "DONATION",
     "readmore": "READ MORE",
     "inassociation": "YOU ARE AN ASSOCIATION ?",
-    "beinlist" : "WANT TO BE IN THIS LIST - " ,
+    "beinlist": "WANT TO BE IN THIS LIST - ",
     "contactus": " CONTACT US",
     "woodland": "Win u watch are donated 10% of his revenue to the Woodland association in the UK"
   },
@@ -61,9 +61,9 @@
     "wronganswer": "Wrong answer"
   },
   "competition": {
-    "drawDate" :"Drawing Date for this competition in :",
-    "startcomp" : "Competition will start in :",
-    "noticketleft" : "No tickets left",
+    "drawDate": "Drawing Date for this competition in :",
+    "startcomp": "Competition will start in :",
+    "noticketleft": "No tickets left",
     "discount": "Discount",
     "marketvalue": "Market Value",
     "howmany": "HOW MANY TICKETS WOULD YOU LIKE?",
@@ -148,8 +148,8 @@
     "privacy_police": "PRIVACY POLICY.",
     "terms": "I AGREE TO RECEIVE EMAIL UPDATES AND NEWS",
     "remaingtickets": "REMAINING TICKETS",
-    "error": "Error in the creating the order" , 
-    "shouldacceptterms" : "You should accept the terms and conditions" 
+    "error": "Error in the creating the order",
+    "shouldacceptterms": "You should accept the terms and conditions"
   },
   "navitems": {
     "phil": "PHILOSOPHY",
