@@ -11,6 +11,8 @@ interface Comp {
 interface RootState {
   modeleDate: Date | null;
   setModeleDate: (date: Date | null) => void;
+  authDate: Date | null;
+  setAuthDate: (date: Date | null) => void;
   competitions: Comp[];
   addComp: ({
     compID,
@@ -68,6 +70,8 @@ export const useCart = create<RootState>()(
       (set, get) => ({
         modeleDate: null,
         setModeleDate: (date) => set({ modeleDate: date }),
+        authDate: null,
+        setAuthDate: (date) => set({ authDate: date }),
         competitions: [],
         cardDetails: () => {
           const { competitions } = get();
