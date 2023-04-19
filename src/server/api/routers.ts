@@ -127,6 +127,9 @@ export const OrderRouter = createTRPCRouter({
             },
           },
         },
+        orderBy: {
+          createdAt: "desc",
+        },
         include: {
           Ticket: true,
         },
