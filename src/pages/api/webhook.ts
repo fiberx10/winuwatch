@@ -39,31 +39,28 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
 
     switch (event.type) {
       //PAYMENT FAILED OR CANCELLED
-      case "checkout.session.async_payment_failed" ||
-        "checkout.session.cancelled" ||
-        "payment_intent.payment_failed":
-        const checkoutSessionCancelled = event.data.object as {
-          id: string;
-          payment_intent: string;
-        };
-        console.log("checkoutsessionCancelled: ", checkoutSessionCancelled);
+      // case "payment_intent.payment_failed":
+      //   const checkoutSessionFailed = event.data.object as {
+      //     id: string;
+      //     payment_intent: string;
+      //   };
+      //   console.log("checkoutsessionFailed: ", checkoutSessionFailed);
 
-        if (
-          await prisma.order.updateMany({
-            where: {
-              paymentId: checkoutSessionCancelled.id,
-            },
-            data: {
-              status: "CANCELLED",
-            },
-          })
-        ) {
-          return response.json({});
-        }
-        break;
+      //   if (
+      //     await prisma.order.updateMany({
+      //       where: {
+      //         paymentId: checkoutSessionFailed.id,
+      //       },
+      //       data: {
+      //         status: "CANCELLED",
+      //       },
+      //     })
+      //   ) {
+      //     return response.json({});
+      //   }
+      //   break;
       // PAYMENT SUCCEEDED
-      case "checkout.session.async_payment_succeeded" ||
-        "payment_intent.succeeded":
+      case "payment_intent.succeeded":
         const checkoutSessionPayCompleted = event.data.object as {
           id: string;
           payment_intent: string;
@@ -106,6 +103,49 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
           return response.json({});
         }
         break;
+      //CHECKOUT IS CANCELLED
+      case "payment_intent.canceled":
+        const checkoutSessionCancelled = event.data.object as {
+          id: string;
+          payment_intent: string;
+        };
+        console.log("checkoutsessionCancelled: ", checkoutSessionCancelled);
+
+        if (
+          await prisma.order.updateMany({
+            where: {
+              paymentId: checkoutSessionCancelled.id,
+            },
+            data: {
+              status: "CANCELLED",
+            },
+          })
+        ) {
+          return response.json({});
+        }
+        break;
+
+      //REFUNDED
+      // case "charge.refunded":
+      //   const chargeREFUNDED = event.data.object as {
+      //     id: string;
+      //     payment_intent: string;
+      //   };
+      //   console.log("checkoutsessionCancelled: ", chargeREFUNDED);
+
+      //   if (
+      //     await prisma.order.updateMany({
+      //       where: {
+      //         paymentId: chargeREFUNDED.id,
+      //       },
+      //       data: {
+      //         status: "REFUNDED",
+      //       },
+      //     })
+      //   ) {
+      //     return response.json({});
+      //   }
+      //   break;
 
       default:
         console.log(`Unhandled event type ${event.type}`);

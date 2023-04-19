@@ -249,18 +249,18 @@ export const OrderRouter = createTRPCRouter({
           data: {
             paymentId: StripeOrder.id,
           },
-          //  include: {
-          //    Ticket: true,
-          //    Competition: {
-          //      include: {
-          //        Watches: {
-          //          include: {
-          //            images_url: true,
-          //          },
-          //        },
-          //      },
-          //    },
-          //  },
+          include: {
+            Ticket: true,
+            Competition: {
+              include: {
+                Watches: {
+                  include: {
+                    images_url: true,
+                  },
+                },
+              },
+            },
+          },
         });
 
         return {
