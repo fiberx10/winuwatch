@@ -237,7 +237,7 @@ export const OrderRouter = createTRPCRouter({
                 : {}
             ),
             success_url: `${getBaseUrl()}/Confirmation/${id}`,
-            cancel_url: `${getBaseUrl()}/CheckoutPage`,
+            cancel_url: `${getBaseUrl()}/Cancel/${id}`,
           }),
         ]);
         console.log(StripeOrder);
@@ -310,6 +310,27 @@ export const OrderRouter = createTRPCRouter({
         data: input,
         where: {
           id,
+        },
+      });
+    }),
+  updateStatus: publicProcedure
+    .input(z.object({ id: z.string(), status: z.nativeEnum(OrderStatus) }))
+    .mutation(async ({ ctx, input }) => {
+      return await ctx.prisma.order.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          status: input.status,
+        },
+      });
+    }),
+  removeTickets: publicProcedure
+    .input(z.string())
+    .mutation(async ({ ctx, input }) => {
+      await ctx.prisma.ticket.deleteMany({
+        where: {
+          orderId: input,
         },
       });
     }),

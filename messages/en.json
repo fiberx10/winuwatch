@@ -100,7 +100,9 @@
     "thank": "THANK YOU",
     "foryourorder": "FOR YOUR ORDER!",
     "confirm": "Your order has been confirmed .",
-    "confemail": "You will receive an email confirmation shortly."
+    "confemail": "You will receive an email confirmation shortly.",
+    "cancelled": "Your Order has been Cancelled",
+    "redirected": "you are being redirected shortly..."
   },
   "confirder": {
     "text": "We are pleased to inform you that your registration has been successfully received and processed. you have now officially entered in the competition",
