@@ -163,6 +163,9 @@ const CartComp = () => {
                   </h2>
                   <p>
                     {comp.reduction > 0 &&
+                      (comp.number_tickets === 5 ||
+                        comp.number_tickets === 10 ||
+                        comp.number_tickets === 20) &&
                       `${t("discount")}: \t${Formater(
                         comp.reduction *
                           comp.number_tickets *
