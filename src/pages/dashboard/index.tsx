@@ -1,7 +1,7 @@
 import DashboardComp from "@/components/dashboard/DashboardComp";
 import styles from "@/styles/Dashboard.module.css";
 import DashboardMainNav from "@/components/dashboard/DashboardMainNav";
-import { useStore as UseStore } from "@/components/Store";
+import { useStore as UseStore, useCart } from "@/components/Store";
 import DashboardNav from "@/components/dashboard/DashboardNav";
 import DashboardCompetitions from "@/components/dashboard/DashboardCompetitions";
 import DashboardWatches from "@/components/dashboard/DashboardWatches";
@@ -10,19 +10,39 @@ import DashboardWinners from "@/components/dashboard/DashboardWinners";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Head from "next/head";
 import { Button, Modal } from "react-bootstrap";
-import { useState } from "react";
-import Col from "react-bootstrap/Col";
+import { useEffect, useState } from "react";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import * as Yup from "yup";
 import { Formik } from "formik";
 import Image from "next/image";
+import { api } from "@/utils/api";
 
 export function ModalCheck() {
-  const [show, setShow] = useState(true);
+  const { authDate, setAuthDate } = useCart();
+  const [show, setShow] = useState(false);
+  const [error, setError] = useState("");
+  const { mutateAsync: auth, data } = api.DashAuth.auth.useMutation();
 
+  useEffect(() => {
+    // if (
+    //   authDate !== null
+    //     ? new Date().getTime() - new Date(authDate).getTime() < 10800000
+    //     : false
+    // ) {
+    //   setAuthDate(new Date());
+    // } else {
+    //   setShow(true);
+    //   setAuthDate(null);
+    // }
+    if (data === true) {
+      handleClose();
+    }
+    if (data === false) {
+      setError("Wrong password or username");
+    }
+  }, [data, authDate]);
   const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
   const SignupSchema = Yup.object().shape({
     username: Yup.string().required("Required"),
     password: Yup.string().required("Required"),
@@ -31,7 +51,6 @@ export function ModalCheck() {
     <Modal
       className="dash-modal"
       show={show}
-      onHide={handleClose}
       backdrop="static"
       keyboard={false}
     >
@@ -78,8 +97,13 @@ export function ModalCheck() {
               password: "",
             }}
             validationSchema={SignupSchema}
-            onSubmit={(values) => {
+            onSubmit={async (values) => {
               // same shape as initial values
+              await auth({
+                username: values.username,
+                password: values.password,
+              });
+
               console.log(values);
             }}
           >
@@ -104,6 +128,7 @@ export function ModalCheck() {
                     <Form.Label>Password</Form.Label>
                     <Form.Control
                       required
+                      type="password"
                       name="password"
                       onChange={handleChange}
                       placeholder="Password"
@@ -117,6 +142,7 @@ export function ModalCheck() {
                   style={{ display: "grid", placeItems: "center" }}
                   className="mb-3"
                 >
+                  {error && <p style={{ color: "red" }}>{error}</p>}
                   <Button
                     style={{
                       width: "95%",

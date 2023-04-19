@@ -6,6 +6,7 @@ import {
   OrderRouter,
   TicketsRouter,
   WinnersRouter,
+  AuthRouter,
 } from "@/server/api/routers";
 
 /**
@@ -19,6 +20,7 @@ export const appRouter = createTRPCRouter({
   Order: OrderRouter,
   Question: QuestionRouter,
   Tickets: TicketsRouter,
+  DashAuth: AuthRouter,
   Winners: WinnersRouter,
 });
 

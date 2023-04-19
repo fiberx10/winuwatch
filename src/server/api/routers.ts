@@ -104,7 +104,16 @@ export const TicketsRouter = createTRPCRouter({
       })
   ),
 });
-
+export const AuthRouter = createTRPCRouter({
+  auth: publicProcedure
+    .input(z.object({ username: z.string(), password: z.string() }))
+    .mutation(({ input }) => {
+      const user = { username: "admin", password: "1234" };
+      return (
+        input.username === user.username && input.password === user.password
+      );
+    }),
+});
 export const OrderRouter = createTRPCRouter({
   getAll: publicProcedure.input(z.array(z.string()).optional()).query(
     async ({ ctx, input }) =>
