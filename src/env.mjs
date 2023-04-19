@@ -45,7 +45,7 @@ const processEnv = {
   SMTP_PORT: process.env.SMTP_PORT,
   SMTP_USER: process.env.SMTP_USER,
   SMTP_PASSWORD: process.env.SMTP_PASSWORD,
-  HOST: process.env.NEXTAUTH_SECRET,
+  HOST: process.env.NEXTAUTH_URL,
 };
 
 // Don't touch the part below
