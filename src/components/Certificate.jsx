@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "../styles/Home.module.css";
-import Image from "next/image";
+import Certif from "@/components/certif";
 import { useTranslations } from "next-intl";
 
 const Certificate = () => {
@@ -8,15 +8,7 @@ const Certificate = () => {
   return (
     <div className={styles.certifContainer}>
       <h1>{t("certiftitle")}</h1>
-      <div className={styles.certifBox}>
-        <Image
-          width={238}
-          height={363}
-          priority={true}
-          src="/images/certificate.svg"
-          alt="certificate"
-        />
-      </div>
+      <Certif />
       <h2>{t("certifdesc")}</h2>
     </div>
   );
