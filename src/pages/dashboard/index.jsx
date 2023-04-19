@@ -28,7 +28,13 @@ export function ModalCheck() {
     password: Yup.string().required("Required"),
   });
   return (
-    <Modal show={show} onHide={handleClose} backdrop="static" keyboard={false}>
+    <Modal
+      className="dash-modal"
+      show={show}
+      onHide={handleClose}
+      backdrop="static"
+      keyboard={false}
+    >
       <Modal.Header>
         <Modal.Title
           style={{
