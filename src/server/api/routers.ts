@@ -219,9 +219,7 @@ export const OrderRouter = createTRPCRouter({
                       currency: "gbp",
                       product_data: {
                         name: comp.Watches.model,
-                        images: comp.Watches.images_url.map(
-                          ({ url }) => url
-                        )
+                        images: comp.Watches.images_url.map(({ url }) => url),
                       },
                       unit_amount: Math.floor(
                         comp.ticket_price *
@@ -242,46 +240,31 @@ export const OrderRouter = createTRPCRouter({
             cancel_url: `${getBaseUrl()}/CheckoutPage`,
           }),
         ]);
-        /*
-        const dataUp = await ctx.prisma.order.update({
-          where: {
-            id,
-          },
-          data: {
-            paymentId:
-              typeof payment_intent === "string" ? payment_intent : undefined,
-          },
-          include: {
-            Ticket: true,
-            Competition: {
-              include: {
-                Watches: {
-                  include: {
-                    images_url: true,
-                  },
-                },
-              },
-            },
-          },
-        });
-        await Transporter.sendMail({
-          from: "noreply@winuwatch.uk",
-          to: data.email,
-          subject: `Order Confirmation - Winuwatch #${dataUp?.id || "000000"}`,
-          html: Email(dataUp),
-        });
-        */
+        console.log(StripeOrder);
+
         await ctx.prisma.order.update({
           where: {
-            id,
+            id: Order.id,
           },
           data: {
-            paymentId: StripeOrder.payment_intent as string,
+            paymentId: StripeOrder.id,
           },
+          //  include: {
+          //    Ticket: true,
+          //    Competition: {
+          //      include: {
+          //        Watches: {
+          //          include: {
+          //            images_url: true,
+          //          },
+          //        },
+          //      },
+          //    },
+          //  },
         });
+
         return {
           id,
-          payment_intent: StripeOrder.payment_intent,
           url: StripeOrder.url,
         };
       } catch (e) {
