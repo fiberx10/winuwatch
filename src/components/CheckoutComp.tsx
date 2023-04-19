@@ -278,12 +278,12 @@ const CheckoutComp = () => {
                                 fontSize: "12px",
                               }}
                             >
-                              (MM/DD/YYYY)
+                              (DD/MM/YYYY)
                             </label>
                             <Datetime
                               utc={true}
                               input={true}
-                              dateFormat={"MM/DD/YYYY"}
+                              dateFormat={"DD/MM/YYYY"}
                               timeFormat={false}
                               initialValue={new Date("2000-01-01")}
                               isValidDate={(currentDate) =>
