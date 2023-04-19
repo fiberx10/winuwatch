@@ -39,26 +39,30 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
 
     switch (event.type) {
       //PAYMENT FAILED OR CANCELLED
-      // case "payment_intent.payment_failed":
-      //   const checkoutSessionFailed = event.data.object as {
-      //     id: string;
-      //     payment_intent: string;
-      //   };
-      //   console.log("checkoutsessionFailed: ", checkoutSessionFailed);
+      case "payment_intent.payment_failed":
+        const checkoutSessionFailed = event.data.object as {
+          id: string;
+          payment_intent: string;
+        };
+        console.log("checkoutsessionFailed: ", checkoutSessionFailed);
 
-      //   if (
-      //     await prisma.order.updateMany({
-      //       where: {
-      //         paymentId: checkoutSessionFailed.id,
-      //       },
-      //       data: {
-      //         status: "CANCELLED",
-      //       },
-      //     })
-      //   ) {
-      //     return response.json({});
-      //   }
-      //   break;
+        await prisma.order.updateMany({
+          where: {
+            paymentId: checkoutSessionFailed.id,
+          },
+          data: {
+            status: "CANCELLED",
+          },
+        });
+        // THIS CASE CHANGES STATUS IF PAYMENT FAILS BUT DOES NOT DELETE TICKETS
+        // TODO:
+        //  await prisma.ticket.deleteMany({
+        //   where: {
+        //     paymentId: checkoutSessionFailed.id,
+        //   }
+        //  })
+
+        break;
       // PAYMENT SUCCEEDED
       case "payment_intent.succeeded":
         const checkoutSessionPayCompleted = event.data.object as {
