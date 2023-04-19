@@ -445,6 +445,49 @@ const CheckoutComp = () => {
                                     )
                                   )}
                                 </span>
+                                {values.comps[values.comps.length - 1] ? (
+                                  <div className={styles.OrdersFlexBotSum}>
+                                    <div className={styles.orderSum}>
+                                      <p>{`TOTAL`}</p>
+                                      <div className={styles.totalOrder}>
+                                        <span>
+                                          {Formater(
+                                            values.comps.reduce(
+                                              (acc, c) =>
+                                                acc +
+                                                c.number_tickets *
+                                                  c.price_per_ticket *
+                                                  (1 - c.reduction),
+                                              0
+                                            ),
+                                            router.locale
+                                          )}
+                                        </span>
+                                        <p
+                                          style={{
+                                            textDecoration: "underline",
+                                            color: "#987358",
+                                            fontWeight: "300",
+                                            fontSize: "10px",
+                                            textTransform: "uppercase",
+                                            cursor: "pointer",
+                                          }}
+                                          onClick={() => {
+                                            reset();
+                                            setValues({
+                                              ...values,
+                                              comps: [],
+                                            });
+                                          }}
+                                        >
+                                          {t("clearcart")}
+                                        </p>
+                                      </div>
+                                    </div>
+                                  </div>
+                                ) : (
+                                  ""
+                                )}
                               </div>
                               {/* <div className={styles.Counter}>
                               <div
@@ -526,42 +569,8 @@ const CheckoutComp = () => {
                           );
                         })}
                       </div>
-                      <p
-                        style={{
-                          textDecoration: "underline",
-                          color: "#987358",
-                          fontWeight: "300",
-                          fontSize: "10px",
-                          textTransform: "uppercase",
-                          cursor: "pointer",
-                        }}
-                        onClick={() => {
-                          reset();
-                          setValues({
-                            ...values,
-                            comps: [],
-                          });
-                        }}
-                      >
-                        {t("clearcart")}
-                      </p>
+
                       <div className={styles.orderSumBot}>
-                        <div className={styles.orderSum}>
-                          <p>{`TOTAL`}</p>
-                          <span>
-                            {Formater(
-                              values.comps.reduce(
-                                (acc, c) =>
-                                  acc +
-                                  c.number_tickets *
-                                    c.price_per_ticket *
-                                    (1 - c.reduction),
-                                0
-                              ),
-                              router.locale
-                            )}
-                          </span>
-                        </div>
                         {values.paymentMethod === "PAYPAL" ? (
                           <PayPalScriptProvider
                             options={{
