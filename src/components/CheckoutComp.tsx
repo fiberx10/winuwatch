@@ -17,7 +17,7 @@ import PhoneInput from "react-phone-number-input";
 import * as Yup from "yup";
 import "react-phone-number-input/style.css";
 import Loader from "./Loader";
-import 'moment/locale/fr';
+import "moment/locale/fr";
 
 const CheckoutComp = () => {
   const router = useRouter();
@@ -278,11 +278,12 @@ const CheckoutComp = () => {
                                 fontSize: "12px",
                               }}
                             >
-                              (DD/MM/YYYY)
+                              (MM/DD/YYYY)
                             </label>
                             <Datetime
                               utc={true}
                               input={true}
+                              dateFormat={"MM/DD/YYYY"}
                               timeFormat={false}
                               initialValue={new Date("2000-01-01")}
                               isValidDate={(currentDate) =>
@@ -294,7 +295,17 @@ const CheckoutComp = () => {
                                 required: true,
                                 max: "2005-01-01",
                               }}
-                              onChange={(value) => setFieldValue("date", value)}
+                              onChange={(value) => {
+                                if (String(value).includes("-")) {
+                                  setError("Please enter correct date format");
+                                }
+                                if (String(value).length < 10) {
+                                  setError("Please enter correct date format");
+                                } else {
+                                  setError("");
+                                }
+                                setFieldValue("date", value);
+                              }}
                             />
 
                             {
@@ -434,7 +445,6 @@ const CheckoutComp = () => {
                                     )
                                   )}
                                 </span>
-
                               </div>
                               {/* <div className={styles.Counter}>
                               <div
