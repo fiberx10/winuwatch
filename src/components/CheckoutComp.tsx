@@ -17,6 +17,7 @@ import PhoneInput from "react-phone-number-input";
 import * as Yup from "yup";
 import "react-phone-number-input/style.css";
 import Loader from "./Loader";
+import 'moment/locale/fr';
 
 const CheckoutComp = () => {
   const router = useRouter();
@@ -277,7 +278,7 @@ const CheckoutComp = () => {
                                 fontSize: "12px",
                               }}
                             >
-                              (MM/DD/YYYY)
+                              (DD/MM/YYYY)
                             </label>
                             <Datetime
                               utc={true}
@@ -433,15 +434,7 @@ const CheckoutComp = () => {
                                     )
                                   )}
                                 </span>
-                                <h3>
-                                  {t("remaingtickets")}:{" "}
-                                  {values.comps.map(
-                                    (comp) =>
-                                      ComptetionData.remaining_tickets &&
-                                      ComptetionData.remaining_tickets -
-                                        comp.number_tickets
-                                  )}
-                                </h3>
+
                               </div>
                               {/* <div className={styles.Counter}>
                               <div

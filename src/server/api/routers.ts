@@ -119,13 +119,18 @@ export const OrderRouter = createTRPCRouter({
     async ({ ctx, input }) =>
       await ctx.prisma.order.findMany({
         where: {
-          Competition: {
+          Ticket: {
             some: {
-              id: {
-                in: input,
+              Competition: {
+                id: {
+                  in: input,
+                },
               },
             },
           },
+        },
+        orderBy: {
+          createdAt: "desc",
         },
         include: {
           Ticket: true,
