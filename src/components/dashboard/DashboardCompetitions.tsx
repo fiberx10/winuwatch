@@ -16,6 +16,7 @@ import Datetime from "react-datetime";
 import "react-datetime/css/react-datetime.css";
 import UpcomingComps from "./UpcomingComps";
 import Loader from "../Loader";
+import * as Yup from "yup";
 
 const FixDate = (date: moment.MomentInput) =>
   moment(date).tz("Europe/London").toDate();
@@ -69,6 +70,9 @@ const DashboardCompetitions = () => {
     api.Competition.add.useMutation();
   const { mutateAsync: updateComp, isError: updateError } =
     api.Competition.updateOne.useMutation();
+  const FormSchema = Yup.object().shape({
+    watchesId: Yup.string().required("Required").notOneOf(["0"]),
+  });
   return (
     <div className={styles.DashCompsMain}>
       <div className={styles.dashCompsTopHeader}>
@@ -975,6 +979,7 @@ const DashboardCompetitions = () => {
           <Modal.Title>Add a Competition</Modal.Title>
         </Modal.Header>
         <Formik
+          validationSchema={FormSchema}
           onSubmit={async (values, actions) => {
             setAdd(false);
             console.log("Form submitted:", values);
@@ -1011,7 +1016,7 @@ const DashboardCompetitions = () => {
             remaining_tickets: 0,
           }}
         >
-          {({ handleSubmit, handleChange, setFieldValue }) => (
+          {({ handleSubmit, handleChange, setFieldValue, errors, touched }) => (
             <Form onSubmit={handleSubmit}>
               <Modal.Body>
                 <Row className="mb-3">
@@ -1105,6 +1110,7 @@ const DashboardCompetitions = () => {
                     name="watchesId"
                     onChange={handleChange}
                   >
+                    <option value={"0"}>Select a Watch</option>
                     {watches?.map((watch, i) => {
                       return (
                         <option key={i} value={watch.id}>
@@ -1113,6 +1119,9 @@ const DashboardCompetitions = () => {
                       );
                     })}
                   </Form.Select>
+                  {errors.watchesId && touched.watchesId ? (
+                    <div style={{ color: "red" }}>{errors.watchesId}</div>
+                  ) : null}
                 </Form.Group>
 
                 <Row className="mb-3">
