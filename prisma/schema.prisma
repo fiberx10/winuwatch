@@ -150,6 +150,8 @@ enum OrderStatus {
   PENDING
   CONFIRMED
   CANCELLED
+  REFUNDED
+  INCOMPLETE
 }
 
 enum PaymentMethod {
