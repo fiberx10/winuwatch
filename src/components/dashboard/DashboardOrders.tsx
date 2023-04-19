@@ -7,7 +7,7 @@ import { GoPrimitiveDot } from "react-icons/go";
 import { useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import "react-datetime/css/react-datetime.css";
-import { Formater } from "@/utils";
+import { Formater, DateFormater } from "@/utils";
 import Box from "@mui/material/Box";
 import Collapse from "@mui/material/Collapse";
 import IconButton from "@mui/material/IconButton";
@@ -65,8 +65,8 @@ const DashboardOrders = () => {
 
   const { data: orders } = api.Order.getAll.useQuery([show.data]);
 
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -279,7 +279,7 @@ const DashboardOrders = () => {
                                         {row.zip}
                                       </TableCell>
                                       <TableCell align="right">
-                                        {row.date.toDateString()}
+                                        {DateFormater(row.date)}
                                       </TableCell>
                                       <TableCell align="right">
                                         {row.checkedEmail ? "Yes" : "No"}
@@ -288,7 +288,7 @@ const DashboardOrders = () => {
                                         {row.checkedTerms ? "Yes" : "No"}
                                       </TableCell>
                                       <TableCell align="right">
-                                        {row.createdAt.toUTCString()}
+                                        {DateFormater(row.createdAt)}
                                       </TableCell>
                                     </TableRow>
                                     <TableRow>

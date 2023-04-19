@@ -119,13 +119,18 @@ export const OrderRouter = createTRPCRouter({
     async ({ ctx, input }) =>
       await ctx.prisma.order.findMany({
         where: {
-          Competition: {
+          Ticket: {
             some: {
-              id: {
-                in: input,
+              Competition: {
+                id: {
+                  in: input,
+                },
               },
             },
           },
+        },
+        orderBy: {
+          createdAt: "desc",
         },
         include: {
           Ticket: true,
@@ -175,15 +180,6 @@ export const OrderRouter = createTRPCRouter({
               ...data,
               id,
               status: OrderStatus.PENDING,
-              Competition: {
-                connect: {
-                  id: comps
-                    .map(({ compID }) => compID)
-                    .filter(
-                      (value, index, self) => self.indexOf(value) === index
-                    )[0], //TODO: FIx this later
-                },
-              },
               Ticket: {
                 createMany: {
                   data: input.comps
@@ -220,13 +216,21 @@ export const OrderRouter = createTRPCRouter({
               comp.Watches
                 ? {
                     price_data: {
-                      //automatic_tax : true,
                       currency: "gbp",
                       product_data: {
                         name: comp.Watches.model,
-                        //images: [`${getBaseUrl()+comp.Watches.images_url[0]}`],
+                        images: comp.Watches.images_url.map(
+                          ({ url }) => url
+                        )
                       },
-                      unit_amount: Math.floor(comp.ticket_price * 100), // in cents
+                      unit_amount: Math.floor(
+                        comp.ticket_price *
+                          100 *
+                          (1 -
+                            (input.comps.find(
+                              ({ compID }) => compID === comp.id
+                            )?.reduction || 0))
+                      ), // in cents
                     },
                     quantity:
                       input.comps.find((item) => item.compID === comp.id)
