@@ -142,22 +142,33 @@ const DashboardOrders = () => {
                   </span>
                 </div>
                 {show.data === comp.id && (
-                  <Modal size="xl" show={show.modal} onHide={handleClose}>
+                  <Modal
+                    style={{ width: "100vw" }}
+                    size="xl"
+                    show={show.modal}
+                    onHide={handleClose}
+                  >
                     <Modal.Header closeButton>
                       <Modal.Title>Manage your competition</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                       <Paper sx={{ width: "100%", mb: 2 }}>
                         <TableContainer component={Paper}>
-                          <Table aria-label="collapsible table">
+                          <Table
+                            style={{ tableLayout: "auto" }}
+                            aria-label="collapsible table"
+                          >
                             <TableHead>
                               <TableRow>
-                                <TableCell />
                                 <TableCell>
                                   <p style={{ marginBottom: "0" }}>Full Name</p>
                                 </TableCell>
-                                <TableCell align="right">
-                                  <p style={{ marginBottom: "0" }}>Country</p>
+                                <TableCell align="center">
+                                  <p style={{ marginBottom: "0" }}>
+                                    Country
+                                    <br />
+                                    Town
+                                  </p>
                                 </TableCell>
                                 <TableCell align="right">
                                   <p style={{ marginBottom: "0" }}>
@@ -172,17 +183,10 @@ const DashboardOrders = () => {
                                 <TableCell align="right">
                                   <p style={{ marginBottom: "0" }}>Status</p>
                                 </TableCell>
-                                <TableCell align="right">
-                                  <p style={{ marginBottom: "0" }}>Email</p>
-                                </TableCell>
-                                <TableCell align="right">
-                                  <p style={{ marginBottom: "0" }}>Phone</p>
-                                </TableCell>
-                                <TableCell align="right">
-                                  <p style={{ marginBottom: "0" }}>Address</p>
-                                </TableCell>
-                                <TableCell align="right">
-                                  <p style={{ marginBottom: "0" }}>Town</p>
+                                <TableCell align="center">
+                                  <p style={{ marginBottom: "0" }}>
+                                    Email - Phone - Address
+                                  </p>
                                 </TableCell>
                                 <TableCell align="right">
                                   <p style={{ marginBottom: "0" }}>Zip</p>
@@ -233,26 +237,14 @@ const DashboardOrders = () => {
                                         },
                                       }}
                                     >
-                                      <TableCell>
-                                        <IconButton
-                                          aria-label="expand row"
-                                          size="small"
-                                          onClick={() =>
-                                            setOpen({
-                                              opened: !open.opened,
-                                              orderID: row.id,
-                                            })
-                                          }
-                                        >
-                                          <IoIosArrowDown />
-                                        </IconButton>
-                                      </TableCell>
                                       <TableCell component="th" scope="row">
                                         {row.first_name} {row.last_name}
                                       </TableCell>
 
                                       <TableCell align="right">
                                         {row.country}
+                                        <br />
+                                        {row.town}
                                       </TableCell>
                                       <TableCell align="right">
                                         {row.paymentMethod}
@@ -264,17 +256,21 @@ const DashboardOrders = () => {
                                         {row.status}
                                       </TableCell>
                                       <TableCell align="right">
-                                        {row.email}
+                                        <p
+                                          style={{
+                                            margin: "0",
+                                          }}
+                                        >
+                                          {row.email}
+                                          <br />
+                                          {row.phone ? row.phone : "No Phone"}
+                                          <br />
+                                          {row.address
+                                            ? row.address
+                                            : "No Address"}
+                                        </p>
                                       </TableCell>
-                                      <TableCell align="right">
-                                        {row.phone}
-                                      </TableCell>
-                                      <TableCell align="right">
-                                        {row.address}
-                                      </TableCell>
-                                      <TableCell align="right">
-                                        {row.town}
-                                      </TableCell>
+
                                       <TableCell align="right">
                                         {row.zip}
                                       </TableCell>

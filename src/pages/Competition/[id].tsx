@@ -264,16 +264,21 @@ export default function Competition({
                           <button
                             onClick={() => {
                               competitions.length > 0
-                                ? competitions.filter(
-                                    (comp) =>
-                                      comp.compID === data.id &&
-                                      updateComp({
-                                        reduction: counter.reduction,
-                                        compID: data.id,
-                                        number_tickets:
-                                          counter.value + comp.number_tickets,
-                                        price_per_ticket: data.ticket_price,
-                                      })
+                                ? competitions.filter((comp) =>
+                                    comp.compID === data.id
+                                      ? updateComp({
+                                          reduction: counter.reduction,
+                                          compID: data.id,
+                                          number_tickets:
+                                            counter.value + comp.number_tickets,
+                                          price_per_ticket: data.ticket_price,
+                                        })
+                                      : addComp({
+                                          reduction: counter.reduction,
+                                          compID: data.id,
+                                          number_tickets: counter.value,
+                                          price_per_ticket: data.ticket_price,
+                                        })
                                   )
                                 : addComp({
                                     reduction: counter.reduction,

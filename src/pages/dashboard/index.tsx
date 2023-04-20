@@ -19,8 +19,8 @@ import Image from "next/image";
 import { api } from "@/utils/api";
 
 export function ModalCheck() {
-  const { authDate, setAuthDate } = useCart();
-  const [show, setShow] = useState(false);
+  const { auth: authen, setAuth } = useCart();
+  const [show, setShow] = useState(authen === true ? false : true);
   const [error, setError] = useState("");
   const { mutateAsync: auth, data } = api.DashAuth.auth.useMutation();
 
@@ -35,13 +35,15 @@ export function ModalCheck() {
     //   setShow(true);
     //   setAuthDate(null);
     // }
+
     if (data === true) {
-      handleClose();
+      setShow(false);
+      setAuth(true);
     }
     if (data === false) {
       setError("Wrong password or username");
     }
-  }, [data, authDate]);
+  }, [data, authen, setAuth]);
   const handleClose = () => setShow(false);
   const SignupSchema = Yup.object().shape({
     username: Yup.string().required("Required"),
@@ -53,6 +55,7 @@ export function ModalCheck() {
       show={show}
       backdrop="static"
       keyboard={false}
+      style={{ backgroundColor: "white" }}
     >
       <Modal.Header>
         <Modal.Title

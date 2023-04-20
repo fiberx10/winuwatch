@@ -1,0 +1,19 @@
+.CancelWrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 50vh;
+  gap: 1rem;
+}
+.CancelWrap h1 {
+  font-family: "Iskry", sans-serif;
+  text-transform: uppercase;
+  text-align: center;
+}
+.loader {
+  display: flex;
+  flex-direction: row-reverse;
+  gap: 1rem;
+  align-items: center;
+}

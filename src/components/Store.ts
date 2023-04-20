@@ -9,10 +9,10 @@ interface Comp {
 }
 
 interface RootState {
-  modeleDate: Date | null;
-  setModeleDate: (date: Date | null) => void;
-  authDate: Date | null;
-  setAuthDate: (date: Date | null) => void;
+  // modeleDate: Date | null;
+  // setModeleDate: (date: Date | null) => void;
+  auth: boolean;
+  setAuth: (auth: boolean) => void;
   competitions: Comp[];
   addComp: ({
     compID,
@@ -68,10 +68,10 @@ export const useCart = create<RootState>()(
   devtools(
     persist(
       (set, get) => ({
-        modeleDate: null,
-        setModeleDate: (date) => set({ modeleDate: date }),
-        authDate: null,
-        setAuthDate: (date) => set({ authDate: date }),
+        // modeleDate: null,
+        // setModeleDate: (date) => set({ modeleDate: date }),
+        auth: false,
+        setAuth: (auth) => set({ auth: auth }),
         competitions: [],
         cardDetails: () => {
           const { competitions } = get();

@@ -101,7 +101,9 @@
     "thank": "MERCI",
     "foryourorder": "POUR VOTRE COMMANDE !",
     "confirm": "Votre commande a été confirmée.",
-    "confemail": "Vous allez bientôt recevoir un mail de confirmation."
+    "confemail": "Vous allez bientôt recevoir un mail de confirmation.",
+    "cancelled": "Votre commande a été annulée",
+    "redirected": "vous allez être redirigé sous peu..."
   },
   "confirder": {
     "text": "Nous avons le plaisir de vous informer que votre inscription a été reçue et traitée avec succès. vous êtes désormais officiellement inscrit au concoursNous avons le plaisir de vous informer que votre inscription a été reçue et traitée avec succès. vous êtes désormais officiellement inscrit au concours",

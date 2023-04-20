@@ -663,9 +663,6 @@
 .certifBox {
   display: flex;
   align-items: center;
-
-  background-repeat: no-repeat;
-  background-position: -25% 20%;
   flex-direction: column;
   text-align: center;
   justify-content: center;
@@ -1313,6 +1310,19 @@
   .footerLogo {
     margin-right: 10px;
   }
+  .svg {
+    width: 100% !important;
+    height: 30rem !important;
+    margin: 0px 20px;
+  }
+  .svgCert {
+    width: 100% !important;
+    height: 100% !important;
+  }
+  .svgCert2 {
+    width: 58.5%;
+    height: 380px;
+  }
 }
 @media only screen and (min-width: 700px) and (max-width: 930px) {
   .HeaderTit h1 {
@@ -1524,6 +1534,22 @@
   }
   .menusGrid {
     gap: 1rem;
+  }
+  .svg {
+    width: 100% !important;
+    height: 60rem !important;
+  }
+  .svgCert {
+    width: 100% !important;
+    height: 100% !important;
+  }
+  .svgCert2 {
+    width: 260px !important;
+    height: 380px !important;
+  }
+  .certifContainer {
+    padding: 20px 0px;
+    gap: 20px;
   }
 }
 @media only screen and (min-width: 1600px) {

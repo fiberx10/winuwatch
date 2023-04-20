@@ -219,9 +219,7 @@ export const OrderRouter = createTRPCRouter({
                       currency: "gbp",
                       product_data: {
                         name: comp.Watches.model,
-                        images: comp.Watches.images_url.map(
-                          ({ url }) => url
-                        )
+                        images: comp.Watches.images_url.map(({ url }) => url),
                       },
                       unit_amount: Math.floor(
                         comp.ticket_price *
@@ -239,17 +237,17 @@ export const OrderRouter = createTRPCRouter({
                 : {}
             ),
             success_url: `${getBaseUrl()}/Confirmation/${id}`,
-            cancel_url: `${getBaseUrl()}/CheckoutPage`,
+            cancel_url: `${getBaseUrl()}/Cancel/${id}`,
           }),
         ]);
-        /*
-        const dataUp = await ctx.prisma.order.update({
+        console.log(StripeOrder);
+
+        await ctx.prisma.order.update({
           where: {
-            id,
+            id: Order.id,
           },
           data: {
-            paymentId:
-              typeof payment_intent === "string" ? payment_intent : undefined,
+            paymentId: StripeOrder.id,
           },
           include: {
             Ticket: true,
@@ -264,24 +262,9 @@ export const OrderRouter = createTRPCRouter({
             },
           },
         });
-        await Transporter.sendMail({
-          from: "noreply@winuwatch.uk",
-          to: data.email,
-          subject: `Order Confirmation - Winuwatch #${dataUp?.id || "000000"}`,
-          html: Email(dataUp),
-        });
-        */
-        await ctx.prisma.order.update({
-          where: {
-            id,
-          },
-          data: {
-            paymentId: StripeOrder.payment_intent as string,
-          },
-        });
+
         return {
           id,
-          payment_intent: StripeOrder.payment_intent,
           url: StripeOrder.url,
         };
       } catch (e) {
@@ -327,6 +310,27 @@ export const OrderRouter = createTRPCRouter({
         data: input,
         where: {
           id,
+        },
+      });
+    }),
+  updateStatus: publicProcedure
+    .input(z.object({ id: z.string(), status: z.nativeEnum(OrderStatus) }))
+    .mutation(async ({ ctx, input }) => {
+      return await ctx.prisma.order.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          status: input.status,
+        },
+      });
+    }),
+  removeTickets: publicProcedure
+    .input(z.string())
+    .mutation(async ({ ctx, input }) => {
+      await ctx.prisma.ticket.deleteMany({
+        where: {
+          orderId: input,
         },
       });
     }),

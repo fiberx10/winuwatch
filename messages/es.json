@@ -100,7 +100,9 @@
     "thank": "¡GRACIAS!",
     "foryourorder": "POR TU PEDIDO!",
     "confirm": "Tu pedido ha sido confirmado.",
-    "confemail": "Recibirás una confirmación por correo electrónico en breve."
+    "confemail": "Recibirás una confirmación por correo electrónico en breve.",
+    "cancelled": "Su pedido ha sido cancelado",
+    "redirected": "usted está siendo redirigido en breve..."
   },
   "confirder": {
     "discount": "DESCUENTO",

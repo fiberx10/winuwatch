@@ -8,21 +8,15 @@ import { useState } from "react";
 import { Backdrop, Box, Fade, Modal } from "@mui/material";
 import { CloseOutlined } from "@ant-design/icons";
 import { useTranslations } from "next-intl";
+import Loader from "./Loader";
 const CartComp = () => {
   const t = useTranslations("cart");
   const [open, setOpen] = useState(false);
   const [wrong, setWrong] = useState(false);
   const handleClose = () => setOpen(false);
-  const {
-    cardDetails,
-    updateComp,
-    removeComp,
-    competitions,
-    modeleDate,
-    setModeleDate,
-  } = useCart();
+  const { cardDetails, updateComp, removeComp, competitions } = useCart();
 
-  const { data } = api.Competition.getAll.useQuery({
+  const { data, isLoading } = api.Competition.getAll.useQuery({
     ids: competitions.map(({ compID }) => compID),
   });
 
@@ -67,13 +61,23 @@ const CartComp = () => {
   );
   return (
     <div className={styles.CartMain}>
-      {data && competitions.length > 0 ? (
+      {isLoading ? (
+        <div
+          style={{
+            height: "40vh",
+            width: "100%",
+            display: "grid",
+            placeItems: "center",
+          }}
+        >
+          <Loader />
+        </div>
+      ) : data && competitions.length > 0 ? (
         competitions.map((comp, index) => {
           const ComptetionData = data.find(
             (compData) => compData.id === comp.compID
           );
           if (!ComptetionData || ComptetionData.Watches === null) return null;
-          console.log(comp);
 
           return (
             <div className={styles.Watch} key={index}>
@@ -163,6 +167,9 @@ const CartComp = () => {
                   </h2>
                   <p>
                     {comp.reduction > 0 &&
+                      (comp.number_tickets === 5 ||
+                        comp.number_tickets === 10 ||
+                        comp.number_tickets === 20) &&
                       `${t("discount")}: \t${Formater(
                         comp.reduction *
                           comp.number_tickets *
@@ -185,118 +192,106 @@ const CartComp = () => {
           {t("emptycart")}
         </h1>
       )}
+      {isLoading ? (
+        ""
+      ) : (
+        <>
+          <div className={styles.CartTotal}>
+            <p>{t("total")}</p>
+            <span>{Formater(totalCost)}</span>
+          </div>
+          <div className={styles.cartCheckoutCon}>
+            <button
+              onClick={() => {
+                setOpen(true);
+              }}
+            >
+              {t("checkout")}
+            </button>
+            <Modal
+              aria-labelledby="spring-modal-title"
+              aria-describedby="spring-modal-description"
+              open={open}
+              closeAfterTransition
+              slots={{ backdrop: Backdrop }}
+              slotProps={{
+                backdrop: {
+                  TransitionComponent: Fade,
+                },
+              }}
+            >
+              <Fade in={open}>
+                <Box className={styles.ModalBox} sx={style}>
+                  {competitions.length === 0 ? (
+                    <div className={styles.ModalBoxTopFlex}>
+                      <p id="spring-modal-description">{t("cartempty")}</p>
+                      <span onClick={handleClose}>
+                        <CloseOutlined />
+                      </span>
+                    </div>
+                  ) : (
+                    <>
+                      <div className={styles.ModalBoxTopFlex}>
+                        <p id="spring-modal-description">{t("tocontinue")}</p>
+                        <span onClick={handleClose}>
+                          <CloseOutlined />
+                        </span>
+                      </div>
+                      <div className={styles.modalQuestion}>
+                        {randomImage && (
+                          <Image
+                            src={randomImage.img}
+                            style={{
+                              objectFit: "cover",
+                            }}
+                            width={300}
+                            height={150}
+                            alt="questionImage"
+                          />
+                        )}
 
-      <div className={styles.CartTotal}>
-        <p>{t("total")}</p>
-        <span>{Formater(totalCost)}</span>
-      </div>
-      <div className={styles.cartCheckoutCon}>
-        <button
-          onClick={() => {
-            // check the validity date
-            if (
-              modeleDate !== null
-                ? new Date().getTime() - new Date(modeleDate).getTime() <
-                  10800000
-                : false
-            ) {
-              setModeleDate(new Date());
-              router
-                .push("/CheckoutPage")
-                .then(() => {
-                  return null;
-                })
-                .catch(() => {
-                  return null;
-                });
-            } else {
-              setOpen(true);
-              setModeleDate(null);
-            }
-          }}
-        >
-          {t("checkout")}
-        </button>
-        <Modal
-          aria-labelledby="spring-modal-title"
-          aria-describedby="spring-modal-description"
-          open={open}
-          closeAfterTransition
-          slots={{ backdrop: Backdrop }}
-          slotProps={{
-            backdrop: {
-              TransitionComponent: Fade,
-            },
-          }}
-        >
-          <Fade in={open}>
-            <Box className={styles.ModalBox} sx={style}>
-              {competitions.length === 0 ? (
-                <div className={styles.ModalBoxTopFlex}>
-                  <p id="spring-modal-description">{t("cartempty")}</p>
-                  <span onClick={handleClose}>
-                    <CloseOutlined />
-                  </span>
-                </div>
-              ) : (
-                <>
-                  <div className={styles.ModalBoxTopFlex}>
-                    <p id="spring-modal-description">{t("tocontinue")}</p>
-                    <span onClick={handleClose}>
-                      <CloseOutlined />
-                    </span>
-                  </div>
-                  <div className={styles.modalQuestion}>
-                    {randomImage && (
-                      <Image
-                        src={randomImage.img}
+                        <h1>{t("whatwatch")}</h1>
+                      </div>
+                      <h2
                         style={{
-                          objectFit: "cover",
-                        }}
-                        width={300}
-                        height={150}
-                        alt="questionImage"
-                      />
-                    )}
-
-                    <h1>{t("whatwatch")}</h1>
-                  </div>
-                  <h2
-                    style={{ display: wrong ? "flex" : "none", color: "red" }}
-                  >
-                    {t("wronganswer")}
-                  </h2>
-                  <div className={styles.questionsCon}>
-                    {questionImgs.map(({ name }, i) => (
-                      <button
-                        key={i}
-                        onClick={() => {
-                          if (randomImage?.name.includes(name)) {
-                            setModeleDate(new Date());
-                            router
-                              .push("/CheckoutPage")
-                              .then(() => {
-                                return null;
-                              })
-                              .catch((e) => {
-                                console.log(e);
-                                return null;
-                              });
-                          } else {
-                            setWrong(true);
-                          }
+                          display: wrong ? "flex" : "none",
+                          color: "red",
                         }}
                       >
-                        {name}
-                      </button>
-                    ))}
-                  </div>
-                </>
-              )}
-            </Box>
-          </Fade>
-        </Modal>
-      </div>
+                        {t("wronganswer")}
+                      </h2>
+                      <div className={styles.questionsCon}>
+                        {questionImgs.map(({ name }, i) => (
+                          <button
+                            key={i}
+                            onClick={() => {
+                              if (randomImage?.name.includes(name)) {
+                                router
+                                  .push("/CheckoutPage")
+                                  .then(() => {
+                                    return null;
+                                  })
+                                  .catch((e) => {
+                                    console.log(e);
+                                    return null;
+                                  });
+                              } else {
+                                setWrong(true);
+                              }
+                            }}
+                          >
+                            {name}
+                          </button>
+                        ))}
+                      </div>
+                    </>
+                  )}
+                </Box>
+              </Fade>
+            </Modal>
+          </div>
+        </>
+      )}
     </div>
   );
 };
