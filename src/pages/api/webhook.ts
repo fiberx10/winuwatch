@@ -34,12 +34,12 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
         response.status(400).send(`Webhook Error`)
       );
     }
-    const { id } = event.data.object as Stripe.PaymentIntent;
-    console.log("id : ", id);
-
+    console.log( event.data);
+    
     switch (event.type) {
       //PAYMENT FAILED OR CANCELLED
       case "payment_intent.payment_failed":
+        const { id } = event.data.object as Stripe.PaymentIntent;
         const checkoutSessionFailed = event.data.object as {
           id: string;
           payment_intent: string;
