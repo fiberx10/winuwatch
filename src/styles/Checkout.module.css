@@ -159,6 +159,7 @@
   height: 46px;
   background: #cbb9ac;
   border-radius: 4px;
+  transition: 0.3s all ease;
   border: 0;
   font-weight: 600;
   font-size: 16px;

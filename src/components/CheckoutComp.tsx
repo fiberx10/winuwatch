@@ -17,6 +17,7 @@ import PhoneInput from "react-phone-number-input";
 import * as Yup from "yup";
 import "react-phone-number-input/style.css";
 import Loader from "./Loader";
+import Loader2 from "./Loader2";
 import "moment/locale/fr";
 
 const CheckoutComp = () => {
@@ -40,7 +41,6 @@ const CheckoutComp = () => {
     );
   };
   const [error, setError] = useState<string | undefined>();
-  const [isNotConfirmed, setIsNotConfirmed] = useState<boolean>(false);
   const { totalCost } = cardDetails();
 
   const FormSchema = Yup.object().shape({
@@ -112,8 +112,6 @@ const CheckoutComp = () => {
                 checkedTerms: false,
               }}
               onSubmit={async (values, actions) => {
-                // disable the confirm button to prevent duplicate messages
-                setIsNotConfirmed(true);
                 //if a value in the object values is undefined, it will not be sent to the server
                 console.log("Form submitted:", values);
                 setLoading(true);
@@ -138,7 +136,7 @@ const CheckoutComp = () => {
                   setLoading(false);
                   await router.push(url);
                 }
-                setError(error || t("error"));
+                setError(error);
                 console.log(error);
                 // const res = CreateOrderSchema.safeParse(values);
 
@@ -642,14 +640,22 @@ const CheckoutComp = () => {
                           </PayPalScriptProvider>
                         ) : (
                           <button
-                            disabled={loading}
+                            disabled={loading || error ? true : false}
+                            style={{
+                              backgroundColor: error
+                                ? "rgba(30, 30, 30, 0.3)"
+                                : loading
+                                ? "#cbb9ac"
+                                : "#cbb9ac",
+                              cursor: loading || error ? "default" : "pointer",
+                            }}
                             type="submit"
                             onClick={() => {
                               if (!values.checkedTerms)
                                 return alert(`${t("shouldacceptterms")}`);
                             }}
                           >
-                            {t("confirmorder")}
+                            {loading ? <Loader2 /> : t("confirmorder")}
                           </button>
                         )}
                       </div>
