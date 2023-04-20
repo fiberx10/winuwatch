@@ -163,6 +163,9 @@ const CartComp = () => {
                   </h2>
                   <p>
                     {comp.reduction > 0 &&
+                      (comp.number_tickets === 5 ||
+                        comp.number_tickets === 10 ||
+                        comp.number_tickets === 20) &&
                       `${t("discount")}: \t${Formater(
                         comp.reduction *
                           comp.number_tickets *
@@ -193,26 +196,7 @@ const CartComp = () => {
       <div className={styles.cartCheckoutCon}>
         <button
           onClick={() => {
-            // check the validity date
-            if (
-              modeleDate !== null
-                ? new Date().getTime() - new Date(modeleDate).getTime() <
-                  10800000
-                : false
-            ) {
-              setModeleDate(new Date());
-              router
-                .push("/CheckoutPage")
-                .then(() => {
-                  return null;
-                })
-                .catch(() => {
-                  return null;
-                });
-            } else {
-              setOpen(true);
-              setModeleDate(null);
-            }
+            setOpen(true);
           }}
         >
           {t("checkout")}
@@ -272,7 +256,6 @@ const CartComp = () => {
                         key={i}
                         onClick={() => {
                           if (randomImage?.name.includes(name)) {
-                            setModeleDate(new Date());
                             router
                               .push("/CheckoutPage")
                               .then(() => {

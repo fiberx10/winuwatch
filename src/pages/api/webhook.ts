@@ -63,6 +63,29 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
         //  })
 
         break;
+      //CHECKOUT SESSION PAYMENT FAILED
+      case "checkout.session.async_payment_failed":
+        const checkoutSessionPayFailed = event.data.object as {
+          id: string;
+          payment_intent: string;
+        };
+        console.log("checkoutSessionPayFailed: ", checkoutSessionPayFailed);
+
+        await prisma.order.updateMany({
+          where: {
+            paymentId: checkoutSessionPayFailed.id,
+          },
+          data: {
+            status: "CANCELLED",
+          },
+        });
+      // THIS CASE CHANGES STATUS IF PAYMENT FAILS BUT DOES NOT DELETE TICKETS
+      // TODO:
+      //  await prisma.ticket.deleteMany({
+      //   where: {
+      //     id: must be orderID,
+      //   }
+      //  })
       // PAYMENT SUCCEEDED
       case "payment_intent.succeeded":
         const checkoutSessionPayCompleted = event.data.object as {
@@ -82,10 +105,9 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
             },
           })
         ) {
-          return response.json({});
+          break;
         }
-        break;
-      // CHECKOUT IS COMPLETE
+        // CHECKOUT IS COMPLETE
       case "checkout.session.completed":
         const checkoutSessionCompleted = event.data.object as {
           id: string;
@@ -104,9 +126,8 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
             },
           })
         ) {
-          return response.json({});
+          break;
         }
-        break;
       //CHECKOUT IS CANCELLED
       case "payment_intent.canceled":
         const checkoutSessionCancelled = event.data.object as {
@@ -125,9 +146,8 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
             },
           })
         ) {
-          return response.json({});
+         break;
         }
-        break;
 
       //REFUNDED
       // case "charge.refunded":

@@ -86,10 +86,15 @@
 .OrdersFlex {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 1rem;
+}
+.totalOrder {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 }
 .orderImg {
-  width: 106px;
+  width: 20%;
   height: 105px;
   object-fit: cover;
   box-shadow: 0px 4px 30px -6px rgba(0, 0, 0, 0.1);
@@ -97,7 +102,7 @@
 .orderItem {
   display: flex;
   align-items: center;
-  gap: 2rem;
+  gap: 1rem;
 }
 .Counter {
   display: flex;
@@ -204,7 +209,7 @@
   cursor: pointer;
 }
 .orderTit {
-  width: 100%;
+  width: 80%;
 }
 .orderTit h3 {
   font-weight: 500;

@@ -17,7 +17,7 @@ import PhoneInput from "react-phone-number-input";
 import * as Yup from "yup";
 import "react-phone-number-input/style.css";
 import Loader from "./Loader";
-import 'moment/locale/fr';
+import "moment/locale/fr";
 
 const CheckoutComp = () => {
   const router = useRouter();
@@ -283,6 +283,7 @@ const CheckoutComp = () => {
                             <Datetime
                               utc={true}
                               input={true}
+                              dateFormat={"DD/MM/YYYY"}
                               timeFormat={false}
                               initialValue={new Date("2000-01-01")}
                               isValidDate={(currentDate) =>
@@ -294,7 +295,17 @@ const CheckoutComp = () => {
                                 required: true,
                                 max: "2005-01-01",
                               }}
-                              onChange={(value) => setFieldValue("date", value)}
+                              onChange={(value) => {
+                                if (String(value).includes("-")) {
+                                  setError("Please enter correct date format");
+                                }
+                                if (String(value).length < 10) {
+                                  setError("Please enter correct date format");
+                                } else {
+                                  setError("");
+                                }
+                                setFieldValue("date", value);
+                              }}
                             />
 
                             {
@@ -434,7 +445,49 @@ const CheckoutComp = () => {
                                     )
                                   )}
                                 </span>
-
+                                {values.comps[values.comps.length - 1] ? (
+                                  <div className={styles.OrdersFlexBotSum}>
+                                    <div className={styles.orderSum}>
+                                      <p>{`TOTAL`}</p>
+                                      <div className={styles.totalOrder}>
+                                        <span>
+                                          {Formater(
+                                            values.comps.reduce(
+                                              (acc, c) =>
+                                                acc +
+                                                c.number_tickets *
+                                                  c.price_per_ticket *
+                                                  (1 - c.reduction),
+                                              0
+                                            ),
+                                            router.locale
+                                          )}
+                                        </span>
+                                        <p
+                                          style={{
+                                            textDecoration: "underline",
+                                            color: "#987358",
+                                            fontWeight: "300",
+                                            fontSize: "10px",
+                                            textTransform: "uppercase",
+                                            cursor: "pointer",
+                                          }}
+                                          onClick={() => {
+                                            reset();
+                                            setValues({
+                                              ...values,
+                                              comps: [],
+                                            });
+                                          }}
+                                        >
+                                          {t("clearcart")}
+                                        </p>
+                                      </div>
+                                    </div>
+                                  </div>
+                                ) : (
+                                  ""
+                                )}
                               </div>
                               {/* <div className={styles.Counter}>
                               <div
@@ -516,42 +569,8 @@ const CheckoutComp = () => {
                           );
                         })}
                       </div>
-                      <p
-                        style={{
-                          textDecoration: "underline",
-                          color: "#987358",
-                          fontWeight: "300",
-                          fontSize: "10px",
-                          textTransform: "uppercase",
-                          cursor: "pointer",
-                        }}
-                        onClick={() => {
-                          reset();
-                          setValues({
-                            ...values,
-                            comps: [],
-                          });
-                        }}
-                      >
-                        {t("clearcart")}
-                      </p>
+
                       <div className={styles.orderSumBot}>
-                        <div className={styles.orderSum}>
-                          <p>{`TOTAL`}</p>
-                          <span>
-                            {Formater(
-                              values.comps.reduce(
-                                (acc, c) =>
-                                  acc +
-                                  c.number_tickets *
-                                    c.price_per_ticket *
-                                    (1 - c.reduction),
-                                0
-                              ),
-                              router.locale
-                            )}
-                          </span>
-                        </div>
                         {values.paymentMethod === "PAYPAL" ? (
                           <PayPalScriptProvider
                             options={{
