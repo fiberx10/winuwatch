@@ -41,6 +41,11 @@ input::-webkit-inner-spin-button {
     transform: rotate(360deg);
   }
 }
+@media (min-width: 1200px) {
+  .modal-xl {
+    --bs-modal-width: 95% !important;
+  }
+}
 /* .modal-backdrop.show {
   background: white !important;
   opacity: 1 !important;
