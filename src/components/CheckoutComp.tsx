@@ -431,21 +431,26 @@ const CheckoutComp = () => {
                                   </p>
                                 )}
                                 <span>
-                                  {values.comps.map(
-                                    (
-                                      { number_tickets, price_per_ticket },
-                                      i
-                                    ) => (
-                                      <p key={i}>
-                                        {Formater(
-                                          number_tickets * price_per_ticket,
-                                          router.locale
-                                        )}
-                                      </p>
+                                  {values.comps
+                                    .filter(
+                                      (comp) => comp.compID === order.compID
                                     )
-                                  )}
+                                    .map(
+                                      (
+                                        { number_tickets, price_per_ticket },
+                                        i
+                                      ) => (
+                                        <p key={i}>
+                                          {Formater(
+                                            number_tickets * price_per_ticket,
+                                            router.locale
+                                          )}
+                                        </p>
+                                      )
+                                    )}
                                 </span>
-                                {values.comps[values.comps.length - 1] ? (
+                                {values.comps[values.comps.length - 1] ===
+                                values.comps[i] ? (
                                   <div className={styles.OrdersFlexBotSum}>
                                     <div className={styles.orderSum}>
                                       <p>{`TOTAL`}</p>
