@@ -194,98 +194,106 @@ const CartComp = () => {
           {t("emptycart")}
         </h1>
       )}
+      {isLoading ? (
+        ""
+      ) : (
+        <>
+          <div className={styles.CartTotal}>
+            <p>{t("total")}</p>
+            <span>{Formater(totalCost)}</span>
+          </div>
+          <div className={styles.cartCheckoutCon}>
+            <button
+              onClick={() => {
+                setOpen(true);
+              }}
+            >
+              {t("checkout")}
+            </button>
+            <Modal
+              aria-labelledby="spring-modal-title"
+              aria-describedby="spring-modal-description"
+              open={open}
+              closeAfterTransition
+              slots={{ backdrop: Backdrop }}
+              slotProps={{
+                backdrop: {
+                  TransitionComponent: Fade,
+                },
+              }}
+            >
+              <Fade in={open}>
+                <Box className={styles.ModalBox} sx={style}>
+                  {competitions.length === 0 ? (
+                    <div className={styles.ModalBoxTopFlex}>
+                      <p id="spring-modal-description">{t("cartempty")}</p>
+                      <span onClick={handleClose}>
+                        <CloseOutlined />
+                      </span>
+                    </div>
+                  ) : (
+                    <>
+                      <div className={styles.ModalBoxTopFlex}>
+                        <p id="spring-modal-description">{t("tocontinue")}</p>
+                        <span onClick={handleClose}>
+                          <CloseOutlined />
+                        </span>
+                      </div>
+                      <div className={styles.modalQuestion}>
+                        {randomImage && (
+                          <Image
+                            src={randomImage.img}
+                            style={{
+                              objectFit: "cover",
+                            }}
+                            width={300}
+                            height={150}
+                            alt="questionImage"
+                          />
+                        )}
 
-      <div className={styles.CartTotal}>
-        <p>{t("total")}</p>
-        <span>{Formater(totalCost)}</span>
-      </div>
-      <div className={styles.cartCheckoutCon}>
-        <button
-          onClick={() => {
-            setOpen(true);
-          }}
-        >
-          {t("checkout")}
-        </button>
-        <Modal
-          aria-labelledby="spring-modal-title"
-          aria-describedby="spring-modal-description"
-          open={open}
-          closeAfterTransition
-          slots={{ backdrop: Backdrop }}
-          slotProps={{
-            backdrop: {
-              TransitionComponent: Fade,
-            },
-          }}
-        >
-          <Fade in={open}>
-            <Box className={styles.ModalBox} sx={style}>
-              {competitions.length === 0 ? (
-                <div className={styles.ModalBoxTopFlex}>
-                  <p id="spring-modal-description">{t("cartempty")}</p>
-                  <span onClick={handleClose}>
-                    <CloseOutlined />
-                  </span>
-                </div>
-              ) : (
-                <>
-                  <div className={styles.ModalBoxTopFlex}>
-                    <p id="spring-modal-description">{t("tocontinue")}</p>
-                    <span onClick={handleClose}>
-                      <CloseOutlined />
-                    </span>
-                  </div>
-                  <div className={styles.modalQuestion}>
-                    {randomImage && (
-                      <Image
-                        src={randomImage.img}
+                        <h1>{t("whatwatch")}</h1>
+                      </div>
+                      <h2
                         style={{
-                          objectFit: "cover",
-                        }}
-                        width={300}
-                        height={150}
-                        alt="questionImage"
-                      />
-                    )}
-
-                    <h1>{t("whatwatch")}</h1>
-                  </div>
-                  <h2
-                    style={{ display: wrong ? "flex" : "none", color: "red" }}
-                  >
-                    {t("wronganswer")}
-                  </h2>
-                  <div className={styles.questionsCon}>
-                    {questionImgs.map(({ name }, i) => (
-                      <button
-                        key={i}
-                        onClick={() => {
-                          if (randomImage?.name.includes(name)) {
-                            router
-                              .push("/CheckoutPage")
-                              .then(() => {
-                                return null;
-                              })
-                              .catch((e) => {
-                                console.log(e);
-                                return null;
-                              });
-                          } else {
-                            setWrong(true);
-                          }
+                          display: wrong ? "flex" : "none",
+                          color: "red",
                         }}
                       >
-                        {name}
-                      </button>
-                    ))}
-                  </div>
-                </>
-              )}
-            </Box>
-          </Fade>
-        </Modal>
-      </div>
+                        {t("wronganswer")}
+                      </h2>
+                      <div className={styles.questionsCon}>
+                        {questionImgs.map(({ name }, i) => (
+                          <button
+                            key={i}
+                            onClick={() => {
+                              if (randomImage?.name.includes(name)) {
+                                router
+                                  .push("/CheckoutPage")
+                                  .then(() => {
+                                    return null;
+                                  })
+                                  .catch((e) => {
+                                    console.log(e);
+                                    return null;
+                                  });
+                              } else {
+                                setWrong(true);
+                              }
+                            }}
+                          >
+                            {name}
+                          </button>
+                        ))}
+                      </div>
+                    </>
+                  )}
+                </Box>
+              </Fade>
+            </Modal>
+          </div>
+        </>
+      )}
     </div>
   );
 };
