@@ -294,24 +294,47 @@ const CheckoutComp = () => {
                                 max: "2005-01-01",
                               }}
                               onChange={(value) => {
-                                function isStringValid(str: string): boolean {
-                                  return /^[0-9/]+$/.test(str); // Test for only numbers and "/" symbol
-                                }
+                                const isValidDateString = (
+                                  dateString: string
+                                ): boolean => {
+                                  const dateRegex = /^\d{2}\/\d{2}\/\d{4}$/;
+                                  const isValidFormat =
+                                    dateRegex.test(dateString);
+
+                                  if (!isValidFormat) {
+                                    return false; // date string does not match format DD/MM/YYYY
+                                  }
+
+                                  const [day, month, year] = dateString
+                                    .split("/")
+                                    .map((str) => parseInt(str, 10));
+                                  const date = new Date(
+                                    year as number,
+                                    (month as number) - 1,
+                                    day
+                                  );
+                                  const minDate = new Date();
+                                  minDate.setFullYear(
+                                    minDate.getFullYear() - 18
+                                  );
+
+                                  const isValidDate =
+                                    date.getFullYear() === year &&
+                                    date.getMonth() === (month as number) - 1 &&
+                                    date.getDate() === day;
+                                  const isOver18 = date <= minDate;
+
+                                  return isValidDate && isOver18;
+                                };
+
+                                // if (
+
                                 if (
-                                  typeof value === "string" &&
-                                  value.length < 10
+                                  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                  //@ts-ignore
+                                  !isValidDateString(String(value._i))
                                 ) {
-                                  setError("Please enter correct date format");
-                                } else if (
-                                  typeof value === "string" &&
-                                  value.length > 10
-                                ) {
-                                  setError("Please enter correct date format");
-                                } else if (
-                                  typeof value === "string" &&
-                                  isStringValid(value) === false
-                                ) {
-                                  setError("Invalid characters found");
+                                  setError("Date contains invalid characters");
                                 } else {
                                   setError("");
                                 }
