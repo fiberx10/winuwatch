@@ -34,12 +34,11 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
         response.status(400).send(`Webhook Error`)
       );
     }
-    console.log( event.data);
+    //console.log( event.data);
     
     switch (event.type) {
       //PAYMENT FAILED OR CANCELLED
       case "payment_intent.payment_failed":
-        const { id } = event.data.object as Stripe.PaymentIntent;
         const checkoutSessionFailed = event.data.object as {
           id: string;
           payment_intent: string;
@@ -79,6 +78,7 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
             status: "CANCELLED",
           },
         });
+        break;
       // THIS CASE CHANGES STATUS IF PAYMENT FAILS BUT DOES NOT DELETE TICKETS
       // TODO:
       //  await prisma.ticket.deleteMany({
