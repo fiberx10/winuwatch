@@ -41,10 +41,10 @@ input::-webkit-inner-spin-button {
     transform: rotate(360deg);
   }
 }
-.modal-backdrop.show {
+/* .modal-backdrop.show {
   background: white !important;
   opacity: 1 !important;
-}
+} */
 /* Firefox */
 input[type="number"] {
   -moz-appearance: textfield;
