@@ -59,8 +59,6 @@ const CartComp = () => {
   const [randomImage] = useState(
     questionImgs[Math.floor(Math.random() * questionImgs.length)]
   );
-  console.log("competitions:", competitions);
-
   return (
     <div className={styles.CartMain}>
       {isLoading ? (
