@@ -17,6 +17,7 @@ import PhoneInput from "react-phone-number-input";
 import * as Yup from "yup";
 import "react-phone-number-input/style.css";
 import Loader from "./Loader";
+import Loader2 from "./Loader2";
 import "moment/locale/fr";
 
 const CheckoutComp = () => {
@@ -40,7 +41,6 @@ const CheckoutComp = () => {
     );
   };
   const [error, setError] = useState<string | undefined>();
-  const [isNotConfirmed, setIsNotConfirmed] = useState<boolean>(false);
   const { totalCost } = cardDetails();
 
   const FormSchema = Yup.object().shape({
@@ -112,8 +112,6 @@ const CheckoutComp = () => {
                 checkedTerms: false,
               }}
               onSubmit={async (values, actions) => {
-                // disable the confirm button to prevent duplicate messages
-                setIsNotConfirmed(true);
                 //if a value in the object values is undefined, it will not be sent to the server
                 console.log("Form submitted:", values);
                 setLoading(true);
@@ -138,7 +136,7 @@ const CheckoutComp = () => {
                   setLoading(false);
                   await router.push(url);
                 }
-                setError(error || t("error"));
+                setError(error);
                 console.log(error);
                 // const res = CreateOrderSchema.safeParse(values);
 
@@ -296,24 +294,47 @@ const CheckoutComp = () => {
                                 max: "2005-01-01",
                               }}
                               onChange={(value) => {
-                                function isStringValid(str: string): boolean {
-                                  return /^[0-9/]+$/.test(str); // Test for only numbers and "/" symbol
-                                }
+                                const isValidDateString = (
+                                  dateString: string
+                                ): boolean => {
+                                  const dateRegex = /^\d{2}\/\d{2}\/\d{4}$/;
+                                  const isValidFormat =
+                                    dateRegex.test(dateString);
+
+                                  if (!isValidFormat) {
+                                    return false; // date string does not match format DD/MM/YYYY
+                                  }
+
+                                  const [day, month, year] = dateString
+                                    .split("/")
+                                    .map((str) => parseInt(str, 10));
+                                  const date = new Date(
+                                    year as number,
+                                    (month as number) - 1,
+                                    day
+                                  );
+                                  const minDate = new Date();
+                                  minDate.setFullYear(
+                                    minDate.getFullYear() - 18
+                                  );
+
+                                  const isValidDate =
+                                    date.getFullYear() === year &&
+                                    date.getMonth() === (month as number) - 1 &&
+                                    date.getDate() === day;
+                                  const isOver18 = date <= minDate;
+
+                                  return isValidDate && isOver18;
+                                };
+
+                                // if (
+
                                 if (
-                                  typeof value === "string" &&
-                                  value.length < 10
+                                  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                  //@ts-ignore
+                                  !isValidDateString(String(value._i))
                                 ) {
-                                  setError("Please enter correct date format");
-                                } else if (
-                                  typeof value === "string" &&
-                                  value.length > 10
-                                ) {
-                                  setError("Please enter correct date format");
-                                } else if (
-                                  typeof value === "string" &&
-                                  isStringValid(value) === false
-                                ) {
-                                  setError("Invalid characters found");
+                                  setError("Date contains invalid characters");
                                 } else {
                                   setError("");
                                 }
@@ -642,14 +663,22 @@ const CheckoutComp = () => {
                           </PayPalScriptProvider>
                         ) : (
                           <button
-                            disabled={loading}
+                            disabled={loading || error ? true : false}
+                            style={{
+                              backgroundColor: error
+                                ? "rgba(30, 30, 30, 0.3)"
+                                : loading
+                                ? "#cbb9ac"
+                                : "#cbb9ac",
+                              cursor: loading || error ? "default" : "pointer",
+                            }}
                             type="submit"
                             onClick={() => {
                               if (!values.checkedTerms)
                                 return alert(`${t("shouldacceptterms")}`);
                             }}
                           >
-                            {t("confirmorder")}
+                            {loading ? <Loader2 /> : t("confirmorder")}
                           </button>
                         )}
                       </div>

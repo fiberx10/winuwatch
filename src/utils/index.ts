@@ -27,6 +27,7 @@ export const DateFormater = (value: Date, local = DEFAULTLOCAL) =>
   new Intl.DateTimeFormat(local, {
     dateStyle: "full",
     timeStyle: "short",
+    hourCycle: "h12",
     timeZone: "Europe/London",
   }).format(value);
 
