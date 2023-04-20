@@ -8,21 +8,15 @@ import { useState } from "react";
 import { Backdrop, Box, Fade, Modal } from "@mui/material";
 import { CloseOutlined } from "@ant-design/icons";
 import { useTranslations } from "next-intl";
+import Loader from "./Loader";
 const CartComp = () => {
   const t = useTranslations("cart");
   const [open, setOpen] = useState(false);
   const [wrong, setWrong] = useState(false);
   const handleClose = () => setOpen(false);
-  const {
-    cardDetails,
-    updateComp,
-    removeComp,
-    competitions,
-    modeleDate,
-    setModeleDate,
-  } = useCart();
+  const { cardDetails, updateComp, removeComp, competitions } = useCart();
 
-  const { data } = api.Competition.getAll.useQuery({
+  const { data, isLoading } = api.Competition.getAll.useQuery({
     ids: competitions.map(({ compID }) => compID),
   });
 
@@ -65,15 +59,27 @@ const CartComp = () => {
   const [randomImage] = useState(
     questionImgs[Math.floor(Math.random() * questionImgs.length)]
   );
+  console.log("competitions:", competitions);
+
   return (
     <div className={styles.CartMain}>
-      {data && competitions.length > 0 ? (
+      {isLoading ? (
+        <div
+          style={{
+            height: "40vh",
+            width: "100%",
+            display: "grid",
+            placeItems: "center",
+          }}
+        >
+          <Loader />
+        </div>
+      ) : data && competitions.length > 0 ? (
         competitions.map((comp, index) => {
           const ComptetionData = data.find(
             (compData) => compData.id === comp.compID
           );
           if (!ComptetionData || ComptetionData.Watches === null) return null;
-          console.log(comp);
 
           return (
             <div className={styles.Watch} key={index}>
