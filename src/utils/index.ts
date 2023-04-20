@@ -2,6 +2,32 @@ import { z } from "zod";
 import { OrderSchema } from "./zodSchemas";
 export * from "./api";
 
+export const CreateOrderFromCartSchema = OrderSchema.extend({
+  comps: z.array(
+    z.object({
+      compID: z.string(),
+      number_tickets: z.number().default(1),
+      price_per_ticket: z.number(),
+      reduction: z.number().default(0),
+    })
+  ),
+}).omit({
+  id: true,
+  status: true,
+  address: true,
+  checkedEmail: true,
+  country: true,
+  date: true,
+  first_name: true,
+  last_name: true,
+  town: true,
+  zip: true,
+  phone: true,
+  email: true,
+  paymentMethod: true,
+  checkedTerms: true,
+  totalPrice: true,
+});
 export const CreateOrderSchema = OrderSchema.extend({
   comps: z.array(
     z.object({
@@ -14,6 +40,18 @@ export const CreateOrderSchema = OrderSchema.extend({
 }).omit({
   status: true,
   id: true,
+});
+export const CreateOrderStripeSchema = OrderSchema.extend({
+  comps: z.array(
+    z.object({
+      compID: z.string(),
+      number_tickets: z.number().default(1),
+      price_per_ticket: z.number(),
+      reduction: z.number().default(0),
+    })
+  ),
+}).omit({
+  status: true,
 });
 const DEFAULTLOCAL = "en-UK";
 
