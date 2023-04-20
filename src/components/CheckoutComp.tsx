@@ -64,6 +64,38 @@ const CheckoutComp = () => {
     })();
   }, [items]);
 
+  function isNotDateFormat(str: string): boolean {
+    const parts = str.split("/");
+    if (parts.length !== 3) {
+      return true; // Not enough parts to be a valid date
+    }
+    const day = parseInt(parts[0] as string, 10);
+    const month = parseInt(parts[1] as string, 10);
+    const year = parseInt(parts[2] as string, 10);
+    if (isNaN(day) || isNaN(month) || isNaN(year)) {
+      return true; // Parts are not valid numbers
+    }
+    if (
+      day < 1 ||
+      day > 31 ||
+      month < 1 ||
+      month > 12 ||
+      year < 1000 ||
+      year > 9999
+    ) {
+      return true; // Parts are out of range for a valid date
+    }
+    const testDate = new Date(year, month - 1, day);
+    if (
+      testDate.getDate() !== day ||
+      testDate.getMonth() !== month - 1 ||
+      testDate.getFullYear() !== year
+    ) {
+      return true; // Date is not valid (e.g. Feb 30)
+    }
+    return false; // Date is valid
+  }
+
   return (
     <div className={styles.CheckoutMain}>
       {isLoading ? (
@@ -296,11 +328,12 @@ const CheckoutComp = () => {
                                 max: "2005-01-01",
                               }}
                               onChange={(value) => {
-                                if (String(value).includes("-")) {
-                                  setError("Please enter correct date format");
-                                }
+                                const nonSlashChars =
+                                  String(value).includes("-");
                                 if (String(value).length < 10) {
                                   setError("Please enter correct date format");
+                                } else if (nonSlashChars) {
+                                  setError("Invalid characters found");
                                 } else {
                                   setError("");
                                 }
