@@ -82,10 +82,9 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
             },
           })
         ) {
-          return response.json({});
+          break;
         }
-        break;
-      // CHECKOUT IS COMPLETE
+        // CHECKOUT IS COMPLETE
       case "checkout.session.completed":
         const checkoutSessionCompleted = event.data.object as {
           id: string;
@@ -104,9 +103,8 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
             },
           })
         ) {
-          return response.json({});
+          break;
         }
-        break;
       //CHECKOUT IS CANCELLED
       case "payment_intent.canceled":
         const checkoutSessionCancelled = event.data.object as {
@@ -125,9 +123,8 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
             },
           })
         ) {
-          return response.json({});
+         break;
         }
-        break;
 
       //REFUNDED
       // case "charge.refunded":
