@@ -403,60 +403,6 @@ export const Email = ([order, comps]: [
                                         host a live for each competition. <br />{" "}
                                         we wish you the best of luck!
                                       </p>
-                                      <a
-                                        style={{
-                                          width: "100%",
-                                          display: "flex",
-                                          justifyContent: "center",
-                                          margin: "0  auto",
-                                        }}
-                                        href="https://www.instagram.com/winuwatch/"
-                                      >
-                                        <img
-                                          alt="instaFollow"
-                                          src="https://www.win-u-watch.uk/images/InstaFooter.png"
-                                          style={{ margin: "0  auto" }}
-                                        />
-                                      </a>
-                                      <h4
-                                        style={{
-                                          width: "100%",
-                                          textAlign: "center",
-                                          fontWeight: "400",
-                                          background: "lightgrey",
-                                        }}
-                                      >
-                                        Lisam Watch Ltd 63-66 Hatton Gardens,
-                                        London, EC1N 8LE, UK
-                                      </h4>
-                                      <div style={{ display: "flex" }}>
-                                        <h5
-                                          style={{
-                                            margin: "0",
-                                            fontWeight: "300",
-                                            marginRight: "auto",
-                                          }}
-                                        >
-                                          NO LONGER WANT TO RECEIVE THESE
-                                          EMAILS? UNSUBSCRIBE
-                                        </h5>
-                                        <a
-                                          style={{
-                                            textDecoration: "none",
-                                            color: "black",
-                                          }}
-                                          href="https://www.win-u-watch.uk/Privacy_Policy"
-                                        >
-                                          <h5
-                                            style={{
-                                              margin: "0",
-                                              fontWeight: "300",
-                                            }}
-                                          >
-                                            PRIVACY POLICY
-                                          </h5>
-                                        </a>
-                                      </div>
                                     </td>
                                   </tr>
                                 </tbody>
@@ -473,13 +419,76 @@ export const Email = ([order, comps]: [
             <table
               align="center"
               width="100%"
-              style={{ fontWeight: 500 }}
+              style={{
+                maxWidth: "37.5em",
+                margin: "0 auto",
+                fontFamily: "Kanit, sans-serif",
+                textAlign: "center",
+                fontWeight: "500",
+              }}
               border={0}
               cellPadding={0}
               cellSpacing={0}
               role="presentation"
             >
-              <tbody></tbody>
+              <tbody>
+                <tr>
+                  <td>
+                    <a
+                      style={{
+                        width: "100%",
+                        display: "flex",
+                        justifyContent: "center",
+                        margin: "0  auto",
+                      }}
+                      href="https://www.instagram.com/winuwatch/"
+                    >
+                      <img
+                        alt="instaFollow"
+                        src="https://www.win-u-watch.uk/images/InstaFooter.png"
+                        style={{ margin: "0  auto" }}
+                      />
+                    </a>
+                    <h4
+                      style={{
+                        width: "100%",
+                        textAlign: "center",
+                        fontWeight: "400",
+                        background: "lightgrey",
+                      }}
+                    >
+                      Lisam Watch Ltd 63-66 Hatton Gardens, London, EC1N 8LE, UK
+                    </h4>
+                    <div style={{ display: "flex" }}>
+                      <h5
+                        style={{
+                          margin: "0",
+                          fontWeight: "300",
+                          marginRight: "auto",
+                        }}
+                      >
+                        NO LONGER WANT TO RECEIVE THESE EMAILS? UNSUBSCRIBE
+                      </h5>
+                      <a
+                        style={{
+                          textDecoration: "none",
+                          color: "black",
+                        }}
+                        href="https://www.win-u-watch.uk/Privacy_Policy"
+                      >
+                        <h5
+                          style={{
+                            margin: "0",
+                            fontWeight: "300",
+                          }}
+                        >
+                          PRIVACY POLICY
+                        </h5>
+                      </a>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
             </table>
           </td>
         </tr>
