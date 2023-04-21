@@ -160,12 +160,12 @@ export const OrderRouter = createTRPCRouter({
     if (!Order) {
       throw new Error("Order not found");
     }
-    await Transporter.sendMail({
-      from: "noreply@winuwatch.uk",
-      to: Order.email,
-      subject: `Order Confirmation - Winuwatch #${Order?.id || "000000"}`,
-      html: Email(Order),
-    });
+    // await Transporter.sendMail({
+    //   from: "noreply@winuwatch.uk",
+    //   to: Order.email,
+    //   subject: `Order Confirmation - Winuwatch #${Order?.id || "000000"}`,
+    //   html: Email(Order),
+    // });
     return Order;
   }),
   createStripe: publicProcedure
