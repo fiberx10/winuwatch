@@ -44,6 +44,8 @@ export default function CheckoutPage({
   const { data: items, isLoading } = api.Competition.getAll.useQuery({
     ids: competitions.map((comp) => comp.compID),
   });
+  const { data: order } = api.Order.getOrder.useQuery(id);
+
   const IsLegal = (Birthdate = new Date()) => {
     const LegalAge = 18;
     const now = new Date();
@@ -78,6 +80,16 @@ export default function CheckoutPage({
       }
     })();
   }, [items]);
+  useEffect(() => {
+    void (async () => {
+      if (
+        order &&
+        (order.status === "CONFIRMED" || order.status === "CANCELLED")
+      ) {
+        return await router.push("/");
+      }
+    })();
+  }, [order]);
   return (
     <div>
       <Head>
@@ -97,6 +109,20 @@ export default function CheckoutPage({
               placeItems: "center",
             }}
           >
+            <Loader />
+          </div>
+        ) : order &&
+          (order.status === "CONFIRMED" || order.status === "CANCELLED") ? (
+          <div>
+            <h1
+              style={{
+                fontFamily: "Iskry, sans-serif",
+                textTransform: "uppercase",
+              }}
+            >
+              This Order is Complete
+            </h1>
+            <p>you are being redirected shorly...</p>
             <Loader />
           </div>
         ) : items?.length === 0 ? (
