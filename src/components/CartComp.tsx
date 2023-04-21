@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useCart } from "./Store";
 import { useRouter } from "next/router";
 import { Formater, api } from "@/utils";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Backdrop, Box, Fade, Modal } from "@mui/material";
 import { CloseOutlined } from "@ant-design/icons";
 import { useTranslations } from "next-intl";
@@ -59,6 +59,26 @@ const CartComp = () => {
   const [randomImage] = useState(
     questionImgs[Math.floor(Math.random() * questionImgs.length)]
   );
+  const {
+    mutateAsync: createOrder,
+    data: id,
+    isLoading: orderPosting,
+  } = api.Order.createOrder.useMutation();
+
+  useEffect(() => {
+    id &&
+      router
+        .push(`/Checkout/${id}`)
+        .then(() => {
+          return null;
+        })
+
+        .catch((e) => {
+          console.log(e);
+          return null;
+        });
+  }, [id]);
+
   return (
     <div className={styles.CartMain}>
       {isLoading ? (
@@ -264,17 +284,10 @@ const CartComp = () => {
                         {questionImgs.map(({ name }, i) => (
                           <button
                             key={i}
-                            onClick={() => {
+                            // eslint-disable-next-line @typescript-eslint/no-misused-promises
+                            onClick={async () => {
                               if (randomImage?.name.includes(name)) {
-                                router
-                                  .push("/CheckoutPage")
-                                  .then(() => {
-                                    return null;
-                                  })
-                                  .catch((e) => {
-                                    console.log(e);
-                                    return null;
-                                  });
+                                await createOrder({ comps: competitions });
                               } else {
                                 setWrong(true);
                               }
@@ -291,6 +304,24 @@ const CartComp = () => {
             </Modal>
           </div>
         </>
+      )}
+      {orderPosting && (
+        <div
+          style={{
+            width: "100%",
+            height: "100vh",
+            background: "white",
+            opacity: "0.8",
+            display: "grid",
+            placeItems: "center",
+            position: "absolute",
+            zIndex: "9999999999999",
+            top: "0",
+            left: "0",
+          }}
+        >
+          <Loader />
+        </div>
       )}
     </div>
   );

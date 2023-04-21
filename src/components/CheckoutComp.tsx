@@ -20,7 +20,7 @@ import Loader from "./Loader";
 import Loader2 from "./Loader2";
 import "moment/locale/fr";
 
-const CheckoutComp = () => {
+const CheckoutComp = ({ id }: any) => {
   const router = useRouter();
   const t = useTranslations("checkout");
   const { mutateAsync: createOrder } = api.Order.createStripe.useMutation();
@@ -117,6 +117,7 @@ const CheckoutComp = () => {
                 setLoading(true);
                 const { url, error } = await createOrder({
                   ...values,
+                  id: id as string,
                   paymentMethod: values.paymentMethod as "PAYPAL" | "STRIPE",
                   date: new Date(values.date),
                   zip: values.zip.toString(),
@@ -610,77 +611,24 @@ const CheckoutComp = () => {
                       </div>
 
                       <div className={styles.orderSumBot}>
-                        {values.paymentMethod === "PAYPAL" ? (
-                          <PayPalScriptProvider
-                            options={{
-                              "client-id": `${
-                                process.env.NEXT_PUBLIC_PAYPAL_ID as string
-                              }`,
-                            }}
-                          >
-                            <PayPalButtons
-                              onClick={async () => {
-                                console.log("Form submitted:", values);
-
-                                const res = CreateOrderSchema.safeParse(values);
-
-                                if (res.success) {
-                                  if (!IsLegal(values.date)) {
-                                    setError(
-                                      "You must be 18 years old to purchase a ticket"
-                                    );
-                                  } else {
-                                    await createOrder(res.data);
-                                  }
-                                }
-                              }}
-                              forceReRender={[
-                                values.comps.reduce(
-                                  (a, b) =>
-                                    a + b.number_tickets * b.price_per_ticket,
-                                  0
-                                ),
-                              ]}
-                              /*
-                            createOrder={(data, actions) => {
-                              return actions.order.create({
-                                purchase_units: values.comp.map((value) => ({
-                                  amount: {
-                                    currency_code: "USD",
-                                    value: (
-                                      value.number_tickets *
-                                      value.price_per_ticket
-                                    )
-                                      .toPrecision(2)
-                                      .toString(),
-                                  },
-                                })),
-                              });
-                            }}
-                            */
-                              style={{ layout: "horizontal" }}
-                            />
-                          </PayPalScriptProvider>
-                        ) : (
-                          <button
-                            disabled={loading || error ? true : false}
-                            style={{
-                              backgroundColor: error
-                                ? "rgba(30, 30, 30, 0.3)"
-                                : loading
-                                ? "#cbb9ac"
-                                : "#cbb9ac",
-                              cursor: loading || error ? "default" : "pointer",
-                            }}
-                            type="submit"
-                            onClick={() => {
-                              if (!values.checkedTerms)
-                                return alert(`${t("shouldacceptterms")}`);
-                            }}
-                          >
-                            {loading ? <Loader2 /> : t("confirmorder")}
-                          </button>
-                        )}
+                        <button
+                          disabled={loading || error ? true : false}
+                          style={{
+                            backgroundColor: error
+                              ? "rgba(30, 30, 30, 0.3)"
+                              : loading
+                              ? "#cbb9ac"
+                              : "#cbb9ac",
+                            cursor: loading || error ? "default" : "pointer",
+                          }}
+                          type="submit"
+                          onClick={() => {
+                            if (!values.checkedTerms)
+                              return alert(`${t("shouldacceptterms")}`);
+                          }}
+                        >
+                          {loading ? <Loader2 /> : t("confirmorder")}
+                        </button>
                       </div>
                     </div>
                   </div>
