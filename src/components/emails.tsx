@@ -352,10 +352,7 @@ export const Email = ([order, comps]: [
                               , the winners will be announced on{" "}
                               {DateFormater(c.Competition.drawing_date) +
                                 " (Local Time in London) "}
-                              <br /> please make sure to follow us on instagram
-                              where we <br />
-                              host a live for each competition. <br /> we wish
-                              you the best of luck!
+                              <br />
                             </p>
                           </td>
                         </tr>
@@ -364,6 +361,22 @@ export const Email = ([order, comps]: [
                   ))}
                 <tr>
                   <td>
+                    <p
+                      style={{
+                        fontSize: "16px",
+                        lineHeight: "24px",
+                        margin: "5px 0px",
+                        textTransform: "uppercase",
+                        color: "black",
+                        textAlign: "center",
+                        letterSpacing: "0.05rem",
+                        padding: "20px",
+                      }}
+                    >
+                      please make sure to follow us on instagram where we <br />
+                      host a live for each competition. <br /> we wish you the
+                      best of luck!
+                    </p>
                     <a
                       style={{
                         width: "100%",
