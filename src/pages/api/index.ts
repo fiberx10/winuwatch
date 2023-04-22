@@ -18,17 +18,34 @@ const prisma = new PrismaClient({
 });
 
 export default async function send(req: NextApiRequest, res: NextApiResponse) {
-  const OrdeerID = "53b1f168-dafb-496f-aba7-0dd7bd63af0a";
+  const OrdeerID = "97d79eef-5e5e-4884-a9f0-4143eb5fbd1e";
 
-  const EmailRender = Email(await GetData(OrdeerID, prisma));
   const data = await GetData(OrdeerID, prisma);
+  const EmailRender = Email(data);
 
+  /*
   await Transporter.sendMail({
     from: "noreply@winuwatch.uk",
-    to: "louihranim@gmail.com",
+    to: "iliassjabali@gmail.com",
     subject: `Order Confirmation - Winuwatch #${data[0]?.id || "000000"}`,
     html: EmailRender,
   });
+  const data = await prisma.competition.findMany({
+    include: {
+      Ticket: {
+        where: {
+          orderId: ,
+        },
+      },
+      Watches : {
+        include: {
+          images_url: true,
+        }  
+      }
+    },
+  });
 
-  res.send(Email(await GetData(OrdeerID, prisma)));
+  res.send(data[0]?.Ticket.map((ticket) => ticket.id));
+  */
+  res.send(EmailRender);
 }

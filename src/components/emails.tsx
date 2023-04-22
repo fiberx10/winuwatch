@@ -1,5 +1,4 @@
-import type { Order, PrismaClient } from "@prisma/client";
-import React from "react";
+import type { PrismaClient } from "@prisma/client";
 import { Formater, getBaseUrl, DateFormater } from "@/utils";
 
 import { renderToString } from "react-dom/server";
@@ -11,19 +10,16 @@ export const GetData = async (OrderID: string, prismaClient: PrismaClient) =>
         id: OrderID,
       },
     }),
-    prismaClient.ticket.findMany({
-      where: {
-        orderId: OrderID,
-      },
+    prismaClient.competition.findMany({
       include: {
-        Order: true,
-        Competition: {
+        Ticket: {
+          where: {
+            orderId: OrderID,
+          },
+        },
+        Watches: {
           include: {
-            Watches: {
-              include: {
-                images_url: true,
-              },
-            },
+            images_url: true,
           },
         },
       },
@@ -70,9 +66,9 @@ export const Email = ([order, comps]: [
         fontWeight: "500",
       }}
     >
-      <tbody>
+      <tbody
+      >
         <tr style={{ width: "100%" }}>
-          <td>
             <table
               align="center"
               width="100%"
@@ -133,234 +129,221 @@ export const Email = ([order, comps]: [
                     </div>
                   </td>
                 </tr>
-
-                {comps
-                  .filter(
-                    (obj, index) =>
-                      comps.findIndex(
-                        (item) => item.Competition.id === obj.competitionId
-                      ) === index
-                  )
-                  .map((c, i) => (
-                    <div key={i}>
-                      <tr>
-                        <td>
-                          <img
-                            alt={c.Competition.id}
-                            src={c.Competition.Watches?.images_url[0]?.url}
-                            width="100%"
-                            height="auto"
-                            max-height="200px"
-                            style={{
-                              display: "block",
-                              outline: "none",
-                              border: "none",
-                              textDecoration: "none",
-                            }}
-                          />
-                          <table
-                            align="center"
-                            width="100%"
-                            style={{
-                              textAlign: "left",
-                              textTransform: "uppercase",
-                              backgroundColor: "#cbb9ac",
-                              color: "white",
-                            }}
-                            border={0}
-                            cellPadding={0}
-                            cellSpacing={0}
-                            role="presentation"
-                          >
-                            <tbody>
-                              <tr>
-                                <td>
-                                  <p
-                                    style={{
-                                      fontSize: "16px",
-                                      margin: "5px 0px",
-                                      textTransform: "uppercase",
-                                      color: "white",
-                                      textAlign: "left",
-                                      fontWeight: "300",
-                                      letterSpacing: "0.1rem",
-                                      padding: "0px 0px 0px 20px",
-                                    }}
-                                  >
-                                    {c.Competition.name}
-                                  </p>
-                                  <table
-                                    align="center"
-                                    width="100%"
-                                    border={0}
-                                    cellPadding={0}
-                                    cellSpacing={0}
-                                    role="presentation"
-                                  >
-                                    <tbody>
-                                      <tr>
-                                        <td
-                                          style={{
-                                            width: "66%",
-                                            padding: "0px 0px 0px 20px",
-                                            fontSize: "16px",
-                                            margin: "5px 0px",
-                                            textTransform: "uppercase",
-                                            color: "white",
-                                            textAlign: "left",
-                                            fontWeight: "300",
-                                            letterSpacing: "0.1rem",
-                                          }}
-                                        >
-                                          <p
-                                            style={{
-                                              fontSize: "14px",
-                                              lineHeight: "24px",
-                                              margin: "5px 0",
-                                            }}
-                                          >
-                                            ORDER: {order?.id}
-                                          </p>
-                                          <p
-                                            style={{
-                                              fontSize: "14px",
-                                              lineHeight: "24px",
-                                              margin: "5px 0",
-                                            }}
-                                          >
-                                            QUANTITY: {comps.length} - TOTAL:
-                                            {order?.totalPrice &&
-                                              Formater(order.totalPrice)}
-                                          </p>
-                                        </td>
-
-                                        <th></th>
-                                      </tr>
-                                    </tbody>
-                                  </table>
-                                </td>
-                              </tr>
-                            </tbody>
-                          </table>
-                        </td>
-                      </tr>
-                      <tr>
-                        <tr>
-                          <td
-                            style={{
-                              fontSize: "16px",
-                              flex: "1",
-                              textAlign: "left",
-                              lineHeight: "24px",
-                              margin: "0px",
-                              padding: "10px",
-                              paddingLeft: "20px",
-                              textTransform: "uppercase",
-                              color: "white",
-                              backgroundColor: "black",
-                            }}
-                          >
-                            My Tickets
-                          </td>
-                        </tr>
-                        <table
+                <tr>
+                {comps.map((c, i) => (
+                  <div key={i}>
+                    <tr>
+                      <td>
+                        <img
+                          alt={c.id}
+                          src={c.Watches?.images_url[0]?.url}
+                          width="100%"
+                          height="auto"
+                          max-height="100px"
                           style={{
-                            padding: "0px 0px 0px 0px",
-                            paddingLeft: "20px",
-                            width: "100%",
-                            fontFamily: "Kanit, sans-serif",
-                            border: "1px solid rgb(146, 124, 102)",
+                            display: "block",
+                            outline: "none",
+                            border: "none",
+                            textDecoration: "none",
                           }}
+                        />
+                        <table
+                          align="center"
+                          width="100%"
+                          style={{
+                            textAlign: "left",
+                            textTransform: "uppercase",
+                            backgroundColor: "#cbb9ac",
+                            color: "white",
+                          }}
+                          border={0}
+                          cellPadding={0}
+                          cellSpacing={0}
+                          role="presentation"
                         >
                           <tbody>
-                            {comps.map(
-                              (ticket, index) =>
-                                ticket.competitionId === c.Competition.id && (
-                                  <tr
-                                    key={index}
-                                    style={{
-                                      width: "100%",
-                                      border: "1px solid rgb(146, 124, 102)",
-                                    }}
-                                  >
-                                    <td>
-                                      <p
+                            <tr>
+                              <td>
+                                <p
+                                  style={{
+                                    fontSize: "16px",
+                                    margin: "5px 0px",
+                                    textTransform: "uppercase",
+                                    color: "white",
+                                    textAlign: "left",
+                                    fontWeight: "300",
+                                    letterSpacing: "0.1rem",
+                                    padding: "0px 0px 0px 20px",
+                                  }}
+                                >
+                                  {c.name}
+                                </p>
+                                <table
+                                  align="center"
+                                  width="100%"
+                                  border={0}
+                                  cellPadding={0}
+                                  cellSpacing={0}
+                                  role="presentation"
+                                >
+                                  <tbody>
+                                    <tr>
+                                      <td
                                         style={{
-                                          fontSize: "13px",
-                                          lineHeight: "24px",
-                                          paddingRight: "5px",
+                                          width: "66%",
+                                          padding: "0px 0px 0px 20px",
+                                          fontSize: "16px",
+                                          margin: "5px 0px",
                                           textTransform: "uppercase",
-                                          color: "black",
+                                          color: "white",
+                                          textAlign: "left",
+                                          fontWeight: "300",
+                                          letterSpacing: "0.1rem",
                                         }}
                                       >
-                                        {index + 1}
-                                      </p>
-                                    </td>
-                                    <td>
-                                      <p
-                                        style={{
-                                          fontSize: "13px",
-                                          lineHeight: "24px",
-                                          textTransform: "uppercase",
-                                          color: "black",
-                                        }}
-                                      >
-                                        {ticket.id}
-                                      </p>
-                                    </td>
-                                    <td>
-                                      <a
-                                        style={{
-                                          fontSize: "13px",
-                                          textAlign: "end",
-                                          lineHeight: "24px",
-                                          textTransform: "uppercase",
-                                          color: "black",
-                                          textDecoration: "underline",
-                                        }}
-                                        href={`${getBaseUrl()}/ticket/${
-                                          ticket?.id
-                                        }`}
-                                      >
-                                        see my ticket
-                                      </a>
-                                    </td>
-                                  </tr>
-                                )
-                            )}
+                                        <p
+                                          style={{
+                                            fontSize: "14px",
+                                            lineHeight: "24px",
+                                            margin: "5px 0",
+                                          }}
+                                        >
+                                          ORDER: {order?.id}
+                                        </p>
+                                        <p
+                                          style={{
+                                            fontSize: "14px",
+                                            lineHeight: "24px",
+                                            margin: "5px 0",
+                                          }}
+                                        >
+                                          QUANTITY: {comps.length} - TOTAL:
+                                          {order?.totalPrice &&
+                                            Formater(order.totalPrice)}
+                                        </p>
+                                      </td>
+
+                                      <th></th>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </td>
+                            </tr>
                           </tbody>
                         </table>
-
-                        <tr>
-                          <td>
-                            <p
+                      </td>
+                    </tr>
+                    <tr>
+                      <tr>
+                        <td
+                          style={{
+                            fontSize: "16px",
+                            flex: "1",
+                            textAlign: "left",
+                            lineHeight: "24px",
+                            margin: "0px",
+                            padding: "10px",
+                            paddingLeft: "20px",
+                            textTransform: "uppercase",
+                            color: "white",
+                            backgroundColor: "black",
+                          }}
+                        >
+                          My Tickets
+                        </td>
+                      </tr>
+                      <table
+                        style={{
+                          padding: "0px 0px 0px 0px",
+                          paddingLeft: "20px",
+                          width: "100%",
+                          fontFamily: "Kanit, sans-serif",
+                          border: "1px solid rgb(146, 124, 102)",
+                        }}
+                      >
+                        <tbody>
+                          {c.Ticket.map((ticket, index) => (
+                            <tr
+                              key={index}
                               style={{
-                                fontSize: "16px",
-                                lineHeight: "24px",
-                                margin: "5px 0px",
-                                textTransform: "uppercase",
-                                color: "black",
-                                textAlign: "center",
-                                letterSpacing: "0.05rem",
-                                padding: "20px",
+                                width: "100%",
+                                border: "1px solid rgb(146, 124, 102)",
                               }}
                             >
-                              What happens now?
-                              <br /> the contest will end on{" "}
-                              {DateFormater(c.Competition.end_date) +
-                                " (Local Time in London) "}
-                              , the winners will be announced on{" "}
-                              {DateFormater(c.Competition.drawing_date) +
-                                " (Local Time in London) "}
-                              <br />
-                            </p>
-                          </td>
-                        </tr>
+                              <td>
+                                <p
+                                  style={{
+                                    fontSize: "13px",
+                                    lineHeight: "24px",
+                                    paddingRight: "5px",
+                                    textTransform: "uppercase",
+                                    color: "black",
+                                  }}
+                                >
+                                  {index + 1}
+                                </p>
+                              </td>
+                              <td>
+                                <p
+                                  style={{
+                                    fontSize: "13px",
+                                    lineHeight: "24px",
+                                    textTransform: "uppercase",
+                                    color: "black",
+                                  }}
+                                >
+                                  {ticket.id}
+                                </p>
+                              </td>
+                              <td>
+                                <a
+                                  style={{
+                                    fontSize: "13px",
+                                    textAlign: "end",
+                                    lineHeight: "24px",
+                                    textTransform: "uppercase",
+                                    color: "black",
+                                    textDecoration: "underline",
+                                  }}
+                                  href={`${getBaseUrl()}/ticket/${ticket?.id}`}
+                                >
+                                  see my ticket
+                                </a>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+
+                      <tr>
+                        <td>
+                          <p
+                            style={{
+                              fontSize: "16px",
+                              lineHeight: "24px",
+                              margin: "5px 0px",
+                              textTransform: "uppercase",
+                              color: "black",
+                              textAlign: "center",
+                              letterSpacing: "0.05rem",
+                              padding: "20px",
+                            }}
+                          >
+                            What happens now?
+                            <br /> the contest will end on{" "}
+                            {DateFormater(c.end_date) +
+                              " (Local Time in London) "}
+                            , the winners will be announced on{" "}
+                            {DateFormater(c.drawing_date) +
+                              " (Local Time in London) "}
+                          </p>
+                        </td>
                       </tr>
-                    </div>
-                  ))}
+                    </tr>
+                  </div>
+                ))}
+                </tr>
                 <tr>
-                  <td>
                     <p
                       style={{
                         fontSize: "16px",
@@ -429,31 +412,9 @@ export const Email = ([order, comps]: [
                         </h5>
                       </a>
                     </div>
-                  </td>
                 </tr>
               </tbody>
             </table>
-
-            {/* <table
-              align="center"
-              width="100%"
-              style={{
-                maxWidth: "37.5em",
-                margin: "0 auto",
-                fontFamily: "Kanit, sans-serif",
-                textAlign: "center",
-                fontWeight: "500",
-              }}
-              border={0}
-              cellPadding={0}
-              cellSpacing={0}
-              role="presentation"
-            >
-              <tbody>
-
-              </tbody>
-            </table> */}
-          </td>
         </tr>
       </tbody>
     </table>
