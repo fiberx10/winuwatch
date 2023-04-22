@@ -23,29 +23,28 @@ export default async function send(req: NextApiRequest, res: NextApiResponse) {
   const data = await GetData(OrdeerID, prisma);
   const EmailRender = Email(data);
 
-  /*
   await Transporter.sendMail({
     from: "noreply@winuwatch.uk",
-    to: "iliassjabali@gmail.com",
+    to: "louihranim@gmail.com",
     subject: `Order Confirmation - Winuwatch #${data[0]?.id || "000000"}`,
     html: EmailRender,
   });
-  const data = await prisma.competition.findMany({
-    include: {
-      Ticket: {
-        where: {
-          orderId: ,
-        },
-      },
-      Watches : {
-        include: {
-          images_url: true,
-        }  
-      }
-    },
-  });
+  // const data = await prisma.competition.findMany({
+  //   include: {
+  //     Ticket: {
+  //       where: {
+  //         orderId: ,
+  //       },
+  //     },
+  //     Watches : {
+  //       include: {
+  //         images_url: true,
+  //       }
+  //     }
+  //   },
+  // });
 
-  res.send(data[0]?.Ticket.map((ticket) => ticket.id));
-  */
+  // res.send(data[0]?.Ticket.map((ticket) => ticket.id));
+
   res.send(EmailRender);
 }
