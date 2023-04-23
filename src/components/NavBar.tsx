@@ -178,6 +178,10 @@ export default function NavBar() {
                 name: "🇯🇵\t日本語",
                 locale: "ja",
               },
+              {
+                name : "🇮🇱\tעברית",
+                locale : "iw"
+              }
             ]
               .filter(({ locale }) => locale !== router.locale)
               .map(({ locale, name }, index) => (
