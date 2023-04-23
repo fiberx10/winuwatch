@@ -144,16 +144,16 @@ export const OrderRouter = createTRPCRouter({
   ),
   getOrder: publicProcedure.input(z.string()).query(async ({ ctx, input }) => {
     const data = await GetData(input, ctx.prisma);
-    if (!data[0]) {
+    if (!data.order) {
       throw new Error("Order not found");
     }
     await Transporter.sendMail({
       from: "noreply@winuwatch.uk",
-      to: data[0].email,
-      subject: `Order Confirmation - Winuwatch #${data[0]?.id || "000000"}`,
+      to: data.order.email,
+      subject: `Order Confirmation - Winuwatch #${data.order?.id || "000000"}`,
       html: Email(data),
     });
-    return data[0];
+    return data.order;
   }),
   createStripe: publicProcedure
     .input(CreateOrderStripeSchema)
