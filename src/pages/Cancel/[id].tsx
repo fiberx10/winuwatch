@@ -43,8 +43,13 @@ export default function Cancel({
       await router.push("/Cart");
     })();
   }, [id, update, RemoveTickets, router]);
+
   return (
-    <div>
+    <div
+      style={{
+        textAlign: router.locale === "iw" ? "right" : "left",
+      }}
+    >
       <Head>
         <title>Order Complete</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />

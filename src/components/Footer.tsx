@@ -167,7 +167,15 @@ const Footer = () => {
                       <a href={mail}>{name}</a>
                     ) : (
                       link && (
-                        <Link href={link}>
+                        <Link
+                          style={{
+                            width:
+                              link === "/FAQ" && router.locale === "iw"
+                                ? "79%"
+                                : "fit-content",
+                          }}
+                          href={link}
+                        >
                           <span>{name}</span>
                         </Link>
                       )
@@ -178,7 +186,12 @@ const Footer = () => {
             ))}
           </div>
           <div className={styles.FooterTopRight}>
-            <div className={styles.emails}>
+            <div
+              style={{
+                flexDirection: router.locale === "iw" ? "row-reverse" : "row",
+              }}
+              className={styles.emails}
+            >
               <p
                 style={{
                   width: "59.7%",

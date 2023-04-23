@@ -57,7 +57,11 @@ export default function Competition({
   const [image, setImage] = useState<string | undefined>(undefined);
   const router = useRouter();
   return (
-    <div>
+    <div
+      style={{
+        textAlign: router.locale === "iw" ? "right" : "left",
+      }}
+    >
       <Head>
         <title>
           Win u Watch
@@ -331,9 +335,8 @@ export default function Competition({
                   </p>
 
                   <p>
-                    {t("runup")} 4 {t("willwin")} {Formater(
-
-                      parseFloat(data.run_up_prize || "0"))}{" "}
+                    {t("runup")} 4 {t("willwin")}{" "}
+                    {Formater(parseFloat(data.run_up_prize || "0"))}{" "}
                     {t("creditto")}
                   </p>
                 </div>

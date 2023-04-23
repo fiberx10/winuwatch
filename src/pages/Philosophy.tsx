@@ -9,10 +9,16 @@ import styles from "@/styles/Philosophy.module.css";
 import { Fade } from "@mui/material";
 import { useTranslations } from "next-intl";
 import type { GetStaticPropsContext } from "next";
+import { useRouter } from "next/router";
 export default function Philosopht() {
+  const router = useRouter();
   const t = useTranslations("philosophy");
   return (
-    <div>
+    <div
+      style={{
+        textAlign: router.locale === "iw" ? "right" : "left",
+      }}
+    >
       <Head>
         <title>Win u Watch - Philosophy</title>
         <meta name="description" content="Win u Watch Our Philosophy" />

@@ -5,12 +5,19 @@
 .compWrapper {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
 }
 .CompetitionMain {
   display: flex;
   gap: 2.5rem;
-  padding: 20px 50px 70px 50px;
+  width: 100%;
+  padding: 0px 50px;
+}
+@media only screen and (max-width: 1160px) {
+  .CompetitionMain {
+    flex-direction: column;
+    align-items: center;
+  }
 }
 .compDesc {
   background: #f8f6f4;
@@ -132,6 +139,7 @@
   text-transform: uppercase;
   color: #000000;
   width: 60%;
+  text-align: left;
   min-width: 434px;
 }
 .CompTit p {
@@ -181,7 +189,7 @@
 .CompTicketSelec {
   display: flex;
   flex-direction: column;
-  width: 90%;
+  width: 100%;
   gap: 1rem;
 }
 .CompTicketSelec h3 {

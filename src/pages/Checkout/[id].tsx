@@ -91,7 +91,11 @@ export default function CheckoutPage({
     })();
   }, [order]);
   return (
-    <div>
+    <div
+      style={{
+        textAlign: router.locale === "iw" ? "right" : "left",
+      }}
+    >
       <Head>
         <title>Win u Watch - Checkout</title>
         <meta name="description" content="Win u Watch Checkout" />
