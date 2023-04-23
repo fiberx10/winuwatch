@@ -62,7 +62,6 @@ const UpComing: React.FC<{
         slidesPerView={5}
         loop={true}
         onSlideChange={() => console.log("slide change")}
-        onSwiper={(swiper) => console.log(swiper)}
         onBeforeInit={(swiper) => {
           swiperRef.current = swiper;
         }}
