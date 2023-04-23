@@ -18,12 +18,12 @@ const prisma = new PrismaClient({
 });
 
 export default async function send(req: NextApiRequest, res: NextApiResponse) {
-  const OrdeerID = "97d79eef-5e5e-4884-a9f0-4143eb5fbd1e";
+  const OrderID = "b02e8ab1-e42c-4f8e-9650-4312822bda32";
 
-  const data = await GetData(OrdeerID, prisma);
-  const EmailRender = Email(data);
+  //const data = await GetData(OrdeerID, prisma);
+  //const EmailRender = Email(data);
 
-  await Transporter.sendMail({
+  /*await Transporter.sendMail({
     from: "noreply@winuwatch.uk",
     to: "louihranim@gmail.com",
     subject: `Order Confirmation - Winuwatch #${data[0]?.id || "000000"}`,
@@ -47,4 +47,9 @@ export default async function send(req: NextApiRequest, res: NextApiResponse) {
   // res.send(data[0]?.Ticket.map((ticket) => ticket.id));
 
   res.send(EmailRender);
+  */
+
+
+
+  res.send(await GetData(OrderID, prisma));
 }
