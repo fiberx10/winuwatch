@@ -12,7 +12,7 @@ import Link from "next/link";
 export default function NavBar() {
   const t = useTranslations("navitems");
   const [open, setOpen] = useState(false);
-  const [navColor, setNavColor] = useState("");
+  const [navColor, setNavColor] = useState("white");
   const router = useRouter();
   const { cardDetails } = useCart();
 
@@ -125,18 +125,9 @@ export default function NavBar() {
         >
           {t("charity")}
         </Link>
-        <span
-          style={{
-            fontWeight:
-              typeof window !== "undefined" &&
-              window.location.pathname === "/Cart"
-                ? "600"
-                : "initial",
-          }}
-          onClick={() => router.push("/Cart")}
-        >
+        <Link style={{ color: navColor }} href={"/Cart"}>
           {`${t("cart")} (${cardDetails().Number_of_item})`}
-        </span>
+        </Link>
 
         <div>
           <Image
