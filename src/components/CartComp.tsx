@@ -9,6 +9,7 @@ import { Backdrop, Box, Fade, Modal } from "@mui/material";
 import { CloseOutlined } from "@ant-design/icons";
 import { useTranslations } from "next-intl";
 import Loader from "./Loader";
+import { Form, Formik } from "formik";
 const CartComp = () => {
   const t = useTranslations("cart");
   const [open, setOpen] = useState(false);
@@ -287,19 +288,35 @@ const CartComp = () => {
                       </h2>
                       <div className={styles.questionsCon}>
                         {questionImgs.map(({ name }, i) => (
-                          <button
-                            key={i}
-                            // eslint-disable-next-line @typescript-eslint/no-misused-promises
-                            onClick={async () => {
-                              if (randomImage?.name.includes(name)) {
-                                await createOrder({ comps: competitions });
-                              } else {
-                                setWrong(true);
-                              }
+                          <Formik
+                            initialValues={{
+                              text: false,
                             }}
+                            onSubmit={async (values, actions) => {
+                              console.log(values.text);
+
+                              await createOrder({ comps: competitions });
+                              actions.setSubmitting(false);
+                            }}
+                            key={i}
                           >
-                            {name}
-                          </button>
+                            {({ setFieldValue }) => (
+                              <Form>
+                                <button
+                                  type="submit"
+                                  onClick={() => {
+                                    if (randomImage?.name.includes(name)) {
+                                      setFieldValue("text", true);
+                                    } else {
+                                      setWrong(true);
+                                    }
+                                  }}
+                                >
+                                  {name}
+                                </button>
+                              </Form>
+                            )}
+                          </Formik>
                         ))}
                       </div>
                     </>

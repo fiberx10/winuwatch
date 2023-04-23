@@ -168,17 +168,6 @@ export const OrderRouter = createTRPCRouter({
             data: {
               ...data,
               status: OrderStatus.PENDING,
-              Ticket: {
-                createMany: {
-                  data: input.comps
-                    .map(({ compID, number_tickets }) =>
-                      new Array(number_tickets).fill(0).map((_) => ({
-                        competitionId: compID,
-                      }))
-                    )
-                    .flat(),
-                },
-              },
             },
           }),
           await Stripe.checkout.sessions.create({
