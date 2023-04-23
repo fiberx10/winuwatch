@@ -13,6 +13,7 @@ import Reviews from "@/components/Reviews";
 import Footer from "@/components/Footer";
 //import OurWinner from "@/components/OurWinner";
 import UpComing from "@/components/UpComing";
+import { useRouter } from "next/router";
 //import { api } from "@/utils/api";
 
 export default function Index() {
@@ -95,9 +96,14 @@ export default function Index() {
       text: "Perpetual calendar ultra-thin",
     },
   ];
+  const router = useRouter();
   //awin
   return (
-    <>
+    <div
+      style={{
+        textAlign: router.locale === "iw" ? "right" : "left",
+      }}
+    >
       <Head>
         <title>Win u Watch - Home</title>
         <meta name="description" content="Win u Watch HomePage" />
@@ -114,7 +120,7 @@ export default function Index() {
       <Reviews />
       <UpComing slides={upComingWatchesCarou} />
       <Footer />
-    </>
+    </div>
   );
 }
 

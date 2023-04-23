@@ -91,7 +91,11 @@ export default function CheckoutPage({
     })();
   }, [order]);
   return (
-    <div>
+    <div
+      style={{
+        textAlign: router.locale === "iw" ? "right" : "left",
+      }}
+    >
       <Head>
         <title>Win u Watch - Checkout</title>
         <meta name="description" content="Win u Watch Checkout" />
@@ -393,7 +397,8 @@ export default function CheckoutPage({
                                   if (
                                     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                                     //@ts-ignore
-                                    !isValidDateString(String(value._i))
+                                    typeof value === "string" &&
+                                    !isValidDateString(value)
                                   ) {
                                     setError(
                                       "Date contains invalid characters"

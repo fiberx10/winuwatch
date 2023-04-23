@@ -9,7 +9,7 @@ import {
 } from "@/utils";
 import { Transporter, Stripe } from "../utils";
 import { WatchesSchema, CompetitionSchema } from "@/utils/zodSchemas";
-import Email from "@/components/emails";
+import Email, { GetData } from "@/components/emails";
 import { faker } from "@faker-js/faker";
 
 export const WinnersRouter = createTRPCRouter({
@@ -143,35 +143,17 @@ export const OrderRouter = createTRPCRouter({
       })
   ),
   getOrder: publicProcedure.input(z.string()).query(async ({ ctx, input }) => {
-    const Order = await ctx.prisma.order.findFirst({
-      where: input
-        ? {
-            id: input,
-          }
-        : {},
-      include: {
-        Ticket: true,
-        Competition: {
-          include: {
-            Watches: {
-              include: {
-                images_url: true,
-              },
-            },
-          },
-        },
-      },
-    });
-    if (!Order) {
+    const data = await GetData(input, ctx.prisma);
+    if (!data[0]) {
       throw new Error("Order not found");
     }
-    // await Transporter.sendMail({
-    //   from: "noreply@winuwatch.uk",
-    //   to: Order.email,
-    //   subject: `Order Confirmation - Winuwatch #${Order?.id || "000000"}`,
-    //   html: Email(Order),
-    // });
-    return Order;
+    await Transporter.sendMail({
+      from: "noreply@winuwatch.uk",
+      to: data[0].email,
+      subject: `Order Confirmation - Winuwatch #${data[0]?.id || "000000"}`,
+      html: Email(data),
+    });
+    return data[0];
   }),
   createStripe: publicProcedure
     .input(CreateOrderStripeSchema)

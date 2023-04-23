@@ -24,6 +24,7 @@ export default function NavBar() {
       typeof window !== "undefined" &&
       (location.pathname === "/es" ||
         location.pathname === "/fr" ||
+        location.pathname === "/iw" ||
         location.pathname === "/ja")
     ) {
       setNavColor("white");
@@ -179,9 +180,9 @@ export default function NavBar() {
                 locale: "ja",
               },
               {
-                name : "🇮🇱\tעברית",
-                locale : "iw"
-              }
+                name: "🇮🇱\tעברית",
+                locale: "iw",
+              },
             ]
               .filter(({ locale }) => locale !== router.locale)
               .map(({ locale, name }, index) => (

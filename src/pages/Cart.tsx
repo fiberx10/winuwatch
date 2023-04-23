@@ -4,10 +4,18 @@ import NavBar from "@/components/NavBar";
 import Head from "next/head";
 import styles from "@/styles/Cart.module.css";
 import type { GetStaticPropsContext } from "next";
+import { useRouter } from "next/router";
 
 export default function Cart() {
+  const router = useRouter();
+
   return (
-    <div className={styles.CartPageWrapper}>
+    <div
+      style={{
+        textAlign: router.locale === "iw" ? "right" : "left",
+      }}
+      className={styles.CartPageWrapper}
+    >
       <Head>
         <title>Win u Watch - Cart</title>
         <meta name="description" content="Win u Watch Cart" />
