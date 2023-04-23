@@ -259,9 +259,8 @@ export const OrderRouter = createTRPCRouter({
       const { comps, ...data } = input;
       const order = await ctx.prisma.order.create({
         data: {
-          ...data,
           address: "",
-          checkedEmail: true,
+          checkedEmail: false ,
           country: "",
           date: new Date(),
           first_name: "",
