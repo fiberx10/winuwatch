@@ -77,7 +77,7 @@ const CartComp = () => {
           console.log(e);
           return null;
         });
-  }, [id]);
+  }, [id, router]);
 
   return (
     <div className={styles.CartMain}>
