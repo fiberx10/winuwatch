@@ -1,7 +1,12 @@
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { CompetitionStatus, OrderStatus } from "@prisma/client";
-import { getBaseUrl, CreateOrderSchema } from "@/utils";
+import {
+  getBaseUrl,
+  CreateOrderSchema,
+  CreateOrderFromCartSchema,
+  CreateOrderStripeSchema,
+} from "@/utils";
 import { Transporter, Stripe } from "../utils";
 import { WatchesSchema, CompetitionSchema } from "@/utils/zodSchemas";
 import Email from "@/components/emails";
@@ -160,25 +165,26 @@ export const OrderRouter = createTRPCRouter({
     if (!Order) {
       throw new Error("Order not found");
     }
-    await Transporter.sendMail({
-      from: "noreply@winuwatch.uk",
-      to: Order.email,
-      subject: `Order Confirmation - Winuwatch #${Order?.id || "000000"}`,
-      html: Email(Order),
-    });
+    // await Transporter.sendMail({
+    //   from: "noreply@winuwatch.uk",
+    //   to: Order.email,
+    //   subject: `Order Confirmation - Winuwatch #${Order?.id || "000000"}`,
+    //   html: Email(Order),
+    // });
     return Order;
   }),
   createStripe: publicProcedure
-    .input(CreateOrderSchema)
+    .input(CreateOrderStripeSchema)
     .mutation(async ({ ctx, input }) => {
       try {
         const { comps, ...data } = input;
-        const id = faker.datatype.uuid();
         const [Order, StripeOrder] = await Promise.all([
-          ctx.prisma.order.create({
+          ctx.prisma.order.update({
+            where: {
+              id: input.id,
+            },
             data: {
               ...data,
-              id,
               status: OrderStatus.PENDING,
               Ticket: {
                 createMany: {
@@ -236,8 +242,8 @@ export const OrderRouter = createTRPCRouter({
                   }
                 : {}
             ),
-            success_url: `${getBaseUrl()}/Confirmation/${id}`,
-            cancel_url: `${getBaseUrl()}/Cancel/${id}`,
+            success_url: `${getBaseUrl()}/Confirmation/${input.id}`,
+            cancel_url: `${getBaseUrl()}/Cancel/${input.id}`,
           }),
         ]);
         console.log(StripeOrder);
@@ -264,7 +270,6 @@ export const OrderRouter = createTRPCRouter({
         });
 
         return {
-          id,
           url: StripeOrder.url,
         };
       } catch (e) {
@@ -274,6 +279,45 @@ export const OrderRouter = createTRPCRouter({
           url: null,
         };
       }
+    }),
+
+  createOrder: publicProcedure
+    .input(CreateOrderFromCartSchema)
+    .mutation(async ({ ctx, input }) => {
+      const id = faker.datatype.uuid();
+      const { comps, ...data } = input;
+      const order = await ctx.prisma.order.create({
+        data: {
+          ...data,
+          address: "",
+          checkedEmail: true,
+          country: "",
+          date: new Date(),
+          first_name: "",
+          last_name: "",
+          town: "",
+          zip: "",
+          phone: "",
+          email: "",
+          paymentMethod: "STRIPE",
+          checkedTerms: false,
+          totalPrice: 0,
+          id,
+          status: OrderStatus.INCOMPLETE,
+          Ticket: {
+            createMany: {
+              data: comps
+                .map(({ compID, number_tickets }) =>
+                  new Array(number_tickets).fill(0).map((_) => ({
+                    competitionId: compID,
+                  }))
+                )
+                .flat(),
+            },
+          },
+        },
+      });
+      return order.id;
     }),
   create: publicProcedure
     .input(CreateOrderSchema)

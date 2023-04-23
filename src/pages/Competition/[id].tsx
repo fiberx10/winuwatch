@@ -331,7 +331,9 @@ export default function Competition({
                   </p>
 
                   <p>
-                    {t("runup")} 4 {t("willwin")} {Formater(25, router.locale)}{" "}
+                    {t("runup")} 4 {t("willwin")} {Formater(
+
+                      parseFloat(data.run_up_prize || "0"))}{" "}
                     {t("creditto")}
                   </p>
                 </div>

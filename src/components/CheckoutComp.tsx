@@ -17,9 +17,10 @@ import PhoneInput from "react-phone-number-input";
 import * as Yup from "yup";
 import "react-phone-number-input/style.css";
 import Loader from "./Loader";
+import Loader2 from "./Loader2";
 import "moment/locale/fr";
 
-const CheckoutComp = () => {
+const CheckoutComp = ({ id }: any) => {
   const router = useRouter();
   const t = useTranslations("checkout");
   const { mutateAsync: createOrder } = api.Order.createStripe.useMutation();
@@ -40,7 +41,6 @@ const CheckoutComp = () => {
     );
   };
   const [error, setError] = useState<string | undefined>();
-  const [isNotConfirmed, setIsNotConfirmed] = useState<boolean>(false);
   const { totalCost } = cardDetails();
 
   const FormSchema = Yup.object().shape({
@@ -112,13 +112,12 @@ const CheckoutComp = () => {
                 checkedTerms: false,
               }}
               onSubmit={async (values, actions) => {
-                // disable the confirm button to prevent duplicate messages
-                setIsNotConfirmed(true);
                 //if a value in the object values is undefined, it will not be sent to the server
                 console.log("Form submitted:", values);
                 setLoading(true);
                 const { url, error } = await createOrder({
                   ...values,
+                  id: id as string,
                   paymentMethod: values.paymentMethod as "PAYPAL" | "STRIPE",
                   date: new Date(values.date),
                   zip: values.zip.toString(),
@@ -138,7 +137,7 @@ const CheckoutComp = () => {
                   setLoading(false);
                   await router.push(url);
                 }
-                setError(error || t("error"));
+                setError(error);
                 console.log(error);
                 // const res = CreateOrderSchema.safeParse(values);
 
@@ -296,24 +295,47 @@ const CheckoutComp = () => {
                                 max: "2005-01-01",
                               }}
                               onChange={(value) => {
-                                function isStringValid(str: string): boolean {
-                                  return /^[0-9/]+$/.test(str); // Test for only numbers and "/" symbol
-                                }
+                                const isValidDateString = (
+                                  dateString: string
+                                ): boolean => {
+                                  const dateRegex = /^\d{2}\/\d{2}\/\d{4}$/;
+                                  const isValidFormat =
+                                    dateRegex.test(dateString);
+
+                                  if (!isValidFormat) {
+                                    return false; // date string does not match format DD/MM/YYYY
+                                  }
+
+                                  const [day, month, year] = dateString
+                                    .split("/")
+                                    .map((str) => parseInt(str, 10));
+                                  const date = new Date(
+                                    year as number,
+                                    (month as number) - 1,
+                                    day
+                                  );
+                                  const minDate = new Date();
+                                  minDate.setFullYear(
+                                    minDate.getFullYear() - 18
+                                  );
+
+                                  const isValidDate =
+                                    date.getFullYear() === year &&
+                                    date.getMonth() === (month as number) - 1 &&
+                                    date.getDate() === day;
+                                  const isOver18 = date <= minDate;
+
+                                  return isValidDate && isOver18;
+                                };
+
+                                // if (
+
                                 if (
-                                  typeof value === "string" &&
-                                  value.length < 10
+                                  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                  //@ts-ignore
+                                  !isValidDateString(String(value._i))
                                 ) {
-                                  setError("Please enter correct date format");
-                                } else if (
-                                  typeof value === "string" &&
-                                  value.length > 10
-                                ) {
-                                  setError("Please enter correct date format");
-                                } else if (
-                                  typeof value === "string" &&
-                                  isStringValid(value) === false
-                                ) {
-                                  setError("Invalid characters found");
+                                  setError("Date contains invalid characters");
                                 } else {
                                   setError("");
                                 }
@@ -589,69 +611,24 @@ const CheckoutComp = () => {
                       </div>
 
                       <div className={styles.orderSumBot}>
-                        {values.paymentMethod === "PAYPAL" ? (
-                          <PayPalScriptProvider
-                            options={{
-                              "client-id": `${
-                                process.env.NEXT_PUBLIC_PAYPAL_ID as string
-                              }`,
-                            }}
-                          >
-                            <PayPalButtons
-                              onClick={async () => {
-                                console.log("Form submitted:", values);
-
-                                const res = CreateOrderSchema.safeParse(values);
-
-                                if (res.success) {
-                                  if (!IsLegal(values.date)) {
-                                    setError(
-                                      "You must be 18 years old to purchase a ticket"
-                                    );
-                                  } else {
-                                    await createOrder(res.data);
-                                  }
-                                }
-                              }}
-                              forceReRender={[
-                                values.comps.reduce(
-                                  (a, b) =>
-                                    a + b.number_tickets * b.price_per_ticket,
-                                  0
-                                ),
-                              ]}
-                              /*
-                            createOrder={(data, actions) => {
-                              return actions.order.create({
-                                purchase_units: values.comp.map((value) => ({
-                                  amount: {
-                                    currency_code: "USD",
-                                    value: (
-                                      value.number_tickets *
-                                      value.price_per_ticket
-                                    )
-                                      .toPrecision(2)
-                                      .toString(),
-                                  },
-                                })),
-                              });
-                            }}
-                            */
-                              style={{ layout: "horizontal" }}
-                            />
-                          </PayPalScriptProvider>
-                        ) : (
-                          <button
-                            disabled={loading}
-                            type="submit"
-                            onClick={() => {
-                              if (!values.checkedTerms)
-                                return alert(`${t("shouldacceptterms")}`);
-                            }}
-                          >
-                            {t("confirmorder")}
-                          </button>
-                        )}
+                        <button
+                          disabled={loading || error ? true : false}
+                          style={{
+                            backgroundColor: error
+                              ? "rgba(30, 30, 30, 0.3)"
+                              : loading
+                              ? "#cbb9ac"
+                              : "#cbb9ac",
+                            cursor: loading || error ? "default" : "pointer",
+                          }}
+                          type="submit"
+                          onClick={() => {
+                            if (!values.checkedTerms)
+                              return alert(`${t("shouldacceptterms")}`);
+                          }}
+                        >
+                          {loading ? <Loader2 /> : t("confirmorder")}
+                        </button>
                       </div>
                     </div>
                   </div>
