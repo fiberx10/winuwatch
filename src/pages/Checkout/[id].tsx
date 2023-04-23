@@ -393,7 +393,8 @@ export default function CheckoutPage({
                                   if (
                                     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                                     //@ts-ignore
-                                    !isValidDateString(String(value._i))
+                                    typeof value === "string" &&
+                                    !isValidDateString(value)
                                   ) {
                                     setError(
                                       "Date contains invalid characters"
