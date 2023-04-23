@@ -12,6 +12,7 @@ import { useTranslations } from "next-intl";
 
 import { useCart } from "@/components/Store";
 import { useEffect } from "react";
+import { useRouter } from "next/router";
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { id } = context.query;
   return {
@@ -35,8 +36,13 @@ export default function Confirmation({
     reset();
   }, [reset]);
 
+  const router = useRouter();
   return (
-    <div>
+    <div
+      style={{
+        textAlign: router.locale === "iw" ? "right" : "left",
+      }}
+    >
       <Head>
         <title>Order Complete</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />

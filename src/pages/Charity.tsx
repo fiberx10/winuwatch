@@ -7,10 +7,16 @@ import Footer from "@/components/Footer";
 import NavBar from "@/components/NavBar";
 import Head from "next/head";
 import type { GetStaticPropsContext } from "next";
+import { useRouter } from "next/router";
 
 export default function Charity() {
+  const router = useRouter();
   return (
-    <div>
+    <div
+      style={{
+        textAlign: router.locale === "iw" ? "right" : "left",
+      }}
+    >
       <Head>
         <title>Win u Watch - Charity</title>
         <meta name="description" content="Win u Watch Our Charity" />

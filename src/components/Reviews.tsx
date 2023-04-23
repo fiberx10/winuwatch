@@ -62,7 +62,13 @@ const Reviews = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
   return (
-    <div id="trustpilot" className={styles.ReviewsContainer}>
+    <div
+      style={{
+        textAlign: "left",
+      }}
+      id="trustpilot"
+      className={styles.ReviewsContainer}
+    >
       <div className={styles.AliceContainer}>
         <AliceCarousel
           infinite={true}

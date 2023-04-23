@@ -111,7 +111,12 @@ const CartComp = () => {
                     "/images/watch.png"
                   }
                 />
-                <div className={styles.watchleftDesc}>
+                <div
+                  style={{
+                    textAlign: "left",
+                  }}
+                  className={styles.watchleftDesc}
+                >
                   <h1>{ComptetionData.Watches.model}</h1>
                   <h4>{ComptetionData.Watches.Bracelet_material}</h4>
                   <p>{ComptetionData.Watches.brand}</p>
