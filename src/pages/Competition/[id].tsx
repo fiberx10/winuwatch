@@ -144,7 +144,7 @@ export default function Competition({
                   )}
                   {data.start_date < new Date() && (
                     <div className={styles.tickets}>
-                      {data.remaining_tickets === 0 ||
+                      {data.remaining_tickets <= 0 ||
                       data.end_date < new Date() ? (
                         <p>{t("noticketleft")}</p>
                       ) : (
@@ -202,7 +202,7 @@ export default function Competition({
                         style={{
                           display:
                             filter === MAX_TICKETS ||
-                            data.remaining_tickets === 0 ||
+                            data.remaining_tickets <= 0 ||
                             data.end_date < new Date()
                               ? "none"
                               : "flex",
