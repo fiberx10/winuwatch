@@ -3,8 +3,8 @@ import { Formater, getBaseUrl, DateFormater } from "@/utils";
 
 import { renderToString } from "react-dom/server";
 
-export const GetData = async (OrderID: string, prismaClient: PrismaClient) =>
-  await Promise.all([
+export const GetData = async (OrderID: string, prismaClient: PrismaClient) => {
+  const [order, comps] = await Promise.all([
     prismaClient.order.findUnique({
       where: {
         id: OrderID,
@@ -25,14 +25,19 @@ export const GetData = async (OrderID: string, prismaClient: PrismaClient) =>
       },
     }),
   ]);
-
-export const Email = ([order, comps]: [
-  ReturnType<typeof GetData> extends Promise<infer T>
-    ? T extends Promise<infer U>
-      ? U
-      : T
-    : never
-][number]) => (
+  return {
+    order,
+    comps: comps.filter(({ Ticket }) => Ticket.length > 0),
+  };
+};
+export const Email = ({
+  order,
+  comps,
+}: ReturnType<typeof GetData> extends Promise<infer T>
+  ? T extends Promise<infer U>
+    ? U
+    : T
+  : never) => (
   <>
     <head>
       <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -123,13 +128,16 @@ export const Email = ([order, comps]: [
                       processed. you have now officially entered in the{" "}
                     </p>
                     <p style={{ margin: "0" }}>
-                      {comps.length > 1 ? "competitions" : "competition"}
+                      {comps && comps?.length > 1
+                        ? "competitions"
+                        : "competition"}
+                      {comps?.length > 1 ? "competitions" : "competition"}
                     </p>
                   </div>
                 </td>
               </tr>
               <tr>
-                {comps.map((c, i) => (
+                {comps?.map((c, i) => (
                   <tbody key={i}>
                     <tr>
                       <td>
