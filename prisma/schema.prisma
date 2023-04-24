@@ -90,7 +90,7 @@ model Order {
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
   totalPrice    Float
-  status        OrderStatus
+  status        order_status
   paymentId     String?
   intentId      String?
   Competition   Competition[]
@@ -146,14 +146,6 @@ model CompetitionToOrder {
   @@map("_CompetitionToOrder")
 }
 
-enum OrderStatus {
-  PENDING
-  CONFIRMED
-  CANCELLED
-  REFUNDED
-  INCOMPLETE
-}
-
 enum PaymentMethod {
   PAYPAL
   STRIPE
@@ -163,4 +155,12 @@ enum CompetitionStatus {
   ACTIVE
   NOT_ACTIVE
   COMPLETED
+}
+
+enum order_status {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  REFUNDED
+  INCOMPLETE
 }

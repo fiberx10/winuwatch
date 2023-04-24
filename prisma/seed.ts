@@ -1,5 +1,5 @@
 import { faker } from "@faker-js/faker";
-import { PrismaClient, PaymentMethod, OrderStatus } from "@prisma/client";
+import { PrismaClient, PaymentMethod, order_status } from "@prisma/client";
 
 const prisma = new PrismaClient({
   log: ["query", "info", "warn"],
