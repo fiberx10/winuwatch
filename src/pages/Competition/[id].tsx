@@ -369,7 +369,13 @@ export default function Competition({
                     ].map(
                       ({ item, value, translation }, i) =>
                         data.Watches && (
-                          <span key={i}>
+                          <span
+                            style={{
+                              flexDirection:
+                                router.locale === "iw" ? "row-reverse" : "row",
+                            }}
+                            key={i}
+                          >
                             <b>{translation}</b>
                             <p
                               style={{
@@ -413,7 +419,13 @@ export default function Competition({
                       ({ item, value }, i) =>
                         data.Watches &&
                         data.Watches !== null && (
-                          <span key={i}>
+                          <span
+                            style={{
+                              flexDirection:
+                                router.locale === "iw" ? "row-reverse" : "row",
+                            }}
+                            key={i}
+                          >
                             <b>{item}</b>
                             <p>{value}</p>
                           </span>

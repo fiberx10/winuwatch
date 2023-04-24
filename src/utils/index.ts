@@ -56,7 +56,7 @@ export const CreateOrderStripeSchema = OrderSchema.extend({
 const DEFAULTLOCAL = "en-UK";
 
 export const Formater = (value: number | bigint, local = DEFAULTLOCAL) =>
-  new Intl.NumberFormat(local, {
+  new Intl.NumberFormat(local === "iw" ? "il" : local, {
     style: "currency",
     currency: "GBP",
   }).format(value);
