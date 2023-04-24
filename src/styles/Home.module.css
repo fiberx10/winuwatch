@@ -617,6 +617,11 @@
   left: 10rem;
   width: 35%;
 }
+/* @media only screen and (max-width: 1180px) {
+  .dot4 {
+    top: 30%;
+  }
+} */
 .howtoTxt4 h2 {
   font-style: italic;
   font-weight: 300;
@@ -1029,10 +1034,10 @@
     height: 100%;
   }
   .dot3 {
-    top: 24%;
+    top: 30%;
   }
   .dot4 {
-    top: 49%;
+    top: 60%;
   }
   .AliceContainer h1 {
     margin-left: 10px;
