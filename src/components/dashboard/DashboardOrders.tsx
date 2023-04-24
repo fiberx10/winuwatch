@@ -2,7 +2,7 @@
 import * as React from "react";
 import { api } from "@/utils/api";
 import styles from "@/styles/Dashboard.module.css";
-import { Button } from "react-bootstrap";
+import { Alert, Button } from "react-bootstrap";
 import { GoPrimitiveDot } from "react-icons/go";
 import { useState } from "react";
 import Modal from "react-bootstrap/Modal";
@@ -24,6 +24,7 @@ import TablePagination from "@mui/material/TablePagination";
 import { ExportToCsv } from "export-to-csv";
 import Loader from "../Loader";
 import { useRouter } from "next/router";
+import { Fade } from "@mui/material";
 
 const csvExporter = new ExportToCsv({
   fieldSeparator: ",",
@@ -44,6 +45,11 @@ const DashboardOrders = () => {
     opened: false,
     orderID: "",
   });
+  const [resend, setResend] = useState({
+    open: false,
+    id: "",
+  });
+  const { mutateAsync: sendEmail } = api.Order.sendEmail.useMutation();
   const { mutateAsync } = api.Winners.getCSV.useMutation();
 
   const { data, isLoading } = api.Competition.getAll.useQuery();
@@ -287,6 +293,7 @@ const DashboardOrders = () => {
                                         {DateFormater(row.createdAt)}
                                       </TableCell>
                                     </TableRow>
+
                                     <TableRow>
                                       <TableCell
                                         style={{
@@ -304,15 +311,69 @@ const DashboardOrders = () => {
                                           unmountOnExit
                                         >
                                           <Box
-                                            sx={{ margin: 1, width: "100%" }}
+                                            sx={{
+                                              margin: 1,
+                                              width: "100%",
+                                            }}
                                           >
-                                            <Typography
-                                              variant="h6"
-                                              gutterBottom
-                                              component="div"
+                                            {row.id === resend.id && (
+                                              <Fade
+                                                in={resend.open} //Write the needed condition here to make it appear
+                                                timeout={{
+                                                  enter: 1000,
+                                                  exit: 1000,
+                                                }} //Edit these two values to change the duration of transition when the element is getting appeared and disappeard
+                                                addEndListener={() => {
+                                                  setTimeout(() => {
+                                                    setResend({
+                                                      open: false,
+                                                      id: "",
+                                                    });
+                                                  }, 2000);
+                                                }}
+                                              >
+                                                <Alert
+                                                  style={{
+                                                    transition: " 0.5s all",
+                                                  }}
+                                                  variant="success"
+                                                >
+                                                  Email Resent!
+                                                </Alert>
+                                              </Fade>
+                                            )}
+                                            <Box
+                                              sx={{
+                                                display: "flex",
+                                                alignItems: "center",
+                                                gap: "1rem",
+                                              }}
                                             >
-                                              Tickets
-                                            </Typography>
+                                              <Typography
+                                                variant="h6"
+                                                gutterBottom
+                                                component="div"
+                                              >
+                                                Tickets
+                                              </Typography>
+
+                                              <Button
+                                                onClick={async () => {
+                                                  setResend({
+                                                    open: !resend.open,
+                                                    id: row.id,
+                                                  });
+                                                  await sendEmail(row.id);
+                                                }}
+                                                size="sm"
+                                                style={{
+                                                  width: "max-content",
+                                                }}
+                                              >
+                                                Resend Email
+                                              </Button>
+                                            </Box>
+
                                             <Table
                                               size="small"
                                               aria-label="purchases"
@@ -336,7 +397,7 @@ const DashboardOrders = () => {
                                                   </TableCell>
                                                 </TableRow>
                                               </TableHead>
-                                              <TableBody>
+                                              <TableBody sx={{ width: "100%" }}>
                                                 {row.Ticket.map((ticket) => (
                                                   <TableRow key={ticket.id}>
                                                     <TableCell
