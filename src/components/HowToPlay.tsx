@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import styles from "../styles/Home.module.css";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
+import { useRouter } from "next/router";
 
 const HowToPlay = () => {
   const t = useTranslations("home");
@@ -18,6 +19,7 @@ const HowToPlay = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+  const router = useRouter();
   const theComp =
     typeof window !== "undefined" && document.getElementById("theComp");
   return (
@@ -46,6 +48,9 @@ const HowToPlay = () => {
             className={styles.dot1}
             src="/images/Dot.svg"
             alt="dot"
+            style={{
+              display: router.locale === "iw" ? "none" : "block",
+            }}
           />
           <Image
             width={10}
@@ -53,6 +58,9 @@ const HowToPlay = () => {
             className={styles.dot2}
             src="/images/Dot.svg"
             alt="dot"
+            style={{
+              display: router.locale === "iw" ? "none" : "block",
+            }}
           />
           <Image
             width={10}
@@ -60,6 +68,9 @@ const HowToPlay = () => {
             className={styles.dot3}
             src="/images/Dot.svg"
             alt="dot"
+            style={{
+              display: router.locale === "iw" ? "none" : "block",
+            }}
           />
           <Image
             width={10}
@@ -67,6 +78,9 @@ const HowToPlay = () => {
             className={styles.dot4}
             src="/images/Dot.svg"
             alt="dot"
+            style={{
+              display: router.locale === "iw" ? "none" : "block",
+            }}
           />
         </div>
         <div className={styles.howtoTxt3}>
