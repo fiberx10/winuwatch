@@ -291,9 +291,7 @@
     width: 105px;
     height: 105px;
   }
-  .orderItem {
-    justify-content: space-between;
-  }
+
   .orderTit {
     width: 200px;
   }
