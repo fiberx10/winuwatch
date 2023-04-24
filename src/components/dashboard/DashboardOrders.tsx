@@ -225,6 +225,7 @@ const DashboardOrders = () => {
                                   page * rowsPerPage,
                                   page * rowsPerPage + rowsPerPage
                                 )
+
                                 .map((row) => (
                                   <>
                                     <TableRow
