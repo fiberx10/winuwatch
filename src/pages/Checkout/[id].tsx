@@ -150,7 +150,7 @@ export default function CheckoutPage({
                 initialValues={{
                   first_name: "",
                   last_name: "",
-                  country: "",
+                  country: "France",
                   address: "",
                   town: "",
                   zip: "",
@@ -247,6 +247,7 @@ export default function CheckoutPage({
                                 required
                                 id="country"
                                 name="country"
+                                value={values.country}
                               >
                                 <option value="0">Select a Country</option>
                                 {countryList.map((country, i) => (
@@ -527,20 +528,7 @@ export default function CheckoutPage({
                                     {ComptetionData?.Watches.brand}{" "}
                                     {ComptetionData?.Watches.model}
                                   </h3>
-                                  {order.reduction > 0 && (
-                                    <p
-                                      style={{
-                                        color: "#a8957e",
-                                      }}
-                                    >
-                                      {`${t("discount")}\t${Formater(
-                                        order.reduction *
-                                          (order.number_tickets *
-                                            ComptetionData.ticket_price),
-                                        router.locale
-                                      )}`}
-                                    </p>
-                                  )}
+
                                   <span>
                                     {values.comps
                                       .filter(
@@ -560,6 +548,20 @@ export default function CheckoutPage({
                                         )
                                       )}
                                   </span>
+                                  {order.reduction > 0 && (
+                                    <p
+                                      style={{
+                                        color: "#a8957e",
+                                      }}
+                                    >
+                                      {`${t("discount")}\t${Formater(
+                                        order.reduction *
+                                          (order.number_tickets *
+                                            ComptetionData.ticket_price),
+                                        router.locale
+                                      )}`}
+                                    </p>
+                                  )}
                                   {values.comps[values.comps.length - 1] ===
                                   values.comps[i] ? (
                                     <div className={styles.OrdersFlexBotSum}>

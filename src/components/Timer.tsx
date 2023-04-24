@@ -38,7 +38,7 @@ const Timer = ({ date, displayFlex }: { date: Date; displayFlex: boolean }) => {
         <h6>{t("days")}</h6>
       </div>
       <div className={styles.timerItem}>
-        <p>{hours}</p>
+        <p>{date < new Date() ? "0" : hours}</p>
         <h6> {t("hours")}</h6>
       </div>
       <div className={styles.timerItem}>

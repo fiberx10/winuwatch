@@ -26,6 +26,7 @@ export const WinnersRouter = createTRPCRouter({
         },
       },
     });
+
     if (!competition) {
       throw new Error("Competition not found");
     }
