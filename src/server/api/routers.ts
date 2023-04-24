@@ -155,6 +155,23 @@ export const OrderRouter = createTRPCRouter({
     });
     return data.order;
   }),
+  sendEmail: publicProcedure
+    .input(z.string())
+    .mutation(async ({ ctx, input }) => {
+      const data = await GetData(input, ctx.prisma);
+      if (!data.order) {
+        throw new Error("Order not found");
+      }
+      await Transporter.sendMail({
+        from: "noreply@winuwatch.uk",
+        to: data.order.email,
+        subject: `Order Confirmation - Winuwatch #${
+          data.order?.id || "000000"
+        }`,
+        html: Email(data),
+      });
+      return true;
+    }),
   createStripe: publicProcedure
     .input(CreateOrderStripeSchema)
     .mutation(async ({ ctx, input }) => {
@@ -260,7 +277,7 @@ export const OrderRouter = createTRPCRouter({
       const order = await ctx.prisma.order.create({
         data: {
           address: "",
-          checkedEmail: false ,
+          checkedEmail: false,
           country: "",
           date: new Date(),
           first_name: "",

@@ -49,6 +49,7 @@ const DashboardOrders = () => {
     open: false,
     id: "",
   });
+  const { mutateAsync: sendEmail } = api.Order.sendEmail.useMutation();
   const { mutateAsync } = api.Winners.getCSV.useMutation();
 
   const { data, isLoading } = api.Competition.getAll.useQuery();
@@ -357,11 +358,12 @@ const DashboardOrders = () => {
                                               </Typography>
 
                                               <Button
-                                                onClick={() => {
+                                                onClick={async () => {
                                                   setResend({
                                                     open: !resend.open,
                                                     id: row.id,
                                                   });
+                                                  await sendEmail(row.id);
                                                 }}
                                                 size="sm"
                                                 style={{
