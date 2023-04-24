@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
-import { CompetitionStatus, OrderStatus } from "@prisma/client";
+import { CompetitionStatus, order_status } from "@prisma/client";
 import {
   getBaseUrl,
   CreateOrderSchema,
@@ -167,7 +167,7 @@ export const OrderRouter = createTRPCRouter({
             },
             data: {
               ...data,
-              status: OrderStatus.PENDING,
+              status: order_status.PENDING,
             },
           }),
           await Stripe.checkout.sessions.create({
@@ -259,9 +259,8 @@ export const OrderRouter = createTRPCRouter({
       const { comps, ...data } = input;
       const order = await ctx.prisma.order.create({
         data: {
-          ...data,
           address: "",
-          checkedEmail: true,
+          checkedEmail: false ,
           country: "",
           date: new Date(),
           first_name: "",
@@ -274,7 +273,7 @@ export const OrderRouter = createTRPCRouter({
           checkedTerms: false,
           totalPrice: 0,
           id,
-          status: OrderStatus.INCOMPLETE,
+          status: order_status.INCOMPLETE,
           Ticket: {
             createMany: {
               data: comps
@@ -297,7 +296,7 @@ export const OrderRouter = createTRPCRouter({
       return await ctx.prisma.order.create({
         data: {
           ...data,
-          status: OrderStatus.CONFIRMED,
+          status: order_status.CONFIRMED,
           Ticket: {
             createMany: {
               data: comps
@@ -315,7 +314,7 @@ export const OrderRouter = createTRPCRouter({
   update: publicProcedure
     .input(
       CreateOrderSchema.extend({
-        status: z.nativeEnum(OrderStatus),
+        status: z.nativeEnum(order_status),
         id: z.string(),
       })
     )
@@ -329,7 +328,7 @@ export const OrderRouter = createTRPCRouter({
       });
     }),
   updateStatus: publicProcedure
-    .input(z.object({ id: z.string(), status: z.nativeEnum(OrderStatus) }))
+    .input(z.object({ id: z.string(), status: z.nativeEnum(order_status) }))
     .mutation(async ({ ctx, input }) => {
       return await ctx.prisma.order.update({
         where: {
