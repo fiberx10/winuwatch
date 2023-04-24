@@ -128,9 +128,6 @@ export const Email = ({
                       processed. you have now officially entered in the{" "}
                     </p>
                     <p style={{ margin: "0" }}>
-                      {comps && comps?.length > 1
-                        ? "competitions"
-                        : "competition"}
                       {comps?.length > 1 ? "competitions" : "competition"}
                     </p>
                   </div>
