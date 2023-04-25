@@ -44,7 +44,7 @@ export default function CheckoutPage({
   const { data: items, isLoading } = api.Competition.getAll.useQuery({
     ids: competitions.map((comp) => comp.compID),
   });
-  const { data: order } = api.Order.getOrder.useQuery(id);
+  const { data: order } = api.Order.getOrderCheck.useQuery(id);
 
   const IsLegal = (Birthdate = new Date()) => {
     const LegalAge = 18;
@@ -173,6 +173,7 @@ export default function CheckoutPage({
                     paymentMethod: values.paymentMethod as "PAYPAL" | "STRIPE",
                     date: new Date(values.date),
                     zip: values.zip.toString(),
+                    locale: router.locale,
                   });
                   if (url) {
                     // await resend.sendEmail({

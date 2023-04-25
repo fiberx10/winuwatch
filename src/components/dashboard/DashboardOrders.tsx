@@ -72,7 +72,7 @@ const DashboardOrders = () => {
   const { data: orders } = api.Order.getAll.useQuery([show.data]);
 
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [rowsPerPage, setRowsPerPage] = useState(15);
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -224,6 +224,9 @@ const DashboardOrders = () => {
                                 ?.slice(
                                   page * rowsPerPage,
                                   page * rowsPerPage + rowsPerPage
+                                )
+                                .filter(
+                                  (order) => order.status !== "INCOMPLETE"
                                 )
 
                                 .map((row) => (
