@@ -86,6 +86,7 @@ model Affiliation {
   Order         Order[]
 
   @@index([competitionId])
+  @@map("affiliation")
 }
 
 model Order {

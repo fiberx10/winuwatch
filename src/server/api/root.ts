@@ -7,6 +7,7 @@ import {
   TicketsRouter,
   WinnersRouter,
   AuthRouter,
+  AffiliationRouter,
 } from "@/server/api/routers";
 
 /**
@@ -22,6 +23,7 @@ export const appRouter = createTRPCRouter({
   Tickets: TicketsRouter,
   DashAuth: AuthRouter,
   Winners: WinnersRouter,
+  Affiliation: AffiliationRouter,
 });
 
 // export type definition of API
