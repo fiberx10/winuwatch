@@ -44,7 +44,7 @@ export default function CheckoutPage({
   const { data: items, isLoading } = api.Competition.getAll.useQuery({
     ids: competitions.map((comp) => comp.compID),
   });
-  const { data: order } = api.Order.getAll.useQuery([id]);
+  const { data: order } = api.Order.getOrderCheck.useQuery(id);
 
   const IsLegal = (Birthdate = new Date()) => {
     const LegalAge = 18;
@@ -84,7 +84,7 @@ export default function CheckoutPage({
     void (async () => {
       if (
         order &&
-        (order[0]?.status === "CONFIRMED" || order[0]?.status === "CANCELLED")
+        (order.status === "CONFIRMED" || order.status === "CANCELLED")
       ) {
         return await router.push("/");
       }
@@ -116,8 +116,7 @@ export default function CheckoutPage({
             <Loader />
           </div>
         ) : order &&
-          (order[0]?.status === "CONFIRMED" ||
-            order[0]?.status === "CANCELLED") ? (
+          (order.status === "CONFIRMED" || order.status === "CANCELLED") ? (
           <div>
             <h1
               style={{

@@ -158,6 +158,16 @@ export const OrderRouter = createTRPCRouter({
     });
     return data.order;
   }),
+  getOrderCheck: publicProcedure
+    .input(z.string())
+    .query(async ({ ctx, input }) => {
+      const data = await GetData(input, ctx.prisma);
+      if (!data.order) {
+        throw new Error("Order not found");
+      }
+
+      return data.order;
+    }),
   AddTicketsAfterConfirmation: publicProcedure
     .input(z.object({ id: z.string(), comps: Comps }))
     .query(async ({ ctx, input }) => {
