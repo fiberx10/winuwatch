@@ -41,6 +41,14 @@ export const CreateOrderSchema = OrderSchema.extend({
   status: true,
   id: true,
 });
+export const Comps = z.array(
+  z.object({
+    compID: z.string(),
+    number_tickets: z.number().default(1),
+    price_per_ticket: z.number(),
+    reduction: z.number().default(0),
+  })
+);
 export const CreateOrderStripeSchema = OrderSchema.extend({
   comps: z.array(
     z.object({
@@ -50,13 +58,14 @@ export const CreateOrderStripeSchema = OrderSchema.extend({
       reduction: z.number().default(0),
     })
   ),
+  locale: z.string().default("en"),
 }).omit({
   status: true,
 });
 const DEFAULTLOCAL = "en-UK";
 
 export const Formater = (value: number | bigint, local = DEFAULTLOCAL) =>
-  new Intl.NumberFormat(local, {
+  new Intl.NumberFormat(local === "iw" ? "il" : local, {
     style: "currency",
     currency: "GBP",
   }).format(value);

@@ -6,6 +6,7 @@ import {
   CreateOrderSchema,
   CreateOrderFromCartSchema,
   CreateOrderStripeSchema,
+  Comps,
 } from "@/utils";
 import { Transporter, Stripe } from "../utils";
 import { WatchesSchema, CompetitionSchema } from "@/utils/zodSchemas";
@@ -26,6 +27,7 @@ export const WinnersRouter = createTRPCRouter({
         },
       },
     });
+
     if (!competition) {
       throw new Error("Competition not found");
     }
@@ -147,6 +149,7 @@ export const OrderRouter = createTRPCRouter({
     if (!data.order) {
       throw new Error("Order not found");
     }
+
     await Transporter.sendMail({
       from: "noreply@winuwatch.uk",
       to: data.order.email,
@@ -155,6 +158,52 @@ export const OrderRouter = createTRPCRouter({
     });
     return data.order;
   }),
+  getOrderCheck: publicProcedure
+    .input(z.string())
+    .query(async ({ ctx, input }) => {
+      const data = await GetData(input, ctx.prisma);
+      if (!data.order) {
+        throw new Error("Order not found");
+      }
+
+      return data.order;
+    }),
+  AddTicketsAfterConfirmation: publicProcedure
+    .input(z.object({ id: z.string(), comps: Comps }))
+    .query(async ({ ctx, input }) => {
+      const data = await GetData(input.id, ctx.prisma);
+      if (!data.order) {
+        throw new Error("Order not found");
+      }
+      await ctx.prisma.order.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          Ticket: {
+            createMany: {
+              data: input.comps
+                .map(({ compID, number_tickets }) =>
+                  new Array(number_tickets).fill(0).map((_) => ({
+                    competitionId: compID,
+                  }))
+                )
+                .flat(),
+            },
+          },
+        },
+      });
+      data.comps.length > 0 &&
+        (await Transporter.sendMail({
+          from: "noreply@winuwatch.uk",
+          to: data.order.email,
+          subject: `Order Confirmation - Winuwatch #${
+            data.order?.id || "000000"
+          }`,
+          html: Email(data),
+        }));
+      return data.order;
+    }),
   sendEmail: publicProcedure
     .input(z.string())
     .mutation(async ({ ctx, input }) => {
@@ -162,6 +211,7 @@ export const OrderRouter = createTRPCRouter({
       if (!data.order) {
         throw new Error("Order not found");
       }
+
       await Transporter.sendMail({
         from: "noreply@winuwatch.uk",
         to: data.order.email,
@@ -176,7 +226,7 @@ export const OrderRouter = createTRPCRouter({
     .input(CreateOrderStripeSchema)
     .mutation(async ({ ctx, input }) => {
       try {
-        const { comps, ...data } = input;
+        const { locale, comps, ...data } = input;
         const [Order, StripeOrder] = await Promise.all([
           ctx.prisma.order.update({
             where: {
@@ -230,8 +280,8 @@ export const OrderRouter = createTRPCRouter({
                   }
                 : {}
             ),
-            success_url: `${getBaseUrl()}/Confirmation/${input.id}`,
-            cancel_url: `${getBaseUrl()}/Cancel/${input.id}`,
+            success_url: `${getBaseUrl()}/${locale}/Confirmation/${input.id}`,
+            cancel_url: `${getBaseUrl()}/${locale}/Cancel/${input.id}`,
           }),
         ]);
         console.log(StripeOrder);
@@ -270,10 +320,9 @@ export const OrderRouter = createTRPCRouter({
     }),
 
   createOrder: publicProcedure
-    .input(CreateOrderFromCartSchema)
+    .input(CreateOrderFromCartSchema.optional())
     .mutation(async ({ ctx, input }) => {
       const id = faker.datatype.uuid();
-      const { comps, ...data } = input;
       const order = await ctx.prisma.order.create({
         data: {
           address: "",
@@ -293,13 +342,7 @@ export const OrderRouter = createTRPCRouter({
           status: order_status.INCOMPLETE,
           Ticket: {
             createMany: {
-              data: comps
-                .map(({ compID, number_tickets }) =>
-                  new Array(number_tickets).fill(0).map((_) => ({
-                    competitionId: compID,
-                  }))
-                )
-                .flat(),
+              data: [],
             },
           },
         },

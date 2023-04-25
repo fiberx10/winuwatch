@@ -30,6 +30,23 @@ export const GetData = async (OrderID: string, prismaClient: PrismaClient) => {
     comps: comps.filter(({ Ticket }) => Ticket.length > 0),
   };
 };
+export const Reduction = (ticketPrice: number, ticketNumber: number) => {
+  if (ticketNumber === 5) {
+    return Formater(
+      ticketPrice * ticketNumber - ticketPrice * ticketNumber * 0.1
+    );
+  } else if (ticketNumber === 10) {
+    return Formater(
+      ticketPrice * ticketNumber - ticketPrice * ticketNumber * 0.15
+    );
+  } else if (ticketNumber === 20) {
+    return Formater(
+      ticketPrice * ticketNumber - ticketPrice * ticketNumber * 0.2
+    );
+  } else {
+    return Formater(ticketPrice * ticketNumber);
+  }
+};
 export const Email = ({
   order,
   comps,
@@ -224,8 +241,9 @@ export const Email = ({
                                           }}
                                         >
                                           QUANTITY: {c.Ticket.length} - TOTAL:
-                                          {Formater(
-                                            c.ticket_price * c.Ticket.length
+                                          {Reduction(
+                                            c.ticket_price,
+                                            c.Ticket.length
                                           )}
                                         </p>
                                       </td>
