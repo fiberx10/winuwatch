@@ -84,6 +84,8 @@ model Affiliation {
   Competition   Competition @relation(fields: [competitionId], references: [id])
   updatedAt     DateTime    @updatedAt
   Order         Order[]
+
+  @@index([competitionId])
 }
 
 model Order {
