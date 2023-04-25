@@ -11,7 +11,7 @@ import type {
 import { useTranslations } from "next-intl";
 
 import { useCart } from "@/components/Store";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/router";
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { id } = context.query;
@@ -30,6 +30,7 @@ export default function Confirmation({
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const { reset, competitions } = useCart();
   // const { mutate: updateOrder, data } = api.Order.getOrder.useMutation();
+
   const { data } = api.Order.AddTicketsAfterConfirmation.useQuery({
     id: id,
     comps: competitions,
@@ -37,10 +38,10 @@ export default function Confirmation({
   const t = useTranslations("thanku");
 
   useEffect(() => {
-    if (competitions.length > 0 && data) {
+    if (data) {
       reset();
     }
-  }, [data]);
+  }, [reset, data]);
 
   const router = useRouter();
   return (
