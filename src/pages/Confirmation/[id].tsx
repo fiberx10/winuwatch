@@ -28,13 +28,20 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 export default function Confirmation({
   id,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const { data } = api.Order.getOrder.useQuery(id);
-  const { reset } = useCart();
+  const { reset, competitions } = useCart();
+  // const { mutate: updateOrder, data } = api.Order.getOrder.useMutation();
+
+  const { data } = api.Order.AddTicketsAfterConfirmation.useQuery({
+    id: id,
+    comps: competitions,
+  });
   const t = useTranslations("thanku");
 
   useEffect(() => {
-    reset();
-  }, [reset]);
+    if (data) {
+      reset();
+    }
+  }, [reset, data]);
 
   const router = useRouter();
   return (
