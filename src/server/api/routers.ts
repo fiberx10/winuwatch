@@ -193,14 +193,15 @@ export const OrderRouter = createTRPCRouter({
           },
         },
       });
-      await Transporter.sendMail({
-        from: "noreply@winuwatch.uk",
-        to: data.order.email,
-        subject: `Order Confirmation - Winuwatch #${
-          data.order?.id || "000000"
-        }`,
-        html: Email(data),
-      });
+      data.comps.length > 0 &&
+        (await Transporter.sendMail({
+          from: "noreply@winuwatch.uk",
+          to: data.order.email,
+          subject: `Order Confirmation - Winuwatch #${
+            data.order?.id || "000000"
+          }`,
+          html: Email(data),
+        }));
       return data.order;
     }),
   sendEmail: publicProcedure
