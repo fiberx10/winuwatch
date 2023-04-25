@@ -295,7 +295,7 @@ const CartComp = () => {
                             onSubmit={async (values, actions) => {
                               console.log(values.text);
 
-                              await createOrder({ comps: competitions });
+                              await createOrder();
                               actions.setSubmitting(false);
                             }}
                             key={i}
