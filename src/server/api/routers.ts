@@ -796,23 +796,23 @@ export const QuestionRouter = createTRPCRouter({
   }),
 });
 
-export const AffiliatesRouter = createTRPCRouter({
-  getAll: publicProcedure.query(async ({ ctx }) => {
-    return await ctx.prisma.affiliates.findMany();
-  }),
-  add: publicProcedure.input(
-    z.object({
-      name: z.string(),
-      url: z.string(),
-      imageURL: z.string(),
-    })
-  ),
-  update: publicProcedure.input(
-    z.object({
-      id: z.string(),
-      name: z.string().optional(),
-      url: z.string().optional(),
-      imageURL: z.string().optional(),
-    })
-  ),
-});
+// export const AffiliatesRouter = createTRPCRouter({
+//   getAll: publicProcedure.query(async ({ ctx }) => {
+//     return await ctx.prisma.affiliates.findMany();
+//   }),
+//   add: publicProcedure.input(
+//     z.object({
+//       name: z.string(),
+//       url: z.string(),
+//       imageURL: z.string(),
+//     })
+//   ),
+//   update: publicProcedure.input(
+//     z.object({
+//       id: z.string(),
+//       name: z.string().optional(),
+//       url: z.string().optional(),
+//       imageURL: z.string().optional(),
+//     })
+//   ),
+// });
