@@ -68,34 +68,50 @@ model Competition {
   Watches                  Watches?          @relation(fields: [watchesId], references: [id])
   Order                    Order[]
   Ticket                   Ticket[]
+  Affiliation              Affiliation[]
 
   @@index([id])
   @@map("competition")
 }
 
-model Order {
-  id            String        @id @default(cuid())
-  first_name    String
-  last_name     String
-  country       String
-  address       String
-  town          String?
-  zip           String
-  phone         String
-  email         String
-  date          DateTime
-  paymentMethod PaymentMethod
-  checkedEmail  Boolean
-  checkedTerms  Boolean
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime      @updatedAt
-  totalPrice    Float
-  status        order_status
-  paymentId     String?
-  intentId      String?
-  Competition   Competition[]
-  Ticket        Ticket[]
+model Affiliation {
+  id            String      @id @default(cuid())
+  discountCode  String      @unique
+  discountRate  Float       @default(0.1)
+  ownerEmail    String      @unique
+  createdAt     DateTime    @default(now())
+  competitionId String
+  Competition   Competition @relation(fields: [competitionId], references: [id])
+  updatedAt     DateTime    @updatedAt
+  Order         Order[]
+}
 
+model Order {
+  id              String        @id @default(cuid())
+  first_name      String
+  last_name       String
+  country         String
+  address         String
+  town            String?
+  zip             String
+  phone           String
+  email           String
+  date            DateTime
+  paymentMethod   PaymentMethod
+  checkedEmail    Boolean
+  checkedTerms    Boolean
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  totalPrice      Float
+  status          order_status
+  paymentId       String?
+  intentId        String?
+  Competition     Competition[]
+  Ticket          Ticket[]
+  affiliationCode String?
+  Discount        Affiliation?  @relation(fields: [affiliationCode], references: [id])
+
+  @@index([affiliationCode])
   @@map("order")
 }
 

@@ -110,6 +110,7 @@ export const TicketsRouter = createTRPCRouter({
       })
   ),
 });
+
 export const AuthRouter = createTRPCRouter({
   auth: publicProcedure
     .input(z.object({ username: z.string(), password: z.string() }))
@@ -120,6 +121,7 @@ export const AuthRouter = createTRPCRouter({
       );
     }),
 });
+
 export const OrderRouter = createTRPCRouter({
   getAll: publicProcedure.input(z.array(z.string()).optional()).query(
     async ({ ctx, input }) =>
@@ -269,6 +271,12 @@ export const OrderRouter = createTRPCRouter({
         };
       }
     }),
+
+  // checkDiscount: publicProcedure
+  //   .input(z.object({ code: z.string(), email: z.string() }))
+  //   .mutation(async ({ ctx, input }) => {
+  //     const { code, email } = input;
+  //   }),
 
   createOrder: publicProcedure
     .input(CreateOrderFromCartSchema)
@@ -787,3 +795,24 @@ export const QuestionRouter = createTRPCRouter({
     };
   }),
 });
+
+// export const AffiliatesRouter = createTRPCRouter({
+//   getAll: publicProcedure.query(async ({ ctx }) => {
+//     return await ctx.prisma.affiliates.findMany();
+//   }),
+//   add: publicProcedure.input(
+//     z.object({
+//       name: z.string(),
+//       url: z.string(),
+//       imageURL: z.string(),
+//     })
+//   ),
+//   update: publicProcedure.input(
+//     z.object({
+//       id: z.string(),
+//       name: z.string().optional(),
+//       url: z.string().optional(),
+//       imageURL: z.string().optional(),
+//     })
+//   ),
+// });
