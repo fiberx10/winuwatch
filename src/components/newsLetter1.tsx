@@ -81,10 +81,10 @@ const mail = (
                   background: order
                     ? order.Competition[0]?.Watches?.images_url[0]?.url
                     : `url(https://firebasestorage.googleapis.com/v0/b/winuwatch-bd56d.appspot.com/o/newsletterwatch.jpg?alt=media&token=b9a66883-ab78-495f-8fce-9838a8590c3a)`,
-                  backgroundSize: "100% 450px",
-                  backgroundPosition: "50% 60%",
+                  backgroundSize: "contain",
+                  backgroundPosition: "100% 97%",
                   backgroundRepeat: "no-repeat",
-                  height: "950px",
+                  height: "550px",
                   marginTop: "50px",
                 }}
               >
@@ -134,7 +134,7 @@ const mail = (
 
                 <tr>
                   <td>
-                    <div style={{ width: "100%", height: "720px" }}>
+                    <div style={{ width: "100%", height: "520px" }}>
                       <div
                         style={{
                           maxHeight: "0",
@@ -165,6 +165,7 @@ const mail = (
                                 fontSize: "16px",
                                 color: "#CBB9AC",
                                 margin: "0",
+                                fontWeight: "600",
                               }}
                             >
                               WORTH
@@ -175,7 +176,7 @@ const mail = (
                                 margin: "0",
                                 fontFamily: "DM Serif Display",
                                 color: "black",
-                                fontWeight: "500",
+                                fontWeight: "600",
                               }}
                             >
                               19,000£
@@ -183,43 +184,57 @@ const mail = (
                           </div>
                         </div>
                       </div>
-
                       <div
                         style={{
-                          width: "95%",
-                          height: "100px",
-                          marginTop: "460px",
-                          marginLeft: "0px",
-
-                          display: "inline-block",
+                          maxHeight: "0",
+                          maxWidth: "100%",
+                          overflow: " visible",
                         }}
                       >
                         <div
                           style={{
-                            background: "white",
+                            width: "100%",
+                            marginTop: "420px",
 
-                            width: "fit-content",
-                            padding: "10px ",
+                            display: "inline-block",
                           }}
                         >
-                          <p
+                          <div
                             style={{
-                              fontSize: "16px",
-                              margin: "5px 0px",
-                              textTransform: "uppercase",
-                              color: "black",
-                              textAlign: "center",
-                              fontWeight: "400",
-                              letterSpacing: "0.1rem",
-                              padding: "0px 0px 0px 0px",
+                              width: "95%",
+
+                              marginLeft: "0px",
+
+                              display: "inline-block",
                             }}
                           >
-                            Rolex GMT-Master II Black Dial, Blue & Red
-                            &quot;Pepsi&quot; Bezel, Jubilee Bracelet
-                          </p>
+                            <div
+                              style={{
+                                background: "white",
+                                marginTop: "10px",
+                                width: "fit-content",
+                                padding: "5px ",
+                              }}
+                            >
+                              <p
+                                style={{
+                                  fontSize: "16px",
+                                  margin: "5px 0px",
+                                  textTransform: "uppercase",
+                                  color: "black",
+                                  textAlign: "center",
+                                  fontWeight: "500",
+                                  letterSpacing: "0.1rem",
+                                  padding: "0px 0px 0px 0px",
+                                }}
+                              >
+                                Rolex GMT-Master II Black Dial, Blue & Red
+                                &quot;Pepsi&quot; Bezel, Jubilee Bracelet
+                              </p>
+                            </div>
+                          </div>
                         </div>
                       </div>
-
                       <table
                         align="center"
                         width="100%"
@@ -228,7 +243,8 @@ const mail = (
                           textTransform: "uppercase",
                           backgroundColor: "#cbb9ac",
                           color: "white",
-                          marginTop: "0px",
+                          padding: "50px 0px 10px 0px",
+                          marginTop: "460px",
                         }}
                         border={0}
                         cellPadding={0}
@@ -264,7 +280,6 @@ const mail = (
                                       <p
                                         style={{
                                           fontSize: "14px",
-                                          lineHeight: "24px",
                                           margin: "5px 0",
                                         }}
                                       >
@@ -273,7 +288,6 @@ const mail = (
                                       <p
                                         style={{
                                           fontSize: "14px",
-                                          lineHeight: "24px",
                                           margin: "5px 0",
                                         }}
                                       >
@@ -286,7 +300,8 @@ const mail = (
                                         width: "40%",
                                       }}
                                     >
-                                      <button
+                                      <a
+                                        href="winuwatch.com"
                                         style={{
                                           textTransform: "uppercase",
                                           color: "white",
@@ -296,10 +311,12 @@ const mail = (
                                           border: "none",
                                           padding: "10px 15px",
                                           cursor: "pointer",
+                                          marginRight: "10px",
+                                          textDecoration: "none",
                                         }}
                                       >
                                         enter competition
-                                      </button>
+                                      </a>
                                     </th>
                                   </tr>
                                 </tbody>
@@ -317,7 +334,7 @@ const mail = (
             <table
               align="center"
               width="100%"
-              style={{ fontWeight: 500 }}
+              style={{ fontWeight: 500, marginTop: "50px" }}
               border={0}
               cellPadding={0}
               cellSpacing={0}
@@ -338,18 +355,28 @@ const mail = (
                         padding: "20px",
                       }}
                     >
-                      What happens now?
-                      <br /> the contest will end on{" "}
+                      The competition will end on{" "}
                       {DateFormater(order?.Competition[0]?.end_date as Date) +
-                        " (Local Time in London) "}
-                      , the winners will be announced on{" "}
-                      {DateFormater(
-                        order?.Competition[0]?.drawing_date as Date
-                      ) + " (Local Time in London) "}
-                      <br /> please make sure to follow us on instagram where we{" "}
+                        " (Local Time in London). "}
                       <br />
-                      host a live for each competition. <br /> we wish you the
-                      best of luck!
+                      <br />
+                      <b style={{ fontSize: "25px", color: "black" }}>
+                        {" "}
+                        Don&apos;t delay in securing your tickets <br />
+                        as they are selling fast !
+                      </b>
+                      <br />
+                      <br />
+                      <span
+                        style={{
+                          fontWeight: "400",
+                          fontSize: "16px",
+                          color: "#CBB9AC",
+                        }}
+                      >
+                        For news, exclusive offers and beatiful watches - Follow
+                        us on <br /> instagram !
+                      </span>
                     </p>
                     <a
                       style={{
@@ -372,6 +399,7 @@ const mail = (
                         textAlign: "center",
                         fontWeight: "400",
                         background: "lightgrey",
+                        color: "black",
                       }}
                     >
                       Lisam Watch Ltd 63-66 Hatton Gardens, London, EC1N 8LE, UK
@@ -382,6 +410,7 @@ const mail = (
                           margin: "0",
                           fontWeight: "300",
                           marginRight: "auto",
+                          color: "black",
                         }}
                       >
                         NO LONGER WANT TO RECEIVE THESE EMAILS? UNSUBSCRIBE
@@ -394,6 +423,7 @@ const mail = (
                           style={{
                             margin: "0",
                             fontWeight: "300",
+                            color: "black",
                           }}
                         >
                           PRIVACY POLICY
