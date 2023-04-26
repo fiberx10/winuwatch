@@ -79,9 +79,8 @@ const mail = (
               <tbody
                 style={{
                   background: order
-                    ? // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-                      `url(https://firebasestorage.googleapis.com/v0/b/winuwatch-bd56d.appspot.com/o/newsletterwatch.jpg?alt=media&token=b9a66883-ab78-495f-8fce-9838a8590c3a)`
-                    : "",
+                    ? order.Competition[0]?.Watches?.images_url[0]?.url
+                    : `url(https://firebasestorage.googleapis.com/v0/b/winuwatch-bd56d.appspot.com/o/newsletterwatch.jpg?alt=media&token=b9a66883-ab78-495f-8fce-9838a8590c3a)`,
                   backgroundSize: "100% 450px",
                   backgroundPosition: "50% 60%",
                   backgroundRepeat: "no-repeat",
@@ -135,7 +134,7 @@ const mail = (
 
                 <tr>
                   <td>
-                    <div style={{ width: "300px", height: "550px" }}>
+                    <div style={{ width: "100%", height: "720px" }}>
                       <div
                         style={{
                           maxHeight: "0",
@@ -184,91 +183,132 @@ const mail = (
                           </div>
                         </div>
                       </div>
-                    </div>
-                    <table
-                      align="center"
-                      width="100%"
-                      style={{
-                        textAlign: "left",
-                        textTransform: "uppercase",
-                        backgroundColor: "#cbb9ac",
-                        color: "white",
-                      }}
-                      border={0}
-                      cellPadding={0}
-                      cellSpacing={0}
-                      role="presentation"
-                    >
-                      <tbody>
-                        <tr>
-                          <td>
-                            <p
-                              style={{
-                                fontSize: "16px",
-                                margin: "5px 0px",
-                                textTransform: "uppercase",
-                                color: "white",
-                                textAlign: "left",
-                                fontWeight: "300",
-                                letterSpacing: "0.1rem",
-                                padding: "0px 0px 0px 20px",
-                              }}
-                            >
-                              {order?.Competition[0]?.name}
-                            </p>
-                            <table
-                              align="center"
-                              width="100%"
-                              border={0}
-                              cellPadding={0}
-                              cellSpacing={0}
-                              role="presentation"
-                            >
-                              <tbody>
-                                <tr>
-                                  <td
-                                    style={{
-                                      width: "66%",
-                                      padding: "0px 0px 0px 20px",
-                                      fontSize: "16px",
-                                      margin: "5px 0px",
-                                      textTransform: "uppercase",
-                                      color: "white",
-                                      textAlign: "left",
-                                      fontWeight: "300",
-                                      letterSpacing: "0.1rem",
-                                    }}
-                                  >
-                                    <p
-                                      style={{
-                                        fontSize: "14px",
-                                        lineHeight: "24px",
-                                        margin: "5px 0",
-                                      }}
-                                    >
-                                      ORDER: {order?.id}
-                                    </p>
-                                    <p
-                                      style={{
-                                        fontSize: "14px",
-                                        lineHeight: "24px",
-                                        margin: "5px 0",
-                                      }}
-                                    >
-                                      QUANTITY: {order?.Ticket.length} - TOTAL:
-                                      {order?.totalPrice &&
-                                        Formater(order.totalPrice)}
-                                    </p>
-                                  </td>
 
-                                  <th></th>
-                                </tr>
-                              </tbody>
-                            </table>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
+                      <div
+                        style={{
+                          width: "95%",
+                          height: "100px",
+                          marginTop: "460px",
+                          marginLeft: "0px",
+
+                          display: "inline-block",
+                        }}
+                      >
+                        <div
+                          style={{
+                            background: "white",
+
+                            width: "fit-content",
+                            padding: "10px ",
+                          }}
+                        >
+                          <p
+                            style={{
+                              fontSize: "16px",
+                              margin: "5px 0px",
+                              textTransform: "uppercase",
+                              color: "black",
+                              textAlign: "center",
+                              fontWeight: "400",
+                              letterSpacing: "0.1rem",
+                              padding: "0px 0px 0px 0px",
+                            }}
+                          >
+                            Rolex GMT-Master II Black Dial, Blue & Red
+                            &quot;Pepsi&quot; Bezel, Jubilee Bracelet
+                          </p>
+                        </div>
+                      </div>
+
+                      <table
+                        align="center"
+                        width="100%"
+                        style={{
+                          textAlign: "left",
+                          textTransform: "uppercase",
+                          backgroundColor: "#cbb9ac",
+                          color: "white",
+                          marginTop: "0px",
+                        }}
+                        border={0}
+                        cellPadding={0}
+                        cellSpacing={0}
+                        role="presentation"
+                      >
+                        <tbody>
+                          <tr>
+                            <td>
+                              <table
+                                align="center"
+                                width="100%"
+                                border={0}
+                                cellPadding={0}
+                                cellSpacing={0}
+                                role="presentation"
+                              >
+                                <tbody>
+                                  <tr>
+                                    <td
+                                      style={{
+                                        width: "60%",
+                                        padding: "0px 0px 0px 20px",
+                                        fontSize: "20px",
+                                        margin: "5px 0px",
+                                        textTransform: "uppercase",
+                                        color: "white",
+                                        textAlign: "left",
+                                        fontWeight: "300",
+                                        letterSpacing: "0.1rem",
+                                      }}
+                                    >
+                                      <p
+                                        style={{
+                                          fontSize: "14px",
+                                          lineHeight: "24px",
+                                          margin: "5px 0",
+                                        }}
+                                      >
+                                        ONLY 1100 Tickets available
+                                      </p>
+                                      <p
+                                        style={{
+                                          fontSize: "14px",
+                                          lineHeight: "24px",
+                                          margin: "5px 0",
+                                        }}
+                                      >
+                                        Entry ticket&apos;s Price : 20£
+                                      </p>
+                                    </td>
+
+                                    <th
+                                      style={{
+                                        width: "40%",
+                                      }}
+                                    >
+                                      <button
+                                        style={{
+                                          textTransform: "uppercase",
+                                          color: "white",
+                                          fontWeight: "500",
+                                          fontSize: "14px",
+                                          backgroundColor: "black",
+                                          border: "none",
+                                          padding: "10px 15px",
+                                          cursor: "pointer",
+                                        }}
+                                      >
+                                        enter competition
+                                      </button>
+                                    </th>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
                   </td>
                 </tr>
               </tbody>
