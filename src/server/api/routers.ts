@@ -944,9 +944,53 @@ export const QuestionRouter = createTRPCRouter({
 });
 
 export const AffiliationRouter = createTRPCRouter({
-  // getAll: publicProcedure.query(async ({ ctx }) => {
-  //   return await ctx.prisma.affiliation.findMany();
-  // }),
-  // add: publicProcedure.input(z.object({})),
-  // update: publicProcedure.input(z.object({})),
+  getAll: publicProcedure.query(async ({ ctx }) => {
+    return await ctx.prisma.affiliation.findMany();
+  }),
+  add: publicProcedure
+    .input(
+      z.object({
+        discountCode: z.string(),
+        discountRate: z.number(),
+        ownerEmail: z.string(),
+        compitionId: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      return await ctx.prisma.affiliation.create({
+        data: {
+          ...input,
+        },
+      });
+    }),
+  update: publicProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        discountCode: z.string(),
+        discountRate: z.number(),
+        ownerEmail: z.string(),
+        compitionId: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { id, ...data } = input;
+      return await ctx.prisma.affiliation.update({
+        data,
+        where: { id },
+      });
+    }),
+  delete: publicProcedure
+    .input(
+      z.object({
+        id: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      return await ctx.prisma.affiliation.delete({
+        where: {
+          id: input.id,
+        },
+      });
+    }),
 });
