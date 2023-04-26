@@ -390,7 +390,7 @@
   place-items: center;
 }
 .watchCon p {
-  font-weight: 500;
+  font-weight: 400;
   font-size: 25px;
   margin-top: 5px !important;
   color: #987358;
@@ -398,6 +398,7 @@
 }
 .watchCon b {
   font-size: 35px;
+  font-weight: 500;
 }
 .WinnCon {
   margin-top: 200px;
