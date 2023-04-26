@@ -11,7 +11,7 @@ const Certificate = () => {
       <div className={styles.certifBox}>
         <Image
           alt="certificate"
-          src="/images/CertifSVG.svg"
+          src="/images/certifsvg.svg"
           width={434}
           height={534}
         />
