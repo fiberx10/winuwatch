@@ -69,7 +69,7 @@ const DashboardOrders = () => {
   };
   //DATA FROM BACKEND
 
-  const { data: orders } = api.Order.getAll.useQuery([show.data]);
+  const { data: orders } = api.Order.getAll.useQuery(show.data);
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(15);

@@ -59,7 +59,7 @@ export default function Competition({
   return (
     <div
       style={{
-        textAlign: router.locale === "iw" ? "right" : "left",
+        textAlign: router.locale === "il" ? "right" : "left",
       }}
     >
       <Head>
@@ -372,7 +372,7 @@ export default function Competition({
                           <span
                             style={{
                               flexDirection:
-                                router.locale === "iw" ? "row-reverse" : "row",
+                                router.locale === "il" ? "row-reverse" : "row",
                             }}
                             key={i}
                           >
@@ -422,7 +422,7 @@ export default function Competition({
                           <span
                             style={{
                               flexDirection:
-                                router.locale === "iw" ? "row-reverse" : "row",
+                                router.locale === "il" ? "row-reverse" : "row",
                             }}
                             key={i}
                           >

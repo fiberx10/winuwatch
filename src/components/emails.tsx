@@ -30,22 +30,21 @@ export const GetData = async (OrderID: string, prismaClient: PrismaClient) => {
     comps: comps.filter(({ Ticket }) => Ticket.length > 0),
   };
 };
+export const DISCOUNT_RATES = [
+  { threshold: 5, rate: 0.1 },
+  { threshold: 10, rate: 0.15 },
+  { threshold: 20, rate: 0.2 },
+];
+
 export const Reduction = (ticketPrice: number, ticketNumber: number) => {
-  if (ticketNumber === 5) {
-    return Formater(
-      ticketPrice * ticketNumber - ticketPrice * ticketNumber * 0.1
-    );
-  } else if (ticketNumber === 10) {
-    return Formater(
-      ticketPrice * ticketNumber - ticketPrice * ticketNumber * 0.15
-    );
-  } else if (ticketNumber === 20) {
-    return Formater(
-      ticketPrice * ticketNumber - ticketPrice * ticketNumber * 0.2
-    );
-  } else {
-    return Formater(ticketPrice * ticketNumber);
-  }
+  const discount = DISCOUNT_RATES.find(
+    ({ threshold }) => ticketNumber == threshold
+  );
+  return Formater(
+    discount
+      ? ticketPrice * ticketNumber * (1 - discount.rate)
+      : ticketPrice * ticketNumber
+  );
 };
 export const Email = ({
   order,
