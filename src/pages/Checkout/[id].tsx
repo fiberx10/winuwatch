@@ -32,6 +32,7 @@ import type {
   InferGetServerSidePropsType,
 } from "next";
 import Link from "next/link";
+import { checkCustomRoutes } from "next/dist/lib/load-custom-routes";
 export default function CheckoutPage({
   id,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
@@ -162,6 +163,7 @@ export default function CheckoutPage({
                   date: new Date(),
                   checkedEmail: true,
                   checkedTerms: false,
+                  affiliationCode: "",
                 }}
                 onSubmit={async (values, actions) => {
                   //if a value in the object values is undefined, it will not be sent to the server
@@ -421,6 +423,26 @@ export default function CheckoutPage({
                               }
                             </div>
                           </div>
+                        </div>
+                      </div>
+                      {/* Insert coupon */}
+                      <div className={styles.leftFormItem}>
+                      <h1>{/* {t("coupon")} */} Have a coupon code ?</h1>
+                          <div className={styles.CouponInput}>
+                            <Field
+                              type="text"
+                              name="coupon"
+                              placeholder={"Enter coupon code"}
+                            />
+                            <button
+                              type="button"
+                              onClick={(value) => {
+                                  setFieldValue("affiliationCode", value);
+                                  // checkDiscountCode(value);
+                              }}
+                            >
+                              ADD
+                            </button>
                         </div>
                       </div>
                       <div className={styles.leftFormItem}>
