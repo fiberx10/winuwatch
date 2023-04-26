@@ -14,6 +14,15 @@ import Email, { GetData } from "@/components/emails";
 import { faker } from "@faker-js/faker";
 import { TRPCError } from "@trpc/server";
 
+const coupongenerator = () => {
+  const possible =
+    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".split("");
+  const coupon = Array.from(
+    { length: 6 },
+    () => possible[Math.floor(Math.random() * possible.length)]
+  ).join("");
+  return coupon;
+};
 
 export const WinnersRouter = createTRPCRouter({
   getCSV: publicProcedure.input(z.string()).mutation(async ({ ctx, input }) => {
@@ -316,17 +325,16 @@ export const OrderRouter = createTRPCRouter({
     .input(
       z.object({
         code: z.string(),
-        email: z.string().email(),
         competitionId: z.string(),
       })
     )
     .mutation(async ({ ctx, input }) => {
       try {
-        const { code, email } = input;
-        const discount = await ctx.prisma.affiliation.findUnique({
+        const { code, competitionId } = input;
+        const discount = await ctx.prisma.affiliation.findMany({
           where: {
             discountCode: code,
-            ownerEmail: email,
+            competitionId,
           },
         });
         if (!discount) {
