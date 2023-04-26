@@ -394,14 +394,20 @@ export const OrderRouter = createTRPCRouter({
               },
             });
             if (updatedDiscount && updatedDiscount.uses % 5 === 0) {
+              // TODO: Add the correct data (we can fetch order that has the same email and use the same data) || (we can ask the user to fill the data)
+              //TODO: Maybe not create an order but just a ticket
               const wonOrder = await tx.order.create({
                 data: {
-                  address: "",
                   checkedEmail: true,
-                  competitionId: order.competitionId,
                   email: discount.ownerEmail,
-                  firstName: "",
-                  lastName: "",
+                  phone: "",
+                  first_name: "",
+                  last_name: "",
+                  country: "",
+                  address: "",
+                  zip: "",
+                  date: new Date(), //! ???????
+                  paymentMethod: payment_method.STRIPE, //! ???????
                   paymentId: "",
                   status: order_status.CONFIRMED,
                   totalPrice: 0,
@@ -409,7 +415,7 @@ export const OrderRouter = createTRPCRouter({
               });
               await tx.ticket.create({
                 data: {
-                  competitionId: order.competitionId,
+                  competitionId: discount.competitionId,
                   orderId: wonOrder.id,
                 },
               });
@@ -421,7 +427,7 @@ export const OrderRouter = createTRPCRouter({
                   // TODO: Add the correct template
                   order: {
                     id: wonOrder.id,
-                    competition: order.competitionId,
+                    competition: discount.competitionId,
                   },
                 }),
               });
