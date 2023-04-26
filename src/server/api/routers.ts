@@ -237,7 +237,7 @@ export const OrderRouter = createTRPCRouter({
     .input(CreateOrderStripeSchema)
     .mutation(async ({ ctx, input }) => {
       try {
-        const { locale, comps, ...data } = input;
+        const { locale, comps,affiliationId, ...data } = input;
         const [Order, StripeOrder] = await Promise.all([
           ctx.prisma.order.update({
             where: {
@@ -245,6 +245,7 @@ export const OrderRouter = createTRPCRouter({
             },
             data: {
               ...data,
+              affiliationId: affiliationId || undefined,
               status: order_status.PENDING,
             },
           }),

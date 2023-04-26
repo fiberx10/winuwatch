@@ -36,6 +36,7 @@ export default function CheckoutPage({
   id,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const router = useRouter();
+  const [affiliationId, setAffiliationId] = useState<string | undefined>();
   const t = useTranslations("checkout");
   const { mutateAsync: createOrder } = api.Order.createStripe.useMutation();
   const { competitions, cardDetails, reset } = useCart();
@@ -172,6 +173,7 @@ export default function CheckoutPage({
                     zip: values.zip.toString(),
                     paymentMethod: values.paymentMethod as "PAYPAL" | "STRIPE",
                     date: new Date(values.date),
+                    affiliationId,
                     locale: router.locale
                       ? (router.locale as (typeof i18n)[number])
                       : "en",
