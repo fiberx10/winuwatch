@@ -14,7 +14,7 @@ import Email, { GetData } from "@/components/emails";
 import { faker } from "@faker-js/faker";
 import { TRPCError } from "@trpc/server";
 
-const coupongenerator = () => {
+const discountCodeGenerator = (): string => {
   const possible =
     "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".split("");
   const coupon = Array.from(
@@ -1017,16 +1017,28 @@ export const AffiliationRouter = createTRPCRouter({
   add: publicProcedure
     .input(
       z.object({
-        discountCode: z.string(),
         discountRate: z.number(),
         ownerEmail: z.string().email(),
         competitionId: z.string(),
       })
     )
     .mutation(async ({ ctx, input }) => {
+      const discountCodes = await ctx.prisma.affiliation.findMany({
+        select: {
+          discountCode: true,
+        },
+      });
+      const discountCodeArray = discountCodes.map(
+        ({ discountCode }) => discountCode
+      );
+      let genDiscountCode: string = discountCodeGenerator();
+      while (!!discountCodeArray.includes(genDiscountCode)) {
+        genDiscountCode = discountCodeGenerator();
+      }
       return await ctx.prisma.affiliation.create({
         data: {
           ...input,
+          discountCode: genDiscountCode,
         },
       });
     }),
@@ -1034,7 +1046,6 @@ export const AffiliationRouter = createTRPCRouter({
     .input(
       z.object({
         id: z.string(),
-        discountCode: z.string(),
         discountRate: z.number(),
         ownerEmail: z.string(),
         compitionId: z.string(),
