@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
-import { CompetitionStatus, order_status, PaymentMethod } from "@prisma/client";
+import { CompetitionStatus, order_status } from "@prisma/client";
 import {
   getBaseUrl,
   CreateOrderSchema,
@@ -443,7 +443,6 @@ export const OrderRouter = createTRPCRouter({
                   } = ownerPrevOrders[0] || {};
                   const wonOrder = await tx.order.create({
                     data: {
-                      checkedEmail: true,
                       email: discount.ownerEmail,
                       phone: phone,
                       first_name: first_name,
@@ -452,8 +451,9 @@ export const OrderRouter = createTRPCRouter({
                       address: address,
                       zip: zip,
                       date: new Date(),
-                      paymentMethod: PaymentMethod.AFFILIATION,
-                      paymentId: "",
+                      paymentMethod: "AFFILIATION",
+                      checkedEmail: true,
+                      checkedTerms: true,
                       status: order_status.CONFIRMED,
                       totalPrice: 0,
                     },
