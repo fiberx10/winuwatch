@@ -321,11 +321,116 @@ export const OrderRouter = createTRPCRouter({
       }
     }),
 
-  // checkDiscount: publicProcedure
-  //   .input(z.object({ code: z.string(), email: z.string() }))
-  //   .mutation(async ({ ctx, input }) => {
-  //     const { code, email } = input;
-  //   }),
+  // TODO: The two procedures that was added
+  checkDiscount: publicProcedure
+    .input(
+      z.object({
+        code: z.string(),
+        email: z.string().email(),
+        competitionId: z.string(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const { code, email } = input;
+      const discount = await ctx.prisma.affiliation.findUnique({
+        where: {
+          discountCode: code,
+          ownerEmail: email,
+        },
+      });
+      if (!discount) {
+        throw new Error("Invalid code");
+      } else {
+        return discount;
+      }
+    }),
+
+  applyDiscount: publicProcedure
+    .input(z.object({ orderId: z.string(), discountId: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const { orderId, discountId } = input;
+      const order = await ctx.prisma.order.findUnique({
+        where: {
+          id: orderId,
+        },
+      });
+      if (!order) {
+        throw new Error("Invalid order");
+      } else if (order.status !== order_status.CONFIRMED) {
+        throw new Error("Order not confirmed");
+      } else {
+        const discount = await ctx.prisma.affiliation.findUnique({
+          where: {
+            id: discountId,
+          },
+        });
+        if (!discount) {
+          throw new Error("Invalid discount");
+        } else {
+          await ctx.prisma.$transaction(async (tx) => {
+            await tx.order.update({
+              where: {
+                id: orderId,
+              },
+              data: {
+                totalPrice: {
+                  decrement: discount.discountRate * order.totalPrice,
+                },
+              },
+            });
+            await tx.affiliation.update({
+              where: {
+                id: discountId,
+              },
+              data: {
+                uses: {
+                  increment: 1,
+                },
+              },
+            });
+            const updatedDiscount = await tx.affiliation.findUnique({
+              where: {
+                id: discountId,
+              },
+            });
+            if (updatedDiscount && updatedDiscount.uses % 5 === 0) {
+              const wonOrder = await tx.order.create({
+                data: {
+                  address: "",
+                  checkedEmail: true,
+                  competitionId: order.competitionId,
+                  email: discount.ownerEmail,
+                  firstName: "",
+                  lastName: "",
+                  paymentId: "",
+                  status: order_status.CONFIRMED,
+                  totalPrice: 0,
+                },
+              });
+              await tx.ticket.create({
+                data: {
+                  competitionId: order.competitionId,
+                  orderId: wonOrder.id,
+                },
+              });
+              await Transporter.sendMail({
+                from: "noreply@winuwatch.uk",
+                to: discount.ownerEmail,
+                subject: `Claim your free ticket - Winuwatch`,
+                html: Email({
+                  // TODO: Add the correct template
+                  order: {
+                    id: wonOrder.id,
+                    competition: order.competitionId,
+                  },
+                }),
+              });
+            }
+          });
+          return true;
+        }
+      }
+    }),
 
   createOrder: publicProcedure
     .input(CreateOrderFromCartSchema.optional())

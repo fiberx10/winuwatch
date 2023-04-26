@@ -81,6 +81,7 @@ model Affiliation {
   ownerEmail    String      @unique
   createdAt     DateTime    @default(now())
   competitionId String
+  uses          Int         @default(0)
   Competition   Competition @relation(fields: [competitionId], references: [id])
   updatedAt     DateTime    @updatedAt
   Order         Order[]
@@ -90,31 +91,31 @@ model Affiliation {
 }
 
 model Order {
-  id              String        @id @default(cuid())
-  first_name      String
-  last_name       String
-  country         String
-  address         String
-  town            String?
-  zip             String
-  phone           String
-  email           String
-  date            DateTime
-  paymentMethod   PaymentMethod
-  checkedEmail    Boolean
-  checkedTerms    Boolean
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt
-  totalPrice      Float
-  status          order_status
-  paymentId       String?
-  intentId        String?
-  Competition     Competition[]
-  Ticket          Ticket[]
-  affiliationCode String?
-  Discount        Affiliation?  @relation(fields: [affiliationCode], references: [id])
+  id            String        @id @default(cuid())
+  first_name    String
+  last_name     String
+  country       String
+  address       String
+  town          String?
+  zip           String
+  phone         String
+  email         String
+  date          DateTime
+  paymentMethod PaymentMethod
+  checkedEmail  Boolean
+  checkedTerms  Boolean
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  totalPrice    Float
+  status        order_status
+  paymentId     String?
+  intentId      String?
+  Competition   Competition[]
+  Ticket        Ticket[]
+  affiliationId String?
+  Discount      Affiliation?  @relation(fields: [affiliationId], references: [id])
 
-  @@index([affiliationCode])
+  @@index([affiliationId])
   @@map("order")
 }
 
