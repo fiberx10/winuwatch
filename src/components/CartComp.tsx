@@ -255,6 +255,21 @@ const CartComp = () => {
                         <CloseOutlined />
                       </span>
                     </div>
+                  ) : orderPosting ? (
+                    <div
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        background: "white",
+                        opacity: "0.8",
+                        display: "grid",
+                        placeItems: "center",
+                        zIndex: "9999999999999",
+                        padding: "20px",
+                      }}
+                    >
+                      <Loader />
+                    </div>
                   ) : (
                     <>
                       <div className={styles.ModalBoxTopFlex}>
@@ -326,24 +341,6 @@ const CartComp = () => {
             </Modal>
           </div>
         </>
-      )}
-      {orderPosting && (
-        <div
-          style={{
-            width: "100%",
-            height: "100vh",
-            background: "white",
-            opacity: "0.8",
-            display: "grid",
-            placeItems: "center",
-            position: "absolute",
-            zIndex: "9999999999999",
-            top: "0",
-            left: "0",
-          }}
-        >
-          <Loader />
-        </div>
       )}
     </div>
   );

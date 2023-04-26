@@ -390,13 +390,15 @@
   place-items: center;
 }
 .watchCon p {
-  font-weight: 400;
-  font-size: 18px;
+  font-weight: 500;
+  font-size: 25px;
   margin-top: 5px !important;
   color: #987358;
   text-transform: uppercase;
 }
-
+.watchCon b {
+  font-size: 35px;
+}
 .WinnCon {
   margin-top: 200px;
   display: flex;
