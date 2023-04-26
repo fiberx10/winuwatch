@@ -394,8 +394,8 @@ export const OrderRouter = createTRPCRouter({
               },
             });
             if (updatedDiscount && updatedDiscount.uses % 5 === 0) {
-              // TODO: Add the correct data (we can fetch order that has the same email and use the same data) || (we can ask the user to fill the data)
-              //TODO: Maybe not create an order but just a ticket
+              // TODO 1: Add the correct data (we can fetch order that has the same email and use the same data) || (we can ask the user to fill the data)
+              //TODO 2: Maybe not create an order or a ticket, but just decrement the remaining tickets of the competition
               const wonOrder = await tx.order.create({
                 data: {
                   checkedEmail: true,
@@ -407,7 +407,6 @@ export const OrderRouter = createTRPCRouter({
                   address: "",
                   zip: "",
                   date: new Date(), //! ???????
-                  paymentMethod: payment_method.STRIPE, //! ???????
                   paymentId: "",
                   status: order_status.CONFIRMED,
                   totalPrice: 0,
@@ -419,16 +418,22 @@ export const OrderRouter = createTRPCRouter({
                   orderId: wonOrder.id,
                 },
               });
+              await tx.competition.update({
+                where: {
+                  id: discount.competitionId,
+                },
+                data: {
+                  remaining_tickets: {
+                    decrement: 1,
+                  },
+                },
+              });
               await Transporter.sendMail({
                 from: "noreply@winuwatch.uk",
                 to: discount.ownerEmail,
                 subject: `Claim your free ticket - Winuwatch`,
                 html: Email({
                   // TODO: Add the correct template
-                  order: {
-                    id: wonOrder.id,
-                    competition: discount.competitionId,
-                  },
                 }),
               });
             }
