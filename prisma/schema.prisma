@@ -169,6 +169,7 @@ model CompetitionToOrder {
 enum PaymentMethod {
   PAYPAL
   STRIPE
+  AFFILIATION
 }
 
 enum CompetitionStatus {
