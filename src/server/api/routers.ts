@@ -14,6 +14,7 @@ import Email, { GetData } from "@/components/emails";
 import { faker } from "@faker-js/faker";
 import { TRPCError } from "@trpc/server";
 
+
 export const WinnersRouter = createTRPCRouter({
   getCSV: publicProcedure.input(z.string()).mutation(async ({ ctx, input }) => {
     const competition = await ctx.prisma.competition.findUnique({
@@ -34,7 +35,7 @@ export const WinnersRouter = createTRPCRouter({
     }
     return competition.Ticket.map((ticket) => ({
       ticketID: ticket.id,
-      Full_Name: `${ticket.Order.first_name} ${ticket.Order.last_name}`,
+      Full_Name: `${ticket.Order.first_name!} ${ticket.Order.last_name!}`,
       Order_ID: ticket.Order.id,
       competionName: competition.name,
       Total_Price: ticket.Order.totalPrice,
@@ -319,7 +320,7 @@ export const OrderRouter = createTRPCRouter({
         competitionId: z.string(),
       })
     )
-    .query(async ({ ctx, input }) => {
+    .mutation(async ({ ctx, input }) => {
       try {
         const { code, email } = input;
         const discount = await ctx.prisma.affiliation.findUnique({
