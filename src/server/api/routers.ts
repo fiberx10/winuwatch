@@ -122,16 +122,14 @@ export const AuthRouter = createTRPCRouter({
     }),
 });
 export const OrderRouter = createTRPCRouter({
-  getAll: publicProcedure.input(z.array(z.string()).optional()).query(
+  getAll: publicProcedure.input(z.string()).query(
     async ({ ctx, input }) =>
       await ctx.prisma.order.findMany({
         where: {
           Ticket: {
             some: {
               Competition: {
-                id: {
-                  in: input,
-                },
+                id: input,
               },
             },
           },
@@ -140,7 +138,11 @@ export const OrderRouter = createTRPCRouter({
           createdAt: "desc",
         },
         include: {
-          Ticket: true,
+          Ticket: {
+            where: {
+              competitionId: input,
+            },
+          },
         },
       })
   ),
