@@ -952,8 +952,8 @@ export const AffiliationRouter = createTRPCRouter({
       z.object({
         discountCode: z.string(),
         discountRate: z.number(),
-        ownerEmail: z.string(),
-        compitionId: z.string(),
+        ownerEmail: z.string().email(),
+        competitionId: z.string(),
       })
     )
     .mutation(async ({ ctx, input }) => {
