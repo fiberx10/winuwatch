@@ -296,18 +296,6 @@ export const OrderRouter = createTRPCRouter({
           data: {
             paymentId: StripeOrder.id,
           },
-          include: {
-            Ticket: true,
-            Competition: {
-              include: {
-                Watches: {
-                  include: {
-                    images_url: true,
-                  },
-                },
-              },
-            },
-          },
         });
 
         return {
@@ -982,14 +970,6 @@ export const WatchesRouter = createTRPCRouter({
     */
 });
 
-function shuffleArray(array: (string | undefined)[]) {
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
-  }
-  return array.filter((item): item is string => typeof item === "string");
-}
-
 export const QuestionRouter = createTRPCRouter({
   getOneRandom: publicProcedure.query(async ({ ctx }) => {
     const Questions = await ctx.prisma.question.findMany({
@@ -1007,7 +987,16 @@ export const QuestionRouter = createTRPCRouter({
     }
     return {
       ...Question,
-      answers: shuffleArray(Question.answers.map(({ answer }) => answer)) || [],
+      answers:
+        ((array: (string | undefined)[]) => {
+          for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+          }
+          return array.filter(
+            (item): item is string => typeof item === "string"
+          );
+        })(Question.answers.map(({ answer }) => answer)) || [],
     };
   }),
 });
