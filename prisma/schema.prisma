@@ -91,21 +91,21 @@ model Affiliation {
 
 model Order {
   id            String        @id @default(cuid())
-  first_name    String
-  last_name     String
-  country       String
-  address       String
+  first_name    String?
+  last_name     String?
+  country       String?
+  address       String?
   town          String?
-  zip           String
+  zip           String?
   phone         String
   email         String
-  date          DateTime
+  date          DateTime?
   paymentMethod PaymentMethod
-  checkedEmail  Boolean
-  checkedTerms  Boolean
+  checkedEmail  Boolean       @default(false)
+  checkedTerms  Boolean       @default(false)
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
-  totalPrice    Float
+  totalPrice    Float         @default(0)
   status        order_status
   paymentId     String?
   intentId      String?
