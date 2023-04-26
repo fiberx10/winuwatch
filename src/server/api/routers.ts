@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
-import { CompetitionStatus, order_status, PaymentMethod } from "@prisma/client";
+import { CompetitionStatus, order_status, PaymentMethod} from "@prisma/client";
 import {
   getBaseUrl,
   CreateOrderSchema,
@@ -12,6 +12,7 @@ import { Transporter, Stripe } from "../utils";
 import { WatchesSchema, CompetitionSchema } from "@/utils/zodSchemas";
 import Email, { GetData } from "@/components/emails";
 import { faker } from "@faker-js/faker";
+import { TRPCError } from "@trpc/server";
 import { TRPCError } from "@trpc/server";
 
 export const WinnersRouter = createTRPCRouter({
@@ -295,18 +296,6 @@ export const OrderRouter = createTRPCRouter({
           },
           data: {
             paymentId: StripeOrder.id,
-          },
-          include: {
-            Ticket: true,
-            Competition: {
-              include: {
-                Watches: {
-                  include: {
-                    images_url: true,
-                  },
-                },
-              },
-            },
           },
         });
 
@@ -982,13 +971,6 @@ export const WatchesRouter = createTRPCRouter({
     */
 });
 
-function shuffleArray(array: (string | undefined)[]) {
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
-  }
-  return array.filter((item): item is string => typeof item === "string");
-}
 
 export const QuestionRouter = createTRPCRouter({
   getOneRandom: publicProcedure.query(async ({ ctx }) => {
@@ -1007,7 +989,16 @@ export const QuestionRouter = createTRPCRouter({
     }
     return {
       ...Question,
-      answers: shuffleArray(Question.answers.map(({ answer }) => answer)) || [],
+      answers:
+        ((array: (string | undefined)[]) => {
+          for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+          }
+          return array.filter(
+            (item): item is string => typeof item === "string"
+          );
+        })(Question.answers.map(({ answer }) => answer)) || [],
     };
   }),
 });
