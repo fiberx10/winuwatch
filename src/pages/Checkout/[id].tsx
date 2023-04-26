@@ -25,7 +25,7 @@ import "react-phone-number-input/style.css";
 import Loader from "@/components/Loader";
 import Loader2 from "@/components/Loader2";
 import "moment/locale/fr";
-import { toFormikValidationSchema } from 'zod-formik-adapter';
+import { toFormikValidationSchema } from "zod-formik-adapter";
 
 import type {
   GetServerSidePropsContext,
@@ -145,11 +145,7 @@ export default function CheckoutPage({
           items && (
             <div className={styles.formMain}>
               <Formik
-                validationSchema={toFormikValidationSchema(CreateOrderStripeSchema.omit({
-                  zip: true,
-                }).extend({
-                  zip: z.number(),
-                  }))}
+                validationSchema={FormSchema}
                 initialValues={{
                   first_name: "",
                   last_name: "",
@@ -173,10 +169,12 @@ export default function CheckoutPage({
                   const { url, error } = await createOrder({
                     ...values,
                     id: id,
-                    zip : values.zip.toString(),
+                    zip: values.zip.toString(),
                     paymentMethod: values.paymentMethod as "PAYPAL" | "STRIPE",
                     date: new Date(values.date),
-                    locale: router.locale ? router.locale as typeof i18n[number] : "en",
+                    locale: router.locale
+                      ? (router.locale as (typeof i18n)[number])
+                      : "en",
                   });
                   if (url) {
                     // await resend.sendEmail({
