@@ -2,16 +2,15 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable  @typescript-eslint/restrict-template-expressions */
-import CheckoutComp from "@/components/CheckoutComp";
 import Footer from "@/components/Footer";
 import NavBar from "@/components/NavBar";
 import Head from "next/head";
 import { z } from "zod";
 import { useEffect, useState } from "react";
 import styles from "@/styles/Checkout.module.css";
-import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js";
+//import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js";
 import { useRouter } from "next/router";
-import { api, Formater, CreateOrderSchema } from "@/utils";
+import { api, Formater, CreateOrderStripeSchema, i18n } from "@/utils";
 import { useCart } from "@/components/Store";
 import { countryList } from "@/components/countries";
 import "@/styles/Checkout.module.css";
@@ -20,13 +19,13 @@ import { Formik, Form, Field } from "formik";
 import Datetime from "react-datetime";
 import "react-datetime/css/react-datetime.css";
 import { useTranslations } from "next-intl";
-import type { GetStaticPropsContext } from "next";
 import PhoneInput from "react-phone-number-input";
 import * as Yup from "yup";
 import "react-phone-number-input/style.css";
 import Loader from "@/components/Loader";
 import Loader2 from "@/components/Loader2";
 import "moment/locale/fr";
+import { toFormikValidationSchema } from "zod-formik-adapter";
 
 import type {
   GetServerSidePropsContext,
@@ -38,6 +37,7 @@ export default function CheckoutPage({
   id,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const router = useRouter();
+  const [affiliationId, setAffiliationId] = useState<string | undefined>();
   const t = useTranslations("checkout");
   const { mutateAsync: createOrder } = api.Order.createStripe.useMutation();
   const { competitions, cardDetails, reset } = useCart();
@@ -94,7 +94,7 @@ export default function CheckoutPage({
   return (
     <div
       style={{
-        textAlign: router.locale === "iw" ? "right" : "left",
+        textAlign: router.locale === "il" ? "right" : "left",
       }}
     >
       <Head>
@@ -172,10 +172,13 @@ export default function CheckoutPage({
                   const { url, error } = await createOrder({
                     ...values,
                     id: id,
+                    zip: values.zip.toString(),
                     paymentMethod: values.paymentMethod as "PAYPAL" | "STRIPE",
                     date: new Date(values.date),
-                    zip: values.zip.toString(),
-                    locale: router.locale,
+                    affiliationId,
+                    locale: router.locale
+                      ? (router.locale as (typeof i18n)[number])
+                      : "en",
                   });
                   if (url) {
                     // await resend.sendEmail({

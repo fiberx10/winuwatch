@@ -135,16 +135,14 @@ export const AuthRouter = createTRPCRouter({
 });
 
 export const OrderRouter = createTRPCRouter({
-  getAll: publicProcedure.input(z.array(z.string()).optional()).query(
+  getAll: publicProcedure.input(z.string()).query(
     async ({ ctx, input }) =>
       await ctx.prisma.order.findMany({
         where: {
           Ticket: {
             some: {
               Competition: {
-                id: {
-                  in: input,
-                },
+                id: input,
               },
             },
           },
@@ -153,7 +151,11 @@ export const OrderRouter = createTRPCRouter({
           createdAt: "desc",
         },
         include: {
-          Ticket: true,
+          Ticket: {
+            where: {
+              competitionId: input,
+            },
+          },
         },
       })
   ),
@@ -174,12 +176,20 @@ export const OrderRouter = createTRPCRouter({
   getOrderCheck: publicProcedure
     .input(z.string())
     .query(async ({ ctx, input }) => {
-      const data = await GetData(input, ctx.prisma);
-      if (!data.order) {
-        throw new Error("Order not found");
+      const order = await ctx.prisma.order.findUnique({
+        where: {
+          id: input,
+        },  
+      });
+      //const data = await GetData(input, ctx.prisma);
+      if (!order ) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Order not found",
+        });
       }
 
-      return data.order;
+      return order;
     }),
   AddTicketsAfterConfirmation: publicProcedure
     .input(z.object({ id: z.string(), comps: Comps }))
@@ -239,7 +249,7 @@ export const OrderRouter = createTRPCRouter({
     .input(CreateOrderStripeSchema)
     .mutation(async ({ ctx, input }) => {
       try {
-        const { locale, comps, ...data } = input;
+        const { locale, comps,affiliationId, ...data } = input;
         const [Order, StripeOrder] = await Promise.all([
           ctx.prisma.order.update({
             where: {
@@ -247,6 +257,7 @@ export const OrderRouter = createTRPCRouter({
             },
             data: {
               ...data,
+              affiliationId: affiliationId || undefined,
               status: order_status.PENDING,
             },
           }),
@@ -254,6 +265,7 @@ export const OrderRouter = createTRPCRouter({
             payment_method_types: ["card"],
             mode: "payment",
             customer_email: data.email,
+            locale : locale === "il" ? "auto" : locale,
             line_items: (
               await ctx.prisma.competition.findMany({
                 where: {
@@ -293,8 +305,12 @@ export const OrderRouter = createTRPCRouter({
                   }
                 : {}
             ),
-            success_url: `${getBaseUrl()}/${locale}/Confirmation/${input.id}`,
-            cancel_url: `${getBaseUrl()}/${locale}/Cancel/${input.id}`,
+            success_url: `${getBaseUrl()}${
+              locale && `/${locale}`
+            }/Confirmation/${input.id}`,
+            cancel_url: `${getBaseUrl()}${locale && `/${locale}`}/Cancel/${
+              input.id
+            }`,
           }),
         ]);
         console.log(StripeOrder);
