@@ -74,14 +74,17 @@ export default function CheckoutPage({
   const checkAffiliation = (): Promise<any> => {
     return checkDiscount({
       code: affiliationCode || "",
-      competitionId: id,
+      competitionId: competitions[0]?.compID || "",
     }).then((res) => {      
       if (res) {
+        setAffiliationError("");
         setAffiliationId(res.id);
         setAffiliationDiscount(res.discountRate);
         return Promise.resolve(res);
       }
     }).catch((err) => {
+      setAffiliationId(undefined);
+      setAffiliationDiscount(0);
       setAffiliationError(err.message);
       return Promise.reject(err);
     });
@@ -625,7 +628,7 @@ export default function CheckoutPage({
                                       )}`}
                                     </p>
                                   )}
-                                  {affiliationDiscount > 0 && (
+                                  {affiliationDiscount > 0 ? (
                                     <div>
                                       <div className={styles.coupon}>
                                         <p style={{color: "#a8957e",}}>{`Coupon`}</p>
@@ -641,7 +644,7 @@ export default function CheckoutPage({
                                         </div>
                                       </div>
                                     </div>
-                                  )}
+                                  ) : null}
                                   {values.comps[values.comps.length - 1] ===
                                   values.comps[i] ? (
                                     <div className={styles.OrdersFlexBotSum}>

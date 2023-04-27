@@ -347,6 +347,8 @@ export const OrderRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       try {
         const { code, competitionId } = input;
+        console.log({ code, competitionId });
+
         const discount = await ctx.prisma.affiliation.findMany({
           where: {
             discountCode: code,
