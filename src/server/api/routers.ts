@@ -44,7 +44,7 @@ export const WinnersRouter = createTRPCRouter({
     }
     return competition.Ticket.map((ticket) => ({
       ticketID: ticket.id,
-      Full_Name: `${ticket.Order.first_name} ${ticket.Order.last_name}`,
+      Full_Name: `${ticket.Order.first_name!} ${ticket.Order.last_name!}`,
       Order_ID: ticket.Order.id,
       competionName: competition.name,
       Total_Price: ticket.Order.totalPrice,
@@ -338,7 +338,6 @@ export const OrderRouter = createTRPCRouter({
     }),
 
   // TODO: The two procedures that was added
-
 
   createOrder: publicProcedure
     .input(CreateOrderFromCartSchema.optional())
@@ -911,17 +910,18 @@ export const AffiliationRouter = createTRPCRouter({
     .input(
       z.object({
         discountCode: z.string(),
-        competitionId: z.string(),
+        competitionId: z.array(z.string()),
       })
     )
     .mutation(async ({ ctx, input }) => {
-      //console.log(input);
-      const discount = await ctx.prisma.affiliation.findFirstOrThrow({
+      return await ctx.prisma.affiliation.findFirstOrThrow({
         where: {
-          ...input,
+          discountCode: input.discountCode,
+          competitionId: {
+            in: input.competitionId,
+          },
         },
       });
-      return discount;
     }),
 
   applyDiscount: publicProcedure

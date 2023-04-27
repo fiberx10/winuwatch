@@ -47,23 +47,18 @@ const IsLegal = (Birthdate = new Date()) => {
 export default function CheckoutPage({
   id,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const router = useRouter();
-  const [affiliationId, setAffiliationId] = useState<string | undefined>();
   const t = useTranslations("checkout");
+  const router = useRouter();
   const { mutateAsync: createOrder } = api.Order.createStripe.useMutation();
-  const { mutateAsync: checkDiscount } =
-    api.Affiliation.checkDiscount.useMutation();
-  const { competitions, cardDetails, reset } = useCart();
+  const { competitions, cardDetails, reset, updateComp } = useCart();
   const [loading, setLoading] = useState(false);
   const { data: items, isLoading } = api.Competition.getAll.useQuery({
     ids: competitions.map((comp) => comp.compID),
   });
   const { data: order } = api.Order.getOrderCheck.useQuery(id);
   const [error, setError] = useState<string | undefined>();
-  const [affiliation, setAffiliation] = useState<Affiliation | undefined>();
-  const [affiliationError, setAffiliationError] = useState<
-    string | undefined
-  >();
+  const { mutateAsync: checkDiscount, error: affiliationError, data : Affiliation  } =
+    api.Affiliation.checkDiscount.useMutation();
   const { totalCost } = cardDetails();
   const FormSchema = Yup.object().shape({
     first_name: Yup.string().required("Required"),
@@ -153,20 +148,26 @@ export default function CheckoutPage({
               <Formik
                 validationSchema={FormSchema}
                 initialValues={{
-                  first_name: "",
-                  last_name: "",
-                  country: "France",
-                  address: "",
-                  town: "",
-                  zip: "",
-                  phone: "",
-                  email: "",
-                  paymentMethod: "STRIPE",
+                  ...(
+                    order || {
+                      first_name: "",
+                      last_name: "",
+                      country: "France",
+                      address: "",
+                      town: "",
+                      zip: "",
+                      phone: "",
+                      email: "",
+                      paymentMethod: "STRIPE",
+                      totalPrice: totalCost,
+                      comps: competitions,
+                      date: new Date(),
+                      checkedEmail: true,
+                      checkedTerms: false,
+                    }  
+                  ),
                   totalPrice: totalCost,
                   comps: competitions,
-                  date: new Date(),
-                  checkedEmail: true,
-                  checkedTerms: false,
                 }}
                 onSubmit={async (values, actions) => {
                   //if a value in the object values is undefined, it will not be sent to the server
@@ -447,7 +448,7 @@ export default function CheckoutPage({
                               //TODO: We pass two params here: one is the coupon code, the other is the competations, we need to check if it valid for one
                               const results = await checkDiscount({
                                 discountCode: "",
-                                competitionId: "",
+                                competitionId: comps.map((c) => c.id),
                               });
                               console.log(results);
                             }}

@@ -74,23 +74,23 @@ model Competition {
 
 model Order {
   id            String        @id @default(cuid())
-  first_name    String
-  last_name     String
-  country       String
-  address       String
+  first_name    String?
+  last_name     String?
+  country       String?
+  address       String?
   town          String?
-  zip           String
+  zip           String?
   phone         String
   email         String
-  date          DateTime
-  paymentMethod PaymentMethod
-  checkedEmail  Boolean
-  checkedTerms  Boolean
+  date          DateTime?
+  paymentMethod PaymentMethod @default(STRIPE)
+  checkedEmail  Boolean      @default(false)
+  checkedTerms  Boolean     @default(false)
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
-  totalPrice    Float
-  status        order_status
-  paymentId     String?
+  totalPrice    Float        @default(0)
+  status        order_status @default(INCOMPLETE)
+  paymentId     String? 
   intentId      String?
   Ticket        Ticket[]
   affiliationId String?
@@ -123,7 +123,6 @@ model Question {
   updatedAt     DateTime @updatedAt
   imageURL      String?
   answers       answer[]
-
   @@map("question")
 }
 
