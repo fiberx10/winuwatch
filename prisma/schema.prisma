@@ -67,45 +67,28 @@ model Competition {
   watchesId                String            @unique
   Watches                  Watches?          @relation(fields: [watchesId], references: [id])
   Ticket                   Ticket[]
-  Affiliation              Affiliation[]
 
   @@index([id])
   @@map("competition")
 }
 
-model Affiliation {
-  id            String      @id @default(cuid())
-  discountCode  String      @unique
-  discountRate  Float       @default(0.1)
-  ownerEmail    String      @unique
-  createdAt     DateTime    @default(now())
-  competitionId String
-  uses          Int         @default(0)
-  updatedAt     DateTime    @updatedAt
-  Competition   Competition @relation(fields: [competitionId], references: [id])
-  Order         Order[]
-
-  @@index([competitionId])
-  @@map("affiliation")
-}
-
 model Order {
   id            String        @id @default(cuid())
-  first_name    String?
-  last_name     String?
-  country       String?
-  address       String?
+  first_name    String
+  last_name     String
+  country       String
+  address       String
   town          String?
-  zip           String?
+  zip           String
   phone         String
   email         String
-  date          DateTime?
+  date          DateTime
   paymentMethod PaymentMethod
-  checkedEmail  Boolean       @default(false)
-  checkedTerms  Boolean       @default(false)
+  checkedEmail  Boolean
+  checkedTerms  Boolean
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
-  totalPrice    Float         @default(0)
+  totalPrice    Float
   status        order_status
   paymentId     String?
   intentId      String?
@@ -123,7 +106,6 @@ model Ticket {
   competitionId String
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
-  ticketPrice   Float       @default(0)
   Order         Order       @relation(fields: [orderId], references: [id])
   Competition   Competition @relation(fields: [competitionId], references: [id])
   ticketPrice   Float       @default(0)
