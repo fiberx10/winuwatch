@@ -14,13 +14,13 @@
     "nocompval": "No competitions available",
     "howtoplay": "HOW TO PLAY",
     "chooseyourtickets": "CHOOSE YOUR TICKETS",
-    "chooseyourticketsdesc": "Choose how many tickets you want - up to 25 per person - and you're on the way to winning the luxury timepiece.",
+    "chooseyourticketsdesc": "Please select the desired quantity of tickets, up to a maximum of 25 per person, to begin your journey towards winning the luxury timepiece.",
     "playthegame": "PLAY THE GAME ONLINE",
-    "playthegamedesc": "Test your watch knowledge in our online game – built to sort the connoisseurs from the pretenders.",
+    "playthegamedesc": "We invite you to challenge your watch knowledge by playing our online game, expertly designed to differentiate the connoisseurs from the pretenders.",
     "buytickets": "BUY YOUR TICKETS",
-    "buyticketsdesc": "Pay securely to submit your entry. We use a third party Random Number Generator called Randomdraws to choose the winner.",
+    "buyticketsdesc": "Upon securely submitting your entry, please note that the winner will be selected through the use of a third-party called Randomdraws.",
     "winawatch": "WIN YOUR DREAM WATCH!",
-    "winawatchdesc": "And that's it! You could walk away with a new £20,000 watch – for as little as £25.",
+    "winawatchdesc": "And that's it! By participating with as little as £25, you stand a chance of winning a new £20,000 watch.",
     "enter": "ENTER COMPETITION",
     "certiftitle": "WE USE TPAL ELECTRONIC RANDOM DRAW COMPUTERIZED SYSTEM",
     "certifdesc": "randomdraws certificate system",
@@ -30,15 +30,15 @@
     "followusdesc": "Don't miss the live draw and the announcement of the next competitions on Instagram !",
     "follow": "FOLLOW",
     "competitions2": "THE COMPETITIONS, HOW TO PLAY, CONTACT, PHILOSOPHY, TRUSTPILOT, CHARITY, ACCEPTABLE USE POLICY, FAQ, RETURN POLICY, TERMS & CONDITIONS, PRIVACY POLICY",
-    "enquiries": "For enquiries, please email ",
+    "enquiries": "For enquiries, please email us",
     "securepay": "100% Secure payment",
     "cart": "CART"
   },
   "philosophy": {
     "philoheader": "IN OUR FAMILY OWNER BUSINESS, WE BELIEVE THAT THERE IS NO SUCH THING AS GENIUS, ONLY “KNOW-HOW”",
     "philoheaderdesc": " We are a large family-owned company where our team works tirelessly every day to bring you the most sought-after timepieces. We founded WINUWATCH with the goal of helping individuals turn their dream of owning a luxury watch into a reality.",
-    "philotext": "YOU SHOULD KNOW THAT WE ARE THE NUMBER 1 SITE IN THE WORLD IN TERMS OF PROBABILITY OF WINNING ",
-    "philotextdesc": "We are the number 1 site in the world in terms of probability of winning because we publish a limited number of tickets aligned with the number of participants makes us the best probability of winning."
+    "philotext": "YOU SHOULD KNOW THAT WE ARE THE NUMBER ONE SITE IN THE WORLD IN TERMS OF THE PROBABILITY OF WINNING.",
+    "philotextdesc": "It is with great pride that we declare our website as the top-ranked platform worldwide in terms of the probability of winning. Our success in this regard can be attributed to our limited ticket allocation strategy, which is specifically tailored to the number of participants, resulting in the highest likelihood of winning. We remain committed to providing our esteemed users with the most optimal opportunities for success and are honored to maintain our position as the premier website in this industry."
   },
   "charity": {
     "charityheader": "TOTAL RAISED FOR CHARITY",
@@ -47,10 +47,10 @@
     "inassociation": "YOU ARE AN ASSOCIATION ?",
     "beinlist": "WANT TO BE IN THIS LIST - ",
     "contactus": " CONTACT US",
-    "woodland": "Win u watch are donated 10% of his revenue to the Woodland association in the UK"
+    "woodland": "Win U Watch donates 10% of its revenue to the Woodland Association in the UK."
   },
   "cart": {
-    "whatwatch": "What watch is this ?",
+    "whatwatch": "What watch is this?",
     "discount": "Discount",
     "emptycart": "NO ITEMS IN THE CART",
     "remove": "REMOVE",
@@ -73,15 +73,15 @@
     "continue": "Continue",
     "details": "COMPETITION DETAILS",
     "prize": "Prize:",
-    "paperwork": "Comes with full paperwork, new digital warranty card & fully boxed.",
-    "maxspace": "Maximum spaces in the final draw: ",
+    "paperwork": "This product comes with full paperwork, a new digital warranty card, and is fully boxed.",
+    "maxspace": "Maximum entries in the final draw: ",
     "maxwatchwinner": "Maximum watch winners : ",
     "endcomp": "End of competition:",
     "winannon": "Winner announcement: ",
-    "liveinsta": "in direct live on",
+    "liveinsta": "in direct, live on",
     "runup": "Runner-Up prizes:",
-    "willwin": "players will win",
-    "creditto": "credit into our next competition.",
+    "willwin": "runner-up prizes of",
+    "creditto": "credit towards our next competition.",
     "watchinfo": "WATCH INFORMATION",
     "brand": "Brand",
     "model": "Model",
@@ -99,10 +99,10 @@
   "thanku": {
     "thank": "THANK YOU",
     "foryourorder": "FOR YOUR ORDER!",
-    "confirm": "Your order has been confirmed .",
+    "confirm": "Your order has been confirmed.",
     "confemail": "You will receive an email confirmation shortly.",
     "cancelled": "Your Order has been Cancelled",
-    "redirected": "you are being redirected shortly..."
+    "redirected": "You are being redirected shortly to our homepage."
   },
   "confirder": {
     "text": "We are pleased to inform you that your registration has been successfully received and processed. you have now officially entered in the competition",
