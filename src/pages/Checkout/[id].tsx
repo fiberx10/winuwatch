@@ -6,7 +6,7 @@ import Footer from "@/components/Footer";
 import NavBar from "@/components/NavBar";
 import Head from "next/head";
 import { z } from "zod";
-import { useEffect, useState } from "react";
+import { SetStateAction, useEffect, useState } from "react";
 import styles from "@/styles/Checkout.module.css";
 //import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js";
 import { useRouter } from "next/router";
@@ -462,7 +462,7 @@ export default function CheckoutPage({
                               onInput={() => {
                                 setAffiliationError("");
                               }}
-                              onChange={(e) => {
+                              onChange={(e: { target: { value: SetStateAction<string | undefined>; }; }) => {
                                 setAffiliationCode(e.target.value)
                               }}
                             />
@@ -624,6 +624,23 @@ export default function CheckoutPage({
                                         router.locale
                                       )}`}
                                     </p>
+                                  )}
+                                  {affiliationDiscount > 0 && (
+                                    <div>
+                                      <div className={styles.coupon}>
+                                        <p style={{color: "#a8957e",}}>{`Coupon`}</p>
+                                        <div className={styles.couponRate}>
+                                          <p style={{color: "#a8957e", padding: "0 72px 0 0"}}>
+                                            {Formater(
+                                              affiliationDiscount *
+                                                (order.number_tickets *
+                                                  ComptetionData.ticket_price),
+                                              router.locale
+                                            )}
+                                          </p>
+                                        </div>
+                                      </div>
+                                    </div>
                                   )}
                                   {values.comps[values.comps.length - 1] ===
                                   values.comps[i] ? (
