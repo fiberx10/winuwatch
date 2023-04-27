@@ -61,7 +61,7 @@ const Footer = () => {
       },
       {
         name: t_footer("privacypolicy"),
-        link: "/PrivacyPolicy",
+        link: "/Privacy_Policy",
       },
     ],
   ];
