@@ -179,10 +179,10 @@ export const OrderRouter = createTRPCRouter({
       const order = await ctx.prisma.order.findUnique({
         where: {
           id: input,
-        },  
+        },
       });
       //const data = await GetData(input, ctx.prisma);
-      if (!order ) {
+      if (!order) {
         throw new TRPCError({
           code: "NOT_FOUND",
           message: "Order not found",
@@ -249,7 +249,7 @@ export const OrderRouter = createTRPCRouter({
     .input(CreateOrderStripeSchema)
     .mutation(async ({ ctx, input }) => {
       try {
-        const { locale, comps,affiliationId, ...data } = input;
+        const { locale, comps, affiliationId, ...data } = input;
         const [Order, StripeOrder] = await Promise.all([
           ctx.prisma.order.update({
             where: {
@@ -265,7 +265,7 @@ export const OrderRouter = createTRPCRouter({
             payment_method_types: ["card"],
             mode: "payment",
             customer_email: data.email,
-            locale : locale === "il" ? "auto" : locale,
+            locale: locale === "il" ? "auto" : locale,
             line_items: (
               await ctx.prisma.competition.findMany({
                 where: {
@@ -353,21 +353,24 @@ export const OrderRouter = createTRPCRouter({
             competitionId,
           },
         });
-        if (!discount) {
+        if (!discount.length) {
           throw new TRPCError({
             code: "NOT_FOUND",
-            message: "Discount not found",
+            message: "Invalid discount code",
           });
         } else {
-          return discount;
+          return discount[0];
         }
       } catch (e) {
-        console.error(e);
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "Internal server error",
-          cause: e,
-        });
+        if (e instanceof TRPCError) {
+          throw e;
+        } else {
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message: "Internal server error",
+            cause: e,
+          });
+        }
       }
     }),
 

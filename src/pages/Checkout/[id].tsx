@@ -33,15 +33,23 @@ import type {
 } from "next";
 import Link from "next/link";
 import { checkCustomRoutes } from "next/dist/lib/load-custom-routes";
+
 export default function CheckoutPage({
   id,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const router = useRouter();
   const [affiliationId, setAffiliationId] = useState<string | undefined>();
+  const [affiliationCode, setAffiliationCode] = useState<string | undefined>();
+  const [affiliationDiscount, setAffiliationDiscount] = useState<number>(0);
+
   const t = useTranslations("checkout");
+
   const { mutateAsync: createOrder } = api.Order.createStripe.useMutation();
+  const { mutateAsync: checkDiscount } = api.Order.checkDiscount.useMutation();
+
   const { competitions, cardDetails, reset } = useCart();
   const [loading, setLoading] = useState(false);
+
   const { data: items, isLoading } = api.Competition.getAll.useQuery({
     ids: competitions.map((comp) => comp.compID),
   });
@@ -59,8 +67,26 @@ export default function CheckoutPage({
     );
   };
   const [error, setError] = useState<string | undefined>();
+  const [affiliationError, setAffiliationError] = useState<string | undefined>();
+
   const { totalCost } = cardDetails();
 
+  const checkAffiliation = (): Promise<any> => {
+    return checkDiscount({
+      code: affiliationCode || "",
+      competitionId: id,
+    }).then((res) => {      
+      if (res) {
+        setAffiliationId(res.id);
+        setAffiliationDiscount(res.discountRate);
+        return Promise.resolve(res);
+      }
+    }).catch((err) => {
+      setAffiliationError(err.message);
+      return Promise.reject(err);
+    });
+  };
+  
   const FormSchema = Yup.object().shape({
     first_name: Yup.string().required("Required"),
     last_name: Yup.string().required("Required"),
@@ -433,17 +459,28 @@ export default function CheckoutPage({
                               type="text"
                               name="coupon"
                               placeholder={"Enter coupon code"}
-                            />
-                            <button
-                              type="button"
-                              onClick={(value) => {
-                                  setFieldValue("affiliationCode", value);
-                                  // checkDiscountCode(value);
+                              onInput={() => {
+                                setAffiliationError("");
                               }}
+                              onChange={(e) => {
+                                setAffiliationCode(e.target.value)
+                              }}
+                            />
+                            <a
+                              onClick={() => {
+                                checkAffiliation().then((res) => {
+                                  console.log(res);
+                                }).catch((err) => {
+                                  console.log(err);
+                                });
+                              }}                              
                             >
                               ADD
-                            </button>
+                            </a>
                         </div>
+                        {
+                          !!affiliationError?.length ? <p style={{ color: "red" }}>{affiliationError}</p> : null
+                        }
                       </div>
                       <div className={styles.leftFormItem}>
                         <h1>{t("paymethod")}</h1>
