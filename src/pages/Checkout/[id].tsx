@@ -92,6 +92,15 @@ export default function CheckoutPage({
       return Promise.reject(err);
     });
   };
+
+  const addDiscountToTotal = (total: number): number => {
+    competitions.forEach((comp) => {
+      if (comp.compID === affiliationCompId) {        
+        total -= comp.price_per_ticket * comp.number_tickets * affiliationDiscount;
+      }
+    });
+    return total;
+  };
   
   const FormSchema = Yup.object().shape({
     first_name: Yup.string().required("Required"),
@@ -205,6 +214,7 @@ export default function CheckoutPage({
                     ...values,
                     id: id,
                     zip: values.zip.toString(),
+                    totalPrice: addDiscountToTotal(totalCost),
                     paymentMethod: values.paymentMethod as "PAYPAL" | "STRIPE",
                     date: new Date(values.date),
                     affiliationId,
@@ -655,15 +665,15 @@ export default function CheckoutPage({
                                         <p>{`TOTAL`}</p>
                                         <div className={styles.totalOrder}>
                                           <span>
-                                            {Formater(
+                                            {Formater(addDiscountToTotal(
                                               values.comps.reduce(
                                                 (acc, c) =>
                                                   (acc +
                                                   c.number_tickets *
                                                     c.price_per_ticket *
-                                                    (1 - c.reduction)) - (affiliationDiscount * (c.number_tickets * c.price_per_ticket)),
+                                                    (1 - c.reduction)),
                                                 0
-                                              ),
+                                              )),
                                               router.locale
                                             )}
                                           </span>
