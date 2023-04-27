@@ -2,9 +2,7 @@ import { z } from "zod";
 import { OrderSchema } from "./zodSchemas";
 export * from "./api";
 
-
 export const i18n = ["en", "es", "fr", "ja", "il"] as const;
-
 
 export const CreateOrderFromCartSchema = OrderSchema.extend({
   comps: z.array(
@@ -67,7 +65,7 @@ export const CreateOrderStripeSchema = OrderSchema.extend({
 }).omit({
   status: true,
 });
-const DEFAULTLOCAL = "en" ;
+const DEFAULTLOCAL = "en";
 
 export const Formater = (value: number | bigint, local = DEFAULTLOCAL) =>
   new Intl.NumberFormat(local, {

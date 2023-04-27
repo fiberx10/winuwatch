@@ -35,7 +35,7 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
       );
     }
     //console.log( event.data);
-    
+
     switch (event.type) {
       //PAYMENT FAILED OR CANCELLED
       case "payment_intent.payment_failed":
@@ -107,7 +107,7 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
         ) {
           break;
         }
-        // CHECKOUT IS COMPLETE
+      // CHECKOUT IS COMPLETE
       case "checkout.session.completed":
         const checkoutSessionCompleted = event.data.object as {
           id: string;
@@ -146,7 +146,7 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
             },
           })
         ) {
-         break;
+          break;
         }
 
       //REFUNDED

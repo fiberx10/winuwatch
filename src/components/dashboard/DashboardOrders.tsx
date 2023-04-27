@@ -285,7 +285,9 @@ const DashboardOrders = () => {
                                         {row.zip}
                                       </TableCell>
                                       <TableCell align="right">
-                                        {row.date !== null ? DateFormater(row.date) : "Birthday not provided"}
+                                        {row.date !== null
+                                          ? DateFormater(row.date)
+                                          : "Birthday not provided"}
                                       </TableCell>
                                       <TableCell align="right">
                                         {row.checkedEmail ? "Yes" : "No"}
