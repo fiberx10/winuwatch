@@ -249,6 +249,8 @@ export const OrderRouter = createTRPCRouter({
     .input(CreateOrderStripeSchema)
     .mutation(async ({ ctx, input }) => {
       try {
+        console.log(input);
+
         const { locale, comps, affiliationId, ...data } = input;
         const [Order, StripeOrder] = await Promise.all([
           ctx.prisma.order.update({
@@ -336,6 +338,7 @@ export const OrderRouter = createTRPCRouter({
     }),
 
   // TODO: The two procedures that was added
+
 
   createOrder: publicProcedure
     .input(CreateOrderFromCartSchema.optional())

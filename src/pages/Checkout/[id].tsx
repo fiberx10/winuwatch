@@ -65,7 +65,6 @@ export default function CheckoutPage({
     string | undefined
   >();
   const { totalCost } = cardDetails();
-
   const FormSchema = Yup.object().shape({
     first_name: Yup.string().required("Required"),
     last_name: Yup.string().required("Required"),
@@ -177,6 +176,7 @@ export default function CheckoutPage({
                     ...values,
                     id: id,
                     zip: values.zip.toString(),
+                    totalPrice: addDiscountToTotal(totalCost),
                     paymentMethod: values.paymentMethod as "PAYPAL" | "STRIPE",
                     date: new Date(values.date),
                     affiliationId: affiliation?.id,
@@ -431,6 +431,7 @@ export default function CheckoutPage({
                       </div>
                       {/* Insert coupon */}
                       <div className={styles.leftFormItem}>
+
                         <h1>{/* {t("coupon")} */} Have a coupon code ?</h1>
                         <div className={styles.CouponInput}>
                           <Field
@@ -453,6 +454,7 @@ export default function CheckoutPage({
                           >
                             ADD
                           </a>
+
                         </div>
                         {!!affiliationError?.length ? (
                           <p style={{ color: "red" }}>{affiliationError}</p>
@@ -603,6 +605,7 @@ export default function CheckoutPage({
                                   )}
                                   {affiliation &&
                                   affiliation.discountRate > 0 ? (
+
                                     <div>
                                       <div className={styles.coupon}>
                                         <p
@@ -633,7 +636,7 @@ export default function CheckoutPage({
                                         <p>{`TOTAL`}</p>
                                         <div className={styles.totalOrder}>
                                           <span>
-                                            {Formater(
+                                            {Formater(addDiscountToTotal(
                                               values.comps.reduce(
                                                 (acc, c) =>
                                                   acc +
@@ -645,8 +648,8 @@ export default function CheckoutPage({
                                                         0)) -
                                                   c.number_tickets *
                                                     c.price_per_ticket,
-                                                0
-                                              ),
+
+                                              )),
                                               router.locale
                                             )}
                                           </span>
