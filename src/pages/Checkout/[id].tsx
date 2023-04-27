@@ -25,71 +25,44 @@ import "react-phone-number-input/style.css";
 import Loader from "@/components/Loader";
 import Loader2 from "@/components/Loader2";
 import "moment/locale/fr";
-import { toFormikValidationSchema } from "zod-formik-adapter";
-
 import type {
   GetServerSidePropsContext,
   InferGetServerSidePropsType,
 } from "next";
 import Link from "next/link";
-import { checkCustomRoutes } from "next/dist/lib/load-custom-routes";
+import { Affiliation } from "@prisma/client";
+
+const IsLegal = (Birthdate = new Date()) => {
+  const LegalAge = 18;
+  const now = new Date();
+  return (
+    new Date(
+      now.getFullYear() - LegalAge,
+      now.getMonth(),
+      now.getDate()
+    ).getTime() >= Birthdate.getTime()
+  );
+};
 
 export default function CheckoutPage({
   id,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const router = useRouter();
   const [affiliationId, setAffiliationId] = useState<string | undefined>();
-  const [affiliationCode, setAffiliationCode] = useState<string | undefined>();
-  const [affiliationDiscount, setAffiliationDiscount] = useState<number>(0);
-
   const t = useTranslations("checkout");
-
   const { mutateAsync: createOrder } = api.Order.createStripe.useMutation();
-  const { mutateAsync: checkDiscount } = api.Order.checkDiscount.useMutation();
-
+  const { mutateAsync: checkDiscount} = api.Affiliation.checkDiscount.useMutation();
   const { competitions, cardDetails, reset } = useCart();
   const [loading, setLoading] = useState(false);
-
   const { data: items, isLoading } = api.Competition.getAll.useQuery({
     ids: competitions.map((comp) => comp.compID),
   });
   const { data: order } = api.Order.getOrderCheck.useQuery(id);
-
-  const IsLegal = (Birthdate = new Date()) => {
-    const LegalAge = 18;
-    const now = new Date();
-    return (
-      new Date(
-        now.getFullYear() - LegalAge,
-        now.getMonth(),
-        now.getDate()
-      ).getTime() >= Birthdate.getTime()
-    );
-  };
   const [error, setError] = useState<string | undefined>();
+  const [affiliation, setAffiliation] = useState< Affiliation | undefined >();
   const [affiliationError, setAffiliationError] = useState<string | undefined>();
-
   const { totalCost } = cardDetails();
 
-  const checkAffiliation = (): Promise<any> => {
-    return checkDiscount({
-      code: affiliationCode || "",
-      competitionId: competitions[0]?.compID || "",
-    }).then((res) => {      
-      if (res) {
-        setAffiliationError("");
-        setAffiliationId(res.id);
-        setAffiliationDiscount(res.discountRate);
-        return Promise.resolve(res);
-      }
-    }).catch((err) => {
-      setAffiliationId(undefined);
-      setAffiliationDiscount(0);
-      setAffiliationError(err.message);
-      return Promise.reject(err);
-    });
-  };
-  
   const FormSchema = Yup.object().shape({
     first_name: Yup.string().required("Required"),
     last_name: Yup.string().required("Required"),
@@ -192,7 +165,6 @@ export default function CheckoutPage({
                   date: new Date(),
                   checkedEmail: true,
                   checkedTerms: false,
-                  affiliationCode: "",
                 }}
                 onSubmit={async (values, actions) => {
                   //if a value in the object values is undefined, it will not be sent to the server
@@ -204,7 +176,7 @@ export default function CheckoutPage({
                     zip: values.zip.toString(),
                     paymentMethod: values.paymentMethod as "PAYPAL" | "STRIPE",
                     date: new Date(values.date),
-                    affiliationId,
+                    affiliationId : affiliation?.id,
                     locale: router.locale
                       ? (router.locale as (typeof i18n)[number])
                       : "en",
@@ -462,20 +434,18 @@ export default function CheckoutPage({
                               type="text"
                               name="coupon"
                               placeholder={"Enter coupon code"}
-                              onInput={() => {
-                                setAffiliationError("");
-                              }}
-                              onChange={(e: { target: { value: SetStateAction<string | undefined>; }; }) => {
-                                setAffiliationCode(e.target.value)
+                              onChange={(e) => {
+                                console.log(e.target.value);
                               }}
                             />
                             <a
-                              onClick={() => {
-                                checkAffiliation().then((res) => {
-                                  console.log(res);
-                                }).catch((err) => {
-                                  console.log(err);
+                              onClick={async() => {
+                                //TODO: We pass two params here: one is the coupon code, the other is the competations, we need to check if it valid for one
+                                const results  = await checkDiscount({
+                                  discountCode: "",
+                                  competitionId: ""
                                 });
+                                console.log(results);
                               }}                              
                             >
                               ADD
@@ -628,14 +598,14 @@ export default function CheckoutPage({
                                       )}`}
                                     </p>
                                   )}
-                                  {affiliationDiscount > 0 ? (
+                                  {affiliation && affiliation.discountRate > 0 ? (
                                     <div>
                                       <div className={styles.coupon}>
                                         <p style={{color: "#a8957e",}}>{`Coupon`}</p>
                                         <div className={styles.couponRate}>
                                           <p style={{color: "#a8957e", padding: "0 72px 0 0"}}>
                                             {Formater(
-                                              affiliationDiscount *
+                                              affiliation.discountRate *
                                                 (order.number_tickets *
                                                   ComptetionData.ticket_price),
                                               router.locale
@@ -658,7 +628,7 @@ export default function CheckoutPage({
                                                   (acc +
                                                   c.number_tickets *
                                                     c.price_per_ticket *
-                                                    (1 - c.reduction)) - (affiliationDiscount * (c.number_tickets * c.price_per_ticket)),
+                                                    (1 - c.reduction - (affiliation?.discountRate ?? 0) ) - (c.number_tickets * c.price_per_ticket)),
                                                 0
                                               ),
                                               router.locale

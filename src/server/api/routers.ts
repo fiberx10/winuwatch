@@ -44,7 +44,7 @@ export const WinnersRouter = createTRPCRouter({
     }
     return competition.Ticket.map((ticket) => ({
       ticketID: ticket.id,
-      Full_Name: `${ticket.Order.first_name!} ${ticket.Order.last_name!}`,
+      Full_Name: `${ticket.Order.first_name} ${ticket.Order.last_name}`,
       Order_ID: ticket.Order.id,
       competionName: competition.name,
       Total_Price: ticket.Order.totalPrice,

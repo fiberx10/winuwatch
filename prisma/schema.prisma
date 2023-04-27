@@ -94,7 +94,7 @@ model Order {
   intentId      String?
   Ticket        Ticket[]
   affiliationId String?
-  Affliated     affiliation?  @relation(fields: [affiliationId], references: [id])
+  Affliated     Affiliation?  @relation(fields: [affiliationId], references: [id])
 
   @@index([affiliationId, id])
   @@map("order")
@@ -162,7 +162,7 @@ enum order_status {
   INCOMPLETE
 }
 
-model affiliation {
+model Affiliation {
   id            String   @id @default(cuid())
   discountCode  String   @unique
   discountRate  Float    @default(0.1)
@@ -173,6 +173,7 @@ model affiliation {
   updatedAt     DateTime @updatedAt
   Order         Order[]
   @@index([competitionId])
+  @@map("affiliation")
 }
 
 enum PaymentMethod {
