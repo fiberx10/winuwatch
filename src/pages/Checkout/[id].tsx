@@ -655,10 +655,10 @@ export default function CheckoutPage({
                                             {Formater(
                                               values.comps.reduce(
                                                 (acc, c) =>
-                                                  acc +
+                                                  (acc +
                                                   c.number_tickets *
                                                     c.price_per_ticket *
-                                                    (1 - c.reduction),
+                                                    (1 - c.reduction)) - (affiliationDiscount * (c.number_tickets * c.price_per_ticket)),
                                                 0
                                               ),
                                               router.locale
