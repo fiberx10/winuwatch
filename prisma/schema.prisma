@@ -163,7 +163,7 @@ enum order_status {
 }
 
 model affiliation {
-  id            String   @id
+  id            String   @id @default(cuid())
   discountCode  String   @unique
   discountRate  Float    @default(0.1)
   ownerEmail    String   @unique
@@ -172,7 +172,6 @@ model affiliation {
   uses          Int      @default(0)
   updatedAt     DateTime @updatedAt
   Order         Order[]
-
   @@index([competitionId])
 }
 
