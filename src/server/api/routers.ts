@@ -341,18 +341,19 @@ export const OrderRouter = createTRPCRouter({
     .input(
       z.object({
         code: z.string(),
-        competitionId: z.string(),
+        competitionIds: z.array(z.string()),
       })
     )
     .mutation(async ({ ctx, input }) => {
       try {
-        const { code, competitionId } = input;
-        console.log({ code, competitionId });
+        const { code, competitionIds } = input;
 
         const discount = await ctx.prisma.affiliation.findMany({
           where: {
             discountCode: code,
-            competitionId,
+            competitionId: {
+              in: competitionIds,
+            },
           },
         });
         if (!discount.length) {

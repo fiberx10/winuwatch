@@ -41,6 +41,7 @@ export default function CheckoutPage({
   const [affiliationId, setAffiliationId] = useState<string | undefined>();
   const [affiliationCode, setAffiliationCode] = useState<string | undefined>();
   const [affiliationDiscount, setAffiliationDiscount] = useState<number>(0);
+  const [affiliationCompId, setAffiliationCompId] = useState<string | undefined>();
 
   const t = useTranslations("checkout");
 
@@ -74,17 +75,19 @@ export default function CheckoutPage({
   const checkAffiliation = (): Promise<any> => {
     return checkDiscount({
       code: affiliationCode || "",
-      competitionId: competitions[0]?.compID || "",
+      competitionIds: competitions.map((comp) => comp.compID) || [],
     }).then((res) => {      
       if (res) {
         setAffiliationError("");
         setAffiliationId(res.id);
+        setAffiliationCompId(res.competitionId);
         setAffiliationDiscount(res.discountRate);
         return Promise.resolve(res);
       }
     }).catch((err) => {
       setAffiliationId(undefined);
       setAffiliationDiscount(0);
+      setAffiliationCompId(undefined);
       setAffiliationError(err.message);
       return Promise.reject(err);
     });
@@ -456,12 +459,12 @@ export default function CheckoutPage({
                       </div>
                       {/* Insert coupon */}
                       <div className={styles.leftFormItem}>
-                      <h1>{/* {t("coupon")} */} Have a coupon code ?</h1>
+                      <h1>{/* {t("coupon")} */} Have a discount code ?</h1>
                           <div className={styles.CouponInput}>
                             <Field
                               type="text"
                               name="coupon"
-                              placeholder={"Enter coupon code"}
+                              placeholder={"Enter discount code"}
                               onInput={() => {
                                 setAffiliationError("");
                               }}
@@ -628,7 +631,7 @@ export default function CheckoutPage({
                                       )}`}
                                     </p>
                                   )}
-                                  {affiliationDiscount > 0 ? (
+                                  {(affiliationDiscount > 0 && ComptetionData.id === affiliationCompId ) ? (
                                     <div>
                                       <div className={styles.coupon}>
                                         <p style={{color: "#a8957e",}}>{`Coupon`}</p>
