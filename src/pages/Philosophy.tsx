@@ -27,7 +27,15 @@ export default function Philosopht() {
       </Head>
       <NavBar />
       <div className={styles.philoMain}>
-        <div className={styles.Philo}>
+        <div
+          style={{
+            background:
+              router.locale === "en"
+                ? "linear-gradient( 180deg, #faf8f6 30%, rgba(206, 198, 189, 0) 35.83%, #a8957e 80% )"
+                : "linear-gradient( 180deg, #faf8f6 30%, rgba(206, 198, 189, 0) 50.83%, #a8957e 100% )",
+          }}
+          className={styles.Philo}
+        >
           <Fade in={true}>
             <div className={styles.philoHeader}>
               <h1>{t("philoheader")}</h1>
