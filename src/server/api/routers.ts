@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
-import { CompetitionStatus, order_status } from "@prisma/client";
+import { Affiliation, CompetitionStatus, order_status } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 import {
   getBaseUrl,
   CreateOrderSchema,
@@ -249,9 +250,15 @@ export const OrderRouter = createTRPCRouter({
     .input(CreateOrderStripeSchema)
     .mutation(async ({ ctx, input }) => {
       try {
-        console.log(input);
-
         const { locale, comps, affiliationId, ...data } = input;
+        let affiliationData: Affiliation | null;
+        if (input.affiliationId) {
+          affiliationData = await ctx.prisma.affiliation.findUnique({
+            where: {
+              id: affiliationId,
+            },
+          });
+        }
         const [Order, StripeOrder] = await Promise.all([
           ctx.prisma.order.update({
             where: {
@@ -296,6 +303,9 @@ export const OrderRouter = createTRPCRouter({
                         comp.ticket_price *
                           100 *
                           (1 -
+                            (comp.id == affiliationData?.competitionId
+                              ? affiliationData?.discountRate || 0
+                              : 0) -
                             (input.comps.find(
                               ({ compID }) => compID === comp.id
                             )?.reduction || 0))
@@ -910,18 +920,42 @@ export const AffiliationRouter = createTRPCRouter({
     .input(
       z.object({
         discountCode: z.string(),
-        competitionId: z.array(z.string()),
+        competitionIds: z.array(z.string()),
       })
     )
     .mutation(async ({ ctx, input }) => {
-      return await ctx.prisma.affiliation.findFirstOrThrow({
-        where: {
-          discountCode: input.discountCode,
-          competitionId: {
-            in: input.competitionId,
+      try {
+        if (!input.discountCode) {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "Enter your discount code",
+          });
+        }
+        return await ctx.prisma.affiliation.findFirstOrThrow({
+          where: {
+            discountCode: input.discountCode,
+            competitionId: {
+              in: input.competitionIds,
+            },
           },
-        },
-      });
+        });
+      } catch (e) {
+        if (e instanceof TRPCError) {
+          throw e;
+        } else if (e instanceof Prisma.PrismaClientKnownRequestError) {
+          if (e.code === "P2025") {
+            throw new TRPCError({
+              code: "NOT_FOUND",
+              message: "Invalid discount code",
+            });
+          }
+        }
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Internal server error",
+          cause: e,
+        });
+      }
     }),
 
   applyDiscount: publicProcedure
