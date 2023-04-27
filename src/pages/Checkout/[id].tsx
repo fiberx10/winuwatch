@@ -51,7 +51,8 @@ export default function CheckoutPage({
   const [affiliationId, setAffiliationId] = useState<string | undefined>();
   const t = useTranslations("checkout");
   const { mutateAsync: createOrder } = api.Order.createStripe.useMutation();
-  const { mutateAsync: checkDiscount} = api.Affiliation.checkDiscount.useMutation();
+  const { mutateAsync: checkDiscount } =
+    api.Affiliation.checkDiscount.useMutation();
   const { competitions, cardDetails, reset } = useCart();
   const [loading, setLoading] = useState(false);
   const { data: items, isLoading } = api.Competition.getAll.useQuery({
@@ -59,8 +60,10 @@ export default function CheckoutPage({
   });
   const { data: order } = api.Order.getOrderCheck.useQuery(id);
   const [error, setError] = useState<string | undefined>();
-  const [affiliation, setAffiliation] = useState< Affiliation | undefined >();
-  const [affiliationError, setAffiliationError] = useState<string | undefined>();
+  const [affiliation, setAffiliation] = useState<Affiliation | undefined>();
+  const [affiliationError, setAffiliationError] = useState<
+    string | undefined
+  >();
   const { totalCost } = cardDetails();
 
   const FormSchema = Yup.object().shape({
@@ -176,7 +179,7 @@ export default function CheckoutPage({
                     zip: values.zip.toString(),
                     paymentMethod: values.paymentMethod as "PAYPAL" | "STRIPE",
                     date: new Date(values.date),
-                    affiliationId : affiliation?.id,
+                    affiliationId: affiliation?.id,
                     locale: router.locale
                       ? (router.locale as (typeof i18n)[number])
                       : "en",
@@ -428,32 +431,32 @@ export default function CheckoutPage({
                       </div>
                       {/* Insert coupon */}
                       <div className={styles.leftFormItem}>
-                      <h1>{/* {t("coupon")} */} Have a coupon code ?</h1>
-                          <div className={styles.CouponInput}>
-                            <Field
-                              type="text"
-                              name="coupon"
-                              placeholder={"Enter coupon code"}
-                              onChange={(e) => {
-                                console.log(e.target.value);
-                              }}
-                            />
-                            <a
-                              onClick={async() => {
-                                //TODO: We pass two params here: one is the coupon code, the other is the competations, we need to check if it valid for one
-                                const results  = await checkDiscount({
-                                  discountCode: "",
-                                  competitionId: ""
-                                });
-                                console.log(results);
-                              }}                              
-                            >
-                              ADD
-                            </a>
+                        <h1>{/* {t("coupon")} */} Have a coupon code ?</h1>
+                        <div className={styles.CouponInput}>
+                          <Field
+                            type="text"
+                            name="coupon"
+                            placeholder={"Enter coupon code"}
+                            onChange={(e) => {
+                              console.log(e.target.value);
+                            }}
+                          />
+                          <a
+                            onClick={async () => {
+                              //TODO: We pass two params here: one is the coupon code, the other is the competations, we need to check if it valid for one
+                              const results = await checkDiscount({
+                                discountCode: "",
+                                competitionId: "",
+                              });
+                              console.log(results);
+                            }}
+                          >
+                            ADD
+                          </a>
                         </div>
-                        {
-                          !!affiliationError?.length ? <p style={{ color: "red" }}>{affiliationError}</p> : null
-                        }
+                        {!!affiliationError?.length ? (
+                          <p style={{ color: "red" }}>{affiliationError}</p>
+                        ) : null}
                       </div>
                       <div className={styles.leftFormItem}>
                         <h1>{t("paymethod")}</h1>
@@ -598,12 +601,20 @@ export default function CheckoutPage({
                                       )}`}
                                     </p>
                                   )}
-                                  {affiliation && affiliation.discountRate > 0 ? (
+                                  {affiliation &&
+                                  affiliation.discountRate > 0 ? (
                                     <div>
                                       <div className={styles.coupon}>
-                                        <p style={{color: "#a8957e",}}>{`Coupon`}</p>
+                                        <p
+                                          style={{ color: "#a8957e" }}
+                                        >{`Coupon`}</p>
                                         <div className={styles.couponRate}>
-                                          <p style={{color: "#a8957e", padding: "0 72px 0 0"}}>
+                                          <p
+                                            style={{
+                                              color: "#a8957e",
+                                              padding: "0 72px 0 0",
+                                            }}
+                                          >
                                             {Formater(
                                               affiliation.discountRate *
                                                 (order.number_tickets *
@@ -625,10 +636,15 @@ export default function CheckoutPage({
                                             {Formater(
                                               values.comps.reduce(
                                                 (acc, c) =>
-                                                  (acc +
+                                                  acc +
                                                   c.number_tickets *
                                                     c.price_per_ticket *
-                                                    (1 - c.reduction - (affiliation?.discountRate ?? 0) ) - (c.number_tickets * c.price_per_ticket)),
+                                                    (1 -
+                                                      c.reduction -
+                                                      (affiliation?.discountRate ??
+                                                        0)) -
+                                                  c.number_tickets *
+                                                    c.price_per_ticket,
                                                 0
                                               ),
                                               router.locale
