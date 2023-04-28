@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { Affiliation, CompetitionStatus, order_status } from "@prisma/client";
@@ -224,9 +225,6 @@ export const OrderRouter = createTRPCRouter({
 
       //! What I've added
       if (data.comps.length > 0 && !!data.order?.affiliationId?.length) {
-        console.log("🎉 Affiliation found ===> ");
-
-        // increment the number of uses of affiliate code
         await ctx.prisma.$transaction(async (tx) => {
           const updatedAffiliation = await tx.affiliation.update({
             where: {
@@ -238,13 +236,8 @@ export const OrderRouter = createTRPCRouter({
               },
             },
           });
-          console.log("🎉 Affiliation updated ===> ", updatedAffiliation);
 
           if (updatedAffiliation && updatedAffiliation.uses % 5 === 0) {
-            console.log(
-              "🎉 Affiliation reached 5 uses ===> ",
-              updatedAffiliation
-            );
             const ownerPrevOrders = await tx.order.findFirst({
               where: {
                 email: updatedAffiliation.ownerEmail,
@@ -257,10 +250,6 @@ export const OrderRouter = createTRPCRouter({
                 },
               },
             });
-            console.log(
-              "🎉 Affiliation ownerPrevOrders ===> ",
-              ownerPrevOrders
-            );
 
             if (!!ownerPrevOrders) {
               const { phone, first_name, last_name, country, address, zip } =
@@ -295,12 +284,17 @@ export const OrderRouter = createTRPCRouter({
                   },
                 },
               });
-              const winnerData = await GetData(wonOrder.id, ctx.prisma);
+
               await Transporter.sendMail({
                 from: "noreply@winuwatch.uk",
                 to: updatedAffiliation.ownerEmail,
                 subject: `Claim your free ticket - Winuwatch`,
-                html: Email(winnerData),
+                html: Email({
+                  order: wonOrder,
+                  comps: data.comps.filter(
+                    (e) => e.id === updatedAffiliation.competitionId
+                  ),
+                }),
               });
             }
           }
@@ -538,6 +532,29 @@ export const OrderRouter = createTRPCRouter({
       },
     });
   }),
+
+  // getperMonthforYear where year is optional
+  getperMonthforYear: publicProcedure
+    .input(z.number().optional())
+    .query(async ({ ctx, input }) => {
+      const date = input ? new Date(input, 0, 1) : new Date();
+
+      const data = await ctx.prisma.$queryRaw`SELECT 
+                  YEAR(createdAt) AS year,
+                  MONTH(createdAt) AS month,
+                  COUNT(CASE WHEN status = 'REFUNDED' THEN id END) AS refunded_orders,
+                  COUNT(CASE WHEN status = 'CONFIRMED' THEN id END) AS confirmed_orders
+                  FROM 
+                    \`order\`
+                  WHERE 
+                      status IN ('REFUNDED', 'CONFIRMED') AND createdAt >= DATE_SUB(${date}, INTERVAL 12 MONTH) AND createdAt <= ${date}
+                  GROUP BY 
+                      YEAR(createdAt), MONTH(createdAt)
+                  ORDER BY 
+                      year ASC, month ASC`;
+      console.log("✨ getperMonthforYear ✨", data);
+      return data;
+    }),
 });
 
 export const CompetitionRouter = createTRPCRouter({
