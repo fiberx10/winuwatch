@@ -10,7 +10,11 @@ import {
   Comps,
 } from "@/utils";
 import { Transporter, Stripe } from "../utils";
-import { WatchesSchema, CompetitionSchema } from "@/utils/zodSchemas";
+import {
+  WatchesSchema,
+  CompetitionSchema,
+  affiliationSchema,
+} from "@/utils/zodSchemas";
 import Email, { GetData } from "@/components/emails";
 import { faker } from "@faker-js/faker";
 import { TRPCError } from "@trpc/server";
@@ -217,6 +221,90 @@ export const OrderRouter = createTRPCRouter({
           },
         },
       });
+
+      //! What I've added
+      if (!!data.order?.affiliationId?.length) {
+        console.log("🎉 Affiliation found ===> ");
+
+        // increment the number of uses of affiliate code
+        await ctx.prisma.$transaction(async (tx) => {
+          const updatedAffiliation = await tx.affiliation.update({
+            where: {
+              id: data?.order?.affiliationId || undefined,
+            },
+            data: {
+              uses: {
+                increment: 1,
+              },
+            },
+          });
+          console.log("🎉 Affiliation updated ===> ", updatedAffiliation);
+
+          if (updatedAffiliation && updatedAffiliation.uses % 5 === 0) {
+            console.log(
+              "🎉 Affiliation reached 5 uses ===> ",
+              updatedAffiliation
+            );
+            const ownerPrevOrders = await tx.order.findFirst({
+              where: {
+                email: updatedAffiliation.ownerEmail,
+              },
+              include: {
+                Ticket: {
+                  where: {
+                    competitionId: updatedAffiliation.competitionId,
+                  },
+                },
+              },
+            });
+            console.log(
+              "🎉 Affiliation ownerPrevOrders ===> ",
+              ownerPrevOrders
+            );
+
+            if (!!ownerPrevOrders) {
+              const { phone, first_name, last_name, country, address, zip } =
+                ownerPrevOrders || {};
+              const wonOrder = await tx.order.create({
+                data: {
+                  email: updatedAffiliation.ownerEmail,
+                  phone: phone,
+                  first_name: first_name,
+                  last_name: last_name,
+                  country: country,
+                  address: address,
+                  zip: zip,
+                  date: new Date(),
+                  paymentMethod: "AFFILIATION",
+                  status: order_status.CONFIRMED,
+                },
+              });
+              await tx.ticket.create({
+                data: {
+                  competitionId: updatedAffiliation.competitionId,
+                  orderId: wonOrder.id,
+                },
+              });
+              await tx.competition.update({
+                where: {
+                  id: updatedAffiliation.competitionId,
+                },
+                data: {
+                  remaining_tickets: {
+                    decrement: 1,
+                  },
+                },
+              });
+              await Transporter.sendMail({
+                from: "noreply@winuwatch.uk",
+                to: updatedAffiliation.ownerEmail,
+                subject: `Claim your free ticket - Winuwatch`,
+                html: /* Email(), */ "You won your free ticket!",
+              });
+            }
+          }
+        });
+      }
       data.comps.length > 0 &&
         (await Transporter.sendMail({
           from: "noreply@winuwatch.uk",
@@ -346,8 +434,6 @@ export const OrderRouter = createTRPCRouter({
         };
       }
     }),
-
-  // TODO: The two procedures that was added
 
   createOrder: publicProcedure
     .input(CreateOrderFromCartSchema.optional())
@@ -958,146 +1044,146 @@ export const AffiliationRouter = createTRPCRouter({
       }
     }),
 
-  applyDiscount: publicProcedure
-    .input(z.object({ orderId: z.string(), discountId: z.string() }))
-    .mutation(async ({ ctx, input }) => {
-      try {
-        const { orderId, discountId } = input;
-        const order = await ctx.prisma.order.findUnique({
-          where: {
-            id: orderId,
-          },
-        });
-        if (!order) {
-          throw new Error("Invalid order");
-        } else if (order.status !== order_status.CONFIRMED) {
-          throw new Error("Order not confirmed");
-        } else {
-          const discount = await ctx.prisma.affiliation.findUnique({
-            where: {
-              id: discountId,
-            },
-          });
-          if (!discount) {
-            throw new Error("Invalid discount");
-          } else {
-            await ctx.prisma.$transaction(async (tx) => {
-              await tx.order.update({
-                where: {
-                  id: orderId,
-                },
-                data: {
-                  totalPrice: {
-                    decrement: discount.discountRate * order.totalPrice,
-                  },
-                },
-              });
-              await tx.affiliation.update({
-                where: {
-                  id: discountId,
-                },
-                data: {
-                  uses: {
-                    increment: 1,
-                  },
-                },
-              });
-              const updatedDiscount = await tx.affiliation.findUnique({
-                where: {
-                  id: discountId,
-                },
-              });
-              if (updatedDiscount && updatedDiscount.uses % 5 === 0) {
-                const ownerPrevOrders = await tx.order.findMany({
-                  where: {
-                    email: discount.ownerEmail,
-                  },
-                  select: {
-                    id: true,
-                    phone: true,
-                    first_name: true,
-                    last_name: true,
-                    country: true,
-                    address: true,
-                    zip: true,
-                    Ticket: {
-                      select: {
-                        competitionId: true,
-                      },
-                      where: {
-                        competitionId: discount.competitionId,
-                      },
-                    },
-                  },
-                });
-                // await tx.$queryRaw`SELECT * FROM "ticket" WHERE "competitionId" = ${discount.competitionId} AND "orderId" IN (SELECT "id" FROM "order" WHERE "email" = ${discount.ownerEmail}) `;
+  // applyDiscount: publicProcedure
+  //   .input(z.object({ orderId: z.string(), discountId: z.string() }))
+  //   .mutation(async ({ ctx, input }) => {
+  //     try {
+  //       const { orderId, discountId } = input;
+  //       const order = await ctx.prisma.order.findUnique({
+  //         where: {
+  //           id: orderId,
+  //         },
+  //       });
+  //       if (!order) {
+  //         throw new Error("Invalid order");
+  //       } else if (order.status !== order_status.CONFIRMED) {
+  //         throw new Error("Order not confirmed");
+  //       } else {
+  //         const discount = await ctx.prisma.affiliation.findUnique({
+  //           where: {
+  //             id: discountId,
+  //           },
+  //         });
+  //         if (!discount) {
+  //           throw new Error("Invalid discount");
+  //         } else {
+  //           await ctx.prisma.$transaction(async (tx) => {
+  //             await tx.order.update({
+  //               where: {
+  //                 id: orderId,
+  //               },
+  //               data: {
+  //                 totalPrice: {
+  //                   decrement: discount.discountRate * order.totalPrice,
+  //                 },
+  //               },
+  //             });
+  //             await tx.affiliation.update({
+  //               where: {
+  //                 id: discountId,
+  //               },
+  //               data: {
+  //                 uses: {
+  //                   increment: 1,
+  //                 },
+  //               },
+  //             });
+  //             const updatedDiscount = await tx.affiliation.findUnique({
+  //               where: {
+  //                 id: discountId,
+  //               },
+  //             });
+  //             if (updatedDiscount && updatedDiscount.uses % 5 === 0) {
+  //               const ownerPrevOrders = await tx.order.findMany({
+  //                 where: {
+  //                   email: discount.ownerEmail,
+  //                 },
+  //                 select: {
+  //                   id: true,
+  //                   phone: true,
+  //                   first_name: true,
+  //                   last_name: true,
+  //                   country: true,
+  //                   address: true,
+  //                   zip: true,
+  //                   Ticket: {
+  //                     select: {
+  //                       competitionId: true,
+  //                     },
+  //                     where: {
+  //                       competitionId: discount.competitionId,
+  //                     },
+  //                   },
+  //                 },
+  //               });
+  //               // await tx.$queryRaw`SELECT * FROM "ticket" WHERE "competitionId" = ${discount.competitionId} AND "orderId" IN (SELECT "id" FROM "order" WHERE "email" = ${discount.ownerEmail}) `;
 
-                if (!!ownerPrevOrders.length) {
-                  const {
-                    phone = "",
-                    first_name = "",
-                    last_name = "",
-                    country = "",
-                    address = "",
-                    zip = "",
-                  } = ownerPrevOrders[0] || {};
-                  const wonOrder = await tx.order.create({
-                    data: {
-                      email: discount.ownerEmail,
-                      phone: phone,
-                      first_name: first_name,
-                      last_name: last_name,
-                      country: country,
-                      address: address,
-                      zip: zip,
-                      date: new Date(),
-                      paymentMethod: "AFFILIATION",
-                      checkedEmail: true,
-                      checkedTerms: true,
-                      status: order_status.CONFIRMED,
-                      totalPrice: 0,
-                    },
-                  });
-                  await tx.ticket.create({
-                    data: {
-                      competitionId: discount.competitionId,
-                      orderId: wonOrder.id,
-                    },
-                  });
-                  await tx.competition.update({
-                    where: {
-                      id: discount.competitionId,
-                    },
-                    data: {
-                      remaining_tickets: {
-                        decrement: 1,
-                      },
-                    },
-                  });
-                  await Transporter.sendMail({
-                    from: "noreply@winuwatch.uk",
-                    to: discount.ownerEmail,
-                    subject: `Claim your free ticket - Winuwatch`,
-                    // html: /* Email(), */
-                  });
-                } else {
-                  throw new TRPCError({
-                    code: "NOT_FOUND",
-                    message: "No previous orders was made by this user",
-                  });
-                }
-              }
-            });
-            return true;
-          }
-        }
-      } catch (e) {
-        console.error(e);
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "Internal server error",
-          cause: e,
-        });
-      }
-    }),
+  //               if (!!ownerPrevOrders.length) {
+  //                 const {
+  //                   phone = "",
+  //                   first_name = "",
+  //                   last_name = "",
+  //                   country = "",
+  //                   address = "",
+  //                   zip = "",
+  //                 } = ownerPrevOrders[0] || {};
+  //                 const wonOrder = await tx.order.create({
+  //                   data: {
+  //                     email: discount.ownerEmail,
+  //                     phone: phone,
+  //                     first_name: first_name,
+  //                     last_name: last_name,
+  //                     country: country,
+  //                     address: address,
+  //                     zip: zip,
+  //                     date: new Date(),
+  //                     paymentMethod: "AFFILIATION",
+  //                     checkedEmail: true,
+  //                     checkedTerms: true,
+  //                     status: order_status.CONFIRMED,
+  //                     totalPrice: 0,
+  //                   },
+  //                 });
+  //                 await tx.ticket.create({
+  //                   data: {
+  //                     competitionId: discount.competitionId,
+  //                     orderId: wonOrder.id,
+  //                   },
+  //                 });
+  //                 await tx.competition.update({
+  //                   where: {
+  //                     id: discount.competitionId,
+  //                   },
+  //                   data: {
+  //                     remaining_tickets: {
+  //                       decrement: 1,
+  //                     },
+  //                   },
+  //                 });
+  //                 await Transporter.sendMail({
+  //                   from: "noreply@winuwatch.uk",
+  //                   to: discount.ownerEmail,
+  //                   subject: `Claim your free ticket - Winuwatch`,
+  //                   // html: /* Email(), */
+  //                 });
+  //               } else {
+  //                 throw new TRPCError({
+  //                   code: "NOT_FOUND",
+  //                   message: "No previous orders was made by this user",
+  //                 });
+  //               }
+  //             }
+  //           });
+  //           return true;
+  //         }
+  //       }
+  //     } catch (e) {
+  //       console.error(e);
+  //       throw new TRPCError({
+  //         code: "INTERNAL_SERVER_ERROR",
+  //         message: "Internal server error",
+  //         cause: e,
+  //       });
+  //     }
+  //   }),
 });

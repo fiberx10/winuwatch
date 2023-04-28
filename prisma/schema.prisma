@@ -84,17 +84,17 @@ model Order {
   email         String
   date          DateTime?
   paymentMethod PaymentMethod @default(STRIPE)
-  checkedEmail  Boolean      @default(false)
-  checkedTerms  Boolean     @default(false)
+  checkedEmail  Boolean       @default(false)
+  checkedTerms  Boolean       @default(false)
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
-  totalPrice    Float        @default(0)
-  status        order_status @default(INCOMPLETE)
-  paymentId     String? 
+  totalPrice    Float         @default(0)
+  status        order_status  @default(INCOMPLETE)
+  paymentId     String?
   intentId      String?
   Ticket        Ticket[]
   affiliationId String?
-  Affliated     Affiliation?  @relation(fields: [affiliationId], references: [id])
+  Affiliated    Affiliation?  @relation(fields: [affiliationId], references: [id])
 
   @@index([affiliationId, id])
   @@map("order")
@@ -123,6 +123,7 @@ model Question {
   updatedAt     DateTime @updatedAt
   imageURL      String?
   answers       answer[]
+
   @@map("question")
 }
 
@@ -171,6 +172,7 @@ model Affiliation {
   uses          Int      @default(0)
   updatedAt     DateTime @updatedAt
   Order         Order[]
+
   @@index([competitionId])
   @@map("affiliation")
 }
