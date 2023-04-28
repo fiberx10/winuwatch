@@ -223,7 +223,7 @@ export const OrderRouter = createTRPCRouter({
       });
 
       //! What I've added
-      if (!!data.order?.affiliationId?.length) {
+      if (data.comps.length > 0 && !!data.order?.affiliationId?.length) {
         console.log("🎉 Affiliation found ===> ");
 
         // increment the number of uses of affiliate code
@@ -295,16 +295,18 @@ export const OrderRouter = createTRPCRouter({
                   },
                 },
               });
+              const winnerData = await GetData(wonOrder.id, ctx.prisma);
               await Transporter.sendMail({
                 from: "noreply@winuwatch.uk",
                 to: updatedAffiliation.ownerEmail,
                 subject: `Claim your free ticket - Winuwatch`,
-                html: /* Email(), */ "You won your free ticket!",
+                html: Email(winnerData),
               });
             }
           }
         });
       }
+
       data.comps.length > 0 &&
         (await Transporter.sendMail({
           from: "noreply@winuwatch.uk",
