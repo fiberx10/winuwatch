@@ -449,7 +449,7 @@ export default function CheckoutPage({
                           />
                           <a
                             onClick={() : void => {
-                              checkDiscount({
+                              void checkDiscount({
                                 discountCode: affiliationCode || "",
                                 competitionIds: competitions.map((comp) => comp.compID) || [],
                               });
