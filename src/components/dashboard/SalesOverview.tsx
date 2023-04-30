@@ -99,11 +99,11 @@ const SalesOverview = () => {
         series={[
           {
             name: "Confirmed earnings",
-            data: data?.map((item) => item.confirmed_total),
+            data: data?.map((item) => item.confirmed_total) || new Array(12).fill(0),
           },
           {
             name: "Refunded earnings",
-            data: data?.map((item) => item.refunded_total)
+            data: data?.map((item) => item.refunded_total) || new Array(12).fill(0),
           },
         ]}
         type="bar"
