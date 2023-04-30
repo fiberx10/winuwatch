@@ -639,6 +639,30 @@ export const OrderRouter = createTRPCRouter({
       console.log("✨ getperMonthforYear ✨", result);
       return result;
     }),
+  yearlyEarnings: publicProcedure.query(async ({ ctx }) => {
+    // get current year and previous year total earnings
+    const input = new Date();
+    console.log("✨ yearlyEarnings ✨", input);
+
+    const data:
+      | Array<{ current_year: number; last_year: number }>
+      | [{ current_year: number; last_year: number }] = await ctx.prisma
+      .$queryRaw`SELECT
+                    IFNULL(SUM(CASE WHEN YEAR(o.createdAt) = YEAR(${input}) THEN o.totalPrice END), 0) AS current_year,
+                    IFNULL(SUM(CASE WHEN YEAR(o.createdAt) = (YEAR(${input}) - 1) THEN o.totalPrice END), 0) AS last_year
+                  FROM 
+                      \`order\` AS o
+                  WHERE 
+                    o.status = 'CONFIRMED' 
+                    AND YEAR(o.createdAt) >= YEAR(${input}) - 1 
+                    AND YEAR(o.createdAt) <= YEAR(${input})`;
+    const result: { current_year: number; last_year: number } = {
+      current_year: Number(data[0].current_year.toFixed(2)) || 0,
+      last_year: Number(data[0].last_year.toFixed(2)) || 0,
+    };
+    console.log("✨ yearlyEarnings ✨", data);
+    return result;
+  }),
 });
 
 export const CompetitionRouter = createTRPCRouter({
