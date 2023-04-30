@@ -443,7 +443,7 @@ export default function CheckoutPage({
                             type="text"
                             name="coupon"
                             placeholder={"Enter discount code"}
-                            onChange={(e) => {
+                            onChange={(e: { target: { value: SetStateAction<string | undefined>; }; }) => {
                               setAffiliationCode(e.target.value);
                             }}
                           />

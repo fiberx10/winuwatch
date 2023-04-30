@@ -27,7 +27,10 @@ export const GetData = async (OrderID: string, prismaClient: PrismaClient) => {
   ]);
   return {
     order,
-    comps: comps.filter(({ Ticket }) => Ticket.length > 0),
+    comps: comps.filter(({ Ticket }) => Ticket.length > 0).map((comp) => ({
+      ...comp,
+      affiliationCode: "",
+    })),
   };
 };
 export const DISCOUNT_RATES = [
@@ -375,8 +378,7 @@ export const Email = ({
                                     paddingLeft: "20px",
                                     textTransform: "uppercase",
                                     color: "white",
-                                    bo
-                                    backgroundColor: "#cbb9ac",
+                                    backgroundColor: "black",
                                   }}
                                 >
                                   You have earned a discount code, share it with your friends and get a free ticket on each 5 uses! <br /> <br />

@@ -605,8 +605,8 @@ export const OrderRouter = createTRPCRouter({
       const data: Array<{
         yaer: number;
         month: number;
-        refunded_orders: number;
-        confirmed_orders: number;
+        confirmed_total: number;
+        refunded_total: number;
       }> = await ctx.prisma.$queryRaw`SELECT 
                               YEAR(m.date) AS year,
                               MONTH(m.date) AS month,
