@@ -1,7 +1,7 @@
 import { Grid } from "@mui/material";
 import SalesOverview from "@/components/dashboard/SalesOverview";
 import YearlyBreakup from "@/components/dashboard/YearlyBreakup";
-import ProductPerformance from "@/components/dashboard/ProductPerformance";
+import OrderPerformance from "@/components/dashboard/OrderPerformance";
 import MonthlyEarnings from "@/components/dashboard/MonthlyEarnings";
 import Box from "@mui/material/Box";
 
@@ -23,7 +23,7 @@ const DashboardComp = () => {
           </Grid>
         </Grid>
         <Grid item xs={12} lg={12}>
-          <ProductPerformance />
+          <OrderPerformance />
         </Grid>
       </Grid>
     </Box>

@@ -598,6 +598,50 @@ export const OrderRouter = createTRPCRouter({
     });
   }),
 
+  getLast4Orders: publicProcedure
+    .input(z.number().optional())
+    .query(async ({ ctx, input }) => {
+      try {
+        const data = await ctx.prisma.order.findMany({
+          take: input || 10,
+          orderBy: {
+            date: "desc",
+          },
+          where: {
+            status: {
+              not: order_status.INCOMPLETE,
+            },
+          },
+          select: {
+            id: true,
+            email: true,
+            first_name: true,
+            last_name: true,
+            totalPrice: true,
+            status: true,
+            Ticket: {
+              select: {
+                Competition: {
+                  select: {
+                    name: true,
+                    Watches: {
+                      select: {
+                        model: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        });
+        console.log("data", data);
+        return data;
+      } catch (e) {
+        console.log(e);
+        return [];
+      }
+    }),
   // getperMonthforYear where year is optional
   getperMonthforYear: publicProcedure
     .input(z.number().optional())

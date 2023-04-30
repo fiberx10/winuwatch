@@ -9,7 +9,7 @@ import { api } from "@/utils";
 
 const YearlyBreakup = () => {
   const currentYear = new Date().getFullYear();
-  const { data } = api.Order.yearlyEarnings.useQuery();
+  const { data } = api.Order.yearlyEarnings.useQuery() || {};
   // chart color
   const theme = useTheme();
   const primary = "#a8957e";
