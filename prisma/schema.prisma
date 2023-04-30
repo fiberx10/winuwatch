@@ -166,7 +166,7 @@ model Affiliation {
   id            String   @id @default(cuid())
   discountCode  String   @unique
   discountRate  Float    @default(0.1)
-  ownerEmail    String   @unique
+  ownerEmail    String
   createdAt     DateTime @default(now())
   competitionId String
   uses          Int      @default(0)

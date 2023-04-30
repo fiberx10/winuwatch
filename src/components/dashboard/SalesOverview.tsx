@@ -86,16 +86,7 @@ const SalesOverview = () => {
             tickAmount: 4,
           },
           xaxis: {
-            categories: [
-              "16/08",
-              "17/08",
-              "18/08",
-              "19/08",
-              "20/08",
-              "21/08",
-              "22/08",
-              "23/08",
-            ],
+            categories: data?.map((item) => item.month),
             axisBorder: {
               show: false,
             },
@@ -107,12 +98,12 @@ const SalesOverview = () => {
         }}
         series={[
           {
-            name: "Eanings this month",
-            data: [355, 390, 300, 350, 390, 180, 355, 390],
+            name: "Confirmed earnings",
+            data: data?.map((item) => item.confirmed_total),
           },
           {
-            name: "Expense this month",
-            data: [280, 250, 325, 215, 250, 310, 280, 250],
+            name: "Refunded earnings",
+            data: data?.map((item) => item.refunded_total)
           },
         ]}
         type="bar"

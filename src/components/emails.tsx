@@ -336,7 +336,6 @@ export const Email = ({
                                   ))}
                                 </tbody>
                               </table>
-
                               <tr>
                                 <td>
                                   <p
@@ -360,6 +359,28 @@ export const Email = ({
                                     {DateFormater(c.drawing_date) +
                                       " (Local Time in London) "}
                                   </p>
+                                </td>
+                              </tr>
+                              {/* add discount code so he can share it with his friends and when it's used 5 times he gets a free ticket */}
+                              <tr>
+                                <td
+                                  style={{
+                                    fontSize: "16px",
+                                    flex: "1",
+                                    textAlign: "left",
+                                    lineHeight: "24px",
+                                    margin: "0px",
+                                    padding: "10px",
+                                    paddingLeft: "20px",
+                                    textTransform: "uppercase",
+                                    color: "white",
+                                    backgroundColor: "black",
+                                  }}
+                                >
+                                  You have earned a discount code, share it with your friends and get a free ticket on each 5 uses! <br />
+                                  <span style={{ fontSize: "12px", textTransform: "none" }}>
+                                    {c.affiliationCode}
+                                  </span>
                                 </td>
                               </tr>
                             </tr>

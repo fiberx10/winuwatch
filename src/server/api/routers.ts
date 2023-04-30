@@ -16,18 +16,49 @@ import {
   CompetitionSchema,
   affiliationSchema,
 } from "@/utils/zodSchemas";
+import type { PrismaClient } from "@prisma/client";
 import Email, { GetData } from "@/components/emails";
 import { faker } from "@faker-js/faker";
 import { TRPCError } from "@trpc/server";
 
-const discountCodeGenerator = (): string => {
+const Months = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
+];
+
+const discountCodeGenerator = async (prisma: PrismaClient): Promise<string> => {
   const possible =
     "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".split("");
-  const coupon = Array.from(
-    { length: 6 },
-    () => possible[Math.floor(Math.random() * possible.length)]
-  ).join("");
-  return coupon;
+  let attempts = 0;
+  while (attempts < 10) {
+    // limit the number of attempts to 10
+    const coupon = Array.from(
+      { length: 8 },
+      () => possible[Math.floor(Math.random() * possible.length)]
+    ).join("");
+    const exists = await prisma.affiliation.findMany({
+      where: {
+        discountCode: coupon,
+      },
+    });
+    if (exists.length === 0) {
+      return coupon;
+    }
+    attempts++;
+  }
+  throw new Error(
+    "Failed to generate a unique discount code after 10 attempts"
+  );
 };
 
 export const WinnersRouter = createTRPCRouter({
@@ -301,7 +332,39 @@ export const OrderRouter = createTRPCRouter({
         });
       }
 
+      //! send new discount code to user that made the order
+      if (
+        data.comps.length > 0 &&
+        data.order?.status === order_status.CONFIRMED
+      ) {
+        const affiliationExist = await ctx.prisma.affiliation.findMany({
+          where: {
+            ownerEmail: data.order.email,
+            competitionId: {
+              in: data.comps.map((e) => e.id),
+            },
+          },
+        });
+        for (const comp of data.comps) {
+          if (!affiliationExist.find((e) => e.competitionId === comp.id)) {
+            const newAffiliation = await ctx.prisma.affiliation.create({
+              data: {
+                ownerEmail: data.order.email,
+                discountCode: await discountCodeGenerator(ctx.prisma),
+                competitionId: comp.id,
+              },
+            });
+            data.comps = data.comps.map((e) =>
+              e.id === comp.id
+                ? { ...e, affiliationCode: newAffiliation.discountCode }
+                : e
+            );
+          }
+        }
+      }
+
       data.comps.length > 0 &&
+        data.order?.status === order_status.CONFIRMED &&
         (await Transporter.sendMail({
           from: "noreply@winuwatch.uk",
           to: data.order.email,
@@ -539,21 +602,40 @@ export const OrderRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
       const date = input ? new Date(input, 0, 1) : new Date();
 
-      const data = await ctx.prisma.$queryRaw`SELECT 
-                  YEAR(createdAt) AS year,
-                  MONTH(createdAt) AS month,
-                  COUNT(CASE WHEN status = 'REFUNDED' THEN id END) AS refunded_orders,
-                  COUNT(CASE WHEN status = 'CONFIRMED' THEN id END) AS confirmed_orders
-                  FROM 
-                    \`order\`
-                  WHERE 
-                      status IN ('REFUNDED', 'CONFIRMED') AND createdAt >= DATE_SUB(${date}, INTERVAL 12 MONTH) AND createdAt <= ${date}
-                  GROUP BY 
-                      YEAR(createdAt), MONTH(createdAt)
-                  ORDER BY 
-                      year ASC, month ASC`;
-      console.log("✨ getperMonthforYear ✨", data);
-      return data;
+      const data: Array<{
+        yaer: number;
+        month: number;
+        refunded_orders: number;
+        confirmed_orders: number;
+      }> = await ctx.prisma.$queryRaw`SELECT 
+                              YEAR(m.date) AS year,
+                              MONTH(m.date) AS month,
+                              IFNULL(SUM(CASE WHEN o.status = 'REFUNDED' THEN o.totalPrice END), 0) AS refunded_total,
+                              IFNULL(SUM(CASE WHEN o.status = 'CONFIRMED' THEN o.totalPrice END), 0) AS confirmed_total
+                              FROM 
+                                (
+                                  SELECT 
+                                    MAKEDATE(YEAR(${date}), 1) + INTERVAL (MONTHS.month - 1) MONTH AS date
+                                  FROM 
+                                    (SELECT 1 AS month UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 
+                                    UNION SELECT 7 UNION SELECT 8 UNION SELECT 9 UNION SELECT 10 UNION SELECT 11 UNION SELECT 12) AS MONTHS
+                                ) AS m
+                                LEFT JOIN \`order\` AS o 
+                                  ON YEAR(o.createdAt) = YEAR(m.date) AND MONTH(o.createdAt) = MONTH(m.date) AND o.status IN ('REFUNDED', 'CONFIRMED') 
+                                  AND o.createdAt >= DATE_SUB(${date}, INTERVAL 12 MONTH) AND o.createdAt <= ${date}
+                              GROUP BY 
+                                YEAR(m.date), MONTH(m.date)
+                              ORDER BY 
+                                year ASC, month ASC
+                              `;
+      const result = data.map((d) => ({
+        ...d,
+        month: Months[d.month - 1],
+        confirmed_total: Number(d.confirmed_total).toFixed(2),
+        refunded_total: Number(d.refunded_total).toFixed(2),
+      }));
+      console.log("✨ getperMonthforYear ✨", result);
+      return result;
     }),
 });
 
@@ -979,22 +1061,10 @@ export const AffiliationRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const discountCodes = await ctx.prisma.affiliation.findMany({
-        select: {
-          discountCode: true,
-        },
-      });
-      const discountCodeArray = discountCodes.map(
-        ({ discountCode }) => discountCode
-      );
-      let genDiscountCode: string = discountCodeGenerator();
-      while (!!discountCodeArray.includes(genDiscountCode)) {
-        genDiscountCode = discountCodeGenerator();
-      }
       return await ctx.prisma.affiliation.create({
         data: {
           ...input,
-          discountCode: genDiscountCode,
+          discountCode: await discountCodeGenerator(ctx.prisma),
         },
       });
     }),
@@ -1062,147 +1132,4 @@ export const AffiliationRouter = createTRPCRouter({
         });
       }
     }),
-
-  // applyDiscount: publicProcedure
-  //   .input(z.object({ orderId: z.string(), discountId: z.string() }))
-  //   .mutation(async ({ ctx, input }) => {
-  //     try {
-  //       const { orderId, discountId } = input;
-  //       const order = await ctx.prisma.order.findUnique({
-  //         where: {
-  //           id: orderId,
-  //         },
-  //       });
-  //       if (!order) {
-  //         throw new Error("Invalid order");
-  //       } else if (order.status !== order_status.CONFIRMED) {
-  //         throw new Error("Order not confirmed");
-  //       } else {
-  //         const discount = await ctx.prisma.affiliation.findUnique({
-  //           where: {
-  //             id: discountId,
-  //           },
-  //         });
-  //         if (!discount) {
-  //           throw new Error("Invalid discount");
-  //         } else {
-  //           await ctx.prisma.$transaction(async (tx) => {
-  //             await tx.order.update({
-  //               where: {
-  //                 id: orderId,
-  //               },
-  //               data: {
-  //                 totalPrice: {
-  //                   decrement: discount.discountRate * order.totalPrice,
-  //                 },
-  //               },
-  //             });
-  //             await tx.affiliation.update({
-  //               where: {
-  //                 id: discountId,
-  //               },
-  //               data: {
-  //                 uses: {
-  //                   increment: 1,
-  //                 },
-  //               },
-  //             });
-  //             const updatedDiscount = await tx.affiliation.findUnique({
-  //               where: {
-  //                 id: discountId,
-  //               },
-  //             });
-  //             if (updatedDiscount && updatedDiscount.uses % 5 === 0) {
-  //               const ownerPrevOrders = await tx.order.findMany({
-  //                 where: {
-  //                   email: discount.ownerEmail,
-  //                 },
-  //                 select: {
-  //                   id: true,
-  //                   phone: true,
-  //                   first_name: true,
-  //                   last_name: true,
-  //                   country: true,
-  //                   address: true,
-  //                   zip: true,
-  //                   Ticket: {
-  //                     select: {
-  //                       competitionId: true,
-  //                     },
-  //                     where: {
-  //                       competitionId: discount.competitionId,
-  //                     },
-  //                   },
-  //                 },
-  //               });
-  //               // await tx.$queryRaw`SELECT * FROM "ticket" WHERE "competitionId" = ${discount.competitionId} AND "orderId" IN (SELECT "id" FROM "order" WHERE "email" = ${discount.ownerEmail}) `;
-
-  //               if (!!ownerPrevOrders.length) {
-  //                 const {
-  //                   phone = "",
-  //                   first_name = "",
-  //                   last_name = "",
-  //                   country = "",
-  //                   address = "",
-  //                   zip = "",
-  //                 } = ownerPrevOrders[0] || {};
-  //                 const wonOrder = await tx.order.create({
-  //                   data: {
-  //                     email: discount.ownerEmail,
-  //                     phone: phone,
-  //                     first_name: first_name,
-  //                     last_name: last_name,
-  //                     country: country,
-  //                     address: address,
-  //                     zip: zip,
-  //                     date: new Date(),
-  //                     paymentMethod: "AFFILIATION",
-  //                     checkedEmail: true,
-  //                     checkedTerms: true,
-  //                     status: order_status.CONFIRMED,
-  //                     totalPrice: 0,
-  //                   },
-  //                 });
-  //                 await tx.ticket.create({
-  //                   data: {
-  //                     competitionId: discount.competitionId,
-  //                     orderId: wonOrder.id,
-  //                   },
-  //                 });
-  //                 await tx.competition.update({
-  //                   where: {
-  //                     id: discount.competitionId,
-  //                   },
-  //                   data: {
-  //                     remaining_tickets: {
-  //                       decrement: 1,
-  //                     },
-  //                   },
-  //                 });
-  //                 await Transporter.sendMail({
-  //                   from: "noreply@winuwatch.uk",
-  //                   to: discount.ownerEmail,
-  //                   subject: `Claim your free ticket - Winuwatch`,
-  //                   // html: /* Email(), */
-  //                 });
-  //               } else {
-  //                 throw new TRPCError({
-  //                   code: "NOT_FOUND",
-  //                   message: "No previous orders was made by this user",
-  //                 });
-  //               }
-  //             }
-  //           });
-  //           return true;
-  //         }
-  //       }
-  //     } catch (e) {
-  //       console.error(e);
-  //       throw new TRPCError({
-  //         code: "INTERNAL_SERVER_ERROR",
-  //         message: "Internal server error",
-  //         cause: e,
-  //       });
-  //     }
-  //   }),
 });
