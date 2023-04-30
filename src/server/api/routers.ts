@@ -453,9 +453,11 @@ export const OrderRouter = createTRPCRouter({
                             (comp.id == affiliationData?.competitionId
                               ? affiliationData?.discountRate || 0
                               : 0) -
-                            (input.comps.find(
-                              ({ compID }) => compID === comp.id
-                            )?.reduction || 0))
+                            (!affiliationData
+                              ? input.comps.find(
+                                  ({ compID }) => compID === comp.id
+                                )?.reduction || 0
+                              : 0))
                       ), // in cents
                     },
                     quantity:

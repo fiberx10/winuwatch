@@ -457,7 +457,6 @@ export default function CheckoutPage({
                           >
                             ADD
                           </a>
-
                         </div>
                         {!!affiliationError ? (
                           <p style={{ color: "red" }}>{affiliationError.message}</p>
@@ -592,7 +591,7 @@ export default function CheckoutPage({
                                         )
                                       )}
                                   </span>
-                                  {order.reduction > 0 && (
+                                  {!affiliationData  && order.reduction > 0 && (
                                     <p
                                       style={{
                                         color: "#a8957e",
@@ -641,12 +640,13 @@ export default function CheckoutPage({
                                           <span>
                                             {Formater(addDiscountToTotal(
                                               values.comps.reduce(
-                                                (acc, c) => {
-                                                  return (
-                                                    acc +
-                                                    c.number_tickets *
-                                                      c.price_per_ticket
-                                                  )}, 0)),
+                                                (acc, c) =>
+                                                  acc +
+                                                  c.number_tickets *
+                                                    c.price_per_ticket *
+                                                    (!affiliationData?.competitionId ? (1 - c.reduction) : 1),
+                                                0
+                                              )),
                                               router.locale
                                             )}
                                           </span>
