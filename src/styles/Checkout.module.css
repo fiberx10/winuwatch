@@ -126,6 +126,19 @@
   display: grid;
   place-items: center;
 }
+
+.coupon {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.couponRate {
+  display: flex;
+  align-items: center;
+  font-weight: normal;
+}
+
 .orderSum {
   display: flex;
   align-items: center;
@@ -193,6 +206,42 @@
   font-size: 16px;
   text-transform: uppercase;
 }
+.CouponInput {
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 2rem;
+}
+.CouponInput input {
+  width: 50%;
+  border: 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.16);
+  outline: none;
+}
+.CouponInput a {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  transform: translateX(20%);
+  width: 30%;
+  height: 46px;
+  background: #cbb9ac;
+  border-radius: 4px;
+  transition: 0.3s all ease;
+  border: 0;
+  text-align: center;
+  align-items: center;
+  font-weight: 600;
+  font-size: 16px;
+  text-transform: uppercase;
+  color: #ffffff;
+  font-family: "Montserrat", sans-serif;
+  cursor: pointer;
+}
+
 .SignMeUp {
   display: flex;
   flex-direction: column;

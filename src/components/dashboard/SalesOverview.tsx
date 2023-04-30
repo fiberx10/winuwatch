@@ -6,11 +6,15 @@ import { Select, MenuItem } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import DashboardCard from "../../../src/components/shared/DashboardCard";
 import dynamic from "next/dynamic";
+import { api } from "@/utils";
 const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
+
+
 
 const SalesOverview = () => {
   // select
   const [month, setMonth] = useState("1");
+  const { data } = api.Order.getperMonthforYear.useQuery();
 
   // chart color
   const theme = useTheme();
@@ -82,16 +86,7 @@ const SalesOverview = () => {
             tickAmount: 4,
           },
           xaxis: {
-            categories: [
-              "16/08",
-              "17/08",
-              "18/08",
-              "19/08",
-              "20/08",
-              "21/08",
-              "22/08",
-              "23/08",
-            ],
+            categories: data?.map((item) => item.month),
             axisBorder: {
               show: false,
             },
@@ -103,12 +98,12 @@ const SalesOverview = () => {
         }}
         series={[
           {
-            name: "Eanings this month",
-            data: [355, 390, 300, 350, 390, 180, 355, 390],
+            name: "Confirmed earnings",
+            data: data?.map((item) => item.confirmed_total) || new Array(12).fill(0),
           },
           {
-            name: "Expense this month",
-            data: [280, 250, 325, 215, 250, 310, 280, 250],
+            name: "Refunded earnings",
+            data: data?.map((item) => item.refunded_total) || new Array(12).fill(0),
           },
         ]}
         type="bar"

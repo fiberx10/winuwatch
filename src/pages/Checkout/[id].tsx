@@ -6,7 +6,7 @@ import Footer from "@/components/Footer";
 import NavBar from "@/components/NavBar";
 import Head from "next/head";
 import { z } from "zod";
-import { useEffect, useState } from "react";
+import { SetStateAction, useEffect, useState } from "react";
 import styles from "@/styles/Checkout.module.css";
 //import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js";
 import { useRouter } from "next/router";
@@ -25,40 +25,41 @@ import "react-phone-number-input/style.css";
 import Loader from "@/components/Loader";
 import Loader2 from "@/components/Loader2";
 import "moment/locale/fr";
-import { toFormikValidationSchema } from "zod-formik-adapter";
-
 import type {
   GetServerSidePropsContext,
   InferGetServerSidePropsType,
 } from "next";
 import Link from "next/link";
+
+const IsLegal = (Birthdate = new Date()) => {
+  const LegalAge = 18;
+  const now = new Date();
+  return (
+    new Date(
+      now.getFullYear() - LegalAge,
+      now.getMonth(),
+      now.getDate()
+    ).getTime() >= Birthdate.getTime()
+  );
+};
+
 export default function CheckoutPage({
   id,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const router = useRouter();
   const t = useTranslations("checkout");
+  const router = useRouter();
   const { mutateAsync: createOrder } = api.Order.createStripe.useMutation();
-  const { competitions, cardDetails, reset } = useCart();
+  const { competitions, cardDetails, reset, updateComp } = useCart();
   const [loading, setLoading] = useState(false);
   const { data: items, isLoading } = api.Competition.getAll.useQuery({
     ids: competitions.map((comp) => comp.compID),
   });
   const { data: order } = api.Order.getOrderCheck.useQuery(id);
-
-  const IsLegal = (Birthdate = new Date()) => {
-    const LegalAge = 18;
-    const now = new Date();
-    return (
-      new Date(
-        now.getFullYear() - LegalAge,
-        now.getMonth(),
-        now.getDate()
-      ).getTime() >= Birthdate.getTime()
-    );
-  };
   const [error, setError] = useState<string | undefined>();
+  const { mutateAsync: checkDiscount, error: affiliationError, data : affiliationData  } =
+    api.Affiliation.checkDiscount.useMutation();
+  const [affiliationCode, setAffiliationCode] = useState<string | undefined>();
   const { totalCost } = cardDetails();
-
   const FormSchema = Yup.object().shape({
     first_name: Yup.string().required("Required"),
     last_name: Yup.string().required("Required"),
@@ -71,6 +72,15 @@ export default function CheckoutPage({
     phone: Yup.string(),
     email: Yup.string().email("Invalid email").required("Required"),
   });
+
+  const addDiscountToTotal = (total: number): number => {
+    competitions.forEach((comp) => {
+      if (comp.compID === affiliationData?.competitionId) {        
+        total -= comp.price_per_ticket * comp.number_tickets * affiliationData?.discountRate;
+      }
+    });
+    return total;
+  };
 
   useEffect(() => {
     void (async () => {
@@ -89,6 +99,7 @@ export default function CheckoutPage({
       }
     })();
   }, [order]);
+
   return (
     <div
       style={{
@@ -146,21 +157,21 @@ export default function CheckoutPage({
             <div className={styles.formMain}>
               <Formik
                 validationSchema={FormSchema}
-                initialValues={{
-                  first_name: "",
-                  last_name: "",
-                  country: "France",
-                  address: "",
-                  town: "",
-                  zip: "",
-                  phone: "",
-                  email: "",
-                  paymentMethod: "STRIPE",
-                  totalPrice: totalCost,
-                  comps: competitions,
-                  date: new Date(),
-                  checkedEmail: true,
-                  checkedTerms: false,
+                  initialValues={{
+                    first_name: "",
+                    last_name: "",
+                    country: "France",
+                    address: "",
+                    town: "",
+                    zip: "",
+                    phone: "",
+                    email: "",
+                    paymentMethod: "STRIPE",
+                    totalPrice: totalCost,
+                    comps: competitions,
+                    date: new Date(),
+                    checkedEmail: true,
+                    checkedTerms: false,
                 }}
                 onSubmit={async (values, actions) => {
                   //if a value in the object values is undefined, it will not be sent to the server
@@ -170,8 +181,10 @@ export default function CheckoutPage({
                     ...values,
                     id: id,
                     zip: values.zip.toString(),
+                    totalPrice: addDiscountToTotal(totalCost),
                     paymentMethod: values.paymentMethod as "PAYPAL" | "STRIPE",
                     date: new Date(values.date),
+                    affiliationId: affiliationData?.id,
                     locale: router.locale
                       ? (router.locale as (typeof i18n)[number])
                       : "en",
@@ -421,6 +434,35 @@ export default function CheckoutPage({
                           </div>
                         </div>
                       </div>
+                      {/* Insert coupon */}
+                      <div className={styles.leftFormItem}>
+
+                        <h1>{/* {t("coupon")} */} Have a discount code ?</h1>
+                        <div className={styles.CouponInput}>
+                          <Field
+                            type="text"
+                            name="coupon"
+                            placeholder={"Enter discount code"}
+                            onChange={(e: { target: { value: SetStateAction<string | undefined>; }; }) => {
+                              setAffiliationCode(e.target.value);
+                            }}
+                          />
+                          <a
+                            onClick={() : void => {
+                              void checkDiscount({
+                                discountCode: affiliationCode || "",
+                                competitionIds: competitions.map((comp) => comp.compID) || [],
+                              });
+                            }}
+                          >
+                            ADD
+                          </a>
+
+                        </div>
+                        {!!affiliationError ? (
+                          <p style={{ color: "red" }}>{affiliationError.message}</p>
+                        ) : null}
+                      </div>
                       <div className={styles.leftFormItem}>
                         <h1>{t("paymethod")}</h1>
                         <div className={styles.PaymentMethod}>
@@ -564,6 +606,32 @@ export default function CheckoutPage({
                                       )}`}
                                     </p>
                                   )}
+                                  {affiliationData &&
+                                  affiliationData.competitionId === ComptetionData.id ? (
+
+                                    <div>
+                                      <div className={styles.coupon}>
+                                        <p
+                                          style={{ color: "#a8957e" }}
+                                        >{`Coupon`}</p>
+                                        <div className={styles.couponRate}>
+                                          <p
+                                            style={{
+                                              color: "#a8957e",
+                                              padding: "0 72px 0 0",
+                                            }}
+                                          >
+                                            {Formater(
+                                              affiliationData.discountRate *
+                                                (order.number_tickets *
+                                                  ComptetionData.ticket_price),
+                                              router.locale
+                                            )}
+                                          </p>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  ) : null}
                                   {values.comps[values.comps.length - 1] ===
                                   values.comps[i] ? (
                                     <div className={styles.OrdersFlexBotSum}>
@@ -571,15 +639,14 @@ export default function CheckoutPage({
                                         <p>{`TOTAL`}</p>
                                         <div className={styles.totalOrder}>
                                           <span>
-                                            {Formater(
+                                            {Formater(addDiscountToTotal(
                                               values.comps.reduce(
-                                                (acc, c) =>
-                                                  acc +
-                                                  c.number_tickets *
-                                                    c.price_per_ticket *
-                                                    (1 - c.reduction),
-                                                0
-                                              ),
+                                                (acc, c) => {
+                                                  return (
+                                                    acc +
+                                                    c.number_tickets *
+                                                      c.price_per_ticket
+                                                  )}, 0)),
                                               router.locale
                                             )}
                                           </span>

@@ -27,7 +27,10 @@ export const GetData = async (OrderID: string, prismaClient: PrismaClient) => {
   ]);
   return {
     order,
-    comps: comps.filter(({ Ticket }) => Ticket.length > 0),
+    comps: comps.filter(({ Ticket }) => Ticket.length > 0).map((comp) => ({
+      ...comp,
+      affiliationCode: "",
+    })),
   };
 };
 export const DISCOUNT_RATES = [
@@ -183,7 +186,7 @@ export const Email = ({
                         >
                           <tbody>
                             <tr>
-                              <td style={{ backgroundColor: "#cbb9ac" }}>
+                              <td style={{ backgroundColor: "#cbb9ac", color: "white" }}>
                                 <p
                                   style={{
                                     fontSize: "16px",
@@ -336,7 +339,6 @@ export const Email = ({
                                   ))}
                                 </tbody>
                               </table>
-
                               <tr>
                                 <td>
                                   <p
@@ -362,6 +364,30 @@ export const Email = ({
                                   </p>
                                 </td>
                               </tr>
+                              {/* add discount code so he can share it with his friends and when it's used 5 times he gets a free ticket */}
+                              { (c.affiliationCode && order?.totalPrice !== 0) ? (
+                                <tr>
+                                <td
+                                  style={{
+                                    fontSize: "16px",
+                                    flex: "1",
+                                    textAlign: "left",
+                                    lineHeight: "24px",
+                                    margin: "0px",
+                                    padding: "10px",
+                                    paddingLeft: "20px",
+                                    textTransform: "uppercase",
+                                    color: "white",
+                                    backgroundColor: "black",
+                                  }}
+                                >
+                                  You have earned a discount code, share it with your friends and get a free ticket on each 5 uses! <br /> <br />
+                                  <span style={{ fontSize: "20px", textTransform: "none", flex: "1", textAlign: "center", margin: "0 auto" }}>
+                                    {c.affiliationCode}
+                                  </span>
+                                </td>
+                                </tr>
+                              ) : null}
                             </tr>
                           </tbody>
                         </table>

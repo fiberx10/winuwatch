@@ -49,7 +49,5 @@ export default async function send(req: NextApiRequest, res: NextApiResponse) {
   res.send(EmailRender);
   */
 
-
-
   res.send(await GetData(OrderID, prisma));
 }
