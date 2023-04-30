@@ -362,7 +362,8 @@ export const Email = ({
                                 </td>
                               </tr>
                               {/* add discount code so he can share it with his friends and when it's used 5 times he gets a free ticket */}
-                              <tr>
+                              { (c.affiliationCode && order?.totalPrice !== 0) ? (
+                                <tr>
                                 <td
                                   style={{
                                     fontSize: "16px",
@@ -382,7 +383,8 @@ export const Email = ({
                                     {c.affiliationCode}
                                   </span>
                                 </td>
-                              </tr>
+                                </tr>
+                              ) : null}
                             </tr>
                           </tbody>
                         </table>
