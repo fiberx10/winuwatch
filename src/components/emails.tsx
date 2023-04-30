@@ -183,7 +183,7 @@ export const Email = ({
                         >
                           <tbody>
                             <tr>
-                              <td style={{ backgroundColor: "#cbb9ac" }}>
+                              <td style={{ backgroundColor: "#cbb9ac", color: "white" }}>
                                 <p
                                   style={{
                                     fontSize: "16px",
@@ -375,11 +375,12 @@ export const Email = ({
                                     paddingLeft: "20px",
                                     textTransform: "uppercase",
                                     color: "white",
-                                    backgroundColor: "black",
+                                    bo
+                                    backgroundColor: "#cbb9ac",
                                   }}
                                 >
-                                  You have earned a discount code, share it with your friends and get a free ticket on each 5 uses! <br />
-                                  <span style={{ fontSize: "12px", textTransform: "none" }}>
+                                  You have earned a discount code, share it with your friends and get a free ticket on each 5 uses! <br /> <br />
+                                  <span style={{ fontSize: "20px", textTransform: "none", flex: "1", textAlign: "center", margin: "0 auto" }}>
                                     {c.affiliationCode}
                                   </span>
                                 </td>
