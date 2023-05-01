@@ -21,13 +21,14 @@ const config = {
       {
         domain: "winuwatch.co.il",
         defaultLocale: "iw",
+        locales: ["iw"],
       },
       {
         domain: "winuwatch.com",
+        locales: ["en", "es", "fr", "ja"],
         defaultLocale: "en",
       },
     ],
-    localeDetection: false,
   },
   images: {
     remotePatterns: [
