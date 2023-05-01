@@ -50,13 +50,13 @@ const Schema = Yup.object().shape({
   zip: Yup.string().required("Required"),
   phone: Yup.number(),
   address: Yup.string().required("Required"),
-  country : Yup.string().required("Required"), 
-  email: Yup.string()
-    .email("Invalid email")
+  country: Yup.string().required("Required"),
+  email: Yup.string().email("Invalid email").required("Required"),
+  checkedEmail: Yup.boolean()
+    .oneOf([true, false], "Required")
     .required("Required"),
-    checkedEmail: Yup.boolean().oneOf([true], "Required").required("Required"),
-    checkedTerms: Yup.boolean().oneOf([true], "Required").required("Required"),
-})
+  checkedTerms: Yup.boolean().oneOf([true], "Required").required("Required"),
+});
 export default function CheckoutPage({
   id,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
@@ -76,9 +76,7 @@ export default function CheckoutPage({
     mutateAsync: checkDiscount,
     error: affiliationError,
     data: affiliationData,
-  } = api.Affiliation.checkDiscount.useMutation({
-
-  });
+  } = api.Affiliation.checkDiscount.useMutation({});
   const [affiliationCode, setAffiliationCode] = useState<string | undefined>();
 
   useEffect(() => {
@@ -174,67 +172,73 @@ export default function CheckoutPage({
               <Formik
                 validationSchema={Schema}
                 initialValues={{
-                    ...order,
-                    country: (order?.country === null || !order) ? "France" : order.country,
-                    paymentMethod: "STRIPE",
-                    checkedEmail: true,
-                    checkedTerms: false,
-                    date: new Date(),
-
+                  ...order,
+                  country:
+                    order?.country === null || !order
+                      ? "France"
+                      : order.country,
+                  paymentMethod: "STRIPE",
+                  checkedEmail: true,
+                  checkedTerms: false,
+                  date: new Date(),
                 }}
                 onSubmit={async (values, { setSubmitting }) => {
                   //if a value in the object values is undefined, it will not be sent to the server
-                  try{
+                  try {
                     console.log("Form submitted:", values);
-                  //we need to check if each value in values is not undefined
-                  //if it is undefined, we need to set it to null
-                  const ValidatedValues = Schema.cast(values);
-                  const { url, error } = await createOrder({
-                    ...ValidatedValues,
-                    phone: ValidatedValues.phone ? ValidatedValues.phone.toString() : "",
-                    id: id,
-                    zip: ValidatedValues.zip.toString(),
-                    totalPrice: ComputedTotal,
-                    comps: affiliationData
-                      ? competitions.map((comp) => ({
-                          ...comp,
-                          reduction:
-                            affiliationData.competitionId === comp.compID
-                              ? affiliationData.discountRate
-                              : comp.reduction,
-                        }))
-                      : competitions,
-                    paymentMethod: values.paymentMethod as "PAYPAL" | "STRIPE",
-                    date: new Date(values.date),
-                    affiliationId: affiliationData?.id,
-                    locale: router.locale
-                      ? (router.locale as (typeof i18n)[number])
-                      : "en",
-                  });
-                  if (url) {
-                    // await resend.sendEmail({
-                    //   from: "test@winuwatch.uk",
-                    //   to: values.email,
-                    //   subject: "Order Confirmation",
-                    //   react: (
-                    //     <SlackConfirmEmail
-                    //       clientName={values.first_name}
-                    //       numerOfTickets={values.comps}
-                    //     />
-                    //   ),
-                    // })
+                    //we need to check if each value in values is not undefined
+                    //if it is undefined, we need to set it to null
+                    const ValidatedValues = Schema.cast(values);
+                    const { url, error } = await createOrder({
+                      ...ValidatedValues,
+                      phone: ValidatedValues.phone
+                        ? ValidatedValues.phone.toString()
+                        : "",
+                      id: id,
+                      zip: ValidatedValues.zip.toString(),
+                      totalPrice: ComputedTotal,
+                      comps: affiliationData
+                        ? competitions.map((comp) => ({
+                            ...comp,
+                            reduction:
+                              affiliationData.competitionId === comp.compID
+                                ? affiliationData.discountRate
+                                : comp.reduction,
+                          }))
+                        : competitions,
+                      paymentMethod: values.paymentMethod as
+                        | "PAYPAL"
+                        | "STRIPE",
+                      date: new Date(values.date),
+                      affiliationId: affiliationData?.id,
+                      locale: router.locale
+                        ? (router.locale as (typeof i18n)[number])
+                        : "en",
+                    });
+                    if (url) {
+                      // await resend.sendEmail({
+                      //   from: "test@winuwatch.uk",
+                      //   to: values.email,
+                      //   subject: "Order Confirmation",
+                      //   react: (
+                      //     <SlackConfirmEmail
+                      //       clientName={values.first_name}
+                      //       numerOfTickets={values.comps}
+                      //     />
+                      //   ),
+                      // })
+                      setSubmitting(false);
+                      await router.push(url);
+                    }
+                    setError(error);
+                    console.log(error);
+                    // const res = CreateOrderSchema.safeParse(values);
+
+                    // if (res.success) {
+                    //   console.log("Form submitted:", res.data);
+
+                    // }
                     setSubmitting(false);
-                    await router.push(url);
-                  }
-                  setError(error);
-                  console.log(error);
-                  // const res = CreateOrderSchema.safeParse(values);
-
-                  // if (res.success) {
-                  //   console.log("Form submitted:", res.data);
-
-                  // }
-                  setSubmitting(false);
                   } catch (e) {
                     setError(e as any);
                   }

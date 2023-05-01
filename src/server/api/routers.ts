@@ -345,6 +345,15 @@ export const OrderRouter = createTRPCRouter({
             },
           },
         });
+        if (affiliationExist.length === data.comps.length) {
+          for (const affiliation of affiliationExist) {
+            data.comps = data.comps.map((e) =>
+              e.id === affiliation.competitionId
+                ? { ...e, affiliationCode: affiliation.discountCode }
+                : e
+            );
+          }
+        }
         for (const comp of data.comps) {
           if (!affiliationExist.find((e) => e.competitionId === comp.id)) {
             const newAffiliation = await ctx.prisma.affiliation.create({
