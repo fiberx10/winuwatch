@@ -191,7 +191,7 @@ export default function CheckoutPage({
                   const { url, error } = await createOrder({
                     ...ValidatedValues,
                     id: id,
-                    phone: ValidatedValues?.phone.toString() || "",
+                    phone: ValidatedValues ? ValidatedValues.phone : "",
                     zip: ValidatedValues.zip.toString(),
                     totalPrice: ComputedTotal,
                     comps: affiliationData
