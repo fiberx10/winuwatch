@@ -186,7 +186,6 @@ export default function CheckoutPage({
                   //we need to check if each value in values is not undefined
                   //if it is undefined, we need to set it to null
                   const ValidatedValues = Schema.cast(values);
-                  console.log({});
                   const { url, error } = await createOrder({
                     ...ValidatedValues,
                     id: id,

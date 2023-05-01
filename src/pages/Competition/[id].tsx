@@ -225,13 +225,13 @@ export default function Competition({
                         alt="donation"
                         src="/images/cancerRes.png"
                       /> */}
-                      <Image
+                      {/* <Image
                         width={130}
                         height={50}
                         style={{ objectFit: "contain" }}
                         alt="donation"
                         src="/images/woodlandLogo.png"
-                      />
+                      /> */}
                     </div>
                   </div>
                   {data.remaining_tickets === 0 || data.end_date < new Date()
