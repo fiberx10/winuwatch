@@ -50,7 +50,7 @@ const Schema = Yup.object().shape({
   zip: Yup.string().required("Required"),
   phone: Yup.string().required("Required"),
   address: Yup.string().required("Required"),
-  country : Yup.string().default("FRANCE"), 
+  country : Yup.string().required("Required"), 
   email: Yup.string()
     .email("Invalid email")
     .required("Required"),
@@ -173,7 +173,7 @@ export default function CheckoutPage({
                 validationSchema={Schema}
                 initialValues={{
                     ...order,
-                    country: order?.country || "FRANCE",
+                    country: (order?.country === null || !order) ? "France" : order.country,
                     paymentMethod: "STRIPE",
                     checkedEmail: true,
                     checkedTerms: false,
