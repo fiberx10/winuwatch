@@ -243,10 +243,14 @@ export const Email = ({
                                           }}
                                         >
                                           QUANTITY: {c.Ticket.length} - TOTAL:
-                                          {Reduction(
+                                          {
+                                          //TODO: Fix this latter
+                                          /*Reduction(
                                             c.ticket_price,
                                             c.Ticket.length
-                                          )}
+                                          )*/
+                                          order?.totalPrice
+                                          }
                                         </p>
                                       </td>
 

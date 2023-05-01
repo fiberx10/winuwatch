@@ -46,18 +46,17 @@ const IsLegal = (Birthdate = new Date()) => {
 const Schema = Yup.object().shape({
   first_name: Yup.string().required("Required"),
   last_name: Yup.string().required("Required"),
-  country: Yup.string()
-    .required("Required")
-    .notOneOf(["0"])
-    .label("Field empty"),
   town: Yup.string().required("Required"),
   zip: Yup.string().required("Required"),
   phone: Yup.number(),
   address: Yup.string().required("Required"),
-  email: Yup.string().email("Invalid email").required("Required"),
-  checkedEmail: Yup.boolean().default(false).oneOf([true], "Required"),
-  checkedTerms: Yup.boolean().default(false).oneOf([true], "Required"),
-});
+  country : Yup.string().required("Required"), 
+  email: Yup.string()
+    .email("Invalid email")
+    .required("Required"),
+    checkedEmail: Yup.boolean().oneOf([true], "Required"),
+    checkedTerms: Yup.boolean().oneOf([true], "Required"),
+})
 export default function CheckoutPage({
   id,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
@@ -77,7 +76,9 @@ export default function CheckoutPage({
     mutateAsync: checkDiscount,
     error: affiliationError,
     data: affiliationData,
-  } = api.Affiliation.checkDiscount.useMutation();
+  } = api.Affiliation.checkDiscount.useMutation({
+
+  });
   const [affiliationCode, setAffiliationCode] = useState<string | undefined>();
 
   useEffect(() => {
@@ -173,12 +174,13 @@ export default function CheckoutPage({
               <Formik
                 validationSchema={Schema}
                 initialValues={{
-                  ...order,
-                  country: order?.country || "FRANCE",
-                  paymentMethod: "STRIPE",
-                  checkedEmail: true,
-                  checkedTerms: false,
-                  date: new Date(),
+                    ...order,
+                    country: (order?.country === null || !order) ? "France" : order.country,
+                    paymentMethod: "STRIPE",
+                    checkedEmail: true,
+                    checkedTerms: false,
+                    date: new Date(),
+
                 }}
                 onSubmit={async (values, { setSubmitting }) => {
                   //if a value in the object values is undefined, it will not be sent to the server
@@ -186,8 +188,8 @@ export default function CheckoutPage({
                     console.log("Form submitted:", values);
                   //we need to check if each value in values is not undefined
                   //if it is undefined, we need to set it to null
-                  //const ValidatedValues = Schema.cast(values);
-                  const ValidatedValues = Schema.cast(values); 
+                  const ValidatedValues = Schema.cast(values);
+
                   const { url, error } = await createOrder({
                     ...ValidatedValues,
                     phone: ValidatedValues.phone ? ValidatedValues.phone.toString() : "",

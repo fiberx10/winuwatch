@@ -53,7 +53,7 @@ export default function Competition({
     reduction: 0,
   });
   const [filter, setFilter] = useState(5);
-  const { addComp, updateComp, competitions } = useCart();
+  const { addComp, updateComp, competitions, AffiliationSession } = useCart();
   const [image, setImage] = useState<string | undefined>(undefined);
   const router = useRouter();
   return (
@@ -151,11 +151,13 @@ export default function Competition({
                         TICKETREDUC.filter(
                           ({ value }) =>
                             value <= data.remaining_tickets && value <= filter
-                        ).map(({ value: item, reduction }, i) => (
+                        ).map(({ value: item, reduction }, i) => {
+                          const TheReduction =  0;
+                          return (
                           <ToggleButton
                             key={i}
                             onClick={() =>
-                              setCounter({ value: item, reduction })
+                              setCounter({ value: item, reduction: TheReduction })
                             }
                             disabled={item > data.remaining_tickets}
                             sx={{
@@ -183,8 +185,8 @@ export default function Competition({
                           >
                             <span
                               style={{
-                                fontSize: reduction > 0 ? "18px" : "24px",
-                                height: reduction > 0 ? "23px" : "initial",
+                                fontSize: TheReduction > 0 ? "18px" : "24px",
+                                height: TheReduction > 0 ? "23px" : "initial",
                               }}
                             >
                               {item}
@@ -193,10 +195,10 @@ export default function Competition({
                               style={{ fontSize: "10px" }}
                               className={styles.sold}
                             >
-                              {reduction > 0 && `-${reduction * 100}%`}
+                              {TheReduction > 0 && `-${TheReduction * 100}%`}
                             </p>
                           </ToggleButton>
-                        ))
+                        )})
                       )}
                       <button
                         style={{
