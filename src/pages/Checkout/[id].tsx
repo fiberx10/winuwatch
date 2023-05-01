@@ -43,48 +43,63 @@ const IsLegal = (Birthdate = new Date()) => {
   );
 };
 
+const Schema = Yup.object().shape({
+  first_name: Yup.string().required("Required"),
+  last_name: Yup.string().required("Required"),
+  country: Yup.string()
+    .required("Required")
+    .notOneOf(["0"])
+    .label("Field empty"),
+  town: Yup.string().required("Required"),
+  zip: Yup.string().required("Required"),
+  phone: Yup.string().required("Required"),
+  address: Yup.string().required("Required"),
+  email: Yup.string()
+    .email("Invalid email")
+    .required("Required"),
+    checkedEmail: Yup.boolean().oneOf([true], "Required"),
+    checkedTerms: Yup.boolean().oneOf([true], "Required"),
+})
 export default function CheckoutPage({
   id,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const { competitions: competitionsFromStore, reset } = useCart();
+  const [competitions, setCompetitions] = useState(competitionsFromStore);
+  const [ComputedTotal, setComputedTotal] = useState(0);
   const t = useTranslations("checkout");
   const router = useRouter();
   const { mutateAsync: createOrder } = api.Order.createStripe.useMutation();
-  const { competitions, cardDetails, reset, updateComp } = useCart();
-  const [loading, setLoading] = useState(false);
+
   const { data: items, isLoading } = api.Competition.getAll.useQuery({
     ids: competitions.map((comp) => comp.compID),
   });
   const { data: order } = api.Order.getOrderCheck.useQuery(id);
   const [error, setError] = useState<string | undefined>();
-  const { mutateAsync: checkDiscount, error: affiliationError, data : affiliationData  } =
-    api.Affiliation.checkDiscount.useMutation();
+  const {
+    mutateAsync: checkDiscount,
+    error: affiliationError,
+    data: affiliationData,
+  } = api.Affiliation.checkDiscount.useMutation();
   const [affiliationCode, setAffiliationCode] = useState<string | undefined>();
-  const { totalCost } = cardDetails();
-  const FormSchema = Yup.object().shape({
-    first_name: Yup.string().required("Required"),
-    last_name: Yup.string().required("Required"),
-    country: Yup.string()
-      .required("Required")
-      .notOneOf(["0"])
-      .label("Field empty"),
-    town: Yup.string().required("Required"),
-    zip: Yup.string().required("Required"),
-    phone: Yup.string(),
-    email: Yup.string().email("Invalid email").required("Required"),
-  });
-
-  const addDiscountToTotal = (total: number): number => {
-    competitions.forEach((comp) => {
-      if (comp.compID === affiliationData?.competitionId) {        
-        total -= comp.price_per_ticket * comp.number_tickets * affiliationData?.discountRate;
-      }
-    });
-    return total;
-  };
 
   useEffect(() => {
+    setComputedTotal(competitions.reduce(
+      (total, { number_tickets, price_per_ticket, compID, reduction }) => {
+        const discountRate =
+          affiliationData && affiliationData.competitionId === compID
+            ? affiliationData.discountRate 
+            : reduction;
+        const totalPriceForCompetition =
+          number_tickets * price_per_ticket * (1 - discountRate);
+
+        return total + totalPriceForCompetition;
+      },
+      0
+    ));
+  }, [affiliationData?.discountRate]);
+  useEffect(() => {
     void (async () => {
-      if (items && items.length === 0) {
+      if (competitions && competitions.length === 0) {
         return await router.push("/Cart");
       }
     })();
@@ -156,38 +171,41 @@ export default function CheckoutPage({
           items && (
             <div className={styles.formMain}>
               <Formik
-                validationSchema={FormSchema}
-                  initialValues={{
-                    first_name: "",
-                    last_name: "",
-                    country: "France",
-                    address: "",
-                    town: "",
-                    zip: "",
-                    phone: "",
-                    email: "",
+                validationSchema={Schema}
+                initialValues={{
+                    ...order,
+                    country: order?.country || "FRANCE",
                     paymentMethod: "STRIPE",
-                    totalPrice: totalCost,
-                    comps: competitions,
-                    date: new Date(),
                     checkedEmail: true,
                     checkedTerms: false,
+                    date: new Date(),
                 }}
-                onSubmit={async (values, actions) => {
+                onSubmit={async (values, {setSubmitting}) => {
                   //if a value in the object values is undefined, it will not be sent to the server
                   console.log("Form submitted:", values);
-                  setLoading(true);
+                  //we need to check if each value in values is not undefined
+                  //if it is undefined, we need to set it to null
+                  const ValidatedValues = Schema.cast(values);
+                  console.log({
+                  
+                  })
                   const { url, error } = await createOrder({
-                    ...values,
+                    ...ValidatedValues,
                     id: id,
-                    zip: values.zip.toString(),
-                    totalPrice: addDiscountToTotal(totalCost),
+                    zip: ValidatedValues.zip.toString(),
+                    totalPrice: ComputedTotal,
+                    comps: affiliationData ? competitions.map((comp) => ({
+                      ...comp,
+                      reduction: affiliationData.competitionId === comp.compID ? affiliationData.discountRate : comp.reduction,
+                    })) : competitions,
                     paymentMethod: values.paymentMethod as "PAYPAL" | "STRIPE",
                     date: new Date(values.date),
                     affiliationId: affiliationData?.id,
                     locale: router.locale
                       ? (router.locale as (typeof i18n)[number])
                       : "en",
+                    checkedEmail: ValidatedValues.checkedEmail ? true : false,
+                    checkedTerms: ValidatedValues.checkedTerms ?  true : false,
                   });
                   if (url) {
                     // await resend.sendEmail({
@@ -201,7 +219,7 @@ export default function CheckoutPage({
                     //     />
                     //   ),
                     // })
-                    setLoading(false);
+                    setSubmitting(false);
                     await router.push(url);
                   }
                   setError(error);
@@ -212,10 +230,12 @@ export default function CheckoutPage({
                   //   console.log("Form submitted:", res.data);
 
                   // }
-                  actions.setSubmitting(false);
+                  setSubmitting(false);
                 }}
               >
-                {({ values, setValues, setFieldValue, errors, touched }) => (
+                {({ values, 
+                  isSubmitting,
+                setValues, setFieldValue, errors, touched }) => (
                   <Form>
                     <div className={styles.CheckoutLeft}>
                       <div className={styles.leftFormItem}>
@@ -436,31 +456,36 @@ export default function CheckoutPage({
                       </div>
                       {/* Insert coupon */}
                       <div className={styles.leftFormItem}>
-
                         <h1>{/* {t("coupon")} */} Have a discount code ?</h1>
                         <div className={styles.CouponInput}>
                           <Field
                             type="text"
                             name="coupon"
                             placeholder={"Enter discount code"}
-                            onChange={(e: { target: { value: SetStateAction<string | undefined>; }; }) => {
+                            onChange={(e: {
+                              target: {
+                                value: SetStateAction<string | undefined>;
+                              };
+                            }) => {
                               setAffiliationCode(e.target.value);
                             }}
                           />
                           <a
-                            onClick={() : void => {
+                            onClick={(): void => {
                               void checkDiscount({
                                 discountCode: affiliationCode || "",
-                                competitionIds: competitions.map((comp) => comp.compID) || [],
+                                competitionIds:
+                                  competitions.map((comp) => comp.compID) || [],
                               });
                             }}
                           >
                             ADD
                           </a>
-
                         </div>
                         {!!affiliationError ? (
-                          <p style={{ color: "red" }}>{affiliationError.message}</p>
+                          <p style={{ color: "red" }}>
+                            {affiliationError.message}
+                          </p>
                         ) : null}
                       </div>
                       <div className={styles.leftFormItem}>
@@ -544,17 +569,12 @@ export default function CheckoutPage({
                       <h1> {t("ordersum")} </h1>
                       <div className={styles.RightCon}>
                         <div className={styles.OrdersFlex}>
-                          {values.comps.map((order, i) => {
+                          {competitions.map((order, i) => {
                             const ComptetionData = items.find(
                               (compData) => compData.id === order.compID
                             );
-
-                            if (
-                              !ComptetionData ||
-                              ComptetionData.Watches === null
-                            )
-                              return null;
-                            return (
+                            return !ComptetionData ||
+                              ComptetionData.Watches === null ? null : (
                               <div className={styles.orderItem} key={i}>
                                 <Image
                                   width={106}
@@ -574,7 +594,7 @@ export default function CheckoutPage({
                                   </h3>
 
                                   <span>
-                                    {values.comps
+                                    {competitions
                                       .filter(
                                         (comp) => comp.compID === order.compID
                                       )
@@ -592,7 +612,7 @@ export default function CheckoutPage({
                                         )
                                       )}
                                   </span>
-                                  {order.reduction > 0 && (
+                                  {!affiliationData && order.reduction > 0 && (
                                     <p
                                       style={{
                                         color: "#a8957e",
@@ -607,8 +627,8 @@ export default function CheckoutPage({
                                     </p>
                                   )}
                                   {affiliationData &&
-                                  affiliationData.competitionId === ComptetionData.id ? (
-
+                                  affiliationData.competitionId ===
+                                    ComptetionData.id ? (
                                     <div>
                                       <div className={styles.coupon}>
                                         <p
@@ -632,23 +652,19 @@ export default function CheckoutPage({
                                       </div>
                                     </div>
                                   ) : null}
-                                  {values.comps[values.comps.length - 1] ===
-                                  values.comps[i] ? (
+                                  {competitions[competitions.length - 1] ===
+                                  competitions[i] ? (
                                     <div className={styles.OrdersFlexBotSum}>
                                       <div className={styles.orderSum}>
                                         <p>{`TOTAL`}</p>
                                         <div className={styles.totalOrder}>
                                           <span>
-                                            {Formater(addDiscountToTotal(
-                                              values.comps.reduce(
-                                                (acc, c) => {
-                                                  return (
-                                                    acc +
-                                                    c.number_tickets *
-                                                      c.price_per_ticket
-                                                  )}, 0)),
+                                            {Formater(
+                                              ComputedTotal,
                                               router.locale
-                                            )}
+                                              )
+                                            }
+                                              
                                           </span>
                                           <p
                                             style={{
@@ -661,10 +677,7 @@ export default function CheckoutPage({
                                             }}
                                             onClick={() => {
                                               reset();
-                                              setValues({
-                                                ...values,
-                                                comps: [],
-                                              });
+                                              setCompetitions([]);
                                             }}
                                           >
                                             {t("clearcart")}
@@ -672,9 +685,7 @@ export default function CheckoutPage({
                                         </div>
                                       </div>
                                     </div>
-                                  ) : (
-                                    ""
-                                  )}
+                                  ) : null}
                                 </div>
                                 {/* <div className={styles.Counter}>
                               <div
@@ -759,14 +770,14 @@ export default function CheckoutPage({
 
                         <div className={styles.orderSumBot}>
                           <button
-                            disabled={loading || error ? true : false}
+                            disabled={isSubmitting || error ? true : false}
                             style={{
                               backgroundColor: error
                                 ? "rgba(30, 30, 30, 0.3)"
-                                : loading
+                                : isSubmitting
                                 ? "#cbb9ac"
                                 : "#cbb9ac",
-                              cursor: loading || error ? "default" : "pointer",
+                              cursor: isSubmitting || error ? "default" : "pointer",
                             }}
                             type="submit"
                             onClick={() => {
@@ -774,7 +785,7 @@ export default function CheckoutPage({
                                 return alert(`${t("shouldacceptterms")}`);
                             }}
                           >
-                            {loading ? <Loader2 /> : t("confirmorder")}
+                            {isSubmitting ? <Loader2 /> : t("confirmorder")}
                           </button>
                         </div>
                       </div>

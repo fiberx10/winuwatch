@@ -398,14 +398,12 @@ export const OrderRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       try {
         const { locale, comps, affiliationId, ...data } = input;
-        let affiliationData: Affiliation | null;
-        if (input.affiliationId) {
-          affiliationData = await ctx.prisma.affiliation.findUnique({
+        const  affiliationData  = input.affiliationId ? (await ctx.prisma.affiliation.findUnique({
             where: {
               id: affiliationId,
             },
-          });
-        }
+          }))
+          : null;
         const [Order, StripeOrder] = await Promise.all([
           ctx.prisma.order.update({
             where: {
@@ -413,7 +411,7 @@ export const OrderRouter = createTRPCRouter({
             },
             data: {
               ...data,
-              affiliationId: affiliationId || undefined,
+              affiliationId: affiliationId,
               status: order_status.PENDING,
             },
           }),
@@ -447,16 +445,12 @@ export const OrderRouter = createTRPCRouter({
                         images: comp.Watches.images_url.map(({ url }) => url),
                       },
                       unit_amount: Math.floor(
-                        comp.ticket_price *
-                          100 *
-                          (1 -
-                            (comp.id == affiliationData?.competitionId
-                              ? affiliationData?.discountRate || 0
-                              : 0) -
-                            (input.comps.find(
+                          comp.ticket_price *
+                            100 *
+                            (1 - (input.comps.find(
                               ({ compID }) => compID === comp.id
                             )?.reduction || 0))
-                      ), // in cents
+                        ),
                     },
                     quantity:
                       input.comps.find((item) => item.compID === comp.id)
