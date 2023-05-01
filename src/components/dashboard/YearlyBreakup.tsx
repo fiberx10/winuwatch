@@ -20,7 +20,7 @@ const YearlyBreakup = () => {
   const seriescolumnchart = [38, 40, 25];
 
   return (
-    <DashboardCard title="Yearly Breakup">
+    <DashboardCard title="Yearly Earnings">
       <Grid container spacing={3}>
         {/* column */}
         <Grid item xs={7} sm={7}>

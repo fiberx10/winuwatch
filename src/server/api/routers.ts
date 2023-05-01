@@ -635,14 +635,12 @@ export const OrderRouter = createTRPCRouter({
             },
           },
         });
-        console.log("data", data);
         return data;
       } catch (e) {
-        console.log(e);
         return [];
       }
     }),
-  // getperMonthforYear where year is optional
+  // get total per month for a year
   getperMonthforYear: publicProcedure
     .input(z.number().optional())
     .query(async ({ ctx, input }) => {
@@ -680,13 +678,12 @@ export const OrderRouter = createTRPCRouter({
         confirmed_total: Number(d.confirmed_total).toFixed(2),
         refunded_total: Number(d.refunded_total).toFixed(2),
       }));
-      console.log("✨ getperMonthforYear ✨", result);
       return result;
     }),
+  // get yearly earnings for current year and previous year
   yearlyEarnings: publicProcedure.query(async ({ ctx }) => {
     // get current year and previous year total earnings
     const input = new Date();
-    console.log("✨ yearlyEarnings ✨", input);
 
     const data:
       | Array<{ current_year: number; last_year: number }>
@@ -704,8 +701,46 @@ export const OrderRouter = createTRPCRouter({
       current_year: Number(data[0].current_year.toFixed(2)) || 0,
       last_year: Number(data[0].last_year.toFixed(2)) || 0,
     };
-    console.log("✨ yearlyEarnings ✨", data);
     return result;
+  }),
+  // get total tickets sold per day for a month
+  ticketSoldPerDay: publicProcedure.query(async ({ ctx }) => {
+    try {
+      const date = new Date();
+      const data: Array<{
+        date: string;
+        total_tickets: number;
+        total_orders: number;
+      }> = await ctx.prisma.$queryRaw`SELECT 
+                                          DATE(t.createdAt) AS date,
+                                          IFNULL(COUNT(t.id), 0) AS total_tickets
+                                        FROM
+                                          \`tickets\` AS t
+                                        WHERE
+                                          t.createdAt >= DATE_SUB(${date}, INTERVAL 30 DAY)
+                                          AND t.createdAt <= ${date}
+                                        GROUP BY
+                                          DATE(t.createdAt)
+                                        ORDER BY
+                                          date ASC`;
+      console.log("✨ data ✨", data);
+      const result = data.map((d) => ({
+        month: Months[date.getMonth()],
+        day: new Date(d.date).getDate(),
+        total_tickets: Number(d.total_tickets),
+      }));
+      console.log("✨ numTicketsSoldPerDay ✨", result);
+      return {
+        totalNumber: result.reduce((acc, curr) => acc + curr.total_tickets, 0),
+        data: result,
+      };
+    } catch (e) {
+      console.log(e);
+      return {
+        totalNumber: 0,
+        data: [],
+      };
+    }
   }),
 });
 

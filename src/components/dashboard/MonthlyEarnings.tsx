@@ -4,25 +4,31 @@ import dynamic from "next/dynamic";
 const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 import { useTheme } from "@mui/material/styles";
 import { Stack, Typography, Avatar, Fab } from "@mui/material";
-import { IconArrowDownRight, IconCurrencyDollar } from "@tabler/icons-react";
+import { IconArrowDownRight } from "@tabler/icons-react";
 import DashboardCard from "@/components/shared/DashboardCard";
+import { IconCurrencyEuro } from "@tabler/icons-react";
+import { api } from "@/utils";
+import { light } from "@mui/material/styles/createPalette";
+
 
 const MonthlyEarnings = () => {
+  const { data: dataObj } = api.Order.ticketSoldPerDay.useQuery() || {};
+
   // chart color
   const theme = useTheme();
   const secondary = "rgba(168, 149, 126, 0.7)";
-  //const secondarylight = "rgba(168, 149, 126, 0.1)";
+  const secondarylight = "rgba(168, 149, 126, 0.1)";
   const errorlight = "#fdede8";
   return (
     <DashboardCard
-      title="Monthly Earnings"
+      title="Monthly Sold Tickets"
       action={
         <Fab
           color="secondary"
           size="medium"
           sx={{ color: "#ffffff", backgroundColor: "rgba(0, 0, 0, 0.5)" }}
         >
-          <IconCurrencyDollar width={24} />
+          <IconCurrencyEuro width={24} />
         </Fab>
       }
       footer={
@@ -59,10 +65,10 @@ const MonthlyEarnings = () => {
           }}
           series={[
             {
-              name: "",
+              name: "Count",
               color: secondary,
-              data: [25, 66, 20, 40, 12, 58, 20],
-            },
+              data: dataObj?.data.map((item) => item.total_tickets) || [],
+            }
           ]}
           type="area"
           height="60px"
@@ -71,17 +77,17 @@ const MonthlyEarnings = () => {
     >
       <>
         <Typography variant="h3" fontWeight="700" mt="-20px">
-          £6,82
+          {dataObj?.totalNumber ? dataObj?.totalNumber : 0}
         </Typography>
         <Stack direction="row" spacing={1} my={1} alignItems="center">
           <Avatar sx={{ bgcolor: errorlight, width: 27, height: 27 }}>
             <IconArrowDownRight width={20} color="#FA896B" />
           </Avatar>
           <Typography variant="subtitle2" fontWeight="600">
-            +9%
+            {dataObj?.totalNumber ? dataObj?.totalNumber : 0}%
           </Typography>
           <Typography variant="subtitle2" color="textSecondary">
-            last year
+            Yesterday
           </Typography>
         </Stack>
       </>
