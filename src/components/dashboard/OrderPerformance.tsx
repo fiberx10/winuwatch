@@ -9,49 +9,13 @@ import {
   Chip,
 } from "@mui/material";
 import DashboardCard from "@/components/shared/DashboardCard";
+import { api } from "@/utils";
 
-const products = [
-  {
-    id: "1",
-    name: "Sunil Joshi",
-    post: "Web Designer",
-    pname: "Elite Admin",
-    priority: "Low",
-    pbg: "primary.main",
-    budget: "3.9",
-  },
-  {
-    id: "2",
-    name: "Andrew McDownland",
-    post: "Project Manager",
-    pname: "Real Homes WP Theme",
-    priority: "Medium",
-    pbg: "secondary.main",
-    budget: "24.5",
-  },
-  {
-    id: "3",
-    name: "Christopher Jamil",
-    post: "Project Manager",
-    pname: "MedicalPro WP Theme",
-    priority: "High",
-    pbg: "error.main",
-    budget: "12.8",
-  },
-  {
-    id: "4",
-    name: "Nirav Joshi",
-    post: "Frontend Engineer",
-    pname: "Hosting Press HTML",
-    priority: "Critical",
-    pbg: "success.main",
-    budget: "2.4",
-  },
-];
+const OrderPerformance = () => {
+  const { data: orders } = api.Order.getLast4Orders.useQuery();
 
-const ProductPerformance = () => {
   return (
-    <DashboardCard title="Product Performance">
+    <DashboardCard title="Latest Orders">
       <Box sx={{ overflow: "auto", width: { xs: "280px", sm: "auto" } }}>
         <Table
           aria-label="simple table"
@@ -64,34 +28,34 @@ const ProductPerformance = () => {
             <TableRow>
               <TableCell>
                 <Typography variant="subtitle2" fontWeight={600}>
-                  Id
+                  #
                 </Typography>
               </TableCell>
               <TableCell>
                 <Typography variant="subtitle2" fontWeight={600}>
-                  Assigned
+                  Client
                 </Typography>
               </TableCell>
               <TableCell>
                 <Typography variant="subtitle2" fontWeight={600}>
-                  Name
+                  Number of Tickets
                 </Typography>
               </TableCell>
               <TableCell>
                 <Typography variant="subtitle2" fontWeight={600}>
-                  Priority
+                  Status
                 </Typography>
               </TableCell>
               <TableCell align="right">
                 <Typography variant="subtitle2" fontWeight={600}>
-                  Budget
+                  Totale
                 </Typography>
               </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {products.map((product) => (
-              <TableRow key={product.name}>
+            {orders?.map((order, index) => (
+              <TableRow key={index}>
                 <TableCell>
                   <Typography
                     sx={{
@@ -99,7 +63,7 @@ const ProductPerformance = () => {
                       fontWeight: "500",
                     }}
                   >
-                    {product.id}
+                    {index}
                   </Typography>
                 </TableCell>
                 <TableCell>
@@ -111,7 +75,13 @@ const ProductPerformance = () => {
                   >
                     <Box>
                       <Typography variant="subtitle2" fontWeight={600}>
-                        {product.name}
+                        {
+                          (order?.first_name ? 
+                            (order?.first_name?.charAt(0).toLocaleUpperCase() + order?.first_name?.slice(1)) : " ") 
+                            + " " + 
+                          (order?.last_name ?
+                            (order?.last_name.charAt(0).toLocaleUpperCase() + order?.last_name?.slice(1)) : " ")
+                        }
                       </Typography>
                       <Typography
                         color="textSecondary"
@@ -119,7 +89,7 @@ const ProductPerformance = () => {
                           fontSize: "13px",
                         }}
                       >
-                        {product.post}
+                        {order?.email}
                       </Typography>
                     </Box>
                   </Box>
@@ -130,22 +100,23 @@ const ProductPerformance = () => {
                     variant="subtitle2"
                     fontWeight={400}
                   >
-                    {product.pname}
+                    {order?.Ticket.length}
                   </Typography>
                 </TableCell>
                 <TableCell>
                   <Chip
                     sx={{
                       px: "4px",
-                      backgroundColor: product.pbg,
+                      backgroundColor: order?.status === "PENDING" ? "#FF5E57" : 
+                      order?.status === "CONFIRMED" ? "#00B87C" : order?.status === "CANCELLED" ? "#FFC107" : "#00B0FF",
                       color: "#fff",
                     }}
                     size="small"
-                    label={product.priority}
+                    label={order?.status}
                   ></Chip>
                 </TableCell>
                 <TableCell align="right">
-                  <Typography variant="h6">${product.budget}k</Typography>
+                  <Typography variant="h6">${order?.totalPrice}</Typography>
                 </TableCell>
               </TableRow>
             ))}
@@ -156,4 +127,4 @@ const ProductPerformance = () => {
   );
 };
 
-export default ProductPerformance;
+export default OrderPerformance;

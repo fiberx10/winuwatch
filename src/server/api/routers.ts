@@ -398,14 +398,12 @@ export const OrderRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       try {
         const { locale, comps, affiliationId, ...data } = input;
-        let affiliationData: Affiliation | null;
-        if (input.affiliationId) {
-          affiliationData = await ctx.prisma.affiliation.findUnique({
+        const  affiliationData  = input.affiliationId ? (await ctx.prisma.affiliation.findUnique({
             where: {
               id: affiliationId,
             },
-          });
-        }
+          }))
+          : null;
         const [Order, StripeOrder] = await Promise.all([
           ctx.prisma.order.update({
             where: {
@@ -413,7 +411,7 @@ export const OrderRouter = createTRPCRouter({
             },
             data: {
               ...data,
-              affiliationId: affiliationId || undefined,
+              affiliationId: affiliationId,
               status: order_status.PENDING,
             },
           }),
@@ -447,16 +445,14 @@ export const OrderRouter = createTRPCRouter({
                         images: comp.Watches.images_url.map(({ url }) => url),
                       },
                       unit_amount: Math.floor(
-                        comp.ticket_price *
-                          100 *
-                          (1 -
-                            (comp.id == affiliationData?.competitionId
-                              ? affiliationData?.discountRate || 0
-                              : 0) -
-                            (input.comps.find(
+                          comp.ticket_price *
+                            100 *
+                            (1 - (input.comps.find(
                               ({ compID }) => compID === comp.id
                             )?.reduction || 0))
-                      ), // in cents
+                        ),
+
+
                     },
                     quantity:
                       input.comps.find((item) => item.compID === comp.id)
@@ -596,7 +592,49 @@ export const OrderRouter = createTRPCRouter({
     });
   }),
 
-  // getperMonthforYear where year is optional
+  getLast4Orders: publicProcedure
+    .input(z.number().optional())
+    .query(async ({ ctx, input }) => {
+      try {
+        const data = await ctx.prisma.order.findMany({
+          take: input || 10,
+          orderBy: {
+            date: "desc",
+          },
+          where: {
+            status: {
+              not: order_status.INCOMPLETE,
+            },
+          },
+          select: {
+            id: true,
+            email: true,
+            first_name: true,
+            last_name: true,
+            totalPrice: true,
+            status: true,
+            Ticket: {
+              select: {
+                Competition: {
+                  select: {
+                    name: true,
+                    Watches: {
+                      select: {
+                        model: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        });
+        return data;
+      } catch (e) {
+        return [];
+      }
+    }),
+  // get total per month for a year
   getperMonthforYear: publicProcedure
     .input(z.number().optional())
     .query(async ({ ctx, input }) => {
@@ -634,9 +672,70 @@ export const OrderRouter = createTRPCRouter({
         confirmed_total: Number(d.confirmed_total).toFixed(2),
         refunded_total: Number(d.refunded_total).toFixed(2),
       }));
-      console.log("✨ getperMonthforYear ✨", result);
       return result;
     }),
+  // get yearly earnings for current year and previous year
+  yearlyEarnings: publicProcedure.query(async ({ ctx }) => {
+    // get current year and previous year total earnings
+    const input = new Date();
+
+    const data:
+      | Array<{ current_year: number; last_year: number }>
+      | [{ current_year: number; last_year: number }] = await ctx.prisma
+      .$queryRaw`SELECT
+                    IFNULL(SUM(CASE WHEN YEAR(o.createdAt) = YEAR(${input}) THEN o.totalPrice END), 0) AS current_year,
+                    IFNULL(SUM(CASE WHEN YEAR(o.createdAt) = (YEAR(${input}) - 1) THEN o.totalPrice END), 0) AS last_year
+                  FROM 
+                      \`order\` AS o
+                  WHERE 
+                    o.status = 'CONFIRMED' 
+                    AND YEAR(o.createdAt) >= YEAR(${input}) - 1 
+                    AND YEAR(o.createdAt) <= YEAR(${input})`;
+    const result: { current_year: number; last_year: number } = {
+      current_year: Number(data[0].current_year.toFixed(2)) || 0,
+      last_year: Number(data[0].last_year.toFixed(2)) || 0,
+    };
+    return result;
+  }),
+  // get total tickets sold per day for a month
+  ticketSoldPerDay: publicProcedure.query(async ({ ctx }) => {
+    try {
+      const date = new Date();
+      const data: Array<{
+        date: string;
+        total_tickets: number;
+        total_orders: number;
+      }> = await ctx.prisma.$queryRaw`SELECT 
+                                          DATE(t.createdAt) AS date,
+                                          IFNULL(COUNT(t.id), 0) AS total_tickets
+                                        FROM
+                                          \`tickets\` AS t
+                                        WHERE
+                                          t.createdAt >= DATE_SUB(${date}, INTERVAL 30 DAY)
+                                          AND t.createdAt <= ${date}
+                                        GROUP BY
+                                          DATE(t.createdAt)
+                                        ORDER BY
+                                          date ASC`;
+      console.log("✨ data ✨", data);
+      const result = data.map((d) => ({
+        month: Months[date.getMonth()],
+        day: new Date(d.date).getDate(),
+        total_tickets: Number(d.total_tickets),
+      }));
+      console.log("✨ numTicketsSoldPerDay ✨", result);
+      return {
+        totalNumber: result.reduce((acc, curr) => acc + curr.total_tickets, 0),
+        data: result,
+      };
+    } catch (e) {
+      console.log(e);
+      return {
+        totalNumber: 0,
+        data: [],
+      };
+    }
+  }),
 });
 
 export const CompetitionRouter = createTRPCRouter({
