@@ -48,7 +48,7 @@ const Schema = Yup.object().shape({
   last_name: Yup.string().required("Required"),
   town: Yup.string().required("Required"),
   zip: Yup.string().required("Required"),
-  phone: Yup.string().required("Required"),
+  phone: Yup.number(),
   address: Yup.string().required("Required"),
   country : Yup.string().required("Required"), 
   email: Yup.string()
@@ -82,19 +82,21 @@ export default function CheckoutPage({
   const [affiliationCode, setAffiliationCode] = useState<string | undefined>();
 
   useEffect(() => {
-    setComputedTotal(competitions.reduce(
-      (total, { number_tickets, price_per_ticket, compID, reduction }) => {
-        const discountRate =
-          affiliationData && affiliationData.competitionId === compID
-            ? affiliationData.discountRate 
-            : reduction;
-        const totalPriceForCompetition =
-          number_tickets * price_per_ticket * (1 - discountRate);
+    setComputedTotal(
+      competitions.reduce(
+        (total, { number_tickets, price_per_ticket, compID, reduction }) => {
+          const discountRate =
+            affiliationData && affiliationData.competitionId === compID
+              ? affiliationData.discountRate
+              : reduction;
+          const totalPriceForCompetition =
+            number_tickets * price_per_ticket * (1 - discountRate);
 
-        return total + totalPriceForCompetition;
-      },
-      0
-    ));
+          return total + totalPriceForCompetition;
+        },
+        0
+      )
+    );
   }, [affiliationData?.discountRate]);
   useEffect(() => {
     void (async () => {
@@ -178,30 +180,37 @@ export default function CheckoutPage({
                     checkedEmail: true,
                     checkedTerms: false,
                     date: new Date(),
+
                 }}
-                onSubmit={async (values, {setSubmitting}) => {
+                onSubmit={async (values, { setSubmitting }) => {
                   //if a value in the object values is undefined, it will not be sent to the server
-                  console.log("Form submitted:", values);
+                  try{
+                    console.log("Form submitted:", values);
                   //we need to check if each value in values is not undefined
                   //if it is undefined, we need to set it to null
                   const ValidatedValues = Schema.cast(values);
+
                   const { url, error } = await createOrder({
                     ...ValidatedValues,
+                    phone: ValidatedValues.phone ? ValidatedValues.phone.toString() : "",
                     id: id,
                     zip: ValidatedValues.zip.toString(),
                     totalPrice: ComputedTotal,
-                    comps: affiliationData ? competitions.map((comp) => ({
-                      ...comp,
-                      reduction: affiliationData.competitionId === comp.compID ? affiliationData.discountRate : comp.reduction,
-                    })) : competitions,
+                    comps: affiliationData
+                      ? competitions.map((comp) => ({
+                          ...comp,
+                          reduction:
+                            affiliationData.competitionId === comp.compID
+                              ? affiliationData.discountRate
+                              : comp.reduction,
+                        }))
+                      : competitions,
                     paymentMethod: values.paymentMethod as "PAYPAL" | "STRIPE",
                     date: new Date(values.date),
                     affiliationId: affiliationData?.id,
                     locale: router.locale
                       ? (router.locale as (typeof i18n)[number])
                       : "en",
-                    checkedEmail: ValidatedValues.checkedEmail ? true : false,
-                    checkedTerms: ValidatedValues.checkedTerms ?  true : false,
                   });
                   if (url) {
                     // await resend.sendEmail({
@@ -227,11 +236,19 @@ export default function CheckoutPage({
 
                   // }
                   setSubmitting(false);
+                  } catch (e) {
+                    setError(e as any);
+                  }
                 }}
               >
-                {({ values, 
+                {({
+                  values,
                   isSubmitting,
-                setValues, setFieldValue, errors, touched }) => (
+                  setValues,
+                  setFieldValue,
+                  errors,
+                  touched,
+                }) => (
                   <Form>
                     <div className={styles.CheckoutLeft}>
                       <div className={styles.leftFormItem}>
@@ -609,7 +626,6 @@ export default function CheckoutPage({
                                       )}
                                   </span>
                                   {!affiliationData && order.reduction > 0 && (
-
                                     <p
                                       style={{
                                         color: "#a8957e",
@@ -659,9 +675,7 @@ export default function CheckoutPage({
                                             {Formater(
                                               ComputedTotal,
                                               router.locale
-                                              )
-                                            }
-                                              
+                                            )}
                                           </span>
                                           <p
                                             style={{
@@ -774,7 +788,8 @@ export default function CheckoutPage({
                                 : isSubmitting
                                 ? "#cbb9ac"
                                 : "#cbb9ac",
-                              cursor: isSubmitting || error ? "default" : "pointer",
+                              cursor:
+                                isSubmitting || error ? "default" : "pointer",
                             }}
                             type="submit"
                             onClick={() => {

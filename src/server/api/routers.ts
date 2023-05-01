@@ -398,11 +398,12 @@ export const OrderRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       try {
         const { locale, comps, affiliationId, ...data } = input;
-        const  affiliationData  = input.affiliationId ? (await ctx.prisma.affiliation.findUnique({
-            where: {
-              id: affiliationId,
-            },
-          }))
+        const affiliationData = input.affiliationId
+          ? await ctx.prisma.affiliation.findUnique({
+              where: {
+                id: affiliationId,
+              },
+            })
           : null;
         const [Order, StripeOrder] = await Promise.all([
           ctx.prisma.order.update({
@@ -445,14 +446,13 @@ export const OrderRouter = createTRPCRouter({
                         images: comp.Watches.images_url.map(({ url }) => url),
                       },
                       unit_amount: Math.floor(
-                          comp.ticket_price *
-                            100 *
-                            (1 - (input.comps.find(
+                        comp.ticket_price *
+                          100 *
+                          (1 -
+                            (input.comps.find(
                               ({ compID }) => compID === comp.id
                             )?.reduction || 0))
-                        ),
-
-
+                      ),
                     },
                     quantity:
                       input.comps.find((item) => item.compID === comp.id)
@@ -590,151 +590,6 @@ export const OrderRouter = createTRPCRouter({
         id: input,
       },
     });
-  }),
-
-  getLast4Orders: publicProcedure
-    .input(z.number().optional())
-    .query(async ({ ctx, input }) => {
-      try {
-        const data = await ctx.prisma.order.findMany({
-          take: input || 10,
-          orderBy: {
-            date: "desc",
-          },
-          where: {
-            status: {
-              not: order_status.INCOMPLETE,
-            },
-          },
-          select: {
-            id: true,
-            email: true,
-            first_name: true,
-            last_name: true,
-            totalPrice: true,
-            status: true,
-            Ticket: {
-              select: {
-                Competition: {
-                  select: {
-                    name: true,
-                    Watches: {
-                      select: {
-                        model: true,
-                      },
-                    },
-                  },
-                },
-              },
-            },
-          },
-        });
-        return data;
-      } catch (e) {
-        return [];
-      }
-    }),
-  // get total per month for a year
-  getperMonthforYear: publicProcedure
-    .input(z.number().optional())
-    .query(async ({ ctx, input }) => {
-      const date = input ? new Date(input, 0, 1) : new Date();
-
-      const data: Array<{
-        yaer: number;
-        month: number;
-        confirmed_total: number;
-        refunded_total: number;
-      }> = await ctx.prisma.$queryRaw`SELECT 
-                              YEAR(m.date) AS year,
-                              MONTH(m.date) AS month,
-                              IFNULL(SUM(CASE WHEN o.status = 'REFUNDED' THEN o.totalPrice END), 0) AS refunded_total,
-                              IFNULL(SUM(CASE WHEN o.status = 'CONFIRMED' THEN o.totalPrice END), 0) AS confirmed_total
-                              FROM 
-                                (
-                                  SELECT 
-                                    MAKEDATE(YEAR(${date}), 1) + INTERVAL (MONTHS.month - 1) MONTH AS date
-                                  FROM 
-                                    (SELECT 1 AS month UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 
-                                    UNION SELECT 7 UNION SELECT 8 UNION SELECT 9 UNION SELECT 10 UNION SELECT 11 UNION SELECT 12) AS MONTHS
-                                ) AS m
-                                LEFT JOIN \`order\` AS o 
-                                  ON YEAR(o.createdAt) = YEAR(m.date) AND MONTH(o.createdAt) = MONTH(m.date) AND o.status IN ('REFUNDED', 'CONFIRMED') 
-                                  AND o.createdAt >= DATE_SUB(${date}, INTERVAL 12 MONTH) AND o.createdAt <= ${date}
-                              GROUP BY 
-                                YEAR(m.date), MONTH(m.date)
-                              ORDER BY 
-                                year ASC, month ASC
-                              `;
-      const result = data.map((d) => ({
-        ...d,
-        month: Months[d.month - 1],
-        confirmed_total: Number(d.confirmed_total).toFixed(2),
-        refunded_total: Number(d.refunded_total).toFixed(2),
-      }));
-      return result;
-    }),
-  // get yearly earnings for current year and previous year
-  yearlyEarnings: publicProcedure.query(async ({ ctx }) => {
-    // get current year and previous year total earnings
-    const input = new Date();
-
-    const data:
-      | Array<{ current_year: number; last_year: number }>
-      | [{ current_year: number; last_year: number }] = await ctx.prisma
-      .$queryRaw`SELECT
-                    IFNULL(SUM(CASE WHEN YEAR(o.createdAt) = YEAR(${input}) THEN o.totalPrice END), 0) AS current_year,
-                    IFNULL(SUM(CASE WHEN YEAR(o.createdAt) = (YEAR(${input}) - 1) THEN o.totalPrice END), 0) AS last_year
-                  FROM 
-                      \`order\` AS o
-                  WHERE 
-                    o.status = 'CONFIRMED' 
-                    AND YEAR(o.createdAt) >= YEAR(${input}) - 1 
-                    AND YEAR(o.createdAt) <= YEAR(${input})`;
-    const result: { current_year: number; last_year: number } = {
-      current_year: Number(data[0].current_year.toFixed(2)) || 0,
-      last_year: Number(data[0].last_year.toFixed(2)) || 0,
-    };
-    return result;
-  }),
-  // get total tickets sold per day for a month
-  ticketSoldPerDay: publicProcedure.query(async ({ ctx }) => {
-    try {
-      const date = new Date();
-      const data: Array<{
-        date: string;
-        total_tickets: number;
-        total_orders: number;
-      }> = await ctx.prisma.$queryRaw`SELECT 
-                                          DATE(t.createdAt) AS date,
-                                          IFNULL(COUNT(t.id), 0) AS total_tickets
-                                        FROM
-                                          \`tickets\` AS t
-                                        WHERE
-                                          t.createdAt >= DATE_SUB(${date}, INTERVAL 30 DAY)
-                                          AND t.createdAt <= ${date}
-                                        GROUP BY
-                                          DATE(t.createdAt)
-                                        ORDER BY
-                                          date ASC`;
-      console.log("✨ data ✨", data);
-      const result = data.map((d) => ({
-        month: Months[date.getMonth()],
-        day: new Date(d.date).getDate(),
-        total_tickets: Number(d.total_tickets),
-      }));
-      console.log("✨ numTicketsSoldPerDay ✨", result);
-      return {
-        totalNumber: result.reduce((acc, curr) => acc + curr.total_tickets, 0),
-        data: result,
-      };
-    } catch (e) {
-      console.log(e);
-      return {
-        totalNumber: 0,
-        data: [],
-      };
-    }
   }),
 });
 
@@ -1231,4 +1086,164 @@ export const AffiliationRouter = createTRPCRouter({
         });
       }
     }),
+});
+
+export const ChartsRouter = createTRPCRouter({
+  getLast4Orders: publicProcedure
+    .input(z.number().optional())
+    .query(async ({ ctx, input }) => {
+      try {
+        const data = await ctx.prisma.order.findMany({
+          take: input || 10,
+          orderBy: {
+            createdAt: "desc",
+          },
+          where: {
+            status: {
+              not: order_status.INCOMPLETE,
+            },
+          },
+          select: {
+            id: true,
+            email: true,
+            first_name: true,
+            last_name: true,
+            totalPrice: true,
+            status: true,
+            Ticket: {
+              select: {
+                Competition: {
+                  select: {
+                    name: true,
+                    Watches: {
+                      select: {
+                        model: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        });
+        return data;
+      } catch (e) {
+        return [];
+      }
+    }),
+  // get total per month for a year
+  getperMonthforYear: publicProcedure
+    .input(z.number().optional())
+    .query(async ({ ctx, input }) => {
+      const date = input ? new Date(Number(input), 0, 2) : new Date();
+
+      const data: Array<{
+        yaer: number;
+        month: number;
+        confirmed_total: number;
+        refunded_total: number;
+      }> = await ctx.prisma.$queryRaw`SELECT 
+                              YEAR(m.date) AS year,
+                              MONTH(m.date) AS month,
+                              IFNULL(SUM(CASE WHEN o.status = 'REFUNDED' THEN o.totalPrice END), 0) AS refunded_total,
+                              IFNULL(SUM(CASE WHEN o.status = 'CONFIRMED' THEN o.totalPrice END), 0) AS confirmed_total
+                              FROM 
+                                (
+                                  SELECT 
+                                    MAKEDATE(YEAR(${date}), 1) + INTERVAL (MONTHS.month - 1) MONTH AS date
+                                  FROM 
+                                    (SELECT 1 AS month UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 
+                                    UNION SELECT 7 UNION SELECT 8 UNION SELECT 9 UNION SELECT 10 UNION SELECT 11 UNION SELECT 12) AS MONTHS
+                                ) AS m
+                                LEFT JOIN \`order\` AS o 
+                                  ON YEAR(o.createdAt) = YEAR(m.date) AND MONTH(o.createdAt) = MONTH(m.date) AND o.status IN ('REFUNDED', 'CONFIRMED') 
+                                  AND o.createdAt >= DATE_SUB(${date}, INTERVAL 12 MONTH) AND o.createdAt <= ${date}
+                              GROUP BY 
+                                YEAR(m.date), MONTH(m.date)
+                              ORDER BY 
+                                year ASC, month ASC
+                              `;
+      const result = data.map((d) => ({
+        ...d,
+        month: Months[d.month - 1],
+        confirmed_total: Number(d.confirmed_total).toFixed(2),
+        refunded_total: Number(d.refunded_total).toFixed(2),
+      }));
+      return result;
+    }),
+  // get yearly earnings for current year and previous year
+  yearlyEarnings: publicProcedure.query(async ({ ctx }) => {
+    // get current year and previous year total earnings
+    const input = new Date();
+
+    const data:
+      | Array<{ current_year: number; last_year: number }>
+      | [{ current_year: number; last_year: number }] = await ctx.prisma
+      .$queryRaw`SELECT
+                    IFNULL(SUM(CASE WHEN YEAR(o.createdAt) = YEAR(${input}) THEN o.totalPrice END), 0) AS current_year,
+                    IFNULL(SUM(CASE WHEN YEAR(o.createdAt) = (YEAR(${input}) - 1) THEN o.totalPrice END), 0) AS last_year
+                  FROM 
+                      \`order\` AS o
+                  WHERE 
+                    o.status = 'CONFIRMED' 
+                    AND YEAR(o.createdAt) >= YEAR(${input}) - 1 
+                    AND YEAR(o.createdAt) <= YEAR(${input})`;
+    const result: { current_year: number; last_year: number } = {
+      current_year: Number(data[0].current_year.toFixed(2)) || 0,
+      last_year: Number(data[0].last_year.toFixed(2)) || 0,
+    };
+    return result;
+  }),
+  // get total tickets sold per day for a month
+  ticketSoldPerDay: publicProcedure.query(async ({ ctx }) => {
+    try {
+      const date = new Date();
+      const data: Array<{
+        date: string;
+        total_tickets: number;
+        total_orders: number;
+      }> = await ctx.prisma.$queryRaw`SELECT 
+                                        DATE(t.createdAt) AS date,
+                                        IFNULL(COUNT(t.id), 0) AS total_tickets
+                                      FROM
+                                        \`tickets\` AS t
+                                      WHERE
+                                        t.createdAt >= DATE_SUB(${date}, INTERVAL 30 DAY)
+                                        AND t.createdAt <= ${date}
+                                      GROUP BY
+                                        DATE(t.createdAt)
+                                      ORDER BY
+                                        date ASC`;
+
+      const ticketsThisMonth: Array<{ total_tickets: number }> = await ctx
+        .prisma.$queryRaw`SELECT
+                            IFNULL(COUNT(t.id), 0) AS total_tickets
+                          FROM
+                            \`tickets\` AS t
+                          WHERE
+                            t.createdAt >= DATE_SUB(${date}, INTERVAL 30 DAY)
+                            AND t.createdAt <= ${date}`;
+      const ticketsLastMonth: Array<{ total_tickets: number }> = await ctx
+        .prisma.$queryRaw`SELECT 
+                            IFNULL(COUNT(t.id), 0) AS total_tickets
+                          FROM
+                            \`tickets\` AS t
+                          WHERE
+                            t.createdAt >= DATE_SUB(${date}, INTERVAL 60 DAY)
+                            AND t.createdAt <= DATE_SUB(${date}, INTERVAL 30 DAY)`;
+      const result = data.map((d) => ({
+        month: Months[date.getMonth()],
+        day: new Date(d.date).getDate(),
+        total_tickets: Number(d.total_tickets),
+      }));
+      return {
+        totalTicketsThisMonth: Number(ticketsThisMonth[0]?.total_tickets) || 0,
+        totalTicketsLastMonth: Number(ticketsLastMonth[0]?.total_tickets) || 0,
+        data: result,
+      };
+    } catch (e) {
+      console.log(e);
+      return { data: [], totalTicketsThisMonth: 0, totalTicketsLastMonth: 0 };
+    }
+  }),
 });

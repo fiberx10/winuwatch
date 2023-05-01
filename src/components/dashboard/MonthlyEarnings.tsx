@@ -4,21 +4,20 @@ import dynamic from "next/dynamic";
 const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 import { useTheme } from "@mui/material/styles";
 import { Stack, Typography, Avatar, Fab } from "@mui/material";
-import { IconArrowDownRight } from "@tabler/icons-react";
+import { IconArrowDownRight, IconArrowUpLeft } from "@tabler/icons-react";
 import DashboardCard from "@/components/shared/DashboardCard";
 import { IconCurrencyEuro } from "@tabler/icons-react";
 import { api } from "@/utils";
 import { light } from "@mui/material/styles/createPalette";
 
-
 const MonthlyEarnings = () => {
-  const { data: dataObj } = api.Order.ticketSoldPerDay.useQuery() || {};
+  const { data: dataObj } = api.Charts.ticketSoldPerDay.useQuery() || {};
 
   // chart color
   const theme = useTheme();
   const secondary = "rgba(168, 149, 126, 0.7)";
   const secondarylight = "rgba(168, 149, 126, 0.1)";
-  const errorlight = "#fdede8";
+  const successlight = "rgba(3, 201, 169, 0.2)";
   return (
     <DashboardCard
       title="Monthly Sold Tickets"
@@ -65,10 +64,10 @@ const MonthlyEarnings = () => {
           }}
           series={[
             {
-              name: "Count",
+              name: "Total Tickets",
               color: secondary,
               data: dataObj?.data.map((item) => item.total_tickets) || [],
-            }
+            },
           ]}
           type="area"
           height="60px"
@@ -77,17 +76,30 @@ const MonthlyEarnings = () => {
     >
       <>
         <Typography variant="h3" fontWeight="700" mt="-20px">
-          {dataObj?.totalNumber ? dataObj?.totalNumber : 0}
+          {dataObj?.totalTicketsThisMonth || 0}
         </Typography>
         <Stack direction="row" spacing={1} my={1} alignItems="center">
-          <Avatar sx={{ bgcolor: errorlight, width: 27, height: 27 }}>
-            <IconArrowDownRight width={20} color="#FA896B" />
-          </Avatar>
+          {!!dataObj &&
+          dataObj?.totalTicketsThisMonth > dataObj?.totalTicketsLastMonth ? (
+            <Avatar sx={{ bgcolor: successlight, width: 27, height: 27 }}>
+              <IconArrowUpLeft width={20} color="#39B69A" />
+            </Avatar>
+          ) : (
+            <Avatar sx={{ bgcolor: secondarylight, width: 27, height: 27 }}>
+              <IconArrowDownRight width={20} color={secondary} />
+            </Avatar>
+          )}
           <Typography variant="subtitle2" fontWeight="600">
-            {dataObj?.totalNumber ? dataObj?.totalNumber : 0}%
+            {!dataObj?.totalTicketsLastMonth
+              ? 100
+              : (dataObj?.totalTicketsThisMonth || 0) -
+                ((dataObj?.totalTicketsLastMonth || 0) /
+                  (dataObj?.totalTicketsLastMonth || 1)) *
+                  100}
+            %{" "}
           </Typography>
           <Typography variant="subtitle2" color="textSecondary">
-            Yesterday
+            Last Month
           </Typography>
         </Stack>
       </>
