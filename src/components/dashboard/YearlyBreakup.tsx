@@ -2,32 +2,47 @@ import dynamic from "next/dynamic";
 const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 import { useTheme } from "@mui/material/styles";
 import { Grid, Stack, Typography, Avatar } from "@mui/material";
-import { IconArrowUpLeft } from "@tabler/icons-react";
+import { IconArrowUpLeft, IconArrowDownRight } from "@tabler/icons-react";
 import DashboardCard from "../shared/DashboardCard";
+import { api } from "@/utils";
+
 
 const YearlyBreakup = () => {
+  const currentYear = new Date().getFullYear();
+  const { data } = api.Order.yearlyEarnings.useQuery() || {};
   // chart color
   const theme = useTheme();
   const primary = "#a8957e";
   const primarylight = "rgba(168, 149, 126, 0.3)";
   const successlight = "rgba(3, 201, 169, 0.2)";
+  const dangerlight = "rgba(255, 94, 87, 0.2)";
 
   const seriescolumnchart = [38, 40, 25];
 
   return (
-    <DashboardCard title="Yearly Breakup">
+    <DashboardCard title="Yearly Earnings">
       <Grid container spacing={3}>
         {/* column */}
         <Grid item xs={7} sm={7}>
           <Typography variant="h3" fontWeight="700">
-            £36,35
+            £{data?.current_year}
           </Typography>
           <Stack direction="row" spacing={1} mt={1} alignItems="center">
-            <Avatar sx={{ bgcolor: successlight, width: 27, height: 27 }}>
-              <IconArrowUpLeft width={20} color="#39B69A" />
-            </Avatar>
+            {data && data?.current_year > data?.last_year ? (
+              <Avatar sx={{ bgcolor: successlight, width: 27, height: 27 }}>
+                <IconArrowUpLeft width={20} color="#39B69A" />
+              </Avatar>
+            ) : (
+              <Avatar sx={{ bgcolor: dangerlight, width: 27, height: 27 }}>
+                <IconArrowDownRight width={20} color="#FF5E57" />
+              </Avatar>
+            )}
             <Typography variant="subtitle2" fontWeight="600">
-              +9%
+              { data ?
+                data?.last_year === 0 ? 0 : Math.round((data?.current_year - data?.last_year) / data?.last_year * 100)
+                : 0
+              }
+              %
             </Typography>
             <Typography variant="subtitle2" color="textSecondary">
               last year
@@ -44,7 +59,7 @@ const YearlyBreakup = () => {
                 }}
               ></Avatar>
               <Typography variant="subtitle2" color="textSecondary">
-                2022
+              {currentYear - 1}
               </Typography>
             </Stack>
             <Stack direction="row" spacing={1} alignItems="center">
@@ -57,7 +72,7 @@ const YearlyBreakup = () => {
                 }}
               ></Avatar>
               <Typography variant="subtitle2" color="textSecondary">
-                2023
+                {currentYear}
               </Typography>
             </Stack>
           </Stack>

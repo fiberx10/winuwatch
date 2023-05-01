@@ -613,6 +613,7 @@ export default function CheckoutPage({
                                       )}
                                   </span>
                                   {!affiliationData && order.reduction > 0 && (
+
                                     <p
                                       style={{
                                         color: "#a8957e",

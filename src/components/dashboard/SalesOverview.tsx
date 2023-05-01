@@ -13,7 +13,8 @@ const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
 const SalesOverview = () => {
   // select
-  const [month, setMonth] = useState("1");
+  const currentYear = new Date().getFullYear();
+  const [year, setYear] = useState(currentYear);
   const { data } = api.Order.getperMonthforYear.useQuery();
 
   // chart color
@@ -26,15 +27,15 @@ const SalesOverview = () => {
         <Select
           labelId="month-dd"
           id="month-dd"
-          value={month}
+          value={year}
           size="small"
           onChange={(event) => {
-            setMonth(event.target.value);
+            setYear(Number(event.target.value));
           }}
         >
-          <MenuItem value={1}>March 2023</MenuItem>
-          <MenuItem value={2}>April 2023</MenuItem>
-          <MenuItem value={3}>May 2023</MenuItem>
+          <MenuItem value={currentYear}>{currentYear}</MenuItem>
+          <MenuItem value={currentYear - 1}>{currentYear - 1}</MenuItem>
+          <MenuItem value={currentYear - 2}>{currentYear - 2}</MenuItem>
         </Select>
       }
     >
