@@ -52,7 +52,7 @@ const Schema = Yup.object().shape({
     .label("Field empty"),
   town: Yup.string().required("Required"),
   zip: Yup.string().required("Required"),
-  phone: Yup.string(),
+  phone: Yup.number(),
   address: Yup.string().required("Required"),
   email: Yup.string().email("Invalid email").required("Required"),
   checkedEmail: Yup.boolean().default(false).oneOf([true], "Required"),
@@ -190,8 +190,8 @@ export default function CheckoutPage({
                   const ValidatedValues = Schema.cast(values); 
                   const { url, error } = await createOrder({
                     ...ValidatedValues,
+                    phone: ValidatedValues.phone ? ValidatedValues.phone.toString() : "",
                     id: id,
-                    phone: ValidatedValues ? ValidatedValues.phone : "",
                     zip: ValidatedValues.zip.toString(),
                     totalPrice: ComputedTotal,
                     comps: affiliationData
