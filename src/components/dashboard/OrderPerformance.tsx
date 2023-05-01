@@ -12,10 +12,10 @@ import DashboardCard from "@/components/shared/DashboardCard";
 import { api } from "@/utils";
 
 const OrderPerformance = () => {
-  const { data: orders } = api.Order.getLast4Orders.useQuery();
+  const { data: orders } = api.Charts.getLast4Orders.useQuery();
 
   return (
-    <DashboardCard title="Latest Orders">
+    <DashboardCard title="Last Orders">
       <Box sx={{ overflow: "auto", width: { xs: "280px", sm: "auto" } }}>
         <Table
           aria-label="simple table"
@@ -75,13 +75,15 @@ const OrderPerformance = () => {
                   >
                     <Box>
                       <Typography variant="subtitle2" fontWeight={600}>
-                        {
-                          (order?.first_name ? 
-                            (order?.first_name?.charAt(0).toLocaleUpperCase() + order?.first_name?.slice(1)) : " ") 
-                            + " " + 
-                          (order?.last_name ?
-                            (order?.last_name.charAt(0).toLocaleUpperCase() + order?.last_name?.slice(1)) : " ")
-                        }
+                        {(order?.first_name
+                          ? order?.first_name?.charAt(0).toLocaleUpperCase() +
+                            order?.first_name?.slice(1)
+                          : " ") +
+                          " " +
+                          (order?.last_name
+                            ? order?.last_name.charAt(0).toLocaleUpperCase() +
+                              order?.last_name?.slice(1)
+                            : " ")}
                       </Typography>
                       <Typography
                         color="textSecondary"
@@ -107,8 +109,14 @@ const OrderPerformance = () => {
                   <Chip
                     sx={{
                       px: "4px",
-                      backgroundColor: order?.status === "PENDING" ? "#FF5E57" : 
-                      order?.status === "CONFIRMED" ? "#00B87C" : order?.status === "CANCELLED" ? "#FFC107" : "#00B0FF",
+                      backgroundColor:
+                        order?.status === "PENDING"
+                          ? "#FF5E57"
+                          : order?.status === "CONFIRMED"
+                          ? "#00B87C"
+                          : order?.status === "CANCELLED"
+                          ? "#FFC107"
+                          : "#00B0FF",
                       color: "#fff",
                     }}
                     size="small"

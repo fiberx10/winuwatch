@@ -6,10 +6,9 @@ import { IconArrowUpLeft, IconArrowDownRight } from "@tabler/icons-react";
 import DashboardCard from "../shared/DashboardCard";
 import { api } from "@/utils";
 
-
 const YearlyBreakup = () => {
   const currentYear = new Date().getFullYear();
-  const { data } = api.Order.yearlyEarnings.useQuery() || {};
+  const { data } = api.Charts.yearlyEarnings.useQuery() || {};
   // chart color
   const theme = useTheme();
   const primary = "#a8957e";
@@ -38,14 +37,19 @@ const YearlyBreakup = () => {
               </Avatar>
             )}
             <Typography variant="subtitle2" fontWeight="600">
-              { data ?
-                data?.last_year === 0 ? 0 : Math.round((data?.current_year - data?.last_year) / data?.last_year * 100)
-                : 0
-              }
+              {data
+                ? data?.last_year === 0
+                  ? 100
+                  : Math.round(
+                      ((data?.current_year - data?.last_year) /
+                        data?.last_year) *
+                        100
+                    )
+                : 0}
               %
             </Typography>
             <Typography variant="subtitle2" color="textSecondary">
-              last year
+              Last year
             </Typography>
           </Stack>
           <Stack spacing={3} mt={5} direction="row">
@@ -59,7 +63,7 @@ const YearlyBreakup = () => {
                 }}
               ></Avatar>
               <Typography variant="subtitle2" color="textSecondary">
-              {currentYear - 1}
+                {currentYear - 1}
               </Typography>
             </Stack>
             <Stack direction="row" spacing={1} alignItems="center">
