@@ -152,53 +152,57 @@ export default function Competition({
                           ({ value }) =>
                             value <= data.remaining_tickets && value <= filter
                         ).map(({ value: item, reduction }, i) => {
-                          const TheReduction =  0;
+                          const TheReduction = 0;
                           return (
-                          <ToggleButton
-                            key={i}
-                            onClick={() =>
-                              setCounter({ value: item, reduction: TheReduction })
-                            }
-                            disabled={item > data.remaining_tickets}
-                            sx={{
-                              cursor:
-                                item > data.remaining_tickets
-                                  ? "help"
-                                  : "pointer",
-                              width: "55px",
-                              height: "55px",
-                              backgroundColor:
-                                counter.value === item
-                                  ? "rgb(146, 124, 102, 0.5)"
-                                  : "initial",
-                              color:
-                                counter.value === item
-                                  ? "white !important"
-                                  : "initial",
-                              border:
-                                counter.value === item
-                                  ? "2px solid rgb(146, 124, 102) !important"
-                                  : "initial",
-                            }}
-                            value={item}
-                            aria-label="left aligned"
-                          >
-                            <span
-                              style={{
-                                fontSize: TheReduction > 0 ? "18px" : "24px",
-                                height: TheReduction > 0 ? "23px" : "initial",
+                            <ToggleButton
+                              key={i}
+                              onClick={() =>
+                                setCounter({
+                                  value: item,
+                                  reduction: TheReduction,
+                                })
+                              }
+                              disabled={item > data.remaining_tickets}
+                              sx={{
+                                cursor:
+                                  item > data.remaining_tickets
+                                    ? "help"
+                                    : "pointer",
+                                width: "55px",
+                                height: "55px",
+                                backgroundColor:
+                                  counter.value === item
+                                    ? "rgb(146, 124, 102, 0.5)"
+                                    : "initial",
+                                color:
+                                  counter.value === item
+                                    ? "white !important"
+                                    : "initial",
+                                border:
+                                  counter.value === item
+                                    ? "2px solid rgb(146, 124, 102) !important"
+                                    : "initial",
                               }}
+                              value={item}
+                              aria-label="left aligned"
                             >
-                              {item}
-                            </span>
-                            <p
-                              style={{ fontSize: "10px" }}
-                              className={styles.sold}
-                            >
-                              {TheReduction > 0 && `-${TheReduction * 100}%`}
-                            </p>
-                          </ToggleButton>
-                        )})
+                              <span
+                                style={{
+                                  fontSize: TheReduction > 0 ? "18px" : "24px",
+                                  height: TheReduction > 0 ? "23px" : "initial",
+                                }}
+                              >
+                                {item}
+                              </span>
+                              <p
+                                style={{ fontSize: "10px" }}
+                                className={styles.sold}
+                              >
+                                {TheReduction > 0 && `-${TheReduction * 100}%`}
+                              </p>
+                            </ToggleButton>
+                          );
+                        })
                       )}
                       <button
                         style={{
@@ -220,21 +224,21 @@ export default function Competition({
                 <div className={styles.CompBot}>
                   <div className={styles.donations}>
                     <p>{t("donatedto")}</p>
-                    <div className={styles.compSponsors}>
-                      {/* <Image
+                    {/* <div className={styles.compSponsors}> */}
+                    {/* <Image
                         width={130}
                         height={50}
                         alt="donation"
                         src="/images/cancerRes.png"
                       /> */}
-                      {/* <Image
+                    {/* <Image
                         width={130}
                         height={50}
                         style={{ objectFit: "contain" }}
                         alt="donation"
                         src="/images/woodlandLogo.png"
                       /> */}
-                    </div>
+                    {/* </div> */}
                   </div>
                   {data.remaining_tickets === 0 || data.end_date < new Date()
                     ? ""
