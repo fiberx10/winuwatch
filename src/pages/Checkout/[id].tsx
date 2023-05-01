@@ -54,8 +54,8 @@ const Schema = Yup.object().shape({
   email: Yup.string()
     .email("Invalid email")
     .required("Required"),
-    checkedEmail: Yup.boolean().oneOf([true], "Required"),
-    checkedTerms: Yup.boolean().oneOf([true], "Required"),
+    checkedEmail: Yup.boolean().oneOf([true], "Required").required("Required"),
+    checkedTerms: Yup.boolean().oneOf([true], "Required").required("Required"),
 })
 export default function CheckoutPage({
   id,
