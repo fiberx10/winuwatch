@@ -92,8 +92,8 @@ model Order {
   status        order_status  @default(INCOMPLETE)
   paymentId     String?
   intentId      String?
-  Ticket        Ticket[]
   affiliationId String?
+  Ticket        Ticket[]
   Affiliated    Affiliation?  @relation(fields: [affiliationId], references: [id])
 
   @@index([affiliationId, id])
@@ -106,9 +106,9 @@ model Ticket {
   competitionId String
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
+  ticketPrice   Float       @default(0)
   Order         Order       @relation(fields: [orderId], references: [id])
   Competition   Competition @relation(fields: [competitionId], references: [id])
-  ticketPrice   Float       @default(0)
 
   @@index([competitionId])
   @@index([orderId])
@@ -148,20 +148,6 @@ model CompetitionToOrder {
   @@map("_CompetitionToOrder")
 }
 
-enum CompetitionStatus {
-  ACTIVE
-  NOT_ACTIVE
-  COMPLETED
-}
-
-enum order_status {
-  PENDING
-  CONFIRMED
-  CANCELLED
-  REFUNDED
-  INCOMPLETE
-}
-
 model Affiliation {
   id            String   @id @default(cuid())
   discountCode  String   @unique
@@ -175,6 +161,20 @@ model Affiliation {
 
   @@index([competitionId])
   @@map("affiliation")
+}
+
+enum CompetitionStatus {
+  ACTIVE
+  NOT_ACTIVE
+  COMPLETED
+}
+
+enum order_status {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  REFUNDED
+  INCOMPLETE
 }
 
 enum PaymentMethod {
