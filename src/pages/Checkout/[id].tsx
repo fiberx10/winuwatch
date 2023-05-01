@@ -52,7 +52,7 @@ const Schema = Yup.object().shape({
     .label("Field empty"),
   town: Yup.string().required("Required"),
   zip: Yup.string().required("Required"),
-  phone: Yup.string().required("Required"),
+  phone: Yup.string(),
   address: Yup.string().required("Required"),
   email: Yup.string().email("Invalid email").required("Required"),
   checkedEmail: Yup.boolean().default(false).oneOf([true], "Required"),
