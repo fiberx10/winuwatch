@@ -182,11 +182,11 @@ export default function CheckoutPage({
                 }}
                 onSubmit={async (values, { setSubmitting }) => {
                   //if a value in the object values is undefined, it will not be sent to the server
-                  console.log("Form submitted:", values);
+                  try{
+                    console.log("Form submitted:", values);
                   //we need to check if each value in values is not undefined
                   //if it is undefined, we need to set it to null
                   const ValidatedValues = Schema.cast(values);
-                  console.log({});
                   const { url, error } = await createOrder({
                     ...ValidatedValues,
                     id: id,
@@ -234,6 +234,9 @@ export default function CheckoutPage({
 
                   // }
                   setSubmitting(false);
+                  } catch (e) {
+                    setError(e as any);
+                  }
                 }}
               >
                 {({
