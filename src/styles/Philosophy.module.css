@@ -16,7 +16,7 @@
   position: absolute;
   background-size: cover;
 
-  top: 5%;
+  top: 10%;
   background-position: contain;
   z-index: -999;
 }
@@ -86,11 +86,12 @@
     width: 100%;
   }
   .philoHeader h1 {
-    font-size: 35px;
+    font-size: 30px;
     line-height: 50px;
+    padding: 0px 15px;
   }
   .philoHeader p {
-    font-size: 20px;
+    font-size: 18px;
     line-height: 2rem;
     padding: 0px 10px;
   }
@@ -103,16 +104,17 @@
     );
   }
   .philoImg {
-    top: 10%;
+    top: 6%;
   }
   .philoBotTxt {
     width: 100%;
   }
   .philoBotTxt h1 {
-    font-size: 35px;
+    font-size: 30px;
+    padding: 0px 15px;
   }
   .philoBotTxt p {
-    font-size: 22px;
+    font-size: 18px;
     line-height: 2rem;
     padding: 0px 10px;
   }
