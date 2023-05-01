@@ -9,13 +9,13 @@ import dynamic from "next/dynamic";
 import { api } from "@/utils";
 const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
-
-
 const SalesOverview = () => {
   // select
   const currentYear = new Date().getFullYear();
   const [year, setYear] = useState(currentYear);
-  const { data } = api.Order.getperMonthforYear.useQuery();
+  const { data } = api.Charts.getperMonthforYear.useQuery(
+    year === currentYear ? undefined : year
+  );
 
   // chart color
   const theme = useTheme();
@@ -100,11 +100,14 @@ const SalesOverview = () => {
         series={[
           {
             name: "Confirmed earnings",
-            data: data?.map((item) => item.confirmed_total) || new Array(12).fill(0),
+            data:
+              data?.map((item) => item.confirmed_total) ||
+              new Array(12).fill(0),
           },
           {
             name: "Refunded earnings",
-            data: data?.map((item) => item.refunded_total) || new Array(12).fill(0),
+            data:
+              data?.map((item) => item.refunded_total) || new Array(12).fill(0),
           },
         ]}
         type="bar"
