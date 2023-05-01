@@ -118,6 +118,9 @@ export default function NavBar() {
         >
           {t("phil")}
         </Link>
+        {/*
+        
+        
         <Link
           className={styles.mobile}
           style={{ color: navColor }}
@@ -125,6 +128,7 @@ export default function NavBar() {
         >
           {t("charity")}
         </Link>
+        */}
         <Link style={{ color: navColor }} href={"/Cart"}>
           {`${t("cart")} (${cardDetails().Number_of_item})`}
         </Link>
