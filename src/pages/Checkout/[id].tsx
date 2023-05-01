@@ -55,8 +55,8 @@ const Schema = Yup.object().shape({
   phone: Yup.string().required("Required"),
   address: Yup.string().required("Required"),
   email: Yup.string().email("Invalid email").required("Required"),
-  checkedEmail: Yup.boolean().oneOf([true, false], "Required"),
-  checkedTerms: Yup.boolean().oneOf([true], "Required"),
+  checkedEmail: Yup.boolean().default(false).oneOf([true], "Required"),
+  checkedTerms: Yup.boolean().default(false).oneOf([true], "Required"),
 });
 export default function CheckoutPage({
   id,
@@ -186,7 +186,8 @@ export default function CheckoutPage({
                     console.log("Form submitted:", values);
                   //we need to check if each value in values is not undefined
                   //if it is undefined, we need to set it to null
-                  const ValidatedValues = Schema.cast(values);
+                  //const ValidatedValues = Schema.cast(values);
+                  const ValidatedValues = Schema.cast(values); 
                   const { url, error } = await createOrder({
                     ...ValidatedValues,
                     id: id,
@@ -207,8 +208,6 @@ export default function CheckoutPage({
                     locale: router.locale
                       ? (router.locale as (typeof i18n)[number])
                       : "en",
-                    checkedEmail: ValidatedValues.checkedEmail ? true : false,
-                    checkedTerms: ValidatedValues.checkedTerms ? true : false,
                   });
                   if (url) {
                     // await resend.sendEmail({
