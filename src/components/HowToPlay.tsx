@@ -49,7 +49,7 @@ const HowToPlay = () => {
             src="/images/Dot.svg"
             alt="dot"
             style={{
-              display: router.locale === "iw" ? "none" : "block",
+              display: router.locale === "il" ? "none" : "block",
             }}
           />
           <Image
@@ -59,7 +59,7 @@ const HowToPlay = () => {
             src="/images/Dot.svg"
             alt="dot"
             style={{
-              display: router.locale === "iw" ? "none" : "block",
+              display: router.locale === "il" ? "none" : "block",
             }}
           />
           <Image
@@ -69,7 +69,7 @@ const HowToPlay = () => {
             src="/images/Dot.svg"
             alt="dot"
             style={{
-              display: router.locale === "iw" ? "none" : "block",
+              display: router.locale === "il" ? "none" : "block",
             }}
           />
           <Image
@@ -79,7 +79,7 @@ const HowToPlay = () => {
             src="/images/Dot.svg"
             alt="dot"
             style={{
-              display: router.locale === "iw" ? "none" : "block",
+              display: router.locale === "il" ? "none" : "block",
             }}
           />
         </div>

@@ -27,25 +27,27 @@ export const GetData = async (OrderID: string, prismaClient: PrismaClient) => {
   ]);
   return {
     order,
-    comps: comps.filter(({ Ticket }) => Ticket.length > 0),
+    comps: comps.filter(({ Ticket }) => Ticket.length > 0).map((comp) => ({
+      ...comp,
+      affiliationCode: "",
+    })),
   };
 };
+export const DISCOUNT_RATES = [
+  { threshold: 5, rate: 0.1 },
+  { threshold: 10, rate: 0.15 },
+  { threshold: 20, rate: 0.2 },
+];
+
 export const Reduction = (ticketPrice: number, ticketNumber: number) => {
-  if (ticketNumber === 5) {
-    return Formater(
-      ticketPrice * ticketNumber - ticketPrice * ticketNumber * 0.1
-    );
-  } else if (ticketNumber === 10) {
-    return Formater(
-      ticketPrice * ticketNumber - ticketPrice * ticketNumber * 0.15
-    );
-  } else if (ticketNumber === 20) {
-    return Formater(
-      ticketPrice * ticketNumber - ticketPrice * ticketNumber * 0.2
-    );
-  } else {
-    return Formater(ticketPrice * ticketNumber);
-  }
+  const discount = DISCOUNT_RATES.find(
+    ({ threshold }) => ticketNumber == threshold
+  );
+  return Formater(
+    discount
+      ? ticketPrice * ticketNumber * (1 - discount.rate)
+      : ticketPrice * ticketNumber
+  );
 };
 export const Email = ({
   order,
@@ -184,7 +186,7 @@ export const Email = ({
                         >
                           <tbody>
                             <tr>
-                              <td style={{ backgroundColor: "#cbb9ac" }}>
+                              <td style={{ backgroundColor: "#cbb9ac", color: "white" }}>
                                 <p
                                   style={{
                                     fontSize: "16px",
@@ -241,10 +243,14 @@ export const Email = ({
                                           }}
                                         >
                                           QUANTITY: {c.Ticket.length} - TOTAL:
-                                          {Reduction(
+                                          {
+                                          //TODO: Fix this latter
+                                          /*Reduction(
                                             c.ticket_price,
                                             c.Ticket.length
-                                          )}
+                                          )*/
+                                          order?.totalPrice
+                                          }
                                         </p>
                                       </td>
 
@@ -337,7 +343,6 @@ export const Email = ({
                                   ))}
                                 </tbody>
                               </table>
-
                               <tr>
                                 <td>
                                   <p
@@ -363,6 +368,30 @@ export const Email = ({
                                   </p>
                                 </td>
                               </tr>
+                              {/* add discount code so he can share it with his friends and when it's used 5 times he gets a free ticket */}
+                              { (c.affiliationCode && order?.totalPrice !== 0) ? (
+                                <tr>
+                                <td
+                                  style={{
+                                    fontSize: "16px",
+                                    flex: "1",
+                                    textAlign: "left",
+                                    lineHeight: "24px",
+                                    margin: "0px",
+                                    padding: "10px",
+                                    paddingLeft: "20px",
+                                    textTransform: "uppercase",
+                                    color: "white",
+                                    backgroundColor: "black",
+                                  }}
+                                >
+                                  You have earned a discount code, share it with your friends and get a free ticket on each 5 uses! <br /> <br />
+                                  <span style={{ fontSize: "20px", textTransform: "none", flex: "1", textAlign: "center", margin: "0 auto" }}>
+                                    {c.affiliationCode}
+                                  </span>
+                                </td>
+                                </tr>
+                              ) : null}
                             </tr>
                           </tbody>
                         </table>
