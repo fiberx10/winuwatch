@@ -46,14 +46,11 @@ const IsLegal = (Birthdate = new Date()) => {
 const Schema = Yup.object().shape({
   first_name: Yup.string().required("Required"),
   last_name: Yup.string().required("Required"),
-  country: Yup.string()
-    .required("Required")
-    .notOneOf(["0"])
-    .label("Field empty"),
   town: Yup.string().required("Required"),
   zip: Yup.string().required("Required"),
   phone: Yup.string().required("Required"),
   address: Yup.string().required("Required"),
+  country : Yup.string().default("FRANCE"), 
   email: Yup.string()
     .email("Invalid email")
     .required("Required"),
