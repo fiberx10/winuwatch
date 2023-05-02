@@ -259,6 +259,75 @@ export const OrderRouter = createTRPCRouter({
         },
       });
 
+      const wonOrderOnCompetitions = await ctx.prisma.order.findMany({
+        where: {
+          status: "PENDING",
+          paymentMethod: "AFFILIATION",
+          totalPrice: 0,
+          affiliationId: {
+            in: await ctx.prisma.affiliation
+              .findMany({
+                where: {
+                  competitionId: {
+                    in: input.comps.map(({ compID }) => compID),
+                  },
+                },
+              })
+              .then((affiliations) => affiliations.map(({ id }) => id)),
+          },
+        },
+        include: {
+          Ticket: {
+            where: {
+              competitionId: {
+                in: input.comps.map(({ compID }) => compID),
+              },
+            },
+          },
+        },
+      });
+
+      for (const wonOrderOnCompetition of wonOrderOnCompetitions) {
+        if (!!wonOrderOnCompetition.affiliationId) {
+          const compId: string = await ctx.prisma.affiliation
+            .findUnique({
+              where: {
+                id: wonOrderOnCompetition.affiliationId,
+              },
+            })
+            .then((affiliation) => affiliation?.competitionId ?? "");
+          if (!!compId) {
+            await ctx.prisma.$transaction(async (tx) => {
+              await tx.ticket.create({
+                data: {
+                  competitionId: compId,
+                  orderId: wonOrderOnCompetition.id,
+                },
+              });
+              await tx.competition.update({
+                where: {
+                  id: wonOrderOnCompetition.id,
+                },
+                data: {
+                  remaining_tickets: {
+                    decrement: 1,
+                  },
+                },
+              });
+              await tx.order.update({
+                where: {
+                  id: wonOrderOnCompetition.id,
+                },
+                data: {
+                  status: "CONFIRMED",
+                },
+              });
+            });
+            console.log("🧨🧨🧨🧨Won order confirmed");
+          }
+        }
+      }
+
       //! What I've added
       if (data.comps.length > 0 && !!data.order?.affiliationId?.length) {
         await ctx.prisma.$transaction(async (tx) => {
@@ -309,41 +378,56 @@ export const OrderRouter = createTRPCRouter({
             if (!!ownerPrevOrders) {
               const { phone, first_name, last_name, country, address, zip } =
                 ownerPrevOrders || {};
-              const wonOrder = await tx.order.create({
-                data: {
-                  email: updatedAffiliation.ownerEmail,
-                  phone: phone,
-                  first_name: first_name,
-                  last_name: last_name,
-                  country: country,
-                  address: address,
-                  zip: zip,
-                  date: new Date(),
-                  paymentMethod: "AFFILIATION",
-                  status: order_status.CONFIRMED,
-                },
-              });
-              await tx.ticket.create({
-                data: {
-                  competitionId: !!nextCompetition
-                    ? nextCompetition.id
-                    : updatedAffiliation.competitionId,
-                  orderId: wonOrder.id,
-                },
-              });
-              await tx.competition.update({
+              const creckTicketOrderExist = await tx.order.findFirst({
                 where: {
-                  id: !!nextCompetition
-                    ? nextCompetition.id
-                    : updatedAffiliation.competitionId,
+                  email: updatedAffiliation.ownerEmail,
                 },
-                data: {
-                  remaining_tickets: {
-                    decrement: 1,
+                include: {
+                  Ticket: {
+                    where: {
+                      competitionId: nextCompetition?.id,
+                    },
                   },
                 },
               });
-
+              const wonOrder = !creckTicketOrderExist
+                ? await tx.order.create({
+                    data: {
+                      email: updatedAffiliation.ownerEmail,
+                      phone: phone,
+                      first_name: first_name,
+                      last_name: last_name,
+                      country: country,
+                      address: address,
+                      zip: zip,
+                      date: new Date(),
+                      paymentMethod: "AFFILIATION",
+                      status: order_status.PENDING,
+                    },
+                  })
+                : creckTicketOrderExist;
+              if (wonOrder.status === order_status.CONFIRMED) {
+                await tx.ticket.create({
+                  data: {
+                    competitionId: !!nextCompetition
+                      ? nextCompetition.id
+                      : updatedAffiliation.competitionId,
+                    orderId: wonOrder.id,
+                  },
+                });
+                await tx.competition.update({
+                  where: {
+                    id: !!nextCompetition
+                      ? nextCompetition.id
+                      : updatedAffiliation.competitionId,
+                  },
+                  data: {
+                    remaining_tickets: {
+                      decrement: 1,
+                    },
+                  },
+                });
+              }
               await Transporter.sendMail({
                 from: "noreply@winuwatch.uk",
                 to: updatedAffiliation.ownerEmail,
@@ -457,7 +541,7 @@ export const OrderRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       try {
         const { locale, comps, affiliationId, ...data } = input;
-        const affiliationData = input.affiliationId
+        input.affiliationId
           ? await ctx.prisma.affiliation.findUnique({
               where: {
                 id: affiliationId,

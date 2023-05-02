@@ -142,10 +142,14 @@ export const Email = ({
                       {order?.first_name}, Thank you!
                     </p>
                     <p style={{ margin: "0" }}>
-                      We are pleased to inform you that your
+                      {order?.totalPrice !== 0
+                        ? "We are pleased to inform you that your"
+                        : "Your"}
                     </p>
                     <p style={{ margin: "0" }}>
-                      registration has been successfully received and
+                      {order?.totalPrice !== 0
+                        ? "registration has been successfully received and"
+                        : "registration has been successfully received and"}
                     </p>
                     <p style={{ margin: "0" }}>
                       processed. you have now officially entered in the{" "}
