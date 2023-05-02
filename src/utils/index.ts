@@ -89,7 +89,7 @@ export const TICKETREDUC = [
   })),
   {
     value: 5,
-    reduction: 0.1,
+    reduction: 0,
   },
   ...new Array(4).fill(0).map((_, i) => ({
     value: i + 6,
@@ -97,7 +97,7 @@ export const TICKETREDUC = [
   })),
   {
     value: 10,
-    reduction: 0.15,
+    reduction: 0,
   },
   {
     value: 15,
@@ -105,7 +105,7 @@ export const TICKETREDUC = [
   },
   {
     value: 20,
-    reduction: 0.2,
+    reduction: 0,
   },
   {
     value: 25,
