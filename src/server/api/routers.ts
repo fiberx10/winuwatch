@@ -36,7 +36,6 @@ export const WinnersRouter = createTRPCRouter({
       Order_ID: ticket.Order.id,
       first_name: ticket.Order.first_name,
       last_name: ticket.Order.last_name,
-      Date_of_Purchase : ticket.Order.createdAt,
     }));
   }),
   pickOneRandom: publicProcedure
