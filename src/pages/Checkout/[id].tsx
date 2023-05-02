@@ -505,9 +505,9 @@ export default function CheckoutPage({
                         ) : null}
                       </div>
                       <div className={styles.leftFormItem}>
-                        <h1>{t("paymethod")}</h1>
-                        <div className={styles.PaymentMethod}>
-                          <div className={styles.method}>
+                        {/* <h1>{t("paymethod")}</h1> */}
+                        {/* <div className={styles.PaymentMethod}> */}
+                        {/* <div className={styles.method}>
                             <Field
                               type="radio"
                               name="paymentMethod"
@@ -523,8 +523,8 @@ export default function CheckoutPage({
                             >
                               {t("creditcard")}
                             </p>
-                          </div>
-                          {/* <div className={styles.method}>
+                          </div> */}
+                        {/* <div className={styles.method}>
                         <Field
                           type="radio"
                           name="paymentMethod"
@@ -542,7 +542,7 @@ export default function CheckoutPage({
                           PayPal
                         </p>
                       </div> */}
-                        </div>
+                        {/* </div> */}
                         <div className={styles.SignMeUp}>
                           <label>
                             <Field

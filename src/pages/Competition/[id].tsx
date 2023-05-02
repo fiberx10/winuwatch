@@ -222,7 +222,19 @@ export default function Competition({
                   )}
                 </div>
                 <div className={styles.CompBot}>
-                  <div className={styles.donations}>
+                  <div
+                    style={
+                      router.locale === "il"
+                        ? {
+                            justifyContent: "flex-end",
+                            marginRight: "30px",
+                          }
+                        : {
+                            justifyContent: "flex-start",
+                          }
+                    }
+                    className={styles.donations}
+                  >
                     <p>{t("donatedto")}</p>
                     {/* <div className={styles.compSponsors}> */}
                     {/* <Image
@@ -245,12 +257,22 @@ export default function Competition({
                     : data.start_date < new Date() && (
                         <div className={styles.addtoCart}>
                           <div className={styles.prices}>
-                            <p>
-                              {`${t("tickets")}: ${counter.value} x ${Formater(
-                                data.ticket_price,
-                                router.locale
-                              )}`}
-                            </p>
+                            {router.locale === "il" ? (
+                              <p>
+                                {`${Formater(
+                                  data.ticket_price,
+                                  router.locale
+                                )} x ${counter.value} ${t("tickets")}`}
+                              </p>
+                            ) : (
+                              <p>
+                                {`${t("tickets")} ${counter.value} x ${Formater(
+                                  data.ticket_price,
+                                  router.locale
+                                )}`}
+                              </p>
+                            )}
+
                             {counter.reduction > 0 && (
                               <p>
                                 {`${t("discount")}: ${Formater(

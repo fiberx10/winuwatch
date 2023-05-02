@@ -304,12 +304,16 @@
   .donations {
     width: 100%;
     margin-bottom: 20px;
+    margin-right: 0 !important;
   }
   .donations p {
     width: 55%;
   }
   .addtoCart {
     width: 100%;
+  }
+  .addtoCart p {
+    font-size: 25px;
   }
   .images {
     width: 100%;
