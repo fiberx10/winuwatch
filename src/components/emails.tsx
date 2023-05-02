@@ -27,10 +27,13 @@ export const GetData = async (OrderID: string, prismaClient: PrismaClient) => {
   ]);
   return {
     order,
-    comps: comps.filter(({ Ticket }) => Ticket.length > 0).map((comp) => ({
-      ...comp,
-      affiliationCode: "",
-    })),
+    comps: comps
+      .filter(({ Ticket }) => Ticket.length > 0)
+      .map((comp) => ({
+        ...comp,
+        affiliationCode: "",
+        affiliationRate: 0,
+      })),
   };
 };
 export const DISCOUNT_RATES = [
@@ -168,6 +171,7 @@ export const Email = ({
                             border: "none",
                             textDecoration: "none",
                             objectFit: "cover",
+                            marginTop: "10px",
                           }}
                         />
                         <table
@@ -186,7 +190,12 @@ export const Email = ({
                         >
                           <tbody>
                             <tr>
-                              <td style={{ backgroundColor: "#cbb9ac", color: "white" }}>
+                              <td
+                                style={{
+                                  backgroundColor: "#cbb9ac",
+                                  color: "white",
+                                }}
+                              >
                                 <p
                                   style={{
                                     fontSize: "16px",
@@ -244,12 +253,12 @@ export const Email = ({
                                         >
                                           QUANTITY: {c.Ticket.length} - TOTAL:
                                           {
-                                          //TODO: Fix this latter
-                                          /*Reduction(
-                                            c.ticket_price,
-                                            c.Ticket.length
-                                          )*/
-                                          order?.totalPrice
+                                            //TODO: Fix this later
+                                            (
+                                              c.ticket_price *
+                                              c.Ticket.length *
+                                              (1 - c.affiliationRate)
+                                            ).toFixed(2)
                                           }
                                         </p>
                                       </td>
@@ -369,27 +378,37 @@ export const Email = ({
                                 </td>
                               </tr>
                               {/* add discount code so he can share it with his friends and when it's used 5 times he gets a free ticket */}
-                              { (c.affiliationCode && order?.totalPrice !== 0) ? (
-                                <tr>
-                                <td
-                                  style={{
-                                    fontSize: "16px",
-                                    flex: "1",
-                                    textAlign: "left",
-                                    lineHeight: "24px",
-                                    margin: "0px",
-                                    padding: "10px",
-                                    paddingLeft: "20px",
-                                    textTransform: "uppercase",
-                                    color: "white",
-                                    backgroundColor: "black",
-                                  }}
-                                >
-                                  You have earned a discount code, share it with your friends and get a free ticket on each 5 uses! <br /> <br />
-                                  <span style={{ fontSize: "20px", textTransform: "none", flex: "1", textAlign: "center", margin: "0 auto" }}>
-                                    {c.affiliationCode}
-                                  </span>
-                                </td>
+                              {c.affiliationCode && order?.totalPrice !== 0 ? (
+                                <tr style={{ margin: "0 0 20px 0" }}>
+                                  <td
+                                    style={{
+                                      fontSize: "16px",
+                                      flex: "1",
+                                      textAlign: "center",
+                                      lineHeight: "24px",
+                                      padding: "10px",
+                                      paddingLeft: "20px",
+                                      textTransform: "uppercase",
+                                      color: "black",
+                                      backgroundColor: "white",
+                                      border: "1px solid rgb(146, 124, 102)",
+                                    }}
+                                  >
+                                    You have earned a discount code, share it
+                                    with your friends and get a free ticket on
+                                    each 5 uses! <br /> <br />
+                                    <p
+                                      style={{
+                                        display: "flex",
+                                        fontSize: "20px",
+                                        textTransform: "none",
+                                        margin: "0 auto",
+                                        fontWeight: "bold",
+                                      }}
+                                    >
+                                      {c.affiliationCode}
+                                    </p>
+                                  </td>
                                 </tr>
                               ) : null}
                             </tr>

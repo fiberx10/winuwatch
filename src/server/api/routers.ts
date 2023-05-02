@@ -360,10 +360,12 @@ export const OrderRouter = createTRPCRouter({
               },
             });
             comp.affiliationCode = newAffiliation.discountCode;
+            comp.affiliationRate = newAffiliation.discountRate;
           } else {
             for (const affiliation of affiliationExist) {
               if (comp.id === affiliation.competitionId) {
                 comp.affiliationCode = affiliation.discountCode;
+                comp.affiliationRate = affiliation.discountRate;
                 break;
               }
             }
