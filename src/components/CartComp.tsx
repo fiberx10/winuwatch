@@ -160,15 +160,14 @@ const CartComp = () => {
                   <div
                     onClick={() => {
                       updateComp({
-                        reduction:
-                          // comp.number_tickets === 4
-                          //   ? 0.1
-                          //   : comp.number_tickets === 9
-                          //   ? 0.15
-                          //   : comp.number_tickets === 19
-                          //   ? 0.2
-                          //   :
-                          0,
+                        reduction: 0,
+                          /*comp.number_tickets === 4
+                            ? 0.1
+                            : comp.number_tickets === 9
+                            ? 0.15
+                            : comp.number_tickets === 19
+                            ? 0.2
+                            : 0,*/
                         compID: comp.compID,
                         number_tickets:
                           comp.number_tickets < ComptetionData.remaining_tickets
@@ -257,6 +256,21 @@ const CartComp = () => {
                         <CloseOutlined />
                       </span>
                     </div>
+                  ) : orderPosting ? (
+                    <div
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        background: "white",
+                        opacity: "0.8",
+                        display: "grid",
+                        placeItems: "center",
+                        zIndex: "9999999999999",
+                        padding: "20px",
+                      }}
+                    >
+                      <Loader />
+                    </div>
                   ) : (
                     <>
                       <div className={styles.ModalBoxTopFlex}>
@@ -328,24 +342,6 @@ const CartComp = () => {
             </Modal>
           </div>
         </>
-      )}
-      {orderPosting && (
-        <div
-          style={{
-            width: "100%",
-            height: "100vh",
-            background: "white",
-            opacity: "0.8",
-            display: "grid",
-            placeItems: "center",
-            position: "absolute",
-            zIndex: "9999999999999",
-            top: "0",
-            left: "0",
-          }}
-        >
-          <Loader />
-        </div>
       )}
     </div>
   );

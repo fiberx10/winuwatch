@@ -69,7 +69,7 @@ const DashboardOrders = () => {
   };
   //DATA FROM BACKEND
 
-  const { data: orders } = api.Order.getAll.useQuery([show.data]);
+  const { data: orders } = api.Order.getAll.useQuery(show.data);
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(15);
@@ -285,7 +285,9 @@ const DashboardOrders = () => {
                                         {row.zip}
                                       </TableCell>
                                       <TableCell align="right">
-                                        {DateFormater(row.date)}
+                                        {row.date !== null
+                                          ? DateFormater(row.date)
+                                          : "Birthday not provided"}
                                       </TableCell>
                                       <TableCell align="right">
                                         {row.checkedEmail ? "Yes" : "No"}

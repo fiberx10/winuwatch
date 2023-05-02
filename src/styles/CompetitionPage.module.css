@@ -198,10 +198,10 @@
   text-transform: uppercase;
 }
 .donations {
-  width: 55%;
+  width: 80%;
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: left;
 
   gap: 1rem;
 }
@@ -304,12 +304,16 @@
   .donations {
     width: 100%;
     margin-bottom: 20px;
+    margin-right: 0 !important;
   }
   .donations p {
     width: 55%;
   }
   .addtoCart {
     width: 100%;
+  }
+  .addtoCart p {
+    font-size: 25px;
   }
   .images {
     width: 100%;
