@@ -79,15 +79,19 @@ const OrderPerformance = () => {
                     }}
                   >
                     <Box>
-                      <Typography variant="subtitle2" fontWeight={600}>
-                        {(order?.first_name
-                          ? order?.first_name?.charAt(0).toLocaleUpperCase() +
-                            order?.first_name?.slice(1)
+                      <Typography
+                        style={{
+                          textTransform: "capitalize",
+                        }}
+                        variant="subtitle2"
+                        fontWeight={600}
+                      >
+                        {(order?.first_name !== (undefined || null)
+                          ? order?.first_name.slice(1)
                           : " ") +
                           " " +
-                          (order?.last_name
-                            ? order?.last_name.charAt(0).toLocaleUpperCase() +
-                              order?.last_name?.slice(1)
+                          (order?.last_name !== (undefined || null)
+                            ? order?.last_name.slice(1)
                             : " ")}
                       </Typography>
                       <Typography
