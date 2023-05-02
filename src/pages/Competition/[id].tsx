@@ -227,7 +227,7 @@ export default function Competition({
                       router.locale === "il"
                         ? {
                             justifyContent: "flex-end",
-                            marginRight: "20px",
+                            marginRight: "30px",
                           }
                         : {
                             justifyContent: "flex-start",
