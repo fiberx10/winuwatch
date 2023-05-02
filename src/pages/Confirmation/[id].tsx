@@ -47,7 +47,7 @@ export default function Confirmation({
   return (
     <div
       style={{
-        textAlign: router.locale === "iw" ? "right" : "left",
+        textAlign: router.locale === "il" ? "right" : "left",
       }}
     >
       <Head>
@@ -60,9 +60,9 @@ export default function Confirmation({
       <div className={styles.confirmwrapper}>
         <div className={styles.confirm_text}>
           <h1>
-            {`${t("thank")} ${data ? data.first_name : ""} ${t(
-              "foryourorder"
-            )}`}
+            {`${t("thank")} ${
+              data && data.first_name !== null ? data.first_name : ""
+            } ${t("foryourorder")}`}
           </h1>
           <p>
             {t("confirm")} <br /> {t("confemail")}

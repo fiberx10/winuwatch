@@ -44,7 +44,6 @@ export function ModalCheck() {
       setError("Wrong password or username");
     }
   }, [data, authen, setAuth]);
-  const handleClose = () => setShow(false);
   const SignupSchema = Yup.object().shape({
     username: Yup.string().required("Required"),
     password: Yup.string().required("Required"),

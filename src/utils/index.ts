@@ -2,6 +2,8 @@ import { z } from "zod";
 import { OrderSchema } from "./zodSchemas";
 export * from "./api";
 
+export const i18n = ["en", "es", "fr", "ja", "il"] as const;
+
 export const CreateOrderFromCartSchema = OrderSchema.extend({
   comps: z.array(
     z.object({
@@ -58,14 +60,15 @@ export const CreateOrderStripeSchema = OrderSchema.extend({
       reduction: z.number().default(0),
     })
   ),
-  locale: z.string().default("en"),
+  affiliationId: z.string().optional(),
+  locale: z.enum(i18n).default("en"),
 }).omit({
   status: true,
 });
-const DEFAULTLOCAL = "en-UK";
+const DEFAULTLOCAL = "en";
 
 export const Formater = (value: number | bigint, local = DEFAULTLOCAL) =>
-  new Intl.NumberFormat(local === "iw" ? "il" : local, {
+  new Intl.NumberFormat(local, {
     style: "currency",
     currency: "GBP",
   }).format(value);

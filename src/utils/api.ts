@@ -9,7 +9,7 @@ import { createTRPCNext } from "@trpc/next";
 import { type inferRouterInputs, type inferRouterOutputs } from "@trpc/server";
 import superjson from "superjson";
 import { type AppRouter } from "@/server/api/root";
-import {env} from "../env.mjs";
+import { env } from "../env.mjs";
 export const getBaseUrl = () => {
   if (typeof window !== "undefined") return ""; // browser should use relative url
   if (env.HOST) return env.HOST; // SSR should use vercel url

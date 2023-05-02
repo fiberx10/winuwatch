@@ -198,10 +198,10 @@
   text-transform: uppercase;
 }
 .donations {
-  width: 55%;
+  width: 80%;
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: left;
 
   gap: 1rem;
 }
