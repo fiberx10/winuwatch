@@ -345,17 +345,13 @@ export const OrderRouter = createTRPCRouter({
             },
           },
         });
-        if (affiliationExist.length === data.comps.length) {
-          for (const affiliation of affiliationExist) {
-            data.comps = data.comps.map((e) =>
-              e.id === affiliation.competitionId
-                ? { ...e, affiliationCode: affiliation.discountCode }
-                : e
-            );
-          }
-        }
+
+        const affiliationExistIds = new Set(
+          affiliationExist.map((e) => e.competitionId)
+        );
+
         for (const comp of data.comps) {
-          if (!affiliationExist.find((e) => e.competitionId === comp.id)) {
+          if (!affiliationExistIds.has(comp.id)) {
             const newAffiliation = await ctx.prisma.affiliation.create({
               data: {
                 ownerEmail: data.order.email,
@@ -363,11 +359,14 @@ export const OrderRouter = createTRPCRouter({
                 competitionId: comp.id,
               },
             });
-            data.comps = data.comps.map((e) =>
-              e.id === comp.id
-                ? { ...e, affiliationCode: newAffiliation.discountCode }
-                : e
-            );
+            comp.affiliationCode = newAffiliation.discountCode;
+          } else {
+            for (const affiliation of affiliationExist) {
+              if (comp.id === affiliation.competitionId) {
+                comp.affiliationCode = affiliation.discountCode;
+                break;
+              }
+            }
           }
         }
       }
