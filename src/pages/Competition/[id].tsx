@@ -53,13 +53,13 @@ export default function Competition({
     reduction: 0,
   });
   const [filter, setFilter] = useState(5);
-  const { addComp, updateComp, competitions } = useCart();
+  const { addComp, updateComp, competitions, AffiliationSession } = useCart();
   const [image, setImage] = useState<string | undefined>(undefined);
   const router = useRouter();
   return (
     <div
       style={{
-        textAlign: router.locale === "iw" ? "right" : "left",
+        textAlign: router.locale === "il" ? "right" : "left",
       }}
     >
       <Head>
@@ -151,52 +151,58 @@ export default function Competition({
                         TICKETREDUC.filter(
                           ({ value }) =>
                             value <= data.remaining_tickets && value <= filter
-                        ).map(({ value: item, reduction }, i) => (
-                          <ToggleButton
-                            key={i}
-                            onClick={() =>
-                              setCounter({ value: item, reduction })
-                            }
-                            disabled={item > data.remaining_tickets}
-                            sx={{
-                              cursor:
-                                item > data.remaining_tickets
-                                  ? "help"
-                                  : "pointer",
-                              width: "55px",
-                              height: "55px",
-                              backgroundColor:
-                                counter.value === item
-                                  ? "rgb(146, 124, 102, 0.5)"
-                                  : "initial",
-                              color:
-                                counter.value === item
-                                  ? "white !important"
-                                  : "initial",
-                              border:
-                                counter.value === item
-                                  ? "2px solid rgb(146, 124, 102) !important"
-                                  : "initial",
-                            }}
-                            value={item}
-                            aria-label="left aligned"
-                          >
-                            <span
-                              style={{
-                                fontSize: reduction > 0 ? "18px" : "24px",
-                                height: reduction > 0 ? "23px" : "initial",
+                        ).map(({ value: item, reduction }, i) => {
+                          const TheReduction = 0;
+                          return (
+                            <ToggleButton
+                              key={i}
+                              onClick={() =>
+                                setCounter({
+                                  value: item,
+                                  reduction: TheReduction,
+                                })
+                              }
+                              disabled={item > data.remaining_tickets}
+                              sx={{
+                                cursor:
+                                  item > data.remaining_tickets
+                                    ? "help"
+                                    : "pointer",
+                                width: "55px",
+                                height: "55px",
+                                backgroundColor:
+                                  counter.value === item
+                                    ? "rgb(146, 124, 102, 0.5)"
+                                    : "initial",
+                                color:
+                                  counter.value === item
+                                    ? "white !important"
+                                    : "initial",
+                                border:
+                                  counter.value === item
+                                    ? "2px solid rgb(146, 124, 102) !important"
+                                    : "initial",
                               }}
+                              value={item}
+                              aria-label="left aligned"
                             >
-                              {item}
-                            </span>
-                            <p
-                              style={{ fontSize: "10px" }}
-                              className={styles.sold}
-                            >
-                              {reduction > 0 && `-${reduction * 100}%`}
-                            </p>
-                          </ToggleButton>
-                        ))
+                              <span
+                                style={{
+                                  fontSize: TheReduction > 0 ? "18px" : "24px",
+                                  height: TheReduction > 0 ? "23px" : "initial",
+                                }}
+                              >
+                                {item}
+                              </span>
+                              <p
+                                style={{ fontSize: "10px" }}
+                                className={styles.sold}
+                              >
+                                {TheReduction > 0 && `-${TheReduction * 100}%`}
+                              </p>
+                            </ToggleButton>
+                          );
+                        })
                       )}
                       <button
                         style={{
@@ -216,35 +222,57 @@ export default function Competition({
                   )}
                 </div>
                 <div className={styles.CompBot}>
-                  <div className={styles.donations}>
+                  <div
+                    style={
+                      router.locale === "il"
+                        ? {
+                            justifyContent: "flex-end",
+                            marginRight: "30px",
+                          }
+                        : {
+                            justifyContent: "flex-start",
+                          }
+                    }
+                    className={styles.donations}
+                  >
                     <p>{t("donatedto")}</p>
-                    <div className={styles.compSponsors}>
-                      {/* <Image
+                    {/* <div className={styles.compSponsors}> */}
+                    {/* <Image
                         width={130}
                         height={50}
                         alt="donation"
                         src="/images/cancerRes.png"
                       /> */}
-                      <Image
+                    {/* <Image
                         width={130}
                         height={50}
                         style={{ objectFit: "contain" }}
                         alt="donation"
                         src="/images/woodlandLogo.png"
-                      />
-                    </div>
+                      /> */}
+                    {/* </div> */}
                   </div>
                   {data.remaining_tickets === 0 || data.end_date < new Date()
                     ? ""
                     : data.start_date < new Date() && (
                         <div className={styles.addtoCart}>
                           <div className={styles.prices}>
-                            <p>
-                              {`${t("tickets")}: ${counter.value} x ${Formater(
-                                data.ticket_price,
-                                router.locale
-                              )}`}
-                            </p>
+                            {router.locale === "il" ? (
+                              <p>
+                                {`${Formater(
+                                  data.ticket_price,
+                                  router.locale
+                                )} x ${counter.value} ${t("tickets")}`}
+                              </p>
+                            ) : (
+                              <p>
+                                {`${t("tickets")} ${counter.value} x ${Formater(
+                                  data.ticket_price,
+                                  router.locale
+                                )}`}
+                              </p>
+                            )}
+
                             {counter.reduction > 0 && (
                               <p>
                                 {`${t("discount")}: ${Formater(
@@ -372,7 +400,7 @@ export default function Competition({
                           <span
                             style={{
                               flexDirection:
-                                router.locale === "iw" ? "row-reverse" : "row",
+                                router.locale === "il" ? "row-reverse" : "row",
                             }}
                             key={i}
                           >
@@ -422,7 +450,7 @@ export default function Competition({
                           <span
                             style={{
                               flexDirection:
-                                router.locale === "iw" ? "row-reverse" : "row",
+                                router.locale === "il" ? "row-reverse" : "row",
                             }}
                             key={i}
                           >

@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { createJSONStorage, devtools, persist } from "zustand/middleware";
-
+import  {Affiliation } from "@prisma/client"
 interface Comp {
   compID: string;
   number_tickets: number;
@@ -11,6 +11,7 @@ interface Comp {
 interface RootState {
   // modeleDate: Date | null;
   // setModeleDate: (date: Date | null) => void;
+  AffiliationSession : Affiliation | undefined;
   auth: boolean;
   setAuth: (auth: boolean) => void;
   competitions: Comp[];
@@ -66,22 +67,23 @@ export const useStore = create<{
 
 export const useCart = create<RootState>()(
   devtools(
-    persist(
+  persist(
       (set, get) => ({
         // modeleDate: null,
         // setModeleDate: (date) => set({ modeleDate: date }),
+        AffiliationSession : undefined,
         auth: false,
         setAuth: (auth) => set({ auth: auth }),
         competitions: [],
         cardDetails: () => {
           const { competitions } = get();
           return {
-            totalCost: competitions.reduce(
+            Number_of_item: competitions.length,
+            totalCost : competitions.reduce(
               (acc, c) =>
                 acc + c.number_tickets * c.price_per_ticket * (1 - c.reduction),
               0
-            ),
-            Number_of_item: competitions.length,
+            )
           };
         },
         addComp: (comp) =>
@@ -93,8 +95,7 @@ export const useCart = create<RootState>()(
             competitions: competitions.filter((c) => c.compID !== compID),
           })),
         updateComp: (comp) =>
-          set(({ competitions }) =>
-            comp.number_tickets > 25 || comp.number_tickets < 1
+          set(({ competitions }) =>comp.number_tickets > 25 || comp.number_tickets < 1
               ? {
                   competitions,
                 }
@@ -102,9 +103,11 @@ export const useCart = create<RootState>()(
                   competitions: competitions.map((c) =>
                     c.compID === comp.compID ? { ...c, ...comp } : c
                   ),
-                }
-          ),
-        reset: () => set({ competitions: [] }),
+          }),
+        reset: () => set({ 
+          AffiliationSession : undefined,
+          competitions: [] 
+        }),
       }),
       {
         name: "cart-store",

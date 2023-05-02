@@ -100,7 +100,7 @@ const Footer = () => {
             typeof window !== "undefined" &&
             (windowLocation === "/es/Philosophy" ||
               windowLocation === "/fr/Philosophy" ||
-              windowLocation === "/iw/Philosophy" ||
+              windowLocation === "/il/Philosophy" ||
               windowLocation === "/ja/Philosophy")
               ? "#a8957e"
               : typeof window !== "undefined" &&
@@ -170,7 +170,7 @@ const Footer = () => {
                         <Link
                           style={{
                             width:
-                              link === "/FAQ" && router.locale === "iw"
+                              link === "/FAQ" && router.locale === "il"
                                 ? "79%"
                                 : "fit-content",
                           }}
@@ -188,7 +188,7 @@ const Footer = () => {
           <div className={styles.FooterTopRight}>
             <div
               style={{
-                flexDirection: router.locale === "iw" ? "row-reverse" : "row",
+                flexDirection: router.locale === "il" ? "row-reverse" : "row",
               }}
               className={styles.emails}
             >

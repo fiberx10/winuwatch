@@ -6779,7 +6779,7 @@ yup@^1.0.2:
 
 zod-formik-adapter@^1.2.0:
   version "1.2.0"
-  resolved "https://registry.npmjs.org/zod-formik-adapter/-/zod-formik-adapter-1.2.0.tgz"
+  resolved "https://registry.yarnpkg.com/zod-formik-adapter/-/zod-formik-adapter-1.2.0.tgz#b2b76f9388bee0fa72fceda2af0f15152d5fa3df"
   integrity sha512-62U+Mf8U05pvLsIMUTC1H6d4K5SmsrXM+YgiZhCpPin5GNhnVuXCGySmJCs0FHuTJCBy7Et5Z1i8KF5ffuLttg==
 
 zod@^3.20.6:

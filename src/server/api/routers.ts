@@ -1,6 +1,13 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
-import { CompetitionStatus, order_status } from "@prisma/client";
+import {
+  Affiliation,
+  CompetitionStatus,
+  Ticket,
+  order_status,
+} from "@prisma/client";
+import { Prisma } from "@prisma/client";
 import {
   getBaseUrl,
   CreateOrderSchema,
@@ -9,9 +16,55 @@ import {
   Comps,
 } from "@/utils";
 import { Transporter, Stripe } from "../utils";
-import { WatchesSchema, CompetitionSchema } from "@/utils/zodSchemas";
+import {
+  WatchesSchema,
+  CompetitionSchema,
+  affiliationSchema,
+} from "@/utils/zodSchemas";
+import type { PrismaClient } from "@prisma/client";
 import Email, { GetData } from "@/components/emails";
 import { faker } from "@faker-js/faker";
+import { TRPCError } from "@trpc/server";
+
+const Months = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
+];
+
+const discountCodeGenerator = async (prisma: PrismaClient): Promise<string> => {
+  const possible =
+    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".split("");
+  let attempts = 0;
+  while (attempts < 10) {
+    // limit the number of attempts to 10
+    const coupon = Array.from(
+      { length: 8 },
+      () => possible[Math.floor(Math.random() * possible.length)]
+    ).join("");
+    const exists = await prisma.affiliation.findMany({
+      where: {
+        discountCode: coupon,
+      },
+    });
+    if (exists.length === 0) {
+      return coupon;
+    }
+    attempts++;
+  }
+  throw new Error(
+    "Failed to generate a unique discount code after 10 attempts"
+  );
+};
 
 export const WinnersRouter = createTRPCRouter({
   getCSV: publicProcedure.input(z.string()).mutation(async ({ ctx, input }) => {
@@ -110,6 +163,7 @@ export const TicketsRouter = createTRPCRouter({
       })
   ),
 });
+
 export const AuthRouter = createTRPCRouter({
   auth: publicProcedure
     .input(z.object({ username: z.string(), password: z.string() }))
@@ -120,17 +174,16 @@ export const AuthRouter = createTRPCRouter({
       );
     }),
 });
+
 export const OrderRouter = createTRPCRouter({
-  getAll: publicProcedure.input(z.array(z.string()).optional()).query(
+  getAll: publicProcedure.input(z.string()).query(
     async ({ ctx, input }) =>
       await ctx.prisma.order.findMany({
         where: {
           Ticket: {
             some: {
               Competition: {
-                id: {
-                  in: input,
-                },
+                id: input,
               },
             },
           },
@@ -139,7 +192,11 @@ export const OrderRouter = createTRPCRouter({
           createdAt: "desc",
         },
         include: {
-          Ticket: true,
+          Ticket: {
+            where: {
+              competitionId: input,
+            },
+          },
         },
       })
   ),
@@ -160,12 +217,20 @@ export const OrderRouter = createTRPCRouter({
   getOrderCheck: publicProcedure
     .input(z.string())
     .query(async ({ ctx, input }) => {
-      const data = await GetData(input, ctx.prisma);
-      if (!data.order) {
-        throw new Error("Order not found");
+      const order = await ctx.prisma.order.findUnique({
+        where: {
+          id: input,
+        },
+      });
+      //const data = await GetData(input, ctx.prisma);
+      if (!order) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Order not found",
+        });
       }
 
-      return data.order;
+      return order;
     }),
   AddTicketsAfterConfirmation: publicProcedure
     .input(z.object({ id: z.string(), comps: Comps }))
@@ -192,7 +257,256 @@ export const OrderRouter = createTRPCRouter({
           },
         },
       });
+
+      const wonOrderOnCompetitions = await ctx.prisma.order.findMany({
+        where: {
+          status: "PENDING",
+          paymentMethod: "AFFILIATION",
+          totalPrice: 0,
+          affiliationId: {
+            in: await ctx.prisma.affiliation
+              .findMany({
+                where: {
+                  competitionId: {
+                    in: input.comps.map(({ compID }) => compID),
+                  },
+                },
+              })
+              .then((affiliations) => affiliations.map(({ id }) => id)),
+          },
+        },
+        include: {
+          Ticket: {
+            where: {
+              competitionId: {
+                in: input.comps.map(({ compID }) => compID),
+              },
+            },
+          },
+        },
+      });
+
+      for (const wonOrderOnCompetition of wonOrderOnCompetitions) {
+        if (!!wonOrderOnCompetition.affiliationId) {
+          const compId: string = await ctx.prisma.affiliation
+            .findUnique({
+              where: {
+                id: wonOrderOnCompetition.affiliationId,
+              },
+            })
+            .then((affiliation) => affiliation?.competitionId ?? "");
+          if (!!compId) {
+            await ctx.prisma.$transaction(async (tx) => {
+              await tx.ticket.create({
+                data: {
+                  competitionId: compId,
+                  orderId: wonOrderOnCompetition.id,
+                },
+              });
+              await tx.competition.update({
+                where: {
+                  id: wonOrderOnCompetition.id,
+                },
+                data: {
+                  remaining_tickets: {
+                    decrement: 1,
+                  },
+                },
+              });
+              await tx.order.update({
+                where: {
+                  id: wonOrderOnCompetition.id,
+                },
+                data: {
+                  status: "CONFIRMED",
+                },
+              });
+            });
+            console.log("🧨🧨🧨🧨Won order confirmed");
+          }
+        }
+      }
+
+      //! What I've added
+      if (data.comps.length > 0 && !!data.order?.affiliationId?.length) {
+        await ctx.prisma.$transaction(async (tx) => {
+          const updatedAffiliation = await tx.affiliation.update({
+            where: {
+              id: data?.order?.affiliationId || undefined,
+            },
+            data: {
+              uses: {
+                increment: 1,
+              },
+            },
+          });
+
+          if (updatedAffiliation && updatedAffiliation.uses % 5 === 0) {
+            const nextCompetition = await tx.competition.findFirst({
+              where: {
+                id: {
+                  not: updatedAffiliation.competitionId,
+                },
+                status: "ACTIVE",
+                start_date: {
+                  gt: await tx.competition
+                    .findUnique({
+                      where: {
+                        id: updatedAffiliation.competitionId,
+                      },
+                    })
+                    .then((comp) => comp?.start_date),
+                },
+              },
+              orderBy: {
+                start_date: "desc",
+              },
+            });
+            const ownerPrevOrders = await tx.order.findFirst({
+              where: {
+                email: updatedAffiliation.ownerEmail,
+              },
+              include: {
+                Ticket: {
+                  where: {
+                    competitionId: updatedAffiliation.competitionId,
+                  },
+                },
+              },
+            });
+            if (!!ownerPrevOrders) {
+              const { phone, first_name, last_name, country, address, zip } =
+                ownerPrevOrders || {};
+              const creckTicketOrderExist = await tx.order.findFirst({
+                where: {
+                  email: updatedAffiliation.ownerEmail,
+                },
+                include: {
+                  Ticket: {
+                    where: {
+                      competitionId: nextCompetition?.id,
+                    },
+                  },
+                },
+              });
+              const wonOrder = !creckTicketOrderExist
+                ? await tx.order.create({
+                    data: {
+                      email: updatedAffiliation.ownerEmail,
+                      phone: phone,
+                      first_name: first_name,
+                      last_name: last_name,
+                      country: country,
+                      address: address,
+                      zip: zip,
+                      date: new Date(),
+                      paymentMethod: "AFFILIATION",
+                      status: order_status.PENDING,
+                    },
+                  })
+                : creckTicketOrderExist;
+              if (wonOrder.status === order_status.CONFIRMED) {
+                await tx.ticket.create({
+                  data: {
+                    competitionId: !!nextCompetition
+                      ? nextCompetition.id
+                      : updatedAffiliation.competitionId,
+                    orderId: wonOrder.id,
+                  },
+                });
+                await tx.competition.update({
+                  where: {
+                    id: !!nextCompetition
+                      ? nextCompetition.id
+                      : updatedAffiliation.competitionId,
+                  },
+                  data: {
+                    remaining_tickets: {
+                      decrement: 1,
+                    },
+                  },
+                });
+              }
+              await Transporter.sendMail({
+                from: "noreply@winuwatch.uk",
+                to: updatedAffiliation.ownerEmail,
+                subject: `Claim your free ticket - Winuwatch`,
+                html: Email({
+                  order: wonOrder,
+                  comps: await tx.competition
+                    .findMany({
+                      include: {
+                        Ticket: {
+                          where: {
+                            orderId: wonOrder.id,
+                          },
+                        },
+                        Watches: {
+                          include: {
+                            images_url: true,
+                          },
+                        },
+                      },
+                    })
+                    .then((e) =>
+                      e
+                        .filter(({ Ticket }) => Ticket.length > 0)
+                        .map((comp) => ({
+                          ...comp,
+                          affiliationCode: "",
+                          affiliationRate: 0,
+                        }))
+                    ),
+                }),
+              });
+            }
+          }
+        });
+      }
+
+      //! send new discount code to user that made the order
+      if (
+        data.comps.length > 0 &&
+        data.order?.status === order_status.CONFIRMED
+      ) {
+        const affiliationExist = await ctx.prisma.affiliation.findMany({
+          where: {
+            ownerEmail: data.order.email,
+            competitionId: {
+              in: data.comps.map((e) => e.id),
+            },
+          },
+        });
+
+        const affiliationExistIds = new Set(
+          affiliationExist.map((e) => e.competitionId)
+        );
+
+        for (const comp of data.comps) {
+          if (!affiliationExistIds.has(comp.id)) {
+            const newAffiliation = await ctx.prisma.affiliation.create({
+              data: {
+                ownerEmail: data.order.email,
+                discountCode: await discountCodeGenerator(ctx.prisma),
+                competitionId: comp.id,
+              },
+            });
+            comp.affiliationCode = newAffiliation.discountCode;
+            comp.affiliationRate = newAffiliation.discountRate;
+          } else {
+            for (const affiliation of affiliationExist) {
+              if (comp.id === affiliation.competitionId) {
+                comp.affiliationCode = affiliation.discountCode;
+                comp.affiliationRate = affiliation.discountRate;
+                break;
+              }
+            }
+          }
+        }
+      }
+
       data.comps.length > 0 &&
+        data.order?.status === order_status.CONFIRMED &&
         (await Transporter.sendMail({
           from: "noreply@winuwatch.uk",
           to: data.order.email,
@@ -225,7 +539,14 @@ export const OrderRouter = createTRPCRouter({
     .input(CreateOrderStripeSchema)
     .mutation(async ({ ctx, input }) => {
       try {
-        const { locale, comps, ...data } = input;
+        const { locale, comps, affiliationId, ...data } = input;
+        input.affiliationId
+          ? await ctx.prisma.affiliation.findUnique({
+              where: {
+                id: affiliationId,
+              },
+            })
+          : null;
         const [Order, StripeOrder] = await Promise.all([
           ctx.prisma.order.update({
             where: {
@@ -233,6 +554,7 @@ export const OrderRouter = createTRPCRouter({
             },
             data: {
               ...data,
+              affiliationId: affiliationId,
               status: order_status.PENDING,
             },
           }),
@@ -240,6 +562,7 @@ export const OrderRouter = createTRPCRouter({
             payment_method_types: ["card"],
             mode: "payment",
             customer_email: data.email,
+            locale: locale === "il" ? "auto" : locale,
             line_items: (
               await ctx.prisma.competition.findMany({
                 where: {
@@ -271,7 +594,7 @@ export const OrderRouter = createTRPCRouter({
                             (input.comps.find(
                               ({ compID }) => compID === comp.id
                             )?.reduction || 0))
-                      ), // in cents
+                      ),
                     },
                     quantity:
                       input.comps.find((item) => item.compID === comp.id)
@@ -279,11 +602,14 @@ export const OrderRouter = createTRPCRouter({
                   }
                 : {}
             ),
-            success_url: `${getBaseUrl()}/${locale}/Confirmation/${input.id}`,
-            cancel_url: `${getBaseUrl()}/${locale}/Cancel/${input.id}`,
+            success_url: `${getBaseUrl()}${
+              locale && `/${locale}`
+            }/Confirmation/${input.id}`,
+            cancel_url: `${getBaseUrl()}${locale && `/${locale}`}/Cancel/${
+              input.id
+            }`,
           }),
         ]);
-        console.log(StripeOrder);
 
         await ctx.prisma.order.update({
           where: {
@@ -291,18 +617,6 @@ export const OrderRouter = createTRPCRouter({
           },
           data: {
             paymentId: StripeOrder.id,
-          },
-          include: {
-            Ticket: true,
-            Competition: {
-              include: {
-                Watches: {
-                  include: {
-                    images_url: true,
-                  },
-                },
-              },
-            },
           },
         });
 
@@ -799,14 +1113,6 @@ export const WatchesRouter = createTRPCRouter({
     */
 });
 
-function shuffleArray(array: (string | undefined)[]) {
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
-  }
-  return array.filter((item): item is string => typeof item === "string");
-}
-
 export const QuestionRouter = createTRPCRouter({
   getOneRandom: publicProcedure.query(async ({ ctx }) => {
     const Questions = await ctx.prisma.question.findMany({
@@ -824,7 +1130,284 @@ export const QuestionRouter = createTRPCRouter({
     }
     return {
       ...Question,
-      answers: shuffleArray(Question.answers.map(({ answer }) => answer)) || [],
+      answers:
+        ((array: (string | undefined)[]) => {
+          for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+          }
+          return array.filter(
+            (item): item is string => typeof item === "string"
+          );
+        })(Question.answers.map(({ answer }) => answer)) || [],
     };
+  }),
+});
+
+export const AffiliationRouter = createTRPCRouter({
+  getAll: publicProcedure.query(async ({ ctx }) => {
+    return await ctx.prisma.affiliation.findMany();
+  }),
+  add: publicProcedure
+    .input(
+      z.object({
+        discountRate: z.number(),
+        ownerEmail: z.string().email(),
+        competitionId: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      return await ctx.prisma.affiliation.create({
+        data: {
+          ...input,
+          discountCode: await discountCodeGenerator(ctx.prisma),
+        },
+      });
+    }),
+  update: publicProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        discountRate: z.number().optional(),
+        ownerEmail: z.string().email().optional(),
+        compitionId: z.string().optional(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { id, ...data } = input;
+      return await ctx.prisma.affiliation.update({
+        data,
+        where: { id },
+      });
+    }),
+  delete: publicProcedure.input(z.string()).mutation(async ({ ctx, input }) => {
+    return await ctx.prisma.affiliation.delete({
+      where: {
+        id: input,
+      },
+    });
+  }),
+  checkDiscount: publicProcedure
+    .input(
+      z.object({
+        discountCode: z.string(),
+        competitionIds: z.array(z.string()),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      try {
+        if (!input.discountCode) {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "Enter your discount code",
+          });
+        }
+        return await ctx.prisma.affiliation.findFirstOrThrow({
+          where: {
+            discountCode: input.discountCode,
+            competitionId: {
+              in: input.competitionIds,
+            },
+          },
+        });
+      } catch (e) {
+        if (e instanceof TRPCError) {
+          throw e;
+        } else if (e instanceof Prisma.PrismaClientKnownRequestError) {
+          if (e.code === "P2025") {
+            throw new TRPCError({
+              code: "NOT_FOUND",
+              message: "Invalid discount code",
+            });
+          }
+        }
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Internal server error",
+          cause: e,
+        });
+      }
+    }),
+});
+
+export const ChartsRouter = createTRPCRouter({
+  getLastOrders: publicProcedure
+    .input(z.number().optional())
+    .query(async ({ ctx, input }) => {
+      try {
+        const data = await ctx.prisma.order.findMany({
+          take: input || 10,
+          orderBy: {
+            createdAt: "desc",
+          },
+          where: {
+            status: {
+              not: order_status.INCOMPLETE,
+            },
+          },
+          select: {
+            id: true,
+            email: true,
+            first_name: true,
+            last_name: true,
+            totalPrice: true,
+            status: true,
+            paymentMethod: true,
+            Ticket: {
+              select: {
+                Competition: {
+                  select: {
+                    name: true,
+                    Watches: {
+                      select: {
+                        model: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        });
+        return data;
+      } catch (e) {
+        return [];
+      }
+    }),
+  // get total per month for a year
+  getperMonthforYear: publicProcedure
+    .input(z.number().optional())
+    .query(async ({ ctx, input }) => {
+      const date = input ? new Date(Number(input), 0, 2) : new Date();
+
+      const data: Array<{
+        yaer: number;
+        month: number;
+        confirmed_total: number;
+        refunded_total: number;
+      }> = await ctx.prisma.$queryRaw`SELECT 
+                              YEAR(m.date) AS year,
+                              MONTH(m.date) AS month,
+                              IFNULL(SUM(CASE WHEN o.status = 'REFUNDED' THEN o.totalPrice END), 0) AS refunded_total,
+                              IFNULL(SUM(CASE WHEN o.status = 'CONFIRMED' THEN o.totalPrice END), 0) AS confirmed_total
+                              FROM 
+                                (
+                                  SELECT 
+                                    MAKEDATE(YEAR(${date}), 1) + INTERVAL (MONTHS.month - 1) MONTH AS date
+                                  FROM 
+                                    (SELECT 1 AS month UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 
+                                    UNION SELECT 7 UNION SELECT 8 UNION SELECT 9 UNION SELECT 10 UNION SELECT 11 UNION SELECT 12) AS MONTHS
+                                ) AS m
+                                LEFT JOIN \`order\` AS o 
+                                  ON YEAR(o.createdAt) = YEAR(m.date) AND MONTH(o.createdAt) = MONTH(m.date) AND o.status IN ('REFUNDED', 'CONFIRMED') 
+                                  AND o.createdAt >= DATE_SUB(${date}, INTERVAL 12 MONTH) AND o.createdAt <= ${date}
+                              GROUP BY 
+                                YEAR(m.date), MONTH(m.date)
+                              ORDER BY 
+                                year ASC, month ASC
+                              `;
+      const result = data.map((d) => ({
+        ...d,
+        month: Months[d.month - 1],
+        confirmed_total: Number(d.confirmed_total).toFixed(2),
+        refunded_total: Number(d.refunded_total).toFixed(2),
+      }));
+      return result;
+    }),
+  // get yearly earnings for current year and previous year
+  yearlyEarnings: publicProcedure.query(async ({ ctx }) => {
+    // get current year and previous year total earnings
+    const input = new Date();
+
+    const data:
+      | Array<{ current_year: number; last_year: number }>
+      | [{ current_year: number; last_year: number }] = await ctx.prisma
+      .$queryRaw`SELECT
+                    IFNULL(SUM(CASE WHEN YEAR(o.createdAt) = YEAR(${input}) THEN o.totalPrice END), 0) AS current_year,
+                    IFNULL(SUM(CASE WHEN YEAR(o.createdAt) = (YEAR(${input}) - 1) THEN o.totalPrice END), 0) AS last_year
+                  FROM 
+                      \`order\` AS o
+                  WHERE 
+                    o.status = 'CONFIRMED' 
+                    AND YEAR(o.createdAt) >= YEAR(${input}) - 1 
+                    AND YEAR(o.createdAt) <= YEAR(${input})`;
+    const result: { current_year: number; last_year: number } = {
+      current_year: Number(data[0].current_year.toFixed(2)) || 0,
+      last_year: Number(data[0].last_year.toFixed(2)) || 0,
+    };
+    return result;
+  }),
+  // get total tickets sold per day for a month
+  ticketSoldPerDay: publicProcedure.query(async ({ ctx }) => {
+    try {
+      const date = new Date();
+      const data: Array<{
+        date: string;
+        total_tickets: number;
+        total_orders: number;
+      }> = await ctx.prisma.$queryRaw`SELECT 
+                                        DATE(t.createdAt) AS date,
+                                        IFNULL(COUNT(t.id), 0) AS total_tickets
+                                      FROM
+                                        \`tickets\` AS t
+                                      WHERE
+                                        t.createdAt >= DATE_SUB(${date}, INTERVAL 30 DAY)
+                                        AND t.createdAt <= ${date}
+                                      GROUP BY
+                                        DATE(t.createdAt)
+                                      ORDER BY
+                                        date ASC`;
+
+      const ticketsThisMonth: Array<{ total_tickets: number }> = await ctx
+        .prisma.$queryRaw`SELECT
+                            IFNULL(COUNT(t.id), 0) AS total_tickets
+                          FROM
+                            \`tickets\` AS t
+                          WHERE
+                            t.createdAt >= DATE_SUB(${date}, INTERVAL 30 DAY)
+                            AND t.createdAt <= ${date}`;
+      const ticketsLastMonth: Array<{ total_tickets: number }> = await ctx
+        .prisma.$queryRaw`SELECT 
+                            IFNULL(COUNT(t.id), 0) AS total_tickets
+                          FROM
+                            \`tickets\` AS t
+                          WHERE
+                            t.createdAt >= DATE_SUB(${date}, INTERVAL 60 DAY)
+                            AND t.createdAt <= DATE_SUB(${date}, INTERVAL 30 DAY)`;
+      const result = data.map((d) => ({
+        month: Months[date.getMonth()],
+        day: new Date(d.date).getDate(),
+        total_tickets: Number(d.total_tickets),
+      }));
+      return {
+        totalTicketsThisMonth: Number(ticketsThisMonth[0]?.total_tickets) || 0,
+        totalTicketsLastMonth: Number(ticketsLastMonth[0]?.total_tickets) || 0,
+        data: result,
+      };
+    } catch (e) {
+      console.log(e);
+      return { data: [], totalTicketsThisMonth: 0, totalTicketsLastMonth: 0 };
+    }
+  }),
+  clientsCountry: publicProcedure.query(async ({ ctx }) => {
+    try {
+      const data: Array<{
+        country: string;
+        total: number;
+      }> = await ctx.prisma.$queryRaw`SELECT 
+                                        IFNULL(u.country, 'Unknown') AS country,
+                                        COUNT(u.id) AS total
+                                      FROM 
+                                        \`order\` AS u
+                                      GROUP BY 
+                                        u.country
+                                      ORDER BY 
+                                        total DESC
+                                      LIMIT 10`;
+      return data;
+    } catch (e) {
+      console.log(e);
+      return [];
+    }
   }),
 });

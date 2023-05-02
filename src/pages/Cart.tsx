@@ -12,7 +12,7 @@ export default function Cart() {
   return (
     <div
       style={{
-        textAlign: router.locale === "iw" ? "right" : "left",
+        textAlign: router.locale === "il" ? "right" : "left",
       }}
       className={styles.CartPageWrapper}
     >
