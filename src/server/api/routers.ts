@@ -31,12 +31,12 @@ export const WinnersRouter = createTRPCRouter({
     if (!competition) {
       throw new Error("Competition not found");
     }
-    return competition.Ticket.map((ticket) => ({
+    return competition.Ticket.filter((ticket) => ticket.Order.status === order_status.CONFIRMED).map((ticket) => ({
       ticketID: ticket.id,
-      Full_Name: `${ticket.Order.first_name} ${ticket.Order.last_name}`,
       Order_ID: ticket.Order.id,
-      competionName: competition.name,
-      Total_Price: ticket.Order.totalPrice,
+      first_name: ticket.Order.first_name,
+      last_name: ticket.Order.last_name,
+      Date_of_Purchase : ticket.Order.createdAt,
     }));
   }),
   pickOneRandom: publicProcedure
