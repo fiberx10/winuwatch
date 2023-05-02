@@ -274,6 +274,26 @@ export const OrderRouter = createTRPCRouter({
           });
 
           if (updatedAffiliation && updatedAffiliation.uses % 5 === 0) {
+            const nextCompetition = await tx.competition.findFirst({
+              where: {
+                id: {
+                  not: updatedAffiliation.competitionId,
+                },
+                status: "ACTIVE",
+                start_date: {
+                  gt: await tx.competition
+                    .findUnique({
+                      where: {
+                        id: updatedAffiliation.competitionId,
+                      },
+                    })
+                    .then((comp) => comp?.start_date),
+                },
+              },
+              orderBy: {
+                start_date: "desc",
+              },
+            });
             const ownerPrevOrders = await tx.order.findFirst({
               where: {
                 email: updatedAffiliation.ownerEmail,
@@ -286,7 +306,6 @@ export const OrderRouter = createTRPCRouter({
                 },
               },
             });
-
             if (!!ownerPrevOrders) {
               const { phone, first_name, last_name, country, address, zip } =
                 ownerPrevOrders || {};
@@ -306,13 +325,17 @@ export const OrderRouter = createTRPCRouter({
               });
               await tx.ticket.create({
                 data: {
-                  competitionId: updatedAffiliation.competitionId,
+                  competitionId: !!nextCompetition
+                    ? nextCompetition.id
+                    : updatedAffiliation.competitionId,
                   orderId: wonOrder.id,
                 },
               });
               await tx.competition.update({
                 where: {
-                  id: updatedAffiliation.competitionId,
+                  id: !!nextCompetition
+                    ? nextCompetition.id
+                    : updatedAffiliation.competitionId,
                 },
                 data: {
                   remaining_tickets: {
