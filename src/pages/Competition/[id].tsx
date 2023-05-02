@@ -223,10 +223,16 @@ export default function Competition({
                 </div>
                 <div className={styles.CompBot}>
                   <div
-                    style={{
-                      justifyContent:
-                        router.locale === "il" ? "flex-end" : "flex-start",
-                    }}
+                    style={
+                      router.locale === "il"
+                        ? {
+                            justifyContent: "flex-end",
+                            marginRight: "20px",
+                          }
+                        : {
+                            justifyContent: "flex-start",
+                          }
+                    }
                     className={styles.donations}
                   >
                     <p>{t("donatedto")}</p>
