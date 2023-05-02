@@ -24,7 +24,7 @@ export default function NavBar() {
       typeof window !== "undefined" &&
       (location.pathname === "/es" ||
         location.pathname === "/fr" ||
-        location.pathname === "/iw" ||
+        location.pathname === "/il" ||
         location.pathname === "/ja")
     ) {
       setNavColor("white");
