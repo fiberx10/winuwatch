@@ -6,9 +6,27 @@ import { IconArrowUpLeft, IconArrowDownRight } from "@tabler/icons-react";
 import DashboardCard from "../shared/DashboardCard";
 import { api } from "@/utils";
 
+function getUniqueRandomHexColors(length: number) {
+  const hexChars = "0123456789ABCDEF";
+  const colors: Array<string> = [];
+
+  while (colors.length < length) {
+    let color = "#";
+    for (let i = 0; i < 6; i++) {
+      color += hexChars[Math.floor(Math.random() * 16)];
+    }
+    if (!colors.includes(color)) {
+      colors.push(color);
+    }
+  }
+
+  return colors;
+}
+
 const YearlyBreakup = () => {
   const currentYear = new Date().getFullYear();
   const { data } = api.Charts.yearlyEarnings.useQuery() || {};
+  const { data: clientsCountry } = api.Charts.clientsCountry.useQuery() || {};
   // chart color
   const theme = useTheme();
   const primary = "#a8957e";
@@ -16,7 +34,11 @@ const YearlyBreakup = () => {
   const successlight = "rgba(3, 201, 169, 0.2)";
   const dangerlight = "rgba(255, 94, 87, 0.2)";
 
-  const seriescolumnchart = [38, 40, 25];
+  const seriescolumnchart =
+    clientsCountry?.map((item) => Number(item.total)) || [];
+  const seriesChartColor = getUniqueRandomHexColors(
+    clientsCountry?.length || 0
+  );
 
   return (
     <DashboardCard title="Yearly Earnings">
@@ -24,7 +46,11 @@ const YearlyBreakup = () => {
         {/* column */}
         <Grid item xs={7} sm={7}>
           <Typography variant="h3" fontWeight="700">
-            £{data?.current_year}
+            {/* £ */}
+            {data?.current_year.toLocaleString("fr-UE", {
+              style: "currency",
+              currency: "EUR",
+            })}
           </Typography>
           <Stack direction="row" spacing={1} mt={1} alignItems="center">
             {data && data?.current_year > data?.last_year ? (
@@ -84,6 +110,7 @@ const YearlyBreakup = () => {
         {/* column */}
         <Grid item xs={5} sm={5}>
           <Chart
+            title="Clients Country"
             options={{
               chart: {
                 type: "donut",
@@ -94,7 +121,9 @@ const YearlyBreakup = () => {
                 },
                 height: 155,
               },
-              colors: [primary, primarylight, "#F9F9FD"],
+              colors: seriesChartColor,
+              labels:
+                clientsCountry?.map((item) => item.country || "Unknown") || [],
               plotOptions: {
                 pie: {
                   startAngle: 0,

@@ -1098,7 +1098,7 @@ export const AffiliationRouter = createTRPCRouter({
 });
 
 export const ChartsRouter = createTRPCRouter({
-  getLast4Orders: publicProcedure
+  getLastOrders: publicProcedure
     .input(z.number().optional())
     .query(async ({ ctx, input }) => {
       try {
@@ -1119,6 +1119,7 @@ export const ChartsRouter = createTRPCRouter({
             last_name: true,
             totalPrice: true,
             status: true,
+            paymentMethod: true,
             Ticket: {
               select: {
                 Competition: {
@@ -1253,6 +1254,27 @@ export const ChartsRouter = createTRPCRouter({
     } catch (e) {
       console.log(e);
       return { data: [], totalTicketsThisMonth: 0, totalTicketsLastMonth: 0 };
+    }
+  }),
+  clientsCountry: publicProcedure.query(async ({ ctx }) => {
+    try {
+      const data: Array<{
+        country: string;
+        total: number;
+      }> = await ctx.prisma.$queryRaw`SELECT 
+                                        IFNULL(u.country, 'Unknown') AS country,
+                                        COUNT(u.id) AS total
+                                      FROM 
+                                        \`order\` AS u
+                                      GROUP BY 
+                                        u.country
+                                      ORDER BY 
+                                        total DESC
+                                      LIMIT 10`;
+      return data;
+    } catch (e) {
+      console.log(e);
+      return [];
     }
   }),
 });
