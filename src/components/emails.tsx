@@ -25,6 +25,7 @@ export const GetData = async (OrderID: string, prismaClient: PrismaClient) => {
       },
     }),
   ]);
+
   return {
     order,
     comps: comps
@@ -252,14 +253,13 @@ export const Email = ({
                                           }}
                                         >
                                           QUANTITY: {c.Ticket.length} - TOTAL:
-                                          {
-                                            //TODO: Fix this later
-                                            (
-                                              c.ticket_price *
-                                              c.Ticket.length *
-                                              (1 - c.affiliationRate)
-                                            ).toFixed(2)
-                                          }
+                                          {order?.totalPrice === 0
+                                            ? order?.totalPrice
+                                            : (
+                                                c.ticket_price *
+                                                c.Ticket.length *
+                                                (1 - c.affiliationRate)
+                                              ).toFixed(2)}
                                         </p>
                                       </td>
 

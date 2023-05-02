@@ -1,7 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
-import { Affiliation, CompetitionStatus, order_status } from "@prisma/client";
+import {
+  Affiliation,
+  CompetitionStatus,
+  Ticket,
+  order_status,
+} from "@prisma/client";
 import { Prisma } from "@prisma/client";
 import {
   getBaseUrl,
@@ -322,9 +327,30 @@ export const OrderRouter = createTRPCRouter({
                 subject: `Claim your free ticket - Winuwatch`,
                 html: Email({
                   order: wonOrder,
-                  comps: data.comps.filter(
-                    (e) => e.id === updatedAffiliation.competitionId
-                  ),
+                  comps: await tx.competition
+                    .findMany({
+                      include: {
+                        Ticket: {
+                          where: {
+                            orderId: wonOrder.id,
+                          },
+                        },
+                        Watches: {
+                          include: {
+                            images_url: true,
+                          },
+                        },
+                      },
+                    })
+                    .then((e) =>
+                      e
+                        .filter(({ Ticket }) => Ticket.length > 0)
+                        .map((comp) => ({
+                          ...comp,
+                          affiliationCode: "",
+                          affiliationRate: 0,
+                        }))
+                    ),
                 }),
               });
             }
