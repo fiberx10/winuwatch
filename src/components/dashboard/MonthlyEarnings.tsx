@@ -8,7 +8,6 @@ import { IconArrowDownRight, IconArrowUpLeft } from "@tabler/icons-react";
 import DashboardCard from "@/components/shared/DashboardCard";
 import { IconCurrencyEuro } from "@tabler/icons-react";
 import { api } from "@/utils";
-import { light } from "@mui/material/styles/createPalette";
 
 const MonthlyEarnings = () => {
   const { data: dataObj } = api.Charts.ticketSoldPerDay.useQuery() || {};

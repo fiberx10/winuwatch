@@ -12,7 +12,7 @@ import DashboardCard from "@/components/shared/DashboardCard";
 import { api } from "@/utils";
 
 const OrderPerformance = () => {
-  const { data: orders } = api.Charts.getLast4Orders.useQuery();
+  const { data: orders } = api.Charts.getLastOrders.useQuery();
 
   return (
     <DashboardCard title="Last Orders">
@@ -39,6 +39,11 @@ const OrderPerformance = () => {
               <TableCell>
                 <Typography variant="subtitle2" fontWeight={600}>
                   Number of Tickets
+                </Typography>
+              </TableCell>
+              <TableCell>
+                <Typography variant="subtitle2" fontWeight={600}>
+                  Payment Method
                 </Typography>
               </TableCell>
               <TableCell>
@@ -104,6 +109,22 @@ const OrderPerformance = () => {
                   >
                     {order?.Ticket.length}
                   </Typography>
+                </TableCell>
+                <TableCell>
+                  <Chip
+                    sx={{
+                      px: "4px",
+                      backgroundColor:
+                        order?.paymentMethod === "STRIPE"
+                          ? "#00B0FF"
+                          : order?.paymentMethod === "PAYPAL"
+                          ? "#1d305f"
+                          : "#5B33FF",
+                      color: "#fff",
+                    }}
+                    size="small"
+                    label={order?.paymentMethod}
+                  ></Chip>
                 </TableCell>
                 <TableCell>
                   <Chip

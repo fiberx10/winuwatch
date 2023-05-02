@@ -345,17 +345,13 @@ export const OrderRouter = createTRPCRouter({
             },
           },
         });
-        if (affiliationExist.length === data.comps.length) {
-          for (const affiliation of affiliationExist) {
-            data.comps = data.comps.map((e) =>
-              e.id === affiliation.competitionId
-                ? { ...e, affiliationCode: affiliation.discountCode }
-                : e
-            );
-          }
-        }
+
+        const affiliationExistIds = new Set(
+          affiliationExist.map((e) => e.competitionId)
+        );
+
         for (const comp of data.comps) {
-          if (!affiliationExist.find((e) => e.competitionId === comp.id)) {
+          if (!affiliationExistIds.has(comp.id)) {
             const newAffiliation = await ctx.prisma.affiliation.create({
               data: {
                 ownerEmail: data.order.email,
@@ -363,11 +359,16 @@ export const OrderRouter = createTRPCRouter({
                 competitionId: comp.id,
               },
             });
-            data.comps = data.comps.map((e) =>
-              e.id === comp.id
-                ? { ...e, affiliationCode: newAffiliation.discountCode }
-                : e
-            );
+            comp.affiliationCode = newAffiliation.discountCode;
+            comp.affiliationRate = newAffiliation.discountRate;
+          } else {
+            for (const affiliation of affiliationExist) {
+              if (comp.id === affiliation.competitionId) {
+                comp.affiliationCode = affiliation.discountCode;
+                comp.affiliationRate = affiliation.discountRate;
+                break;
+              }
+            }
           }
         }
       }
@@ -1098,7 +1099,7 @@ export const AffiliationRouter = createTRPCRouter({
 });
 
 export const ChartsRouter = createTRPCRouter({
-  getLast4Orders: publicProcedure
+  getLastOrders: publicProcedure
     .input(z.number().optional())
     .query(async ({ ctx, input }) => {
       try {
@@ -1119,6 +1120,7 @@ export const ChartsRouter = createTRPCRouter({
             last_name: true,
             totalPrice: true,
             status: true,
+            paymentMethod: true,
             Ticket: {
               select: {
                 Competition: {
@@ -1253,6 +1255,27 @@ export const ChartsRouter = createTRPCRouter({
     } catch (e) {
       console.log(e);
       return { data: [], totalTicketsThisMonth: 0, totalTicketsLastMonth: 0 };
+    }
+  }),
+  clientsCountry: publicProcedure.query(async ({ ctx }) => {
+    try {
+      const data: Array<{
+        country: string;
+        total: number;
+      }> = await ctx.prisma.$queryRaw`SELECT 
+                                        IFNULL(u.country, 'Unknown') AS country,
+                                        COUNT(u.id) AS total
+                                      FROM 
+                                        \`order\` AS u
+                                      GROUP BY 
+                                        u.country
+                                      ORDER BY 
+                                        total DESC
+                                      LIMIT 10`;
+      return data;
+    } catch (e) {
+      console.log(e);
+      return [];
     }
   }),
 });
