@@ -47,9 +47,9 @@ const YearlyBreakup = () => {
         <Grid item xs={7} sm={7}>
           <Typography variant="h3" fontWeight="700">
             {/* £ */}
-            {data?.current_year.toLocaleString("fr-UE", {
+            {data?.current_year.toLocaleString("en-GB", {
               style: "currency",
-              currency: "EUR",
+              currency: "GBP",
             })}
           </Typography>
           <Stack direction="row" spacing={1} mt={1} alignItems="center">

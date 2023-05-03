@@ -145,7 +145,12 @@ const OrderPerformance = () => {
                   ></Chip>
                 </TableCell>
                 <TableCell align="right">
-                  <Typography variant="h6">${order?.totalPrice}</Typography>
+                  <Typography variant="h6">
+                    {order?.totalPrice.toLocaleString("en-GB", {
+                      style: "currency",
+                      currency: "GBP",
+                    })}
+                  </Typography>
                 </TableCell>
               </TableRow>
             ))}
