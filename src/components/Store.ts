@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { createJSONStorage, devtools, persist } from "zustand/middleware";
-import  {Affiliation } from "@prisma/client"
+import { Affiliation } from "@prisma/client";
 interface Comp {
   compID: string;
   number_tickets: number;
@@ -11,7 +11,7 @@ interface Comp {
 interface RootState {
   // modeleDate: Date | null;
   // setModeleDate: (date: Date | null) => void;
-  AffiliationSession : Affiliation | undefined;
+  AffiliationSession: Affiliation | undefined;
   auth: boolean;
   setAuth: (auth: boolean) => void;
   competitions: Comp[];
@@ -45,6 +45,7 @@ export const Dashmenus = [
   "Watches",
   "Orders",
   "Winners",
+  "Affiliations",
 ] as const;
 
 export const useStore = create<{
@@ -67,11 +68,11 @@ export const useStore = create<{
 
 export const useCart = create<RootState>()(
   devtools(
-  persist(
+    persist(
       (set, get) => ({
         // modeleDate: null,
         // setModeleDate: (date) => set({ modeleDate: date }),
-        AffiliationSession : undefined,
+        AffiliationSession: undefined,
         auth: false,
         setAuth: (auth) => set({ auth: auth }),
         competitions: [],
@@ -79,11 +80,11 @@ export const useCart = create<RootState>()(
           const { competitions } = get();
           return {
             Number_of_item: competitions.length,
-            totalCost : competitions.reduce(
+            totalCost: competitions.reduce(
               (acc, c) =>
                 acc + c.number_tickets * c.price_per_ticket * (1 - c.reduction),
               0
-            )
+            ),
           };
         },
         addComp: (comp) =>
@@ -95,7 +96,8 @@ export const useCart = create<RootState>()(
             competitions: competitions.filter((c) => c.compID !== compID),
           })),
         updateComp: (comp) =>
-          set(({ competitions }) =>comp.number_tickets > 25 || comp.number_tickets < 1
+          set(({ competitions }) =>
+            comp.number_tickets > 25 || comp.number_tickets < 1
               ? {
                   competitions,
                 }
@@ -103,11 +105,13 @@ export const useCart = create<RootState>()(
                   competitions: competitions.map((c) =>
                     c.compID === comp.compID ? { ...c, ...comp } : c
                   ),
+                }
+          ),
+        reset: () =>
+          set({
+            AffiliationSession: undefined,
+            competitions: [],
           }),
-        reset: () => set({ 
-          AffiliationSession : undefined,
-          competitions: [] 
-        }),
       }),
       {
         name: "cart-store",

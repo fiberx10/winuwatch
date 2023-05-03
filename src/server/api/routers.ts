@@ -314,8 +314,8 @@ export const OrderRouter = createTRPCRouter({
                 );
               })
               .map(async ({ competitionId, uses }) => {
-                // create order with number of tickets = uses % 5
-                const number_tickets = uses % 5;
+                // create order with number of tickets = Math.floor(uses / 5)
+                const number_tickets = Math.floor(uses / 5);
                 await ctx.prisma.$transaction(async (tx) => {
                   const addedOrder = await tx.order.create({
                     data: {
@@ -483,8 +483,12 @@ export const OrderRouter = createTRPCRouter({
                     from: "noreply@winuwatch.uk",
                     to: updatedAffiliation.ownerEmail,
                     subject: `Claim your free ticket - Winuwatch`,
-                    html: `You won ${updatedAffiliation.uses % 5} free ${
-                      updatedAffiliation.uses % 5 === 1 ? "ticket" : "tickets"
+                    html: `You won ${Math.floor(
+                      updatedAffiliation.uses / 5
+                    )} free ${
+                      Math.floor(updatedAffiliation.uses / 5) === 1
+                        ? "ticket"
+                        : "tickets"
                     }, buy a ticket on next compition to claim it!`,
                   });
                 }
@@ -1180,7 +1184,17 @@ export const QuestionRouter = createTRPCRouter({
 
 export const AffiliationRouter = createTRPCRouter({
   getAll: publicProcedure.query(async ({ ctx }) => {
-    return await ctx.prisma.affiliation.findMany();
+    try {
+      const result: Affiliation[] = await ctx.prisma
+        .$queryRaw`SELECT * FROM \`affiliation\`, \`competition\` AS c 
+                                        LEFT JOIN competition 
+                                        ON Affiliation.competitionId = Competition.id`;
+      console.log(result);
+      return result;
+    } catch (error) {
+      console.log(error);
+      return [];
+    }
   }),
   add: publicProcedure
     .input(
