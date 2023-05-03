@@ -10,7 +10,7 @@ datasource db {
 
 model ImagesUrl {
   id        String   @id @default(cuid())
-  url       String
+  url       String   @db.VarChar(255)
   WatchesId String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
