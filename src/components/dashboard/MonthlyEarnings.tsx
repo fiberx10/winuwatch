@@ -4,9 +4,12 @@ import dynamic from "next/dynamic";
 const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 import { useTheme } from "@mui/material/styles";
 import { Stack, Typography, Avatar, Fab } from "@mui/material";
-import { IconArrowDownRight, IconArrowUpLeft } from "@tabler/icons-react";
+import {
+  IconArrowDownRight,
+  IconArrowUpLeft,
+  IconCurrencyPound,
+} from "@tabler/icons-react";
 import DashboardCard from "@/components/shared/DashboardCard";
-import { IconCurrencyEuro } from "@tabler/icons-react";
 import { api } from "@/utils";
 
 const MonthlyEarnings = () => {
@@ -26,7 +29,7 @@ const MonthlyEarnings = () => {
           size="medium"
           sx={{ color: "#ffffff", backgroundColor: "rgba(0, 0, 0, 0.5)" }}
         >
-          <IconCurrencyEuro width={24} />
+          <IconCurrencyPound width={24} />
         </Fab>
       }
       footer={

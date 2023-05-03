@@ -3,6 +3,7 @@ import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import {
   Affiliation,
+  Competition,
   CompetitionStatus,
   Ticket,
   order_status,
@@ -235,287 +236,319 @@ export const OrderRouter = createTRPCRouter({
   AddTicketsAfterConfirmation: publicProcedure
     .input(z.object({ id: z.string(), comps: Comps }))
     .query(async ({ ctx, input }) => {
-      const data = await GetData(input.id, ctx.prisma);
-      if (!data.order) {
-        throw new Error("Order not found");
-      }
-      await ctx.prisma.order.update({
-        where: {
-          id: input.id,
-        },
-        data: {
-          Ticket: {
-            createMany: {
-              data: input.comps
-                .map(({ compID, number_tickets }) =>
-                  new Array(number_tickets).fill(0).map((_) => ({
-                    competitionId: compID,
-                  }))
-                )
-                .flat(),
-            },
-          },
-        },
-      });
-
-      const wonOrderOnCompetitions = await ctx.prisma.order.findMany({
-        where: {
-          status: "PENDING",
-          paymentMethod: "AFFILIATION",
-          totalPrice: 0,
-          affiliationId: {
-            in: await ctx.prisma.affiliation
-              .findMany({
-                where: {
-                  competitionId: {
-                    in: input.comps.map(({ compID }) => compID),
-                  },
-                },
-              })
-              .then((affiliations) => affiliations.map(({ id }) => id)),
-          },
-        },
-        include: {
-          Ticket: {
+      try {
+        if (input.comps.length > 0) {
+          await ctx.prisma.order.update({
             where: {
-              competitionId: {
-                in: input.comps.map(({ compID }) => compID),
-              },
-            },
-          },
-        },
-      });
-
-      for (const wonOrderOnCompetition of wonOrderOnCompetitions) {
-        if (!!wonOrderOnCompetition.affiliationId) {
-          const compId: string = await ctx.prisma.affiliation
-            .findUnique({
-              where: {
-                id: wonOrderOnCompetition.affiliationId,
-              },
-            })
-            .then((affiliation) => affiliation?.competitionId ?? "");
-          if (!!compId) {
-            await ctx.prisma.$transaction(async (tx) => {
-              await tx.ticket.create({
-                data: {
-                  competitionId: compId,
-                  orderId: wonOrderOnCompetition.id,
-                },
-              });
-              await tx.competition.update({
-                where: {
-                  id: wonOrderOnCompetition.id,
-                },
-                data: {
-                  remaining_tickets: {
-                    decrement: 1,
-                  },
-                },
-              });
-              await tx.order.update({
-                where: {
-                  id: wonOrderOnCompetition.id,
-                },
-                data: {
-                  status: "CONFIRMED",
-                },
-              });
-            });
-            console.log("🧨🧨🧨🧨Won order confirmed");
-          }
-        }
-      }
-
-      //! What I've added
-      if (data.comps.length > 0 && !!data.order?.affiliationId?.length) {
-        await ctx.prisma.$transaction(async (tx) => {
-          const updatedAffiliation = await tx.affiliation.update({
-            where: {
-              id: data?.order?.affiliationId || undefined,
+              id: input.id,
             },
             data: {
-              uses: {
-                increment: 1,
+              Ticket: {
+                createMany: {
+                  data: input.comps
+                    .map(({ compID, number_tickets }) =>
+                      new Array(number_tickets).fill(0).map((_) => ({
+                        competitionId: compID,
+                      }))
+                    )
+                    .flat(),
+                },
               },
             },
           });
 
-          if (updatedAffiliation && updatedAffiliation.uses % 5 === 0) {
-            const nextCompetition = await tx.competition.findFirst({
+          const data = await GetData(input.id, ctx.prisma);
+          if (!data.order) {
+            throw new Error("Order not found");
+          }
+
+          // we are getting all the affiliations that the user has, and all the orders that he won in the competitions he passed in the order
+          const [clientAffiliations, orders] = await Promise.all([
+            ctx.prisma.affiliation.findMany({
               where: {
-                id: {
-                  not: updatedAffiliation.competitionId,
+                ownerEmail: data.order.email,
+                competitionId: {
+                  in: input.comps.map(({ compID }) => compID),
                 },
-                status: "ACTIVE",
-                start_date: {
-                  gt: await tx.competition
-                    .findUnique({
-                      where: {
-                        id: updatedAffiliation.competitionId,
-                      },
-                    })
-                    .then((comp) => comp?.start_date),
+                uses: {
+                  gt: 5,
                 },
               },
-              orderBy: {
-                start_date: "desc",
-              },
-            });
-            const ownerPrevOrders = await tx.order.findFirst({
+            }),
+            ctx.prisma.order.findMany({
               where: {
-                email: updatedAffiliation.ownerEmail,
+                status: "CONFIRMED",
+                paymentMethod: "AFFILIATION",
+                totalPrice: 0,
               },
               include: {
                 Ticket: {
                   where: {
-                    competitionId: updatedAffiliation.competitionId,
+                    competitionId: {
+                      in: input.comps.map(({ compID }) => compID),
+                    },
                   },
                 },
               },
-            });
-            if (!!ownerPrevOrders) {
-              const { phone, first_name, last_name, country, address, zip } =
-                ownerPrevOrders || {};
-              const creckTicketOrderExist = await tx.order.findFirst({
-                where: {
-                  email: updatedAffiliation.ownerEmail,
-                },
-                include: {
-                  Ticket: {
-                    where: {
-                      competitionId: nextCompetition?.id,
-                    },
-                  },
-                },
-              });
-              const wonOrder = !creckTicketOrderExist
-                ? await tx.order.create({
+            }),
+          ]);
+
+          if (
+            !!clientAffiliations.length &&
+            orders.length < input.comps.length &&
+            !!data.order?.email
+          ) {
+            // if the user has affiliations and he won less than the comps he passed in the order
+            // we need to add the affiliations to the order
+            const compsNotWon = input.comps.filter(
+              ({ compID }) =>
+                !orders.some(({ Ticket }) =>
+                  Ticket.some(({ competitionId }) => competitionId === compID)
+                )
+            );
+            clientAffiliations
+              .filter(({ competitionId }) => {
+                return compsNotWon.some(
+                  ({ compID }) => compID === competitionId
+                );
+              })
+              .map(async ({ competitionId, uses }) => {
+                // create order with number of tickets = uses % 5
+                const number_tickets = uses % 5;
+                await ctx.prisma.$transaction(async (tx) => {
+                  const addedOrder = await tx.order.create({
                     data: {
-                      email: updatedAffiliation.ownerEmail,
-                      phone: phone,
-                      first_name: first_name,
-                      last_name: last_name,
-                      country: country,
-                      address: address,
-                      zip: zip,
-                      date: new Date(),
+                      first_name: data.order?.first_name,
+                      last_name: data.order?.last_name,
+                      phone: data.order?.phone || "",
+                      email: data.order?.email || "",
+                      address: data.order?.address,
+                      country: data.order?.country,
+                      zip: data.order?.zip,
+                      town: data.order?.town,
                       paymentMethod: "AFFILIATION",
-                      status: order_status.PENDING,
-                    },
-                  })
-                : creckTicketOrderExist;
-              if (wonOrder.status === order_status.CONFIRMED) {
-                await tx.ticket.create({
-                  data: {
-                    competitionId: !!nextCompetition
-                      ? nextCompetition.id
-                      : updatedAffiliation.competitionId,
-                    orderId: wonOrder.id,
-                  },
-                });
-                await tx.competition.update({
-                  where: {
-                    id: !!nextCompetition
-                      ? nextCompetition.id
-                      : updatedAffiliation.competitionId,
-                  },
-                  data: {
-                    remaining_tickets: {
-                      decrement: 1,
-                    },
-                  },
-                });
-              }
-              await Transporter.sendMail({
-                from: "noreply@winuwatch.uk",
-                to: updatedAffiliation.ownerEmail,
-                subject: `Claim your free ticket - Winuwatch`,
-                html: Email({
-                  order: wonOrder,
-                  comps: await tx.competition
-                    .findMany({
-                      include: {
-                        Ticket: {
-                          where: {
-                            orderId: wonOrder.id,
-                          },
-                        },
-                        Watches: {
-                          include: {
-                            images_url: true,
-                          },
+                      status: "CONFIRMED",
+                      totalPrice: 0,
+                      Ticket: {
+                        createMany: {
+                          data: new Array(number_tickets).fill(0).map((_) => ({
+                            competitionId,
+                          })),
                         },
                       },
-                    })
-                    .then((e) =>
-                      e
-                        .filter(({ Ticket }) => Ticket.length > 0)
-                        .map((comp) => ({
-                          ...comp,
-                          affiliationCode: "",
-                          affiliationRate: 0,
-                        }))
-                    ),
-                }),
+                    },
+                  });
+                  await tx.affiliation.update({
+                    where: {
+                      id: data.order?.affiliationId || undefined,
+                    },
+                    data: {
+                      uses: {
+                        decrement: number_tickets,
+                      },
+                    },
+                  });
+                  // TODO: Send email
+                  console.log("🎁🎁🎁🎁 you made it here, congrats!");
+                  await Transporter.sendMail({
+                    from: "noreply@winuwatch.uk",
+                    to: addedOrder.email,
+                    subject: `Claim your free tickets - Winuwatch`,
+                    html: Email(await GetData(addedOrder.id, ctx.prisma)),
+                  });
+                });
               });
-            }
           }
-        });
-      }
 
-      //! send new discount code to user that made the order
-      if (
-        data.comps.length > 0 &&
-        data.order?.status === order_status.CONFIRMED
-      ) {
-        const affiliationExist = await ctx.prisma.affiliation.findMany({
-          where: {
-            ownerEmail: data.order.email,
-            competitionId: {
-              in: data.comps.map((e) => e.id),
-            },
-          },
-        });
+          //! What I've added
+          if (!!data.order?.affiliationId?.length) {
+            await ctx.prisma.$transaction(async (tx) => {
+              const updatedAffiliation = await tx.affiliation.update({
+                where: {
+                  id: data?.order?.affiliationId || undefined,
+                },
+                data: {
+                  uses: {
+                    increment: 1,
+                  },
+                },
+              });
 
-        const affiliationExistIds = new Set(
-          affiliationExist.map((e) => e.competitionId)
-        );
+              if (updatedAffiliation && updatedAffiliation.uses % 5 === 0) {
+                // get next competition
+                const nextCompetition = await tx.competition.findFirst({
+                  where: {
+                    id: {
+                      not: updatedAffiliation.competitionId,
+                    },
+                    status: "ACTIVE",
+                    start_date: {
+                      gt: await tx.competition
+                        .findUnique({
+                          where: {
+                            id: updatedAffiliation.competitionId,
+                          },
+                        })
+                        .then((comp) => comp?.start_date),
+                    },
+                  },
+                  orderBy: {
+                    start_date: "asc",
+                  },
+                });
 
-        for (const comp of data.comps) {
-          if (!affiliationExistIds.has(comp.id)) {
-            const newAffiliation = await ctx.prisma.affiliation.create({
-              data: {
+                // get owner previous orders on the next competition if exists, if not, for the current competition
+                const prevWonOrder = await tx.order.findFirst({
+                  where: {
+                    email: updatedAffiliation.ownerEmail,
+                    status: "CONFIRMED",
+                    paymentMethod: "AFFILIATION",
+                    totalPrice: 0,
+                  },
+                  include: {
+                    Ticket: {
+                      where: {
+                        competitionId: !nextCompetition
+                          ? updatedAffiliation.competitionId
+                          : nextCompetition?.id,
+                      },
+                    },
+                  },
+                });
+
+                if (!!prevWonOrder) {
+                  // if the owner has previous orders on the next competition, we need to add another ticket to the order
+
+                  await tx.ticket.create({
+                    data: {
+                      competitionId: !nextCompetition
+                        ? updatedAffiliation.competitionId
+                        : nextCompetition?.id,
+                      orderId: prevWonOrder.id,
+                    },
+                  });
+
+                  await tx.competition.update({
+                    where: {
+                      id: !!nextCompetition
+                        ? nextCompetition.id
+                        : updatedAffiliation.competitionId,
+                    },
+                    data: {
+                      remaining_tickets: {
+                        decrement: 1,
+                      },
+                    },
+                  });
+
+                  await Transporter.sendMail({
+                    from: "noreply@winuwatch.uk",
+                    to: updatedAffiliation.ownerEmail,
+                    subject: `Claim your free ticket - Winuwatch`,
+                    html: Email({
+                      order: prevWonOrder,
+                      comps: await tx.competition
+                        .findMany({
+                          include: {
+                            Ticket: {
+                              where: {
+                                orderId: prevWonOrder.id,
+                              },
+                            },
+                            Watches: {
+                              include: {
+                                images_url: true,
+                              },
+                            },
+                          },
+                        })
+                        .then((e) =>
+                          e
+                            .filter(({ Ticket }) => Ticket.length > 0)
+                            .map((comp) => ({
+                              ...comp,
+                              affiliationCode: "",
+                              affiliationRate: 0,
+                            }))
+                        ),
+                    }),
+                  });
+                } else {
+                  // TODO: Send email
+                  console.log(
+                    "🎁🎁🎁🎁 you made it here, congrats! you won a free ticket, buy a ticket on next compition to claim it!"
+                  );
+                  await Transporter.sendMail({
+                    from: "noreply@winuwatch.uk",
+                    to: updatedAffiliation.ownerEmail,
+                    subject: `Claim your free ticket - Winuwatch`,
+                    html: `You won ${updatedAffiliation.uses % 5} free ${
+                      updatedAffiliation.uses % 5 === 1 ? "ticket" : "tickets"
+                    }, buy a ticket on next compition to claim it!`,
+                  });
+                }
+              }
+            });
+          }
+          //! send new discount code to user that made the order
+          if (data.order?.status === order_status.CONFIRMED) {
+            const affiliationExist = await ctx.prisma.affiliation.findMany({
+              where: {
                 ownerEmail: data.order.email,
-                discountCode: await discountCodeGenerator(ctx.prisma),
-                competitionId: comp.id,
+                competitionId: {
+                  in: data.comps.map((e) => e.id),
+                },
               },
             });
-            comp.affiliationCode = newAffiliation.discountCode;
-            comp.affiliationRate = newAffiliation.discountRate;
-          } else {
-            for (const affiliation of affiliationExist) {
-              if (comp.id === affiliation.competitionId) {
-                comp.affiliationCode = affiliation.discountCode;
-                comp.affiliationRate = affiliation.discountRate;
-                break;
+
+            const affiliationExistIds = new Set(
+              affiliationExist.map((e) => e.competitionId)
+            );
+
+            for (const comp of data.comps) {
+              if (!affiliationExistIds.has(comp.id)) {
+                const newAffiliation = await ctx.prisma.affiliation.create({
+                  data: {
+                    ownerEmail: data.order.email,
+                    discountCode: await discountCodeGenerator(ctx.prisma),
+                    competitionId: comp.id,
+                  },
+                });
+                comp.affiliationCode = newAffiliation.discountCode;
+                comp.affiliationRate = newAffiliation.discountRate;
+              } else {
+                for (const affiliation of affiliationExist) {
+                  if (comp.id === affiliation.competitionId) {
+                    comp.affiliationCode = affiliation.discountCode;
+                    comp.affiliationRate = affiliation.discountRate;
+                    break;
+                  }
+                }
               }
             }
           }
-        }
-      }
 
-      data.comps.length > 0 &&
-        data.order?.status === order_status.CONFIRMED &&
-        (await Transporter.sendMail({
-          from: "noreply@winuwatch.uk",
-          to: data.order.email,
-          subject: `Order Confirmation - Winuwatch #${
-            data.order?.id || "000000"
-          }`,
-          html: Email(data),
-        }));
-      return data.order;
+          data.order?.status === order_status.CONFIRMED &&
+            (await Transporter.sendMail({
+              from: "noreply@winuwatch.uk",
+              to: data.order.email,
+              subject: `Order Confirmation - Winuwatch #${
+                data.order?.id || "000000"
+              }`,
+              html: Email(data),
+            }));
+          return data.order;
+        } else {
+          return;
+        }
+      } catch (error) {
+        console.log(error);
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Internal server error",
+          cause: error,
+        });
+      }
     }),
   sendEmail: publicProcedure
     .input(z.string())
