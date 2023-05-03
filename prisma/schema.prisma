@@ -10,7 +10,7 @@ datasource db {
 
 model ImagesUrl {
   id        String   @id @default(cuid())
-  url       String
+  url       String   @db.VarChar(255)
   WatchesId String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -67,6 +67,7 @@ model Competition {
   watchesId                String            @unique
   Watches                  Watches?          @relation(fields: [watchesId], references: [id])
   Ticket                   Ticket[]
+  Affiliation              Affiliation[]
 
   @@index([id])
   @@map("competition")
@@ -155,10 +156,14 @@ model Affiliation {
   ownerEmail    String
   createdAt     DateTime @default(now())
   competitionId String
+  compToWin     String?
   uses          Int      @default(0)
   updatedAt     DateTime @updatedAt
   Order         Order[]
 
+  competition Competition @relation(fields: [competitionId], references: [id])
+
+  @@index([compToWin])
   @@index([competitionId])
   @@map("affiliation")
 }
