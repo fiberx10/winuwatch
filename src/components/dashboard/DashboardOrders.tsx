@@ -26,18 +26,6 @@ import Loader from "../Loader";
 import { useRouter } from "next/router";
 import { Fade } from "@mui/material";
 
-const csvExporter = new ExportToCsv({
-  fieldSeparator: ",",
-  quoteStrings: '"',
-  decimalSeparator: ".",
-  showLabels: true,
-  showTitle: true,
-  title: "Order",
-  useTextFile: false,
-  useBom: true,
-  useKeysAsHeaders: true,
-  // headers: ['Column 1', 'Column 2', etc...] <-- Won't work with useKeysAsHeaders present!
-});
 
 const DashboardOrders = () => {
   const { locale } = useRouter();
@@ -116,8 +104,18 @@ const DashboardOrders = () => {
                     <Button
                       variant="secondary"
                       onClick={async () => {
-                        const data = await mutateAsync(comp.id);
-                        csvExporter.generateCsv(data);
+                        new ExportToCsv({
+                          fieldSeparator: ",",
+                          quoteStrings: '"',
+                          decimalSeparator: ".",
+                          showLabels: true,
+                          showTitle: false,
+                          title: "Order",
+                          useTextFile: false,
+                          useBom: true,
+                          useKeysAsHeaders: true,
+                          // headers: ['Column 1', 'Column 2', etc...] <-- Won't work with useKeysAsHeaders present!
+                        }).generateCsv(await mutateAsync(comp.id));
                       }}
                     >
                       CSV
