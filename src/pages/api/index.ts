@@ -1,16 +1,16 @@
-import type { NextApiRequest, NextApiResponse } from "next";
-import Email, { GetData } from "@/components/emails";
-import { Competition, PrismaClient } from "@prisma/client";
+import type { NextApiRequest, NextApiResponse } from 'next';
+import { Competition, PrismaClient } from '@prisma/client';
 //import Email from "@/components/newsLetter1";
-import nodemailer from "nodemailer";
-
+import nodemailer from 'nodemailer';
+import WinningEmail, { GetWinnerData } from '@/components/emails/WinningEmail';
 
 const prisma = new PrismaClient({
-  log: ["query", "info", "warn"],
+  log: ['query', 'info', 'warn'],
 });
 
 export default async function send(req: NextApiRequest, res: NextApiResponse) {
-  const OrderID = "8a0a819e-bc12-4d01-86c0-2f1e3e25dc75";
+  const OrderID = '8a0a819e-bc12-4d01-86c0-2f1e3e25dc75';
+  const TicketID = 'clgwcdyeg01h4t5jgi5kzezv5';
 
   //const data = await GetData(OrdeerID, prisma);
   //const EmailRender = Email(data);
@@ -44,5 +44,5 @@ export default async function send(req: NextApiRequest, res: NextApiResponse) {
   res.send(EmailRender);
   */
 
-  res.send(Email(await GetData(OrderID, prisma)));
+  res.send(WinningEmail(await GetWinnerData(TicketID, prisma)));
 }
