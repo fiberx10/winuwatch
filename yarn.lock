@@ -4383,10 +4383,10 @@ levn@~0.3.0:
     prelude-ls "~1.1.2"
     type-check "~0.3.2"
 
-libphonenumber-js@^1.10.20:
-  version "1.10.26"
-  resolved "https://registry.npmjs.org/libphonenumber-js/-/libphonenumber-js-1.10.26.tgz"
-  integrity sha512-oB3l4J5gEhMV+ymmlIjWedsbCpsNRqbEZ/E/MpN2QVyinKNra6DcuXywxSk/72M3DZDoH/6kzurOq1erznBMwQ==
+libphonenumber-js@^1.10.28:
+  version "1.10.28"
+  resolved "https://registry.npmjs.org/libphonenumber-js/-/libphonenumber-js-1.10.28.tgz"
+  integrity sha512-1eAgjLrZA0+2Wgw4hs+4Q/kEBycxQo8ZLYnmOvZ3AlM8ImAVAJgDPlZtISLEzD1vunc2q8s2Pn7XwB7I8U3Kzw==
 
 lilconfig@^2.0.5, lilconfig@^2.0.6:
   version "2.1.0"
@@ -5485,14 +5485,14 @@ react-number-format@^5.1.4:
     prop-types "^15.7.2"
 
 react-phone-number-input@^3.2.19:
-  version "3.2.19"
-  resolved "https://registry.npmjs.org/react-phone-number-input/-/react-phone-number-input-3.2.19.tgz"
-  integrity sha512-3peWqyFgJ3+IvkB0GHvhAzQ6LEfJw1/obG8KPvCcac8OKp9Ir+pLdyySgxbD56EYkaAwZbBwOQJaGNqIX0yrtg==
+  version "3.2.20"
+  resolved "https://registry.npmjs.org/react-phone-number-input/-/react-phone-number-input-3.2.20.tgz"
+  integrity sha512-UuLTcD83dzsTbQtgEubXPo50UYv2/k5VnnPFYXW2hXqHY2XNTGw7lqfm73dQ7TYrddOyEKoePbzyDfmysPDvsw==
   dependencies:
     classnames "^2.3.1"
     country-flag-icons "^1.5.4"
     input-format "^0.3.8"
-    libphonenumber-js "^1.10.20"
+    libphonenumber-js "^1.10.28"
     prop-types "^15.8.1"
 
 react-popper@^2.2.5:
@@ -6371,9 +6371,9 @@ tree-node-cli@1.6.0:
     pretty-bytes "^5.6.0"
 
 ts-essentials@^9.3.1:
-  version "9.3.1"
-  resolved "https://registry.npmjs.org/ts-essentials/-/ts-essentials-9.3.1.tgz"
-  integrity sha512-9CChSvQMyVRo29Vb1A2jbs+LKo3d/bAf+ndSaX0T8cEiy/HChVaRN/HY5DqUryZ8hZ6uol9bEgCnGmnDbwBR9Q==
+  version "9.3.2"
+  resolved "https://registry.npmjs.org/ts-essentials/-/ts-essentials-9.3.2.tgz"
+  integrity sha512-JxKJzuWqH1MmH4ZFHtJzGEhkfN3QvVR3C3w+4BIoWeoY68UVVoA2Np/Bca9z0IPSErVCWhv439aT0We4Dks8kQ==
 
 tsconfig-paths@^3.14.1:
   version "3.14.2"
@@ -6779,7 +6779,7 @@ yup@^1.0.2:
 
 zod-formik-adapter@^1.2.0:
   version "1.2.0"
-  resolved "https://registry.yarnpkg.com/zod-formik-adapter/-/zod-formik-adapter-1.2.0.tgz#b2b76f9388bee0fa72fceda2af0f15152d5fa3df"
+  resolved "https://registry.npmjs.org/zod-formik-adapter/-/zod-formik-adapter-1.2.0.tgz"
   integrity sha512-62U+Mf8U05pvLsIMUTC1H6d4K5SmsrXM+YgiZhCpPin5GNhnVuXCGySmJCs0FHuTJCBy7Et5Z1i8KF5ffuLttg==
 
 zod@^3.20.6:
