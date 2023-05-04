@@ -129,13 +129,14 @@ const CartComp = () => {
                     onClick={() => {
                       updateComp({
                         reduction:
-                          comp.number_tickets === 6
-                            ? 0.1
-                            : comp.number_tickets === 11
-                            ? 0.15
-                            : comp.number_tickets === 21
-                            ? 0.2
-                            : 0,
+                          // comp.number_tickets === 6
+                          //   ? 0.1
+                          //   : comp.number_tickets === 11
+                          //   ? 0.15
+                          //   : comp.number_tickets === 21
+                          //   ? 0.2
+                          //   :
+                          0,
                         compID: comp.compID,
                         number_tickets:
                           comp.number_tickets > 1
