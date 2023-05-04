@@ -25,8 +25,8 @@ export const RemainingEmail = (data: ReturnType<typeof GetWinnerData> extends Pr
   : never) => {
   console.log({
     order: data?.Order,
-    competition: data?.Competition,
-    watches: data?.Competition.Watches,
+    competition: data?,
+    watches: data?.Watches,
   });
 
   return (
@@ -100,8 +100,8 @@ export const RemainingEmail = (data: ReturnType<typeof GetWinnerData> extends Pr
             }}
           >
             <img
-              alt={data?.Competition.Watches?.id}
-              src={data?.Competition.Watches?.images_url[0]?.url}
+              alt={data?.Watches?.id}
+              src={data?.Watches?.images_url[0]?.url}
               width="100%"
               height="500px"
               style={{
@@ -150,7 +150,7 @@ export const RemainingEmail = (data: ReturnType<typeof GetWinnerData> extends Pr
                     Brand
                   </p>
                   <p style={{ margin: '4px', textAlign: 'start' }}>
-                    {data?.Competition.Watches?.brand}
+                    {data?.Watches?.brand}
                   </p>
                 </div>
                 <div
@@ -192,7 +192,7 @@ export const RemainingEmail = (data: ReturnType<typeof GetWinnerData> extends Pr
                     Reference number
                   </p>
                   <p style={{ margin: '4px', textAlign: 'start' }}>
-                    {data?.Competition.Watches?.reference_number}
+                    {data?.Watches?.reference_number}
                   </p>
                 </div>
                 <div
@@ -213,7 +213,7 @@ export const RemainingEmail = (data: ReturnType<typeof GetWinnerData> extends Pr
                     Movement
                   </p>
                   <p style={{ margin: '4px', textAlign: 'start' }}>
-                    {data?.Competition.Watches?.movement}
+                    {data?.Watches?.movement}
                   </p>
                 </div>
                 <div
@@ -234,7 +234,7 @@ export const RemainingEmail = (data: ReturnType<typeof GetWinnerData> extends Pr
                     Year of manufacture
                   </p>
                   <p style={{ margin: '4px', textAlign: 'start' }}>
-                    {data?.Competition.Watches?.year_of_manifacture}
+                    {data?.Watches?.year_of_manifacture}
                   </p>
                 </div>
                 <div
@@ -255,7 +255,7 @@ export const RemainingEmail = (data: ReturnType<typeof GetWinnerData> extends Pr
                     Caliber/Gear
                   </p>
                   <p style={{ margin: '4px', textAlign: 'start' }}>
-                    {data?.Competition.Watches?.caliber_grear}
+                    {data?.Watches?.caliber_grear}
                   </p>
                 </div>
                 <div
@@ -276,7 +276,7 @@ export const RemainingEmail = (data: ReturnType<typeof GetWinnerData> extends Pr
                     Glass
                   </p>
                   <p style={{ margin: '4px', textAlign: 'start' }}>
-                    {data?.Competition.Watches?.glass}
+                    {data?.Watches?.glass}
                   </p>
                 </div>
                 <div
@@ -297,7 +297,7 @@ export const RemainingEmail = (data: ReturnType<typeof GetWinnerData> extends Pr
                     Bezel material
                   </p>
                   <p style={{ margin: '4px', textAlign: 'start' }}>
-                    {data?.Competition.Watches?.bezel_material}
+                    {data?.Watches?.bezel_material}
                   </p>
                 </div>
                 <div
@@ -318,7 +318,7 @@ export const RemainingEmail = (data: ReturnType<typeof GetWinnerData> extends Pr
                     Bracelet material
                   </p>
                   <p style={{ margin: '4px', textAlign: 'start' }}>
-                    {data?.Competition.Watches?.Bracelet_material}
+                    {data?.Watches?.Bracelet_material}
                   </p>
                 </div>
               </div>
@@ -357,7 +357,7 @@ export const RemainingEmail = (data: ReturnType<typeof GetWinnerData> extends Pr
                     Name
                   </p>
                   <p style={{ margin: '4px', textAlign: 'start' }}>
-                    {data?.Competition.name}
+                    {data?.name}
                   </p>
                 </div>
                 <div
@@ -378,8 +378,8 @@ export const RemainingEmail = (data: ReturnType<typeof GetWinnerData> extends Pr
                     Prize
                   </p>
                   <p style={{ margin: '4px', textAlign: 'start' }}>
-                    {data?.Competition.Watches?.brand}{' '}
-                    {data?.Competition.Watches?.model}
+                    {data?.Watches?.brand}{' '}
+                    {data?.Watches?.model}
                   </p>
                 </div>
               </div>
