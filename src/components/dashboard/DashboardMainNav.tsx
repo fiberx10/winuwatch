@@ -7,6 +7,7 @@ import {
   TrophyOutlined,
   UsergroupAddOutlined,
   BookOutlined,
+  GiftOutlined,
 } from "@ant-design/icons/lib/icons";
 import Image from "next/image";
 import { useStore, Dashmenus } from "@/components/Store";
@@ -36,8 +37,10 @@ const DashboardMainNav = () => {
                   <TrophyOutlined />
                 ) : i === 3 ? (
                   <BookOutlined />
-                ) : (
+                ) : i === 4 ? (
                   <UsergroupAddOutlined />
+                ) : (
+                  <GiftOutlined />
                 )}
                 <p>{menu}</p>
               </div>
