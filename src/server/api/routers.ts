@@ -17,11 +17,7 @@ import {
   Comps,
 } from "@/utils";
 import { Transporter, Stripe } from "../utils";
-import {
-  WatchesSchema,
-  CompetitionSchema,
-  affiliationSchema,
-} from "@/utils/zodSchemas";
+import { WatchesSchema, CompetitionSchema } from "@/utils/zodSchemas";
 import type { PrismaClient } from "@prisma/client";
 import Email, { GetData } from "@/components/emails";
 import { faker } from "@faker-js/faker";
@@ -1202,12 +1198,14 @@ export const QuestionRouter = createTRPCRouter({
 export const AffiliationRouter = createTRPCRouter({
   getAll: publicProcedure.query(async ({ ctx }) => {
     try {
-      const result: Affiliation[] = await ctx.prisma
-        .$queryRaw`SELECT * FROM \`affiliation\`, \`competition\` AS c 
-                                        LEFT JOIN competition 
-                                        ON Affiliation.competitionId = Competition.id`;
-      console.log(result);
-      return result;
+      return await ctx.prisma.affiliation.findMany({
+        include: {
+          competition: true,
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+      });
     } catch (error) {
       console.log(error);
       return [];
@@ -1216,18 +1214,43 @@ export const AffiliationRouter = createTRPCRouter({
   add: publicProcedure
     .input(
       z.object({
-        discountRate: z.number(),
+        discountRate: z.number().default(10),
         ownerEmail: z.string().email(),
-        competitionId: z.string(),
+        competitionId: z.string().nonempty(),
       })
     )
     .mutation(async ({ ctx, input }) => {
-      return await ctx.prisma.affiliation.create({
-        data: {
-          ...input,
-          discountCode: await discountCodeGenerator(ctx.prisma),
-        },
-      });
+      try {
+        const hasAffiliation = await ctx.prisma.affiliation.findFirst({
+          where: {
+            competitionId: input.competitionId,
+            ownerEmail: input.ownerEmail,
+          },
+        });
+        if (hasAffiliation) {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "Affiliation already exists",
+          });
+        }
+        return await ctx.prisma.affiliation.create({
+          data: {
+            ...input,
+            discountRate: input.discountRate / 100,
+            discountCode: await discountCodeGenerator(ctx.prisma),
+          },
+        });
+      } catch (error) {
+        if (error instanceof TRPCError) {
+          throw error;
+        } else {
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message: "Something went wrong",
+            cause: error,
+          });
+        }
+      }
     }),
   update: publicProcedure
     .input(
@@ -1239,19 +1262,50 @@ export const AffiliationRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const { id, ...data } = input;
-      return await ctx.prisma.affiliation.update({
-        data,
-        where: { id },
+      try {
+        const { id, ...data } = input;
+        if (data.discountRate) {
+          data.discountRate = data.discountRate / 100;
+        }
+        if (data.ownerEmail) {
+          const hasAffiliation = await ctx.prisma.affiliation.findFirst({
+            where: {
+              competitionId: data.compitionId,
+              ownerEmail: data.ownerEmail,
+            },
+          });
+          if (hasAffiliation) {
+            throw new TRPCError({
+              code: "BAD_REQUEST",
+              message: "User already has affiliation on this competition",
+            });
+          }
+        }
+        return await ctx.prisma.affiliation.update({
+          data,
+          where: { id },
+        });
+      } catch (error) {
+        if (error instanceof TRPCError) {
+          throw error;
+        } else {
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message: "Something went wrong",
+            cause: error,
+          });
+        }
+      }
+    }),
+  delete: publicProcedure
+    .input(z.string().nonempty())
+    .mutation(async ({ ctx, input }) => {
+      return await ctx.prisma.affiliation.delete({
+        where: {
+          id: input,
+        },
       });
     }),
-  delete: publicProcedure.input(z.string()).mutation(async ({ ctx, input }) => {
-    return await ctx.prisma.affiliation.delete({
-      where: {
-        id: input,
-      },
-    });
-  }),
   checkDiscount: publicProcedure
     .input(
       z.object({
