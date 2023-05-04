@@ -224,20 +224,23 @@ export const WinnersRouter = createTRPCRouter({
       if (!competition) {
         throw new Error("Competition not found");
       }
-      competition.map(async (order) => {
-        const data = await GetWinnerData(order.Order.id, ctx.prisma);
-        if (!data?.data?.Order) {
-          throw new Error("Order not found");
-        }
-        await Transporter.sendMail({
-          from: "noreply@winuwatch.uk",
-          to: data?.data?.Order?.email,
-          subject: `Congratulations - Winuwatch #${
-            data?.data.Order.id || "000000"
-          }`,
-          html: RemainingEmail(data),
+      competition
+        .filter(
+          (order, index) =>
+            index ===
+            competition.findIndex((o) => order.Order.email === o.Order.email)
+        )
+        .map(async (order) => {
+          console.log("sent");
+
+          const data = { data: order };
+          await Transporter.sendMail({
+            from: "noreply@winuwatch.uk",
+            to: order.Order.email,
+            subject: `Reminder Email - Winuwatch #${order.orderId || "000000"}`,
+            html: RemainingEmail(data),
+          });
         });
-      });
       return void 0;
     }),
 });

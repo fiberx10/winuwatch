@@ -42,7 +42,8 @@ const DashboardWinners = () => {
   };
   useEffect(() => {
     isSuccess ? setShow1(true) : resentEmail ? setShow1(true) : setShow1(false);
-  }, [isSuccess, resentEmail]);
+    remindersSent ? setReminder(true) : setReminder(false);
+  }, [isSuccess, resentEmail, remindersSent]);
   const [show1, setShow1] = useState(false);
   const [reminder, setReminder] = useState(false);
 
@@ -53,7 +54,7 @@ const DashboardWinners = () => {
       </div>
       <Alert
         onClose={() => setReminder(false)}
-        show={remindersSent}
+        show={reminder}
         variant="success"
         dismissible
       >
