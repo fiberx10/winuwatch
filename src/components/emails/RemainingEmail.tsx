@@ -3,35 +3,22 @@ import type { PrismaClient } from '@prisma/client';
 import { renderToString } from 'react-dom/server';
 
 export const GetWinnerData = async (
-  TicketID: string,
+  CompID: string,
   prismaClient: PrismaClient
-) => {
-  const data = await prismaClient.ticket.findUnique({
+) =>  await prismaClient.competition.findUnique({
     where: {
-      id: TicketID,
+      id: CompID,
     },
     include: {
-      Order: true,
-      Competition: {
+      Watches: {
         include: {
-          Watches: {
-            include: {
-              images_url: true,
-            },
-          },
+          images_url: true,
         },
       },
     },
   });
 
-  return {
-    data,
-  };
-};
-
-export const RemainingEmail = ({
-  data,
-}: ReturnType<typeof GetWinnerData> extends Promise<infer T>
+export const RemainingEmail = (data: ReturnType<typeof GetWinnerData> extends Promise<infer T>
   ? T extends Promise<infer U>
     ? U
     : T
@@ -184,7 +171,7 @@ export const RemainingEmail = ({
                     Model
                   </p>
                   <p style={{ margin: '4px', textAlign: 'start' }}>
-                    {data?.Competition.Watches?.model}
+                    {data?.Watches?.model}
                   </p>
                 </div>
                 <div
