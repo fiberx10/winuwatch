@@ -1,24 +1,28 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import styles from "@/styles/Dashboard.module.css";
 import { api } from "@/utils/api";
-import { useState } from "react";
-import { Button } from "react-bootstrap";
+import { useEffect, useState } from "react";
+import { Alert, Button } from "react-bootstrap";
 import { GoPrimitiveDot } from "react-icons/go";
 import Modal from "react-bootstrap/Modal";
 import "react-datetime/css/react-datetime.css";
 import Loader from "../Loader";
 import { Formik } from "formik";
 import Form from "react-bootstrap/Form";
-import * as Yup from "yup";
 
 const DashboardWinners = () => {
   const [show, setShow] = useState({ modal: false, data: "" });
-  const { data, isLoading } = api.Competition.getAll.useQuery({});
+  const { data, isLoading, refetch } = api.Competition.getAll.useQuery({});
   const {
     mutateAsync: winner,
-    data: winnerData,
     isLoading: winnerLoading,
+    isSuccess,
   } = api.Winners.confirmWinner.useMutation();
+  const {
+    mutateAsync: resendEmail,
+    isSuccess: resentEmail,
+    isLoading: resendingEmail,
+  } = api.Winners.sendConfirmation.useMutation();
   const {
     mutateAsync: getWinner,
     data: winnerData2,
@@ -34,6 +38,10 @@ const DashboardWinners = () => {
   const handleClose = () => {
     setShow({ modal: false, data: "" });
   };
+  useEffect(() => {
+    isSuccess ? setShow1(true) : resentEmail ? setShow1(true) : setShow1(false);
+  }, [isSuccess, resentEmail]);
+  const [show1, setShow1] = useState(false);
 
   return (
     <div className={styles.DashCompsMain}>
@@ -102,6 +110,15 @@ const DashboardWinners = () => {
                             textAlign: "center",
                           }}
                         >
+                          <Alert
+                            onClose={() => setShow1(false)}
+                            show={show1}
+                            variant="success"
+                            dismissible
+                          >
+                            Email Sent!
+                          </Alert>
+
                           <h3>For Competiton: {comp?.name}</h3>
                           <div
                             style={{
@@ -180,10 +197,55 @@ const DashboardWinners = () => {
                             alignItems: "center",
                           }}
                         >
-                          <u style={{ cursor: "pointer" }}>
-                            Resend Congratulation email
-                          </u>
-                          <Button>Confirm Winner</Button>
+                          {winnerData2 &&
+                            (resendingEmail ? (
+                              <div className="lds-ring4">
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                              </div>
+                            ) : (
+                              <u
+                                onClick={async () => {
+                                  await resendEmail(winnerData2.id);
+                                }}
+                                style={{ cursor: "pointer" }}
+                              >
+                                Resend Congratulation email
+                              </u>
+                            ))}
+
+                          <Button
+                            onClick={async () => {
+                              winnerData2 &&
+                                (await winner({
+                                  compId: winnerData2.Competition.id,
+                                  ticketId: winnerData2.id,
+                                  orderId: winnerData2.orderId,
+                                  winner:
+                                    String(winnerData2.Order.first_name) +
+                                    " " +
+                                    String(winnerData2.Order.last_name),
+                                }));
+                              await refetch();
+                            }}
+                            disabled={
+                              winnerData2 &&
+                              winnerData2.Competition.id === show.data
+                                ? false
+                                : true
+                            }
+                          >
+                            {winnerLoading ? (
+                              <div className="lds-ring3">
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                              </div>
+                            ) : (
+                              "Confirm Winner"
+                            )}
+                          </Button>
                           <Formik
                             initialValues={{
                               ticketId: "",

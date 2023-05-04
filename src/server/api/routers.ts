@@ -26,6 +26,7 @@ import type { PrismaClient } from "@prisma/client";
 import Email, { GetData } from "@/components/emails";
 import { faker } from "@faker-js/faker";
 import { TRPCError } from "@trpc/server";
+import WinningEmail, { GetWinnerData } from "@/components/emails/WinningEmail";
 
 const Months = [
   "Jan",
@@ -136,7 +137,12 @@ export const WinnersRouter = createTRPCRouter({
   confirmWinner: publicProcedure
     .input(
       z
-        .object({ compId: z.string(), winner: z.string(), orderId: z.string() })
+        .object({
+          compId: z.string(),
+          winner: z.string(),
+          orderId: z.string(),
+          ticketId: z.string(),
+        })
         .required()
     )
     .mutation(async ({ ctx, input }) => {
@@ -153,23 +159,42 @@ export const WinnersRouter = createTRPCRouter({
         throw new Error("Competition not found");
       }
       // change to getWinnerdata
-      const data = await GetData(input.orderId, ctx.prisma);
-      if (!data.order) {
+      const data = await GetWinnerData(input.ticketId, ctx.prisma);
+      if (!data?.data?.Order) {
         throw new Error("Order not found");
       }
 
       await Transporter.sendMail({
         from: "noreply@winuwatch.uk",
-        to: data.order.email,
-        subject: `Congratulations - Winuwatch #${data.order?.id || "000000"}`,
-        html: Email(data),
+        to: data?.data?.Order.email,
+        subject: `Congratulations - Winuwatch #${
+          data?.data?.orderId || "000000"
+        }`,
+        html: WinningEmail(data),
       });
       /*
       const { Order, Competition } = ticket;
       const { Watches } = Competition;
       const { email } = Order;
       */
-      return true; //TODO : Send email
+      return void 0; //TODO : Send email
+    }),
+  sendConfirmation: publicProcedure
+    .input(z.string())
+    .mutation(async ({ ctx, input }) => {
+      const data = await GetWinnerData(input, ctx.prisma);
+      if (!data?.data?.Order) {
+        throw new Error("Order not found");
+      }
+      await Transporter.sendMail({
+        from: "noreply@winuwatch.uk",
+        to: data?.data?.Order.email,
+        subject: `Congratulations - Winuwatch #${
+          data?.data?.orderId || "000000"
+        }`,
+        html: WinningEmail(data),
+      });
+      return void 0;
     }),
 });
 
