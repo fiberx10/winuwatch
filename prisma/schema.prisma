@@ -160,7 +160,6 @@ model Affiliation {
   uses          Int      @default(0)
   updatedAt     DateTime @updatedAt
   Order         Order[]
-
   competition Competition @relation(fields: [competitionId], references: [id])
 
   @@index([compToWin])
