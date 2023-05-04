@@ -18,6 +18,8 @@ const DashboardWinners = () => {
     isLoading: winnerLoading,
     isSuccess,
   } = api.Winners.confirmWinner.useMutation();
+  const { mutateAsync: WinnerReminders, isSuccess: remindersSent } =
+    api.Winners.getWinnerReminders.useMutation();
   const {
     mutateAsync: resendEmail,
     isSuccess: resentEmail,
@@ -42,12 +44,21 @@ const DashboardWinners = () => {
     isSuccess ? setShow1(true) : resentEmail ? setShow1(true) : setShow1(false);
   }, [isSuccess, resentEmail]);
   const [show1, setShow1] = useState(false);
+  const [reminder, setReminder] = useState(false);
 
   return (
     <div className={styles.DashCompsMain}>
       <div className={styles.dashCompsTopHeader}>
         <h1>Your Winners</h1>
       </div>
+      <Alert
+        onClose={() => setReminder(false)}
+        show={remindersSent}
+        variant="success"
+        dismissible
+      >
+        Reminders Emails Sent!
+      </Alert>
       {isLoading ? (
         <div className={styles.LoaderWrapper}>
           <Loader />
@@ -76,6 +87,12 @@ const DashboardWinners = () => {
                         }}
                       >
                         Draw Winner
+                      </Button>
+                      <Button
+                        onClick={async () => await WinnerReminders(comp.id)}
+                        variant="primary"
+                      >
+                        Send Reminder Email
                       </Button>
                     </div>
                     <span

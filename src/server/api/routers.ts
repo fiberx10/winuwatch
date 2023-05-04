@@ -27,6 +27,7 @@ import Email, { GetData } from "@/components/emails";
 import { faker } from "@faker-js/faker";
 import { TRPCError } from "@trpc/server";
 import WinningEmail, { GetWinnerData } from "@/components/emails/WinningEmail";
+import RemainingEmail from "@/components/emails/RemainingEmail";
 
 const Months = [
   "Jan",
@@ -193,6 +194,49 @@ export const WinnersRouter = createTRPCRouter({
           data?.data?.orderId || "000000"
         }`,
         html: WinningEmail(data),
+      });
+      return void 0;
+    }),
+  getWinnerReminders: publicProcedure
+    .input(z.string())
+    .mutation(async ({ ctx, input }) => {
+      const competition = await ctx.prisma.ticket.findMany({
+        where: {
+          competitionId: input,
+          Order: {
+            status: order_status.CONFIRMED,
+          },
+        },
+        include: {
+          Order: true,
+          Competition: {
+            include: {
+              Watches: {
+                include: {
+                  images_url: true,
+                },
+              },
+            },
+          },
+        },
+      });
+
+      if (!competition) {
+        throw new Error("Competition not found");
+      }
+      competition.map(async (order) => {
+        const data = await GetWinnerData(order.Order.id, ctx.prisma);
+        if (!data?.data?.Order) {
+          throw new Error("Order not found");
+        }
+        await Transporter.sendMail({
+          from: "noreply@winuwatch.uk",
+          to: data?.data?.Order?.email,
+          subject: `Congratulations - Winuwatch #${
+            data?.data.Order.id || "000000"
+          }`,
+          html: RemainingEmail(data),
+        });
       });
       return void 0;
     }),
