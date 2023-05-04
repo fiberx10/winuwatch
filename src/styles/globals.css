@@ -33,6 +33,60 @@ input::-webkit-inner-spin-button {
 .lds-ring2 div:nth-child(3) {
   animation-delay: -0.15s;
 }
+.lds-ring3 {
+  display: inline-block;
+  position: relative;
+  width: 34px;
+  height: 34px;
+}
+.lds-ring3 div {
+  box-sizing: border-box;
+  display: block;
+  position: absolute;
+  width: 34px;
+  height: 34px;
+  border: 4px solid white;
+  margin-top: 3px;
+  border-radius: 50%;
+  animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+  border-color: white transparent transparent transparent;
+}
+.lds-ring3 div:nth-child(1) {
+  animation-delay: -0.45s;
+}
+.lds-ring3 div:nth-child(2) {
+  animation-delay: -0.3s;
+}
+.lds-ring3 div:nth-child(3) {
+  animation-delay: -0.15s;
+}
+.lds-ring4 {
+  display: inline-block;
+  position: relative;
+  width: 34px;
+  height: 34px;
+}
+.lds-ring4 div {
+  box-sizing: border-box;
+  display: block;
+  position: absolute;
+  width: 34px;
+  height: 34px;
+  border: 4px solid black;
+  margin-top: 3px;
+  border-radius: 50%;
+  animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+  border-color: black transparent transparent transparent;
+}
+.lds-ring4 div:nth-child(1) {
+  animation-delay: -0.45s;
+}
+.lds-ring4 div:nth-child(2) {
+  animation-delay: -0.3s;
+}
+.lds-ring4 div:nth-child(3) {
+  animation-delay: -0.15s;
+}
 .lds-ring {
   display: inline-block;
   position: relative;

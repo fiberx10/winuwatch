@@ -22,6 +22,7 @@ import type { PrismaClient } from "@prisma/client";
 import Email, { GetData } from "@/components/emails";
 import { faker } from "@faker-js/faker";
 import { TRPCError } from "@trpc/server";
+import WinningEmail, { GetWinnerData } from "@/components/emails/WinningEmail";
 
 const Months = [
   "Jan",
@@ -81,7 +82,9 @@ export const WinnersRouter = createTRPCRouter({
     if (!competition) {
       throw new Error("Competition not found");
     }
-    return competition.Ticket.filter((ticket) => ticket.Order.status === order_status.CONFIRMED).map((ticket) => ({
+    return competition.Ticket.filter(
+      (ticket) => ticket.Order.status === order_status.CONFIRMED
+    ).map((ticket) => ({
       ticketID: ticket.id,
       Order_ID: ticket.Order.id,
       first_name: ticket.Order.first_name,
@@ -113,36 +116,81 @@ export const WinnersRouter = createTRPCRouter({
       const random = Math.floor(Math.random() * tickets.length); // This algo neeeds to change
       return tickets[random] ?? tickets[0];
     }),
-  confirmWinner: publicProcedure
+  getWinner: publicProcedure
     .input(z.string())
     .mutation(async ({ ctx, input }) => {
-      //based on the ticket ID we should be able to close the competition and send the winner an email
-      const ticket = await ctx.prisma.ticket.findUnique({
+      const winner = await ctx.prisma.ticket.findUnique({
         where: {
           id: input,
         },
         include: {
           Order: true,
-          Competition: {
-            include: {
-              Watches: {
-                include: {
-                  images_url: true,
-                },
-              },
-            },
-          },
+          Competition: true,
+        },
+      });
+      return winner;
+    }),
+  confirmWinner: publicProcedure
+    .input(
+      z
+        .object({
+          compId: z.string(),
+          winner: z.string(),
+          orderId: z.string(),
+          ticketId: z.string(),
+        })
+        .required()
+    )
+    .mutation(async ({ ctx, input }) => {
+      //based on the ticket ID we should be able to close the competition and send the winner an email
+      const ticket = await ctx.prisma.competition.update({
+        where: {
+          id: input.compId,
+        },
+        data: {
+          winner: input.winner,
         },
       });
       if (!ticket) {
-        throw new Error("Ticket not found");
+        throw new Error("Competition not found");
       }
+      // change to getWinnerdata
+      const data = await GetWinnerData(input.ticketId, ctx.prisma);
+      if (!data?.data?.Order) {
+        throw new Error("Order not found");
+      }
+
+      await Transporter.sendMail({
+        from: "noreply@winuwatch.uk",
+        to: data?.data?.Order.email,
+        subject: `Congratulations - Winuwatch #${
+          data?.data?.orderId || "000000"
+        }`,
+        html: WinningEmail(data),
+      });
       /*
       const { Order, Competition } = ticket;
       const { Watches } = Competition;
       const { email } = Order;
       */
       return void 0; //TODO : Send email
+    }),
+  sendConfirmation: publicProcedure
+    .input(z.string())
+    .mutation(async ({ ctx, input }) => {
+      const data = await GetWinnerData(input, ctx.prisma);
+      if (!data?.data?.Order) {
+        throw new Error("Order not found");
+      }
+      await Transporter.sendMail({
+        from: "noreply@winuwatch.uk",
+        to: data?.data?.Order.email,
+        subject: `Congratulations - Winuwatch #${
+          data?.data?.orderId || "000000"
+        }`,
+        html: WinningEmail(data),
+      });
+      return void 0;
     }),
 });
 
