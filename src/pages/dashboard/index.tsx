@@ -7,7 +7,7 @@ import DashboardCompetitions from "@/components/dashboard/DashboardCompetitions"
 import DashboardWatches from "@/components/dashboard/DashboardWatches";
 import DashboardOrders from "@/components/dashboard/DashboardOrders";
 import DashboardWinners from "@/components/dashboard/DashboardWinners";
-// import DashboardAffiliation from "@/components/dashboard/DashboardAffiliation";
+import DashboardAffiliation from "@/components/dashboard/DashboardAffiliation";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Head from "next/head";
 import { Button, Modal } from "react-bootstrap";
@@ -190,10 +190,9 @@ const index = () => {
             <DashboardOrders />
           ) : menu === "Winners" ? (
             <DashboardWinners />
+          ) : menu === "Affiliations" ? (
+            <DashboardAffiliation />
           ) : (
-            // : menu === "Affiliations" ? (
-            //   <DashboardAffiliation />
-            // )
             <h1>Competitions</h1>
           )}
         </div>
