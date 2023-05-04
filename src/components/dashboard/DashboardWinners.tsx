@@ -18,8 +18,11 @@ const DashboardWinners = () => {
     isLoading: winnerLoading,
     isSuccess,
   } = api.Winners.confirmWinner.useMutation();
-  const { mutateAsync: WinnerReminders, isSuccess: remindersSent } =
-    api.Winners.getWinnerReminders.useMutation();
+  const {
+    mutateAsync: WinnerReminders,
+    isSuccess: remindersSent,
+    isLoading: sendingRemind,
+  } = api.Winners.getWinnerReminders.useMutation();
   const {
     mutateAsync: resendEmail,
     isSuccess: resentEmail,
@@ -46,6 +49,7 @@ const DashboardWinners = () => {
   }, [isSuccess, resentEmail, remindersSent]);
   const [show1, setShow1] = useState(false);
   const [reminder, setReminder] = useState(false);
+  const [compet, setComp] = useState("");
 
   return (
     <div className={styles.DashCompsMain}>
@@ -90,10 +94,21 @@ const DashboardWinners = () => {
                         Draw Winner
                       </Button>
                       <Button
-                        onClick={async () => await WinnerReminders(comp.id)}
+                        onClick={async () => {
+                          setComp(comp.id);
+                          await WinnerReminders(comp.id);
+                        }}
                         variant="primary"
                       >
-                        Send Reminder Email
+                        {sendingRemind && compet === comp.id ? (
+                          <div className="lds-ring3">
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                          </div>
+                        ) : (
+                          "Send Reminder Email"
+                        )}
                       </Button>
                     </div>
                     <span
