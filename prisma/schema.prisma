@@ -150,17 +150,17 @@ model CompetitionToOrder {
 }
 
 model Affiliation {
-  id            String   @id @default(cuid())
-  discountCode  String   @unique
-  discountRate  Float    @default(0.1)
+  id            String      @id @default(cuid())
+  discountCode  String      @unique
+  discountRate  Float       @default(0.1)
   ownerEmail    String
-  createdAt     DateTime @default(now())
+  createdAt     DateTime    @default(now())
   competitionId String
+  uses          Int         @default(0)
+  updatedAt     DateTime    @updatedAt
   compToWin     String?
-  uses          Int      @default(0)
-  updatedAt     DateTime @updatedAt
   Order         Order[]
-  competition Competition @relation(fields: [competitionId], references: [id])
+  competition   Competition @relation(fields: [competitionId], references: [id])
 
   @@index([compToWin])
   @@index([competitionId])

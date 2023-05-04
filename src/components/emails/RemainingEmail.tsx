@@ -29,7 +29,7 @@ export const GetWinnerData = async (
   };
 };
 
-export const WinningEmail = ({
+export const RemainingEmail = ({
   data,
 }: ReturnType<typeof GetWinnerData> extends Promise<infer T>
   ? T extends Promise<infer U>
@@ -96,17 +96,12 @@ export const WinningEmail = ({
                 letterSpacing: '0.1rem',
               }}
             >
+              <p style={{ margin: '0' }}>Dear {data?.Order?.first_name}</p>
+              <p style={{ margin: '0' }}>we are reaching out to</p>
               <p style={{ margin: '0' }}>
-                Congratulations {data?.Order?.first_name}
+                inform you about an exciting competition
               </p>
-              <p style={{ margin: '0' }}>
-                We are pleased to inform you that you
-              </p>
-              <p style={{ margin: '0' }}>have won</p>
-              <p style={{ margin: '0' }}>
-                the {data?.Competition.Watches?.brand}{' '}
-                {data?.Competition.Watches?.model}
-              </p>
+              <p style={{ margin: '0' }}>that may be of interest to you.</p>
             </div>
           </div>
 
@@ -400,48 +395,6 @@ export const WinningEmail = ({
                     {data?.Competition.Watches?.model}
                   </p>
                 </div>
-                <div
-                  style={{
-                    display: 'flex',
-                    alignItems: 'flex-start',
-                  }}
-                >
-                  <p
-                    style={{
-                      margin: '4px',
-                      minWidth: '180px',
-                      textAlign: 'start',
-                      fontStyle: 'italic',
-                      fontWeight: '400',
-                    }}
-                  >
-                    Your ticket
-                  </p>
-                  <p style={{ margin: '4px', textAlign: 'start' }}>
-                    #{data?.id}
-                  </p>
-                </div>
-                <div
-                  style={{
-                    display: 'flex',
-                    alignItems: 'flex-start',
-                  }}
-                >
-                  <p
-                    style={{
-                      margin: '4px',
-                      minWidth: '180px',
-                      textAlign: 'start',
-                      fontStyle: 'italic',
-                      fontWeight: '400',
-                    }}
-                  >
-                    Your order
-                  </p>
-                  <p style={{ margin: '4px', textAlign: 'start' }}>
-                    #{data?.orderId}{' '}
-                  </p>
-                </div>
               </div>
             </div>
           </div>
@@ -462,7 +415,8 @@ export const WinningEmail = ({
               }}
             >
               please make sure to follow us on instagram where we <br />
-              host a live for each competition.
+              host a live for each competition. <br /> we wish you the best of
+              luck!
             </p>
             <a
               style={{
@@ -526,5 +480,5 @@ export const WinningEmail = ({
   );
 };
 
-export default (order: Parameters<typeof WinningEmail>[0]) =>
-  renderToString(WinningEmail(order));
+export default (order: Parameters<typeof RemainingEmail>[0]) =>
+  renderToString(RemainingEmail(order));
