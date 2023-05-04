@@ -152,6 +152,7 @@ export const WinnersRouter = createTRPCRouter({
       if (!ticket) {
         throw new Error("Competition not found");
       }
+      // change to getWinnerdata
       const data = await GetData(input.orderId, ctx.prisma);
       if (!data.order) {
         throw new Error("Order not found");
@@ -168,7 +169,7 @@ export const WinnersRouter = createTRPCRouter({
       const { Watches } = Competition;
       const { email } = Order;
       */
-      return void 0; //TODO : Send email
+      return true; //TODO : Send email
     }),
 });
 

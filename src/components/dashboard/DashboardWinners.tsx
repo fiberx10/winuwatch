@@ -18,7 +18,7 @@ const DashboardWinners = () => {
     mutateAsync: winner,
     data: winnerData,
     isLoading: winnerLoading,
-  } = api.Winners.pickOneRandom.useMutation();
+  } = api.Winners.confirmWinner.useMutation();
   const {
     mutateAsync: getWinner,
     data: winnerData2,
