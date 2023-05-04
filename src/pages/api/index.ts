@@ -4,15 +4,6 @@ import { Competition, PrismaClient } from "@prisma/client";
 //import Email from "@/components/newsLetter1";
 import nodemailer from "nodemailer";
 
-const Transporter = nodemailer.createTransport({
-  host: "smtp.hostinger.com",
-  port: 465,
-  secure: true,
-  auth: {
-    user: "noreply@winuwatch.uk",
-    pass: "Password1!",
-  },
-});
 
 const prisma = new PrismaClient({
   log: ["query", "info", "warn"],
@@ -53,5 +44,5 @@ export default async function send(req: NextApiRequest, res: NextApiResponse) {
   res.send(EmailRender);
   */
 
-  res.send(await GetData(OrderID, prisma));
+  res.send(Email(await GetData(OrderID, prisma)));
 }
