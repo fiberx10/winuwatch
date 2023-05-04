@@ -267,16 +267,14 @@ export const OrderRouter = createTRPCRouter({
             ctx.prisma.affiliation.findMany({
               where: {
                 ownerEmail: data.order.email,
-                competitionId: {
-                  in: input.comps.map(({ compID }) => compID),
-                },
                 uses: {
-                  gt: 5,
+                  gt: 4,
                 },
               },
             }),
             ctx.prisma.order.findMany({
               where: {
+                email: data.order.email,
                 status: "CONFIRMED",
                 paymentMethod: "AFFILIATION",
                 totalPrice: 0,
@@ -306,15 +304,16 @@ export const OrderRouter = createTRPCRouter({
                   Ticket.some(({ competitionId }) => competitionId === compID)
                 )
             );
-            clientAffiliations
-              .filter(({ competitionId }) => {
-                return compsNotWon.some(
-                  ({ compID }) => compID === competitionId
+
+            compsNotWon.map(async ({ compID }) => {
+              // create order with number of tickets = Math.floor(uses / 5)
+              if (
+                clientAffiliations.some((comp) => comp.compToWin === compID)
+              ) {
+                const number_tickets = Math.floor(
+                  clientAffiliations.find((comp) => comp.compToWin === compID)
+                    ?.uses || 0 / 5
                 );
-              })
-              .map(async ({ competitionId, uses }) => {
-                // create order with number of tickets = Math.floor(uses / 5)
-                const number_tickets = Math.floor(uses / 5);
                 await ctx.prisma.$transaction(async (tx) => {
                   const addedOrder = await tx.order.create({
                     data: {
@@ -332,32 +331,33 @@ export const OrderRouter = createTRPCRouter({
                       Ticket: {
                         createMany: {
                           data: new Array(number_tickets).fill(0).map((_) => ({
-                            competitionId,
+                            competitionId: compID,
                           })),
                         },
                       },
                     },
                   });
-                  await tx.affiliation.update({
+
+                  await tx.competition.update({
                     where: {
-                      id: data.order?.affiliationId || undefined,
+                      id: compID,
                     },
                     data: {
-                      uses: {
+                      remaining_tickets: {
                         decrement: number_tickets,
                       },
                     },
                   });
                   // TODO: Send email
-                  console.log("🎁🎁🎁🎁 you made it here, congrats!");
                   await Transporter.sendMail({
                     from: "noreply@winuwatch.uk",
                     to: addedOrder.email,
-                    subject: `Claim your free tickets - Winuwatch`,
+                    subject: `Here is your free tickets - Winuwatch`,
                     html: Email(await GetData(addedOrder.id, ctx.prisma)),
                   });
                 });
-              });
+              }
+            });
           }
 
           //! What I've added
@@ -441,6 +441,17 @@ export const OrderRouter = createTRPCRouter({
                     },
                   });
 
+                  await tx.affiliation.update({
+                    where: {
+                      id: updatedAffiliation.id,
+                    },
+                    data: {
+                      compToWin: !!nextCompetition
+                        ? nextCompetition.id
+                        : updatedAffiliation.competitionId,
+                    },
+                  });
+
                   await Transporter.sendMail({
                     from: "noreply@winuwatch.uk",
                     to: updatedAffiliation.ownerEmail,
@@ -475,9 +486,16 @@ export const OrderRouter = createTRPCRouter({
                   });
                 } else {
                   // TODO: Send email
-                  console.log(
-                    "🎁🎁🎁🎁 you made it here, congrats! you won a free ticket, buy a ticket on next compition to claim it!"
-                  );
+                  await tx.affiliation.update({
+                    where: {
+                      id: updatedAffiliation.id,
+                    },
+                    data: {
+                      compToWin: !nextCompetition
+                        ? updatedAffiliation.competitionId
+                        : nextCompetition?.id,
+                    },
+                  });
                   await Transporter.sendMail({
                     from: "noreply@winuwatch.uk",
                     to: updatedAffiliation.ownerEmail,
