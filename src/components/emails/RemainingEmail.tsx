@@ -3,43 +3,30 @@ import type { PrismaClient } from '@prisma/client';
 import { renderToString } from 'react-dom/server';
 
 export const GetWinnerData = async (
-  TicketID: string,
+  CompID: string,
   prismaClient: PrismaClient
-) => {
-  const data = await prismaClient.ticket.findUnique({
+) =>  await prismaClient.competition.findUnique({
     where: {
-      id: TicketID,
+      id: CompID,
     },
     include: {
-      Order: true,
-      Competition: {
+      Watches: {
         include: {
-          Watches: {
-            include: {
-              images_url: true,
-            },
-          },
+          images_url: true,
         },
       },
     },
   });
 
-  return {
-    data,
-  };
-};
-
-export const WinningEmail = ({
-  data,
-}: ReturnType<typeof GetWinnerData> extends Promise<infer T>
+export const RemainingEmail = (data: ReturnType<typeof GetWinnerData> extends Promise<infer T>
   ? T extends Promise<infer U>
     ? U
     : T
   : never) => {
   console.log({
     order: data?.Order,
-    competition: data?.Competition,
-    watches: data?.Competition.Watches,
+    competition: data?,
+    watches: data?.Watches,
   });
 
   return (
@@ -96,17 +83,12 @@ export const WinningEmail = ({
                 letterSpacing: '0.1rem',
               }}
             >
+              <p style={{ margin: '0' }}>Dear {data?.Order?.first_name}</p>
+              <p style={{ margin: '0' }}>we are reaching out to</p>
               <p style={{ margin: '0' }}>
-                Congratulations {data?.Order?.first_name}
+                inform you about an exciting competition
               </p>
-              <p style={{ margin: '0' }}>
-                We are pleased to inform you that you
-              </p>
-              <p style={{ margin: '0' }}>have won</p>
-              <p style={{ margin: '0' }}>
-                the {data?.Competition.Watches?.brand}{' '}
-                {data?.Competition.Watches?.model}
-              </p>
+              <p style={{ margin: '0' }}>that may be of interest to you.</p>
             </div>
           </div>
 
@@ -118,8 +100,8 @@ export const WinningEmail = ({
             }}
           >
             <img
-              alt={data?.Competition.Watches?.id}
-              src={data?.Competition.Watches?.images_url[0]?.url}
+              alt={data?.Watches?.id}
+              src={data?.Watches?.images_url[0]?.url}
               width="100%"
               height="500px"
               style={{
@@ -168,7 +150,7 @@ export const WinningEmail = ({
                     Brand
                   </p>
                   <p style={{ margin: '4px', textAlign: 'start' }}>
-                    {data?.Competition.Watches?.brand}
+                    {data?.Watches?.brand}
                   </p>
                 </div>
                 <div
@@ -189,7 +171,7 @@ export const WinningEmail = ({
                     Model
                   </p>
                   <p style={{ margin: '4px', textAlign: 'start' }}>
-                    {data?.Competition.Watches?.model}
+                    {data?.Watches?.model}
                   </p>
                 </div>
                 <div
@@ -210,7 +192,7 @@ export const WinningEmail = ({
                     Reference number
                   </p>
                   <p style={{ margin: '4px', textAlign: 'start' }}>
-                    {data?.Competition.Watches?.reference_number}
+                    {data?.Watches?.reference_number}
                   </p>
                 </div>
                 <div
@@ -231,7 +213,7 @@ export const WinningEmail = ({
                     Movement
                   </p>
                   <p style={{ margin: '4px', textAlign: 'start' }}>
-                    {data?.Competition.Watches?.movement}
+                    {data?.Watches?.movement}
                   </p>
                 </div>
                 <div
@@ -252,7 +234,7 @@ export const WinningEmail = ({
                     Year of manufacture
                   </p>
                   <p style={{ margin: '4px', textAlign: 'start' }}>
-                    {data?.Competition.Watches?.year_of_manifacture}
+                    {data?.Watches?.year_of_manifacture}
                   </p>
                 </div>
                 <div
@@ -273,7 +255,7 @@ export const WinningEmail = ({
                     Caliber/Gear
                   </p>
                   <p style={{ margin: '4px', textAlign: 'start' }}>
-                    {data?.Competition.Watches?.caliber_grear}
+                    {data?.Watches?.caliber_grear}
                   </p>
                 </div>
                 <div
@@ -294,7 +276,7 @@ export const WinningEmail = ({
                     Glass
                   </p>
                   <p style={{ margin: '4px', textAlign: 'start' }}>
-                    {data?.Competition.Watches?.glass}
+                    {data?.Watches?.glass}
                   </p>
                 </div>
                 <div
@@ -315,7 +297,7 @@ export const WinningEmail = ({
                     Bezel material
                   </p>
                   <p style={{ margin: '4px', textAlign: 'start' }}>
-                    {data?.Competition.Watches?.bezel_material}
+                    {data?.Watches?.bezel_material}
                   </p>
                 </div>
                 <div
@@ -336,7 +318,7 @@ export const WinningEmail = ({
                     Bracelet material
                   </p>
                   <p style={{ margin: '4px', textAlign: 'start' }}>
-                    {data?.Competition.Watches?.Bracelet_material}
+                    {data?.Watches?.Bracelet_material}
                   </p>
                 </div>
               </div>
@@ -375,7 +357,7 @@ export const WinningEmail = ({
                     Name
                   </p>
                   <p style={{ margin: '4px', textAlign: 'start' }}>
-                    {data?.Competition.name}
+                    {data?.name}
                   </p>
                 </div>
                 <div
@@ -396,50 +378,8 @@ export const WinningEmail = ({
                     Prize
                   </p>
                   <p style={{ margin: '4px', textAlign: 'start' }}>
-                    {data?.Competition.Watches?.brand}{' '}
-                    {data?.Competition.Watches?.model}
-                  </p>
-                </div>
-                <div
-                  style={{
-                    display: 'flex',
-                    alignItems: 'flex-start',
-                  }}
-                >
-                  <p
-                    style={{
-                      margin: '4px',
-                      minWidth: '180px',
-                      textAlign: 'start',
-                      fontStyle: 'italic',
-                      fontWeight: '400',
-                    }}
-                  >
-                    Your ticket
-                  </p>
-                  <p style={{ margin: '4px', textAlign: 'start' }}>
-                    #{data?.id}
-                  </p>
-                </div>
-                <div
-                  style={{
-                    display: 'flex',
-                    alignItems: 'flex-start',
-                  }}
-                >
-                  <p
-                    style={{
-                      margin: '4px',
-                      minWidth: '180px',
-                      textAlign: 'start',
-                      fontStyle: 'italic',
-                      fontWeight: '400',
-                    }}
-                  >
-                    Your order
-                  </p>
-                  <p style={{ margin: '4px', textAlign: 'start' }}>
-                    #{data?.orderId}{' '}
+                    {data?.Watches?.brand}{' '}
+                    {data?.Watches?.model}
                   </p>
                 </div>
               </div>
@@ -462,7 +402,8 @@ export const WinningEmail = ({
               }}
             >
               please make sure to follow us on instagram where we <br />
-              host a live for each competition.
+              host a live for each competition. <br /> we wish you the best of
+              luck!
             </p>
             <a
               style={{
@@ -526,5 +467,5 @@ export const WinningEmail = ({
   );
 };
 
-export default (order: Parameters<typeof WinningEmail>[0]) =>
-  renderToString(WinningEmail(order));
+export default (order: Parameters<typeof RemainingEmail>[0]) =>
+  renderToString(RemainingEmail(order));
