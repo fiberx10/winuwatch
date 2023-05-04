@@ -23,6 +23,7 @@ import Email, { GetData } from "@/components/emails";
 import { faker } from "@faker-js/faker";
 import { TRPCError } from "@trpc/server";
 import WinningEmail, { GetWinnerData } from "@/components/emails/WinningEmail";
+import RemainingEmail from "@/components/emails/RemainingEmail";
 
 const Months = [
   "Jan",
@@ -190,6 +191,52 @@ export const WinnersRouter = createTRPCRouter({
         }`,
         html: WinningEmail(data),
       });
+      return void 0;
+    }),
+  getWinnerReminders: publicProcedure
+    .input(z.string())
+    .mutation(async ({ ctx, input }) => {
+      const competition = await ctx.prisma.ticket.findMany({
+        where: {
+          competitionId: input,
+          Order: {
+            status: order_status.CONFIRMED,
+          },
+        },
+        include: {
+          Order: true,
+          Competition: {
+            include: {
+              Watches: {
+                include: {
+                  images_url: true,
+                },
+              },
+            },
+          },
+        },
+      });
+
+      if (!competition) {
+        throw new Error("Competition not found");
+      }
+      competition
+        .filter(
+          (order, index) =>
+            index ===
+            competition.findIndex((o) => order.Order.email === o.Order.email)
+        )
+        .map(async (order) => {
+          console.log("sent");
+
+          const data = { data: order };
+          await Transporter.sendMail({
+            from: "noreply@winuwatch.uk",
+            to: order.Order.email,
+            subject: `Reminder Email - Winuwatch #${order.orderId || "000000"}`,
+            html: RemainingEmail(data),
+          });
+        });
       return void 0;
     }),
 });

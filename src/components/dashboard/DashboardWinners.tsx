@@ -19,6 +19,11 @@ const DashboardWinners = () => {
     isSuccess,
   } = api.Winners.confirmWinner.useMutation();
   const {
+    mutateAsync: WinnerReminders,
+    isSuccess: remindersSent,
+    isLoading: sendingRemind,
+  } = api.Winners.getWinnerReminders.useMutation();
+  const {
     mutateAsync: resendEmail,
     isSuccess: resentEmail,
     isLoading: resendingEmail,
@@ -40,14 +45,25 @@ const DashboardWinners = () => {
   };
   useEffect(() => {
     isSuccess ? setShow1(true) : resentEmail ? setShow1(true) : setShow1(false);
-  }, [isSuccess, resentEmail]);
+    remindersSent ? setReminder(true) : setReminder(false);
+  }, [isSuccess, resentEmail, remindersSent]);
   const [show1, setShow1] = useState(false);
+  const [reminder, setReminder] = useState(false);
+  const [compet, setComp] = useState("");
 
   return (
     <div className={styles.DashCompsMain}>
       <div className={styles.dashCompsTopHeader}>
         <h1>Your Winners</h1>
       </div>
+      <Alert
+        onClose={() => setReminder(false)}
+        show={reminder}
+        variant="success"
+        dismissible
+      >
+        Reminders Emails Sent!
+      </Alert>
       {isLoading ? (
         <div className={styles.LoaderWrapper}>
           <Loader />
@@ -76,6 +92,23 @@ const DashboardWinners = () => {
                         }}
                       >
                         Draw Winner
+                      </Button>
+                      <Button
+                        onClick={async () => {
+                          setComp(comp.id);
+                          await WinnerReminders(comp.id);
+                        }}
+                        variant="primary"
+                      >
+                        {sendingRemind && compet === comp.id ? (
+                          <div className="lds-ring3">
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                          </div>
+                        ) : (
+                          "Send Reminder Email"
+                        )}
                       </Button>
                     </div>
                     <span
