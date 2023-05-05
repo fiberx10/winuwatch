@@ -163,7 +163,7 @@ export const WinnersRouter = createTRPCRouter({
 
       await Transporter.sendMail({
         from: "noreply@winuwatch.uk",
-        cc :"admin@winuwatch.uk",
+        cc: "admin@winuwatch.uk",
         to: data?.data?.Order.email,
         subject: `Congratulations - Winuwatch #${
           data?.data?.orderId || "000000"
@@ -186,7 +186,7 @@ export const WinnersRouter = createTRPCRouter({
       }
       await Transporter.sendMail({
         from: "noreply@winuwatch.uk",
-        cc :"admin@winuwatch.uk",
+        cc: "admin@winuwatch.uk",
         to: data?.data?.Order.email,
         subject: `Congratulations - Winuwatch #${
           data?.data?.orderId || "000000"
@@ -233,7 +233,7 @@ export const WinnersRouter = createTRPCRouter({
 
           const data = { data: order };
           await Transporter.sendMail({
-            cc :"admin@winuwatch.uk",
+            cc: "admin@winuwatch.uk",
             from: "noreply@winuwatch.uk",
             to: order.Order.email,
             subject: `Reminder Email - Winuwatch #${order.orderId || "000000"}`,
@@ -303,7 +303,7 @@ export const OrderRouter = createTRPCRouter({
 
     await Transporter.sendMail({
       from: "noreply@winuwatch.uk",
-      cc :"admin@winuwatch.uk",
+      cc: "admin@winuwatch.uk",
       to: data.order.email,
       subject: `Order Confirmation - Winuwatch #${data.order?.id || "000000"}`,
       html: Email(data),
@@ -446,7 +446,7 @@ export const OrderRouter = createTRPCRouter({
                   // TODO: Send email
                   await Transporter.sendMail({
                     from: "noreply@winuwatch.uk",
-                    cc :"admin@winuwatch.uk",
+                    cc: "admin@winuwatch.uk",
                     to: addedOrder.email,
                     subject: `Here is your free tickets - Winuwatch`,
                     html: Email({
@@ -583,7 +583,7 @@ export const OrderRouter = createTRPCRouter({
 
                   await Transporter.sendMail({
                     from: "noreply@winuwatch.uk",
-                    cc :"admin@winuwatch.uk",
+                    cc: "admin@winuwatch.uk",
 
                     to: updatedAffiliation.ownerEmail,
                     subject: `Claim your free ticket - Winuwatch`,
@@ -629,7 +629,7 @@ export const OrderRouter = createTRPCRouter({
                   });
                   await Transporter.sendMail({
                     from: "noreply@winuwatch.uk",
-                    cc :"admin@winuwatch.uk",
+                    cc: "admin@winuwatch.uk",
                     to: updatedAffiliation.ownerEmail,
                     subject: `Claim your free ticket - Winuwatch`,
                     html: `You won ${Math.floor(
@@ -647,54 +647,51 @@ export const OrderRouter = createTRPCRouter({
             });
           }
           //! send new discount code to user that made the order
-          if (data.order?.status === order_status.CONFIRMED) {
-            const affiliationExist = await ctx.prisma.affiliation.findMany({
-              where: {
-                ownerEmail: data.order.email,
-                competitionId: {
-                  in: data.comps.map((e) => e.id),
-                },
+          const affiliationExist = await ctx.prisma.affiliation.findMany({
+            where: {
+              ownerEmail: data.order.email,
+              competitionId: {
+                in: data.comps.map((e) => e.id),
               },
-            });
+            },
+          });
 
-            const affiliationExistIds = new Set(
-              affiliationExist.map((e) => e.competitionId)
-            );
+          const affiliationExistIds = new Set(
+            affiliationExist.map((e) => e.competitionId)
+          );
 
-            for (const comp of data.comps) {
-              if (!affiliationExistIds.has(comp.id)) {
-                const newAffiliation = await ctx.prisma.affiliation.create({
-                  data: {
-                    ownerEmail: data.order.email,
-                    discountCode: await discountCodeGenerator(ctx.prisma),
-                    competitionId: comp.id,
-                  },
-                });
-                comp.affiliationCode = newAffiliation.discountCode;
-                comp.affiliationRate = newAffiliation.discountRate;
-              } else {
-                for (const affiliation of affiliationExist) {
-                  if (comp.id === affiliation.competitionId) {
-                    comp.affiliationCode = affiliation.discountCode;
-                    comp.affiliationRate = affiliation.discountRate;
-                    break;
-                  }
+          for (const comp of data.comps) {
+            if (!affiliationExistIds.has(comp.id)) {
+              const newAffiliation = await ctx.prisma.affiliation.create({
+                data: {
+                  ownerEmail: data.order.email,
+                  discountCode: await discountCodeGenerator(ctx.prisma),
+                  competitionId: comp.id,
+                },
+              });
+              comp.affiliationCode = newAffiliation.discountCode;
+              comp.affiliationRate = newAffiliation.discountRate;
+            } else {
+              for (const affiliation of affiliationExist) {
+                if (comp.id === affiliation.competitionId) {
+                  comp.affiliationCode = affiliation.discountCode;
+                  comp.affiliationRate = affiliation.discountRate;
+                  break;
                 }
               }
             }
           }
 
-          data.order?.status === order_status.CONFIRMED &&
-            (await Transporter.sendMail({
-              from: "noreply@winuwatch.uk",
-              cc :"admin@winuwatch.uk",
+          await Transporter.sendMail({
+            from: "noreply@winuwatch.uk",
+            cc: "admin@winuwatch.uk",
 
-              to: data.order.email,
-              subject: `Order Confirmation - Winuwatch #${
-                data.order?.id || "000000"
-              }`,
-              html: Email(data),
-            }));
+            to: data.order.email,
+            subject: `Order Confirmation - Winuwatch #${
+              data.order?.id || "000000"
+            }`,
+            html: Email(data),
+          });
           return data.order;
         } else {
           return;
@@ -718,7 +715,7 @@ export const OrderRouter = createTRPCRouter({
 
       await Transporter.sendMail({
         from: "noreply@winuwatch.uk",
-        cc :"admin@winuwatch.uk",
+        cc: "admin@winuwatch.uk",
 
         to: data.order.email,
         subject: `Order Confirmation - Winuwatch #${
