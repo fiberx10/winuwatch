@@ -718,7 +718,7 @@ export const OrderRouter = createTRPCRouter({
 
       await Transporter.sendMail({
         from: "noreply@winuwatch.uk",
-        cc :["admin@winuwatch.uk", "iliassjabali@gmail.com"],
+        cc :"admin@winuwatch.uk",
 
         to: data.order.email,
         subject: `Order Confirmation - Winuwatch #${
