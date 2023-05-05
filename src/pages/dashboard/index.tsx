@@ -191,7 +191,7 @@ const index = () => {
             <DashboardOrders />
           ) : menu === "Winners" ? (
             <DashboardWinners />
-          ) : menu === "NewsLetters" ? (
+          ) : menu === "Communication" ? (
             <DashboardNewsLetters />
           ) : (
             // : menu === "Affiliations" ? (
