@@ -647,38 +647,36 @@ export const OrderRouter = createTRPCRouter({
             });
           }
           //! send new discount code to user that made the order
-          if (data.order?.status === order_status.CONFIRMED) {
-            const affiliationExist = await ctx.prisma.affiliation.findMany({
-              where: {
-                ownerEmail: data.order.email,
-                competitionId: {
-                  in: data.comps.map((e) => e.id),
-                },
+          const affiliationExist = await ctx.prisma.affiliation.findMany({
+            where: {
+              ownerEmail: data.order.email,
+              competitionId: {
+                in: data.comps.map((e) => e.id),
               },
-            });
+            },
+          });
 
-            const affiliationExistIds = new Set(
-              affiliationExist.map((e) => e.competitionId)
-            );
+          const affiliationExistIds = new Set(
+            affiliationExist.map((e) => e.competitionId)
+          );
 
-            for (const comp of data.comps) {
-              if (!affiliationExistIds.has(comp.id)) {
-                const newAffiliation = await ctx.prisma.affiliation.create({
-                  data: {
-                    ownerEmail: data.order.email,
-                    discountCode: await discountCodeGenerator(ctx.prisma),
-                    competitionId: comp.id,
-                  },
-                });
-                comp.affiliationCode = newAffiliation.discountCode;
-                comp.affiliationRate = newAffiliation.discountRate;
-              } else {
-                for (const affiliation of affiliationExist) {
-                  if (comp.id === affiliation.competitionId) {
-                    comp.affiliationCode = affiliation.discountCode;
-                    comp.affiliationRate = affiliation.discountRate;
-                    break;
-                  }
+          for (const comp of data.comps) {
+            if (!affiliationExistIds.has(comp.id)) {
+              const newAffiliation = await ctx.prisma.affiliation.create({
+                data: {
+                  ownerEmail: data.order.email,
+                  discountCode: await discountCodeGenerator(ctx.prisma),
+                  competitionId: comp.id,
+                },
+              });
+              comp.affiliationCode = newAffiliation.discountCode;
+              comp.affiliationRate = newAffiliation.discountRate;
+            } else {
+              for (const affiliation of affiliationExist) {
+                if (comp.id === affiliation.competitionId) {
+                  comp.affiliationCode = affiliation.discountCode;
+                  comp.affiliationRate = affiliation.discountRate;
+                  break;
                 }
               }
             }
