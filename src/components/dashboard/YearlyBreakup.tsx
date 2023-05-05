@@ -53,9 +53,9 @@ const YearlyBreakup = () => {
             fontWeight="700"
           >
             {/* £ */}
-            {data?.current_year.toLocaleString("fr-UE", {
+            {data?.current_year.toLocaleString("en-GB", {
               style: "currency",
-              currency: "EUR",
+              currency: "GBP",
             })}
           </Typography>
           <Stack direction="row" spacing={1} mt={1} alignItems="center">

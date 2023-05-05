@@ -1,34 +1,31 @@
-import type { NextApiRequest, NextApiResponse } from "next";
-import Email, { GetData } from "@/components/emails";
-import { Competition, PrismaClient } from "@prisma/client";
-import nodemailer from "nodemailer";
-
-const Transporter = nodemailer.createTransport({
-  host: "smtp.hostinger.com",
-  port: 465,
-  secure: true,
-  auth: {
-    user: "noreply@winuwatch.uk",
-    pass: "Password1!",
-  },
-});
+import type { NextApiRequest, NextApiResponse } from 'next';
+import { Competition, PrismaClient } from '@prisma/client';
+//import Email from "@/components/newsLetter1";
+import nodemailer from 'nodemailer';
+import WinningEmail, { GetWinnerData } from '@/components/emails/WinningEmail';
+import { Email } from '@/components/emails';
+import { Transporter } from '@/server/utils';
+import RemainingEmail from '@/components/emails/RemainingEmail';
 
 const prisma = new PrismaClient({
-  log: ["query", "info", "warn"],
+  log: ['query', 'info', 'warn'],
 });
 
 export default async function send(req: NextApiRequest, res: NextApiResponse) {
-  const OrderID = "b02e8ab1-e42c-4f8e-9650-4312822bda32";
+  // const OrderID = '8a0a819e-bc12-4d01-86c0-2f1e3e25dc75';
+  const TicketID = 'clgwcdyeg01h4t5jgi5kzezv5';
 
-  //const data = await GetData(OrdeerID, prisma);
-  //const EmailRender = Email(data);
+  // const data = await GetWinnerData(TicketID, prisma);
+  // const EmailRender = WinningEmail(data);
 
-  /*await Transporter.sendMail({
-    from: "noreply@winuwatch.uk",
-    to: "louihranim@gmail.com",
-    subject: `Order Confirmation - Winuwatch #${data[0]?.id || "000000"}`,
-    html: EmailRender,
-  });
+  // await Transporter.sendMail({
+  //   from: 'noreply@winuwatch.uk',
+  //   to: 'ysftest3@gmail.com',
+
+  //   subject: `Order Confirmation - Winuwatch #${data.data?.id || '000000'}`,
+
+  //   html: EmailRender,
+  // });
   // const data = await prisma.competition.findMany({
   //   include: {
   //     Ticket: {
@@ -46,8 +43,7 @@ export default async function send(req: NextApiRequest, res: NextApiResponse) {
 
   // res.send(data[0]?.Ticket.map((ticket) => ticket.id));
 
-  res.send(EmailRender);
-  */
+  // res.send(EmailRender);
 
-  res.send(await GetData(OrderID, prisma));
+  res.send(RemainingEmail(await GetWinnerData(TicketID, prisma)));
 }

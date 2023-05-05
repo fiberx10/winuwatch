@@ -67,6 +67,7 @@ model Competition {
   watchesId                String            @unique
   Watches                  Watches?          @relation(fields: [watchesId], references: [id])
   Ticket                   Ticket[]
+  Affiliation              Affiliation[]
 
   @@index([id])
   @@map("competition")
@@ -149,16 +150,19 @@ model CompetitionToOrder {
 }
 
 model Affiliation {
-  id            String   @id @default(cuid())
-  discountCode  String   @unique
-  discountRate  Float    @default(0.1)
+  id            String      @id @default(cuid())
+  discountCode  String      @unique
+  discountRate  Float       @default(0.1)
   ownerEmail    String
-  createdAt     DateTime @default(now())
+  createdAt     DateTime    @default(now())
   competitionId String
-  uses          Int      @default(0)
-  updatedAt     DateTime @updatedAt
+  uses          Int         @default(0)
+  updatedAt     DateTime    @updatedAt
+  compToWin     String?
   Order         Order[]
+  competition   Competition @relation(fields: [competitionId], references: [id])
 
+  @@index([compToWin])
   @@index([competitionId])
   @@map("affiliation")
 }
