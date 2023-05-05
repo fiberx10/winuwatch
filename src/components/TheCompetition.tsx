@@ -42,12 +42,7 @@ const TheCompetition = () => {
                 <div
                   style={{
                     background: watch.Watches.images_url[0]?.url
-                      ? `linear-gradient(
-                      180deg,
-                      rgba(255, 255, 255, 0) 0%,
-                      rgba(255, 255, 255, 0) 36.25%,
-                      #faf8f6 100%
-                    ),
+                      ? `
                     url(${watch.Watches.images_url[0].url})`
                       : `linear-gradient(
                       180deg,

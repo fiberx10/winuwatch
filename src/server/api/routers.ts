@@ -22,6 +22,8 @@ import type { PrismaClient } from "@prisma/client";
 import Email, { GetData } from "@/components/emails";
 import { faker } from "@faker-js/faker";
 import { TRPCError } from "@trpc/server";
+import WinningEmail, { GetWinnerData } from "@/components/emails/WinningEmail";
+import RemainingEmail from "@/components/emails/RemainingEmail";
 
 const Months = [
   "Jan",
@@ -115,13 +117,93 @@ export const WinnersRouter = createTRPCRouter({
       const random = Math.floor(Math.random() * tickets.length); // This algo neeeds to change
       return tickets[random] ?? tickets[0];
     }),
-  confirmWinner: publicProcedure
+  getWinner: publicProcedure
     .input(z.string())
     .mutation(async ({ ctx, input }) => {
-      //based on the ticket ID we should be able to close the competition and send the winner an email
-      const ticket = await ctx.prisma.ticket.findUnique({
+      const winner = await ctx.prisma.ticket.findUnique({
         where: {
           id: input,
+        },
+        include: {
+          Order: true,
+          Competition: true,
+        },
+      });
+      return winner;
+    }),
+  confirmWinner: publicProcedure
+    .input(
+      z
+        .object({
+          compId: z.string(),
+          winner: z.string(),
+          orderId: z.string(),
+          ticketId: z.string(),
+        })
+        .required()
+    )
+    .mutation(async ({ ctx, input }) => {
+      //based on the ticket ID we should be able to close the competition and send the winner an email
+      const ticket = await ctx.prisma.competition.update({
+        where: {
+          id: input.compId,
+        },
+        data: {
+          winner: input.winner,
+        },
+      });
+      if (!ticket) {
+        throw new Error("Competition not found");
+      }
+      // change to getWinnerdata
+      const data = await GetWinnerData(input.ticketId, ctx.prisma);
+      if (!data?.data?.Order) {
+        throw new Error("Order not found");
+      }
+
+      await Transporter.sendMail({
+        from: "noreply@winuwatch.uk",
+        cc :"admin@winuwatch.uk",
+        to: data?.data?.Order.email,
+        subject: `Congratulations - Winuwatch #${
+          data?.data?.orderId || "000000"
+        }`,
+        html: WinningEmail(data),
+      });
+      /*
+      const { Order, Competition } = ticket;
+      const { Watches } = Competition;
+      const { email } = Order;
+      */
+      return void 0; //TODO : Send email
+    }),
+  sendConfirmation: publicProcedure
+    .input(z.string())
+    .mutation(async ({ ctx, input }) => {
+      const data = await GetWinnerData(input, ctx.prisma);
+      if (!data?.data?.Order) {
+        throw new Error("Order not found");
+      }
+      await Transporter.sendMail({
+        from: "noreply@winuwatch.uk",
+        cc :"admin@winuwatch.uk",
+        to: data?.data?.Order.email,
+        subject: `Congratulations - Winuwatch #${
+          data?.data?.orderId || "000000"
+        }`,
+        html: WinningEmail(data),
+      });
+      return void 0;
+    }),
+  getWinnerReminders: publicProcedure
+    .input(z.string())
+    .mutation(async ({ ctx, input }) => {
+      const competition = await ctx.prisma.ticket.findMany({
+        where: {
+          competitionId: input,
+          Order: {
+            status: order_status.CONFIRMED,
+          },
         },
         include: {
           Order: true,
@@ -136,15 +218,29 @@ export const WinnersRouter = createTRPCRouter({
           },
         },
       });
-      if (!ticket) {
-        throw new Error("Ticket not found");
+
+      if (!competition) {
+        throw new Error("Competition not found");
       }
-      /*
-      const { Order, Competition } = ticket;
-      const { Watches } = Competition;
-      const { email } = Order;
-      */
-      return void 0; //TODO : Send email
+      competition
+        .filter(
+          (order, index) =>
+            index ===
+            competition.findIndex((o) => order.Order.email === o.Order.email)
+        )
+        .map(async (order) => {
+          console.log("sent");
+
+          const data = { data: order };
+          await Transporter.sendMail({
+            cc :"admin@winuwatch.uk",
+            from: "noreply@winuwatch.uk",
+            to: order.Order.email,
+            subject: `Reminder Email - Winuwatch #${order.orderId || "000000"}`,
+            html: RemainingEmail(data),
+          });
+        });
+      return void 0;
     }),
 });
 
@@ -207,6 +303,7 @@ export const OrderRouter = createTRPCRouter({
 
     await Transporter.sendMail({
       from: "noreply@winuwatch.uk",
+      cc :"admin@winuwatch.uk",
       to: data.order.email,
       subject: `Order Confirmation - Winuwatch #${data.order?.id || "000000"}`,
       html: Email(data),
@@ -349,6 +446,7 @@ export const OrderRouter = createTRPCRouter({
                   // TODO: Send email
                   await Transporter.sendMail({
                     from: "noreply@winuwatch.uk",
+                    cc :"admin@winuwatch.uk",
                     to: addedOrder.email,
                     subject: `Here is your free tickets - Winuwatch`,
                     html: Email({
@@ -485,6 +583,8 @@ export const OrderRouter = createTRPCRouter({
 
                   await Transporter.sendMail({
                     from: "noreply@winuwatch.uk",
+                    cc :"admin@winuwatch.uk",
+
                     to: updatedAffiliation.ownerEmail,
                     subject: `Claim your free ticket - Winuwatch`,
                     html: Email({
@@ -529,6 +629,7 @@ export const OrderRouter = createTRPCRouter({
                   });
                   await Transporter.sendMail({
                     from: "noreply@winuwatch.uk",
+                    cc :"admin@winuwatch.uk",
                     to: updatedAffiliation.ownerEmail,
                     subject: `Claim your free ticket - Winuwatch`,
                     html: `You won ${Math.floor(
@@ -586,6 +687,8 @@ export const OrderRouter = createTRPCRouter({
           data.order?.status === order_status.CONFIRMED &&
             (await Transporter.sendMail({
               from: "noreply@winuwatch.uk",
+              cc :"admin@winuwatch.uk",
+
               to: data.order.email,
               subject: `Order Confirmation - Winuwatch #${
                 data.order?.id || "000000"
@@ -615,6 +718,8 @@ export const OrderRouter = createTRPCRouter({
 
       await Transporter.sendMail({
         from: "noreply@winuwatch.uk",
+        cc :"admin@winuwatch.uk",
+
         to: data.order.email,
         subject: `Order Confirmation - Winuwatch #${
           data.order?.id || "000000"
