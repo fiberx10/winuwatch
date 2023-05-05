@@ -46,6 +46,7 @@ export const Dashmenus = [
   "Orders",
   "Winners",
   "Affiliations",
+  "NewsLetters",
 ] as const;
 
 export const useStore = create<{
