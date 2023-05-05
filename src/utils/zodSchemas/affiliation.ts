@@ -5,7 +5,5 @@ export const affiliationSchema = z.object({
   discountCode: z.string(),
   discountRate: z.number(),
   ownerEmail: z.string().email({ message: "Invalid email address" }),
-  maxUse: z.number().int(),
-  startsAt: z.date(),
-  expiresAt: z.date(),
+  uses: z.number().int(),
 });

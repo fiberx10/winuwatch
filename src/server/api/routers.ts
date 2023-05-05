@@ -1,13 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
-import {
-  Affiliation,
-  Competition,
-  CompetitionStatus,
-  Ticket,
-  order_status,
-} from "@prisma/client";
+import { CompetitionStatus, order_status } from "@prisma/client";
 import { Prisma } from "@prisma/client";
 import {
   getBaseUrl,
@@ -53,6 +47,31 @@ const discountCodeGenerator = async (prisma: PrismaClient): Promise<string> => {
     const exists = await prisma.affiliation.findMany({
       where: {
         discountCode: coupon,
+      },
+    });
+    if (exists.length === 0) {
+      return coupon;
+    }
+    attempts++;
+  }
+  throw new Error(
+    "Failed to generate a unique discount code after 10 attempts"
+  );
+};
+
+const generateCoupon = async (prisma: PrismaClient): Promise<string> => {
+  const possible =
+    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".split("");
+  let attempts = 0;
+  while (attempts < 10) {
+    // limit the number of attempts to 10
+    const coupon = Array.from(
+      { length: 8 },
+      () => possible[Math.floor(Math.random() * possible.length)]
+    ).join("");
+    const exists = await prisma.runUpPrize.findMany({
+      where: {
+        couponCode: coupon,
       },
     });
     if (exists.length === 0) {
@@ -1668,4 +1687,171 @@ export const ChartsRouter = createTRPCRouter({
       return [];
     }
   }),
+});
+
+export const RunUpPrizeRouter = createTRPCRouter({
+  addRunUpPrizeWinner: publicProcedure
+    .input(z.object({ ticketId: z.string(), compId: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      try {
+        const existTicket = await ctx.prisma.ticket.findUnique({
+          where: {
+            id: input.ticketId,
+          },
+          include: {
+            Order: true,
+            Competition: true,
+          },
+        });
+        if (!existTicket) {
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "Ticket not found",
+          });
+        }
+        if (existTicket.competitionId !== input.compId) {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "Ticket does not belong to this competition",
+          });
+        }
+        const addedPrize = await ctx.prisma.runUpPrize.create({
+          data: {
+            couponCode: await generateCoupon(ctx.prisma),
+            ticketId: input.ticketId,
+          },
+        });
+        await Transporter.sendMail({
+          from: "noreply@winuwatch.uk",
+          cc: "admin@winuwatch.uk",
+          to: existTicket.Order?.email,
+          subject: `Run Up Prize Winner - Winuwatch #${
+            existTicket.Order?.id || "000000"
+          }`,
+          html: `You have won a run up prize for Winuwatch #${
+            existTicket.Order?.id
+          }. Your coupon code is <b>${
+            addedPrize.couponCode
+          }</b>. Please use this coupon code for the next competition to get a discount of £${
+            existTicket.Competition?.run_up_prize?.toString() || "0"
+          }.`,
+        });
+      } catch (e) {
+        if (e instanceof TRPCError) throw e;
+        else if (e instanceof Prisma.PrismaClientKnownRequestError) {
+          if (e.code === "P2002") {
+            throw new TRPCError({
+              code: "BAD_REQUEST",
+              message: "Runner up ticket already registered",
+            });
+          }
+        } else {
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message: "Something went wrong",
+            cause: e,
+          });
+        }
+      }
+    }),
+  resendEmail: publicProcedure
+    .input(z.string().nonempty())
+    .mutation(async ({ ctx, input }) => {
+      try {
+        const runUpPrize = await ctx.prisma.runUpPrize.findFirst({
+          where: { id: input },
+          include: {
+            ticket: {
+              include: {
+                Order: true,
+                Competition: true,
+              },
+            },
+          },
+        });
+        if (!runUpPrize) {
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "Run up prize not found",
+          });
+        }
+        await Transporter.sendMail({
+          from: "noreply@winuwatch.uk",
+          cc: "admin@winuwatch.uk",
+          to: runUpPrize.ticket.Order?.email,
+          subject: `Run Up Prize Winner - Winuwatch #${
+            runUpPrize.ticket.Order?.id || "000000"
+          }`,
+          html: `You have won a run up prize for Winuwatch #${
+            runUpPrize.ticket.Order?.id
+          }. Your coupon code is <b>${
+            runUpPrize.couponCode
+          }</b>. Please use this coupon code for the next competition to get a discount of £${
+            runUpPrize.ticket.Competition?.run_up_prize?.toString() || "0"
+          }.`,
+        });
+      } catch (e) {
+        if (e instanceof TRPCError) throw e;
+        else {
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message: "Something went wrong",
+            cause: e,
+          });
+        }
+      }
+    }),
+  getAll: publicProcedure.input(z.string()).query(async ({ ctx, input }) => {
+    try {
+      if (!input) return [];
+      return await ctx.prisma.runUpPrize.findMany({
+        where: { ticket: { Competition: { id: input } } },
+        include: {
+          ticket: {
+            include: {
+              Order: true,
+              Competition: true,
+            },
+          },
+        },
+      });
+    } catch (e) {
+      throw new TRPCError({
+        code: "INTERNAL_SERVER_ERROR",
+        message: "Something went wrong",
+        cause: e,
+      });
+    }
+  }),
+  updateRunUpPrizeWinner: publicProcedure
+    .input(z.object({ id: z.string(), ticketId: z.string().nonempty() }))
+    .mutation(async ({ ctx, input }) => {
+      try {
+        await ctx.prisma.runUpPrize.update({
+          where: { id: input.id },
+          data: { ticketId: input.ticketId },
+        });
+        return { success: true };
+      } catch (e) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Something went wrong",
+          cause: e,
+        });
+      }
+    }),
+  deleteRunUpPrizeWinner: publicProcedure
+    .input(z.string())
+    .mutation(async ({ ctx, input }) => {
+      try {
+        await ctx.prisma.runUpPrize.delete({ where: { id: input } });
+        return { success: true };
+      } catch (e) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Something went wrong",
+          cause: e,
+        });
+      }
+    }),
 });

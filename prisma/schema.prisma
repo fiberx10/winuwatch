@@ -102,14 +102,15 @@ model Order {
 }
 
 model Ticket {
-  id            String      @id @default(cuid())
+  id            String       @id @default(cuid())
   orderId       String
   competitionId String
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
-  ticketPrice   Float       @default(0)
-  Order         Order       @relation(fields: [orderId], references: [id])
-  Competition   Competition @relation(fields: [competitionId], references: [id])
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  ticketPrice   Float        @default(0)
+  Order         Order        @relation(fields: [orderId], references: [id])
+  Competition   Competition  @relation(fields: [competitionId], references: [id])
+  RunUpPrize    RunUpPrize[]
 
   @@index([competitionId])
   @@index([orderId])
@@ -165,6 +166,19 @@ model Affiliation {
   @@index([compToWin])
   @@index([competitionId])
   @@map("affiliation")
+}
+
+model RunUpPrize {
+  id         String   @id @default(cuid())
+  couponCode String   @unique
+  maxUsage   Int      @default(1)
+  ticketId   String   @unique
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  ticket     Ticket   @relation(fields: [ticketId], references: [id])
+
+  @@index([ticketId])
+  @@map("run_up_prize")
 }
 
 enum CompetitionStatus {
