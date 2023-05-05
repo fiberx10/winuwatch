@@ -76,7 +76,7 @@ const DashboardNewsLetters = () => {
                       <Modal.Header closeButton>
                         <Modal.Title>Confirmation</Modal.Title>
                       </Modal.Header>
-                      <Modal.Body>Hello</Modal.Body>
+                      <Modal.Body>Send NewsLetters ?</Modal.Body>
                       <Modal.Footer>
                         <Button variant="secondary" onClick={handleClose}>
                           Close
