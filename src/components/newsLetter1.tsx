@@ -299,7 +299,10 @@ export const NewsLetter = ({
                                           }}
                                         >
                                           Entry ticket&apos;s Price :{" "}
-                                          {data?.Competition.ticket_price}
+                                          {Formater(
+                                            data?.Competition
+                                              .ticket_price as number
+                                          )}
                                         </p>
                                       </td>
 
