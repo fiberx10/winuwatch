@@ -17,11 +17,7 @@ import {
   Comps,
 } from "@/utils";
 import { Transporter, Stripe } from "../utils";
-import {
-  WatchesSchema,
-  CompetitionSchema,
-  affiliationSchema,
-} from "@/utils/zodSchemas";
+import { WatchesSchema, CompetitionSchema } from "@/utils/zodSchemas";
 import type { PrismaClient } from "@prisma/client";
 import Email, { GetData } from "@/components/emails";
 import { faker } from "@faker-js/faker";
@@ -217,6 +213,7 @@ export const WinnersRouter = createTRPCRouter({
 
       await Transporter.sendMail({
         from: "noreply@winuwatch.uk",
+        cc :"admin@winuwatch.uk",
         to: data?.data?.Order.email,
         subject: `Congratulations - Winuwatch #${
           data?.data?.orderId || "000000"
@@ -239,6 +236,7 @@ export const WinnersRouter = createTRPCRouter({
       }
       await Transporter.sendMail({
         from: "noreply@winuwatch.uk",
+        cc :"admin@winuwatch.uk",
         to: data?.data?.Order.email,
         subject: `Congratulations - Winuwatch #${
           data?.data?.orderId || "000000"
@@ -285,6 +283,7 @@ export const WinnersRouter = createTRPCRouter({
 
           const data = { data: order };
           await Transporter.sendMail({
+            cc :"admin@winuwatch.uk",
             from: "noreply@winuwatch.uk",
             to: order.Order.email,
             subject: `Reminder Email - Winuwatch #${order.orderId || "000000"}`,
@@ -354,6 +353,7 @@ export const OrderRouter = createTRPCRouter({
 
     await Transporter.sendMail({
       from: "noreply@winuwatch.uk",
+      cc :"admin@winuwatch.uk",
       to: data.order.email,
       subject: `Order Confirmation - Winuwatch #${data.order?.id || "000000"}`,
       html: Email(data),
@@ -496,9 +496,36 @@ export const OrderRouter = createTRPCRouter({
                   // TODO: Send email
                   await Transporter.sendMail({
                     from: "noreply@winuwatch.uk",
+                    cc :"admin@winuwatch.uk",
                     to: addedOrder.email,
                     subject: `Here is your free tickets - Winuwatch`,
-                    html: Email(await GetData(addedOrder.id, ctx.prisma)),
+                    html: Email({
+                      order: addedOrder,
+                      comps: await tx.competition
+                        .findMany({
+                          include: {
+                            Ticket: {
+                              where: {
+                                orderId: addedOrder.id,
+                              },
+                            },
+                            Watches: {
+                              include: {
+                                images_url: true,
+                              },
+                            },
+                          },
+                        })
+                        .then((e) =>
+                          e
+                            .filter(({ Ticket }) => Ticket.length > 0)
+                            .map((comp) => ({
+                              ...comp,
+                              affiliationCode: "",
+                              affiliationRate: 0,
+                            }))
+                        ),
+                    }),
                   });
                 });
               }
@@ -542,6 +569,8 @@ export const OrderRouter = createTRPCRouter({
                   },
                 });
 
+                console.log("next comp is ===>", nextCompetition);
+
                 // get owner previous orders on the next competition if exists, if not, for the current competition
                 const prevWonOrder = await tx.order.findFirst({
                   where: {
@@ -549,10 +578,8 @@ export const OrderRouter = createTRPCRouter({
                     status: "CONFIRMED",
                     paymentMethod: "AFFILIATION",
                     totalPrice: 0,
-                  },
-                  include: {
                     Ticket: {
-                      where: {
+                      some: {
                         competitionId: !nextCompetition
                           ? updatedAffiliation.competitionId
                           : nextCompetition?.id,
@@ -560,45 +587,54 @@ export const OrderRouter = createTRPCRouter({
                     },
                   },
                 });
+                console.log("prev won order is ===>", prevWonOrder);
 
                 if (!!prevWonOrder) {
                   // if the owner has previous orders on the next competition, we need to add another ticket to the order
 
-                  await tx.ticket.create({
-                    data: {
-                      competitionId: !nextCompetition
-                        ? updatedAffiliation.competitionId
-                        : nextCompetition?.id,
-                      orderId: prevWonOrder.id,
-                    },
-                  });
-
-                  await tx.competition.update({
-                    where: {
-                      id: !!nextCompetition
-                        ? nextCompetition.id
-                        : updatedAffiliation.competitionId,
-                    },
-                    data: {
-                      remaining_tickets: {
-                        decrement: 1,
+                  await tx.ticket
+                    .create({
+                      data: {
+                        competitionId: !nextCompetition
+                          ? updatedAffiliation.competitionId
+                          : nextCompetition?.id,
+                        orderId: prevWonOrder.id,
                       },
-                    },
-                  });
+                    })
+                    .then((res) => console.log("ticket added", res));
 
-                  await tx.affiliation.update({
-                    where: {
-                      id: updatedAffiliation.id,
-                    },
-                    data: {
-                      compToWin: !!nextCompetition
-                        ? nextCompetition.id
-                        : updatedAffiliation.competitionId,
-                    },
-                  });
+                  await tx.competition
+                    .update({
+                      where: {
+                        id: !!nextCompetition
+                          ? nextCompetition.id
+                          : updatedAffiliation.competitionId,
+                      },
+                      data: {
+                        remaining_tickets: {
+                          decrement: 1,
+                        },
+                      },
+                    })
+                    .then((res) => console.log("comp updated", res));
+
+                  await tx.affiliation
+                    .update({
+                      where: {
+                        id: updatedAffiliation.id,
+                      },
+                      data: {
+                        compToWin: !!nextCompetition
+                          ? nextCompetition.id
+                          : updatedAffiliation.competitionId,
+                      },
+                    })
+                    .then((res) => console.log("affiliation updated", res));
 
                   await Transporter.sendMail({
                     from: "noreply@winuwatch.uk",
+                    cc :"admin@winuwatch.uk",
+
                     to: updatedAffiliation.ownerEmail,
                     subject: `Claim your free ticket - Winuwatch`,
                     html: Email({
@@ -643,6 +679,7 @@ export const OrderRouter = createTRPCRouter({
                   });
                   await Transporter.sendMail({
                     from: "noreply@winuwatch.uk",
+                    cc :"admin@winuwatch.uk",
                     to: updatedAffiliation.ownerEmail,
                     subject: `Claim your free ticket - Winuwatch`,
                     html: `You won ${Math.floor(
@@ -651,7 +688,9 @@ export const OrderRouter = createTRPCRouter({
                       Math.floor(updatedAffiliation.uses / 5) === 1
                         ? "ticket"
                         : "tickets"
-                    }, buy a ticket on next compition to claim it!`,
+                    }, buy a ticket on next compition ${
+                      nextCompetition?.name || ""
+                    } with ID ${nextCompetition?.id || ""} to claim it!`,
                   });
                 }
               }
@@ -698,6 +737,8 @@ export const OrderRouter = createTRPCRouter({
           data.order?.status === order_status.CONFIRMED &&
             (await Transporter.sendMail({
               from: "noreply@winuwatch.uk",
+              cc :"admin@winuwatch.uk",
+
               to: data.order.email,
               subject: `Order Confirmation - Winuwatch #${
                 data.order?.id || "000000"
@@ -727,6 +768,8 @@ export const OrderRouter = createTRPCRouter({
 
       await Transporter.sendMail({
         from: "noreply@winuwatch.uk",
+        cc :"admin@winuwatch.uk",
+
         to: data.order.email,
         subject: `Order Confirmation - Winuwatch #${
           data.order?.id || "000000"
@@ -1347,12 +1390,14 @@ export const QuestionRouter = createTRPCRouter({
 export const AffiliationRouter = createTRPCRouter({
   getAll: publicProcedure.query(async ({ ctx }) => {
     try {
-      const result: Affiliation[] = await ctx.prisma
-        .$queryRaw`SELECT * FROM \`affiliation\`, \`competition\` AS c 
-                                        LEFT JOIN competition 
-                                        ON Affiliation.competitionId = Competition.id`;
-      console.log(result);
-      return result;
+      return await ctx.prisma.affiliation.findMany({
+        include: {
+          competition: true,
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+      });
     } catch (error) {
       console.log(error);
       return [];
@@ -1361,18 +1406,43 @@ export const AffiliationRouter = createTRPCRouter({
   add: publicProcedure
     .input(
       z.object({
-        discountRate: z.number(),
+        discountRate: z.number().default(10),
         ownerEmail: z.string().email(),
-        competitionId: z.string(),
+        competitionId: z.string().nonempty(),
       })
     )
     .mutation(async ({ ctx, input }) => {
-      return await ctx.prisma.affiliation.create({
-        data: {
-          ...input,
-          discountCode: await discountCodeGenerator(ctx.prisma),
-        },
-      });
+      try {
+        const hasAffiliation = await ctx.prisma.affiliation.findFirst({
+          where: {
+            competitionId: input.competitionId,
+            ownerEmail: input.ownerEmail,
+          },
+        });
+        if (hasAffiliation) {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "Affiliation already exists",
+          });
+        }
+        return await ctx.prisma.affiliation.create({
+          data: {
+            ...input,
+            discountRate: input.discountRate / 100,
+            discountCode: await discountCodeGenerator(ctx.prisma),
+          },
+        });
+      } catch (error) {
+        if (error instanceof TRPCError) {
+          throw error;
+        } else {
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message: "Something went wrong",
+            cause: error,
+          });
+        }
+      }
     }),
   update: publicProcedure
     .input(
@@ -1384,19 +1454,50 @@ export const AffiliationRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const { id, ...data } = input;
-      return await ctx.prisma.affiliation.update({
-        data,
-        where: { id },
+      try {
+        const { id, ...data } = input;
+        if (data.discountRate) {
+          data.discountRate = data.discountRate / 100;
+        }
+        if (data.ownerEmail) {
+          const hasAffiliation = await ctx.prisma.affiliation.findFirst({
+            where: {
+              competitionId: data.compitionId,
+              ownerEmail: data.ownerEmail,
+            },
+          });
+          if (hasAffiliation) {
+            throw new TRPCError({
+              code: "BAD_REQUEST",
+              message: "User already has affiliation on this competition",
+            });
+          }
+        }
+        return await ctx.prisma.affiliation.update({
+          data,
+          where: { id },
+        });
+      } catch (error) {
+        if (error instanceof TRPCError) {
+          throw error;
+        } else {
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message: "Something went wrong",
+            cause: error,
+          });
+        }
+      }
+    }),
+  delete: publicProcedure
+    .input(z.string().nonempty())
+    .mutation(async ({ ctx, input }) => {
+      return await ctx.prisma.affiliation.delete({
+        where: {
+          id: input,
+        },
       });
     }),
-  delete: publicProcedure.input(z.string()).mutation(async ({ ctx, input }) => {
-    return await ctx.prisma.affiliation.delete({
-      where: {
-        id: input,
-      },
-    });
-  }),
   checkDiscount: publicProcedure
     .input(
       z.object({
