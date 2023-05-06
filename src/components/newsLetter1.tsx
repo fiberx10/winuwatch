@@ -373,8 +373,9 @@ export const NewsLetter = ({
                         <br />
                         <b style={{ fontSize: "25px", color: "black" }}>
                           {" "}
-                          Don&apos;t delay in securing your tickets <br />
-                          as they are selling fast !
+                          Act fast! Grab your tickets now while they're still available
+                          <br />
+                          and don&apos;t miss out on the chance to win
                         </b>
                         <br />
                         <br />
