@@ -94,6 +94,7 @@ model Order {
   paymentId     String?
   intentId      String?
   affiliationId String?
+  runUpPrizeId  String?
   Ticket        Ticket[]
   Affiliated    Affiliation?  @relation(fields: [affiliationId], references: [id])
 
@@ -172,6 +173,7 @@ model RunUpPrize {
   id         String   @id @default(cuid())
   couponCode String   @unique
   maxUsage   Int      @default(1)
+  uses       Int      @default(0)
   ticketId   String   @unique
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt

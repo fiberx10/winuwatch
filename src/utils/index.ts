@@ -61,6 +61,7 @@ export const CreateOrderStripeSchema = OrderSchema.extend({
     })
   ),
   affiliationId: z.string().optional(),
+  runUpPrizeId: z.string().optional(),
   locale: z.enum(i18n).default("en"),
 }).omit({
   status: true,

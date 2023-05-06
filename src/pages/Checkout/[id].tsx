@@ -82,13 +82,19 @@ export default function CheckoutPage({
   useEffect(() => {
     setComputedTotal(
       competitions.reduce(
-        (total, { number_tickets, price_per_ticket, compID, reduction }) => {
+        (total, { number_tickets, price_per_ticket, compID }) => {
           const discountRate =
             affiliationData && affiliationData.competitionId === compID
               ? affiliationData.discountRate
-              : reduction;
-          const totalPriceForCompetition =
-            number_tickets * price_per_ticket * (1 - discountRate);
+              : 0;
+          const totalPriceForCompetition = affiliationData?.isRunUpPrize
+            ? number_tickets * price_per_ticket - discountRate
+            : number_tickets * price_per_ticket * (1 - discountRate);
+
+          if (totalPriceForCompetition < 0) {
+            // error
+            return totalPriceForCompetition;
+          }
 
           return total + totalPriceForCompetition;
         },
@@ -188,6 +194,16 @@ export default function CheckoutPage({
                     console.log("Form submitted:", values);
                     //we need to check if each value in values is not undefined
                     //if it is undefined, we need to set it to null
+                    if (ComputedTotal < 0) {
+                      if (affiliationData?.isRunUpPrize) {
+                        setError(
+                          "The total price of your order is negative, try making an order that fits the discount"
+                        );
+                      } else {
+                        setError("Total price cannot be negative, try again");
+                      }
+                      return;
+                    }
                     const ValidatedValues = Schema.cast(values);
                     const { url, error } = await createOrder({
                       ...ValidatedValues,
@@ -202,7 +218,10 @@ export default function CheckoutPage({
                             ...comp,
                             reduction:
                               affiliationData.competitionId === comp.compID
-                                ? affiliationData.discountRate
+                                ? affiliationData.isRunUpPrize
+                                  ? affiliationData.discountRate /
+                                    comp.number_tickets
+                                  : affiliationData.discountRate
                                 : comp.reduction,
                           }))
                         : competitions,
@@ -210,7 +229,12 @@ export default function CheckoutPage({
                         | "PAYPAL"
                         | "STRIPE",
                       date: new Date(values.date),
-                      affiliationId: affiliationData?.id,
+                      affiliationId: affiliationData?.isRunUpPrize
+                        ? ""
+                        : affiliationData?.id,
+                      runUpPrizeId: affiliationData?.isRunUpPrize
+                        ? affiliationData.id
+                        : "",
                       locale: router.locale
                         ? (router.locale as (typeof i18n)[number])
                         : "en",
@@ -657,12 +681,16 @@ export default function CheckoutPage({
                                               padding: "0 72px 0 0",
                                             }}
                                           >
-                                            {Formater(
-                                              affiliationData.discountRate *
-                                                (order.number_tickets *
-                                                  ComptetionData.ticket_price),
-                                              router.locale
-                                            )}
+                                            {affiliationData.isRunUpPrize
+                                              ? Formater(
+                                                  affiliationData.discountRate
+                                                )
+                                              : Formater(
+                                                  affiliationData.discountRate *
+                                                    (order.number_tickets *
+                                                      ComptetionData.ticket_price),
+                                                  router.locale
+                                                )}
                                           </p>
                                         </div>
                                       </div>

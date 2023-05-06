@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
-import { CompetitionStatus, order_status } from "@prisma/client";
+import { Competition, CompetitionStatus, order_status } from "@prisma/client";
 import { Prisma } from "@prisma/client";
 import {
   getBaseUrl,
@@ -18,6 +18,7 @@ import { faker } from "@faker-js/faker";
 import { TRPCError } from "@trpc/server";
 import WinningEmail, { GetWinnerData } from "@/components/emails/WinningEmail";
 import RemainingEmail from "@/components/emails/RemainingEmail";
+import { run } from "node:test";
 
 const Months = [
   "Jan",
@@ -44,37 +45,19 @@ const discountCodeGenerator = async (prisma: PrismaClient): Promise<string> => {
       { length: 8 },
       () => possible[Math.floor(Math.random() * possible.length)]
     ).join("");
-    const exists = await prisma.affiliation.findMany({
-      where: {
-        discountCode: coupon,
-      },
-    });
-    if (exists.length === 0) {
-      return coupon;
-    }
-    attempts++;
-  }
-  throw new Error(
-    "Failed to generate a unique discount code after 10 attempts"
-  );
-};
-
-const generateCoupon = async (prisma: PrismaClient): Promise<string> => {
-  const possible =
-    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".split("");
-  let attempts = 0;
-  while (attempts < 10) {
-    // limit the number of attempts to 10
-    const coupon = Array.from(
-      { length: 8 },
-      () => possible[Math.floor(Math.random() * possible.length)]
-    ).join("");
-    const exists = await prisma.runUpPrize.findMany({
-      where: {
-        couponCode: coupon,
-      },
-    });
-    if (exists.length === 0) {
+    const [affExists, rupExists] = await Promise.all([
+      prisma.affiliation.count({
+        where: {
+          discountCode: coupon,
+        },
+      }),
+      prisma.runUpPrize.count({
+        where: {
+          couponCode: coupon,
+        },
+      }),
+    ]);
+    if (affExists + rupExists === 0) {
       return coupon;
     }
     attempts++;
@@ -665,6 +648,19 @@ export const OrderRouter = createTRPCRouter({
               }
             });
           }
+          if (!!data.order?.runUpPrizeId) {
+            await ctx.prisma.runUpPrize.update({
+              where: {
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+                id: data.order?.runUpPrizeId,
+              },
+              data: {
+                uses: {
+                  increment: 1,
+                },
+              },
+            });
+          }
           //! send new discount code to user that made the order
           const affiliationExist = await ctx.prisma.affiliation.findMany({
             where: {
@@ -748,14 +744,13 @@ export const OrderRouter = createTRPCRouter({
     .input(CreateOrderStripeSchema)
     .mutation(async ({ ctx, input }) => {
       try {
-        const { locale, comps, affiliationId, ...data } = input;
-        input.affiliationId
-          ? await ctx.prisma.affiliation.findUnique({
-              where: {
-                id: affiliationId,
-              },
-            })
-          : null;
+        const {
+          locale,
+          comps,
+          affiliationId = null,
+          runUpPrizeId = null,
+          ...data
+        } = input;
         const [Order, StripeOrder] = await Promise.all([
           ctx.prisma.order.update({
             where: {
@@ -764,6 +759,7 @@ export const OrderRouter = createTRPCRouter({
             data: {
               ...data,
               affiliationId: affiliationId,
+              runUpPrizeId: runUpPrizeId,
               status: order_status.PENDING,
             },
           }),
@@ -797,12 +793,17 @@ export const OrderRouter = createTRPCRouter({
                         images: comp.Watches.images_url.map(({ url }) => url),
                       },
                       unit_amount: Math.floor(
-                        comp.ticket_price *
-                          100 *
-                          (1 -
-                            (input.comps.find(
-                              ({ compID }) => compID === comp.id
-                            )?.reduction || 0))
+                        100 *
+                          (!runUpPrizeId
+                            ? comp.ticket_price *
+                              (1 -
+                                (input.comps.find(
+                                  ({ compID }) => compID === comp.id
+                                )?.reduction || 0))
+                            : comp.ticket_price -
+                              (input.comps.find(
+                                ({ compID }) => compID === comp.id
+                              )?.reduction || 0))
                       ),
                     },
                     quantity:
@@ -1472,38 +1473,85 @@ export const AffiliationRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      try {
-        if (!input.discountCode) {
+      const { discountCode, competitionIds } = input;
+
+      if (!discountCode) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Enter your discount code",
+        });
+      }
+
+      const [affiliation, runUpPrize] = await Promise.all([
+        ctx.prisma.affiliation.findFirst({
+          where: {
+            discountCode,
+            competitionId: { in: competitionIds },
+          },
+        }),
+        ctx.prisma.runUpPrize.findFirst({
+          where: {
+            couponCode: discountCode,
+          },
+          include: {
+            ticket: {
+              include: {
+                Competition: true,
+                Order: true,
+              },
+            },
+          },
+        }),
+      ]);
+
+      if (!affiliation && !runUpPrize) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Invalid discount code",
+        });
+      }
+
+      let nextCompetition: Competition | null = null;
+      if (runUpPrize) {
+        if (runUpPrize.uses === runUpPrize.maxUsage) {
           throw new TRPCError({
             code: "BAD_REQUEST",
-            message: "Enter your discount code",
+            message: "Discount code has reached its limit of usage",
           });
         }
-        return await ctx.prisma.affiliation.findFirstOrThrow({
+        nextCompetition = await ctx.prisma.competition.findFirst({
           where: {
-            discountCode: input.discountCode,
-            competitionId: {
-              in: input.competitionIds,
+            start_date: {
+              gt: runUpPrize.ticket.Competition.start_date,
             },
           },
         });
-      } catch (e) {
-        if (e instanceof TRPCError) {
-          throw e;
-        } else if (e instanceof Prisma.PrismaClientKnownRequestError) {
-          if (e.code === "P2025") {
-            throw new TRPCError({
-              code: "NOT_FOUND",
-              message: "Invalid discount code",
-            });
-          }
+        console.log(nextCompetition);
+
+        if (
+          !nextCompetition ||
+          !input.competitionIds.includes(nextCompetition.id)
+        ) {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "Discount code is not valid for this competition",
+          });
         }
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "Internal server error",
-          cause: e,
-        });
       }
+
+      return affiliation
+        ? {
+            ...affiliation,
+            isRunUpPrize: false,
+          }
+        : {
+            id: runUpPrize?.id || "",
+            competitionId: nextCompetition?.id || "",
+            discountRate:
+              Number(runUpPrize?.ticket.Competition.run_up_prize) || 0,
+            discountCode: runUpPrize?.couponCode || "",
+            isRunUpPrize: true,
+          };
     }),
 });
 
@@ -1715,9 +1763,20 @@ export const RunUpPrizeRouter = createTRPCRouter({
             message: "Ticket does not belong to this competition",
           });
         }
+        const winnersCount = await ctx.prisma.runUpPrize.count({
+          where: {
+            ticketId: input.ticketId,
+          },
+        });
+        if (winnersCount >= 4) {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "You have reached the maximum number of winners",
+          });
+        }
         const addedPrize = await ctx.prisma.runUpPrize.create({
           data: {
-            couponCode: await generateCoupon(ctx.prisma),
+            couponCode: await discountCodeGenerator(ctx.prisma),
             ticketId: input.ticketId,
           },
         });
