@@ -18,6 +18,7 @@ import * as Yup from "yup";
 import { Formik } from "formik";
 import Image from "next/image";
 import { api } from "@/utils/api";
+import DashboardNewsLetters from "@/components/dashboard/DashboardNewsLetters";
 
 export function ModalCheck() {
   const { auth: authen, setAuth } = useCart();
@@ -190,8 +191,13 @@ const index = () => {
             <DashboardOrders />
           ) : menu === "Winners" ? (
             <DashboardWinners />
+
+          ) : menu === "Communication" ? (
+            <DashboardNewsLetters />
+
           ) : menu === "Affiliations" ? (
             <DashboardAffiliation />
+
           ) : (
             <h1>Competitions</h1>
           )}
