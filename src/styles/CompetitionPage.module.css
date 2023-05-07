@@ -198,12 +198,11 @@
   text-transform: uppercase;
 }
 .donations {
-  width: 80%;
+  width: 100%;
   display: flex;
+  flex-direction: column;
   flex-wrap: wrap;
   justify-content: left;
-
-  gap: 1rem;
 }
 @media only screen and (min-height: 1080px) {
   .donations {
@@ -217,17 +216,26 @@
   display: flex;
   align-items: center;
 }
+.donations h3 {
+  font-weight: 600;
+  font-size: 35px;
+  color: rgba(0, 0, 0, 0.6);
+  margin: 0;
+}
 .donations p {
   font-weight: 300;
-  width: 60%;
-  font-size: 18px;
+  width: 100%;
+  margin: 0;
   color: rgba(0, 0, 0, 0.6);
+  font-size: 18px;
 }
 .CompBot {
   display: flex;
-  align-items: center;
+  align-items: flex-end;
+  flex-direction: column;
   justify-content: space-between;
   width: 100%;
+  gap: 1rem;
 }
 .prices {
   display: flex;
