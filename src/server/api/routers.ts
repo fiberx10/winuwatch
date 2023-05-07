@@ -408,8 +408,8 @@ export const OrderRouter = createTRPCRouter({
                 clientAffiliations.some((comp) => comp.compToWin === compID)
               ) {
                 const number_tickets = Math.floor(
-                  clientAffiliations.find((comp) => comp.compToWin === compID)
-                    ?.uses || 0 / 5
+                  (clientAffiliations.find((comp) => comp.compToWin === compID)
+                    ?.uses || 0) / 5
                 );
                 await ctx.prisma.$transaction(async (tx) => {
                   const addedOrder = await tx.order.create({
