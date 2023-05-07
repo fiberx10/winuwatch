@@ -7,6 +7,7 @@ import { Email } from "@/components/emails";
 import { Transporter } from "@/server/utils";
 import RemainingEmail from "@/components/emails/RemainingEmail";
 import FreeTickets from "@/components/emails/FreeTickets";
+import { NewsLetter } from "@/components/newsLetter1";
 
 const prisma = new PrismaClient({
   log: ["query", "info", "warn"],
@@ -60,10 +61,30 @@ export default async function send(req: NextApiRequest, res: NextApiResponse) {
   //     }
   //   },
   // });
-
+  //   const orders = await ctx.prisma.ticket.findMany({
+  //   where: {
+  //     Order: {
+  //       checkedEmail: true,
+  //     },
+  //     competitionId: input,
+  //   },
+  //   include: {
+  //     Order: true,
+  //     Competition: {
+  //       include: {
+  //         Watches: {
+  //           include: {
+  //             images_url: true,
+  //           },
+  //         },
+  //       },
+  //     },
+  //   },
+  // });
+  // await sendNewsLetters("clgwcdyeg01h4t5jgi5kzezv5");
   // res.send(data[0]?.Ticket.map((ticket) => ticket.id));
 
   // res.send(EmailRender);
 
-  res.send(RemainingEmail(await GetWinnerData(TicketID, prisma)));
+  res.send(NewsLetter(await GetWinnerData(TicketID, prisma)));
 }
