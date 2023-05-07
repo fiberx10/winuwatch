@@ -105,7 +105,7 @@ export const FreeTickets = (data: {
                 We are pleased to inform you that you
               </p>
               <p style={{ margin: "0" }}>have won</p>
-              <p style={{ margin: "0" }}>{data?.tickets} free tickets</p>
+              <p style={{ margin: "0" }}>{data?.tickets} free ticket(s)</p>
             </div>
           </div>
 
