@@ -58,6 +58,7 @@ export const NewsLetter = ({
                 width="100%"
                 style={{
                   backgroundColor: "#cbb9ac",
+                  marginBottom: "50px",
                 }}
                 border={0}
                 cellPadding={0}
@@ -75,7 +76,7 @@ export const NewsLetter = ({
                     backgroundSize: "contain",
                     backgroundPosition: "100% 97%",
                     backgroundRepeat: "no-repeat",
-                    height: "550px",
+                    height: "fit-content",
                     marginTop: "50px",
                   }}
                 >
@@ -140,7 +141,12 @@ export const NewsLetter = ({
 
                   <tr>
                     <td>
-                      <div style={{ width: "100%", height: "520px" }}>
+                      <div
+                        style={{
+                          width: "100%",
+                          height: "550px",
+                        }}
+                      >
                         <div
                           style={{
                             maxHeight: "0",
@@ -248,7 +254,7 @@ export const NewsLetter = ({
                             textTransform: "uppercase",
                             backgroundColor: "#cbb9ac",
                             color: "white",
-                            padding: "50px 0px 10px 0px",
+                            padding: "30px 0px 10px 0px",
                             marginTop: "460px",
                           }}
                           border={0}
@@ -317,7 +323,8 @@ export const NewsLetter = ({
                                             textTransform: "uppercase",
                                             color: "white",
                                             fontWeight: "500",
-                                            fontSize: "14px",
+                                            width: "max-content",
+                                            fontSize: "8px",
                                             backgroundColor: "black",
                                             border: "none",
                                             padding: "10px 15px",
@@ -345,7 +352,7 @@ export const NewsLetter = ({
               <table
                 align="center"
                 width="100%"
-                style={{ fontWeight: 500, marginTop: "50px" }}
+                style={{ fontWeight: 500, paddingTop: "50px" }}
                 border={0}
                 cellPadding={0}
                 cellSpacing={0}
@@ -373,7 +380,8 @@ export const NewsLetter = ({
                         <br />
                         <b style={{ fontSize: "25px", color: "black" }}>
                           {" "}
-                          Act fast! Grab your tickets now while they&apos;re still available
+                          Act fast! Grab your tickets now while they&apos;re
+                          still available
                           <br />
                           and don&apos;t miss out on the chance to win
                         </b>
