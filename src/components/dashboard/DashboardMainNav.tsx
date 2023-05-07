@@ -10,7 +10,7 @@ import {
   GiftOutlined,
 } from "@ant-design/icons/lib/icons";
 import Image from "next/image";
-import { useStore, Dashmenus } from "@/components/Store";
+import { useStore, Dashmenus, Othermenus } from "@/components/Store";
 
 const DashboardMainNav = () => {
   const { menu: Menu, selectMenu } = useStore();
@@ -50,14 +50,13 @@ const DashboardMainNav = () => {
         <div className={styles.Dashmenus}>
           <span>Other</span>
 
-          {["Communication", "Settings"].map((menu, i) => {
+          {Othermenus.map((menu, i) => {
             return (
               <div
                 style={{
                   color: Menu === menu ? "white" : "hsla(0, 0%, 100%, 0.4)",
                 }}
-                //onClick={() => {}}
-
+                onClick={() => selectMenu(menu)}
                 className={styles.Menu}
                 key={i}
               >

@@ -18,7 +18,7 @@ import { faker } from "@faker-js/faker";
 import { TRPCError } from "@trpc/server";
 import WinningEmail, { GetWinnerData } from "@/components/emails/WinningEmail";
 import RemainingEmail from "@/components/emails/RemainingEmail";
-import { run } from "node:test";
+import NewsLetter from "@/components/newsLetter1";
 
 const Months = [
   "Jan",
@@ -132,6 +132,55 @@ export const WinnersRouter = createTRPCRouter({
         },
       });
       return winner;
+    }),
+  sendNewsLetters: publicProcedure
+    .input(z.string())
+    .mutation(async ({ ctx, input }) => {
+      //based on the ticket ID we should be able to close the competition and send the winner an email
+      const orders = await ctx.prisma.ticket.findMany({
+        where: {
+          Order: {
+            checkedEmail: true,
+          },
+          competitionId: input,
+        },
+        include: {
+          Order: true,
+          Competition: {
+            include: {
+              Watches: {
+                include: {
+                  images_url: true,
+                },
+              },
+            },
+          },
+        },
+      });
+      if (!orders) {
+        throw new Error("Competition not found");
+      }
+      // change to getWinnerdata
+
+      orders
+        .filter(
+          (order, index) =>
+            index ===
+            orders.findIndex((o) => order.Order.email === o.Order.email)
+        )
+        .map(async (order) => {
+          console.log("sent");
+          const data = { data: order };
+          await Transporter.sendMail({
+            from: "noreply@winuwatch.uk",
+            to: order.Order.email,
+            subject: `NewsLetter Email - Winuwatch ${
+              order.Competition.name || "000000"
+            }`,
+            html: NewsLetter(data),
+          });
+        });
+      return void 0; //TODO : Send email
     }),
   confirmWinner: publicProcedure
     .input(

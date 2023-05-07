@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { createJSONStorage, devtools, persist } from "zustand/middleware";
-import { Affiliation } from "@prisma/client";
+import type { Affiliation } from "@prisma/client";
 interface Comp {
   compID: string;
   number_tickets: number;
@@ -48,9 +48,13 @@ export const Dashmenus = [
   "Affiliations",
 ] as const;
 
+export const Othermenus = ["Communication", "Settings"] as const;
+
+const Menus = [...Dashmenus, ...Othermenus] as const;
+
 export const useStore = create<{
-  menu: (typeof Dashmenus)[number];
-  selectMenu: (menu: (typeof Dashmenus)[number]) => void;
+  menu: (typeof Menus)[number];
+  selectMenu: (menu: (typeof Menus)[number]) => void;
 }>()(
   devtools(
     persist(
