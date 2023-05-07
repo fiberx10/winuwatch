@@ -52,6 +52,7 @@ export default function Competition({
     value: 1,
     reduction: 0,
   });
+  const { data: nextComp } = api.Order.getNextComp.useQuery(compID);
   const [filter, setFilter] = useState(5);
   const { addComp, updateComp, competitions, AffiliationSession } = useCart();
   const [image, setImage] = useState<string | undefined>(undefined);
@@ -227,7 +228,7 @@ export default function Competition({
                       router.locale === "il"
                         ? {
                             justifyContent: "flex-end",
-                            marginRight: "30px",
+                            marginRight: "0px",
                           }
                         : {
                             justifyContent: "flex-start",
@@ -235,7 +236,15 @@ export default function Competition({
                     }
                     className={styles.donations}
                   >
-                    <p>{t("donatedto")}</p>
+                    <h3>{t("freeTicket")}</h3>
+                    {nextComp && (
+                      <p>
+                        {t("donatedto")}
+                        {nextComp?.Watches?.model}
+                        {t("nextText")}
+                        {nextComp?.Watches?.model}
+                      </p>
+                    )}
                     {/* <div className={styles.compSponsors}> */}
                     {/* <Image
                         width={130}

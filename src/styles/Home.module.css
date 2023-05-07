@@ -329,7 +329,7 @@
   flex-wrap: wrap;
   align-items: center;
   width: 100%;
-  row-gap: 10rem !important;
+  row-gap: 12rem !important;
   justify-content: space-evenly !important;
   margin-bottom: 100px;
 }

@@ -94,6 +94,7 @@ model Order {
   paymentId     String?
   intentId      String?
   affiliationId String?
+  runUpPrizeId  String?
   Ticket        Ticket[]
   Affiliated    Affiliation?  @relation(fields: [affiliationId], references: [id])
 
@@ -102,14 +103,15 @@ model Order {
 }
 
 model Ticket {
-  id            String      @id @default(cuid())
+  id            String       @id @default(cuid())
   orderId       String
   competitionId String
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
-  ticketPrice   Float       @default(0)
-  Order         Order       @relation(fields: [orderId], references: [id])
-  Competition   Competition @relation(fields: [competitionId], references: [id])
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  ticketPrice   Float        @default(0)
+  Order         Order        @relation(fields: [orderId], references: [id])
+  Competition   Competition  @relation(fields: [competitionId], references: [id])
+  RunUpPrize    RunUpPrize[]
 
   @@index([competitionId])
   @@index([orderId])
@@ -150,21 +152,36 @@ model CompetitionToOrder {
 }
 
 model Affiliation {
-  id            String      @id @default(cuid())
-  discountCode  String      @unique
-  discountRate  Float       @default(0.1)
-  ownerEmail    String
-  createdAt     DateTime    @default(now())
-  competitionId String
-  uses          Int         @default(0)
-  updatedAt     DateTime    @updatedAt
-  compToWin     String?
-  Order         Order[]
-  competition   Competition @relation(fields: [competitionId], references: [id])
+  id             String      @id @default(cuid())
+  discountCode   String      @unique
+  discountRate   Float       @default(0.1)
+  discountAmount Float       @default(0)
+  ownerEmail     String
+  createdAt      DateTime    @default(now())
+  competitionId  String
+  uses           Int         @default(0)
+  updatedAt      DateTime    @updatedAt
+  compToWin      String?
+  Order          Order[]
+  competition    Competition @relation(fields: [competitionId], references: [id])
 
   @@index([compToWin])
   @@index([competitionId])
   @@map("affiliation")
+}
+
+model RunUpPrize {
+  id         String   @id @default(cuid())
+  couponCode String   @unique
+  ticketId   String   @unique
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  maxUsage   Int      @default(1)
+  uses       Int      @default(0)
+  ticket     Ticket   @relation(fields: [ticketId], references: [id])
+
+  @@index([ticketId])
+  @@map("run_up_prize")
 }
 
 enum CompetitionStatus {

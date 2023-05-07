@@ -31,11 +31,13 @@ const DashboardAffiliation = () => {
     id: string;
     competitionId: string;
     discountRate: number;
+    discountAmount: number;
     ownerEmail: string;
   }>({
     id: "",
     competitionId: "",
     discountRate: 0,
+    discountAmount: 0,
     ownerEmail: "",
   });
 
@@ -77,14 +79,13 @@ const DashboardAffiliation = () => {
   }) => {
     console.log(values);
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    await addAffiliationAsync(values);
-    if (addAffiliationSuccess) {
-      handleClose();
+    await addAffiliationAsync(values).then(async () => {
       await refetchAffiliations();
-    } else if (addAffiliationError) {
+      handleClose();
+    });
+    if (addAffiliationError) {
       console.log(addAffiliationErrorData);
     }
-    setShow(false);
   };
 
   const handleEditditAffiliation = async (values: {
@@ -95,14 +96,13 @@ const DashboardAffiliation = () => {
   }) => {
     console.log(values);
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    await editAffiliationAsync(values);
-    if (editAffiliationSuccess) {
-      handleCloseEdit();
+    await editAffiliationAsync(values).then(async () => {
       await refetchAffiliations();
-    } else if (editAffiliationError) {
+      handleCloseEdit();
+    });
+    if (editAffiliationError) {
       console.log(editAffiliationErrorData);
     }
-    setShowEdit(false);
   };
 
   return (
@@ -149,6 +149,11 @@ const DashboardAffiliation = () => {
                   </TableCell>
                   <TableCell>
                     <Typography variant="subtitle2" fontWeight={600}>
+                      Discount Amount
+                    </Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography variant="subtitle2" fontWeight={600}>
                       Discout Code
                     </Typography>
                   </TableCell>
@@ -186,7 +191,12 @@ const DashboardAffiliation = () => {
                       >
                         <Box>
                           <Typography variant="subtitle2" fontWeight={600}>
-                            {affiliation?.competition?.name || ""}
+                            {affiliation?.competition?.name.length > 20
+                              ? affiliation?.competition?.name.substring(
+                                  0,
+                                  20
+                                ) + "..."
+                              : affiliation?.competition?.name}
                           </Typography>
                           <Typography
                             color="textSecondary"
@@ -223,6 +233,14 @@ const DashboardAffiliation = () => {
                       />
                     </TableCell>
                     <TableCell>
+                      <Typography variant="h6">
+                        {affiliation?.discountAmount.toLocaleString("en-GB", {
+                          style: "currency",
+                          currency: "GBP",
+                        })}
+                      </Typography>
+                    </TableCell>
+                    <TableCell>
                       <Chip
                         // discount code hide and show
                         sx={{
@@ -251,9 +269,9 @@ const DashboardAffiliation = () => {
                               onClick={() => {
                                 setAffilationToEdit({
                                   id: affiliation?.id || "",
-                                  competitionId:
-                                    affiliation?.competitionId || "",
+                                  competitionId: affiliation?.competitionId,
                                   discountRate: affiliation?.discountRate || 0,
+                                  discountAmount: affiliation?.discountAmount,
                                   ownerEmail: affiliation?.ownerEmail || "",
                                 });
                                 setShowEdit(true);
@@ -296,13 +314,14 @@ const DashboardAffiliation = () => {
           initialValues={{
             competitionId: "",
             discountRate: 0,
+            discountAmount: 0,
             ownerEmail: "",
           }}
           onSubmit={async (values) => {
             await handleAddAffilation(values);
           }}
         >
-          {({ handleSubmit, handleChange, setFieldValue }) => (
+          {({ handleSubmit, handleChange, setFieldValue, values }) => (
             <Form onSubmit={handleSubmit}>
               <Modal.Body>
                 {addAffiliationError && (
@@ -361,6 +380,23 @@ const DashboardAffiliation = () => {
                       placeholder="20"
                       name="discountRate"
                       required
+                      disabled={values.discountAmount > 0}
+                    />
+                  </Form.Group>
+                  <Form.Group
+                    controlId="formGridState"
+                    style={{
+                      marginBottom: "20px",
+                    }}
+                  >
+                    <Form.Label>Discount Amount (£)</Form.Label>
+                    <Form.Control
+                      type="number"
+                      onChange={handleChange}
+                      placeholder="10"
+                      name="discountAmount"
+                      required
+                      disabled={values.discountRate > 0}
                     />
                   </Form.Group>
                 </Row>
@@ -390,9 +426,17 @@ const DashboardAffiliation = () => {
         <Formik
           initialValues={{
             ...affilationToEdit,
-            discountRate: affilationToEdit.discountRate * 100,
+            competitionId: affilationToEdit.competitionId,
+            discountAmount: affilationToEdit.discountAmount || 0,
+            discountRate: affilationToEdit.discountRate
+              ? affilationToEdit.discountRate * 100
+              : 0,
           }}
           onSubmit={async (values) => {
+            values.discountRate = values.discountRate || 0;
+            values.discountAmount = values.discountAmount || 0;
+            console.log(values);
+
             await handleEditditAffiliation(values);
           }}
         >
@@ -458,6 +502,24 @@ const DashboardAffiliation = () => {
                       placeholder="20"
                       name="discountRate"
                       required
+                      disabled={values.discountAmount > 0}
+                    />
+                  </Form.Group>
+                  <Form.Group
+                    controlId="formGridState"
+                    style={{
+                      marginBottom: "20px",
+                    }}
+                  >
+                    <Form.Label>Discount Amount (£)</Form.Label>
+                    <Form.Control
+                      type="number"
+                      value={values.discountAmount}
+                      onChange={handleChange}
+                      placeholder="10"
+                      name="discountAmount"
+                      required
+                      disabled={values.discountRate > 0}
                     />
                   </Form.Group>
                 </Row>
