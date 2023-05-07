@@ -1511,13 +1511,20 @@ export const AffiliationRouter = createTRPCRouter({
   add: publicProcedure
     .input(
       z.object({
-        discountRate: z.number().default(10),
+        discountRate: z.number().gte(0).lte(100).default(0),
+        discountAmount: z.number().gte(0).default(0),
         ownerEmail: z.string().email(),
         competitionId: z.string().nonempty(),
       })
     )
     .mutation(async ({ ctx, input }) => {
       try {
+        if (input.discountRate == 0 && input.discountAmount == 0) {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "Discount rate or discount amount must be greater than 0",
+          });
+        }
         const hasAffiliation = await ctx.prisma.affiliation.findFirst({
           where: {
             competitionId: input.competitionId,
@@ -1530,10 +1537,32 @@ export const AffiliationRouter = createTRPCRouter({
             message: "Affiliation already exists",
           });
         }
+        const competition = await ctx.prisma.competition.findUnique({
+          where: {
+            id: input.competitionId,
+          },
+          include: {
+            Ticket: {
+              include: {
+                Order: true,
+              },
+            },
+          },
+        });
+        if (
+          competition?.Ticket[0]?.Order?.totalPrice &&
+          input.discountAmount >= competition?.Ticket[0]?.Order?.totalPrice
+        ) {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "Discount amount must be less than total price",
+          });
+        }
         return await ctx.prisma.affiliation.create({
           data: {
             ...input,
             discountRate: input.discountRate / 100,
+            discountAmount: input.discountAmount || 0,
             discountCode: await discountCodeGenerator(ctx.prisma),
           },
         });
@@ -1553,7 +1582,8 @@ export const AffiliationRouter = createTRPCRouter({
     .input(
       z.object({
         id: z.string(),
-        discountRate: z.number().optional(),
+        discountRate: z.number().gte(0).lte(100).optional(),
+        discountAmount: z.number().gte(0).optional(),
         ownerEmail: z.string().email().optional(),
         compitionId: z.string().optional(),
       })
@@ -1569,6 +1599,9 @@ export const AffiliationRouter = createTRPCRouter({
             where: {
               competitionId: data.compitionId,
               ownerEmail: data.ownerEmail,
+              id: {
+                not: id,
+              },
             },
           });
           if (hasAffiliation) {
@@ -1578,6 +1611,29 @@ export const AffiliationRouter = createTRPCRouter({
             });
           }
         }
+        // if (data.discountAmount) {
+        //   const competition = await ctx.prisma.competition.findUnique({
+        //     where: {
+        //       id: input.competitionId,
+        //     },
+        //     include: {
+        //       Ticket: {
+        //         include: {
+        //           Order: true,
+        //         },
+        //       },
+        //     },
+        //   });
+        //   if (
+        //     competition?.Ticket[0]?.Order?.totalPrice &&
+        //     input.discountAmount >= competition?.Ticket[0]?.Order?.totalPrice
+        //   ) {
+        //     throw new TRPCError({
+        //       code: "BAD_REQUEST",
+        //       message: "Discount amount must be less than total price",
+        //     });
+        //   }
+        // }
         return await ctx.prisma.affiliation.update({
           data,
           where: { id },
@@ -1687,6 +1743,7 @@ export const AffiliationRouter = createTRPCRouter({
             competitionId: nextCompetition?.id || "",
             discountRate:
               Number(runUpPrize?.ticket.Competition.run_up_prize) || 0,
+            discountAmount: 0,
             discountCode: runUpPrize?.couponCode || "",
             isRunUpPrize: true,
           };

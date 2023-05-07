@@ -85,7 +85,9 @@ export default function CheckoutPage({
         (total, { number_tickets, price_per_ticket, compID }) => {
           const discountRate =
             affiliationData && affiliationData.competitionId === compID
-              ? affiliationData.discountRate
+              ? affiliationData.discountAmount
+                ? affiliationData.discountAmount / price_per_ticket
+                : affiliationData.discountRate
               : 0;
           const totalPriceForCompetition = affiliationData?.isRunUpPrize
             ? number_tickets * price_per_ticket - discountRate
@@ -101,7 +103,7 @@ export default function CheckoutPage({
         0
       )
     );
-  }, [affiliationData?.discountRate]);
+  }, [affiliationData?.discountRate, affiliationData?.discountAmount]);
   useEffect(() => {
     void (async () => {
       if (competitions && competitions.length === 0) {
@@ -684,6 +686,10 @@ export default function CheckoutPage({
                                             {affiliationData.isRunUpPrize
                                               ? Formater(
                                                   affiliationData.discountRate
+                                                )
+                                              : !!affiliationData.discountAmount
+                                              ? Formater(
+                                                  affiliationData.discountAmount
                                                 )
                                               : Formater(
                                                   affiliationData.discountRate *
