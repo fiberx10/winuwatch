@@ -836,12 +836,16 @@ export const OrderRouter = createTRPCRouter({
                 },
               });
               comp.affiliationCode = newAffiliation.discountCode;
-              comp.affiliationRate = newAffiliation.discountRate;
+              comp.affiliationRate = newAffiliation.discountAmount
+                ? newAffiliation.discountAmount / comp.ticket_price
+                : newAffiliation.discountRate;
             } else {
               for (const affiliation of affiliationExist) {
                 if (comp.id === affiliation.competitionId) {
                   comp.affiliationCode = affiliation.discountCode;
-                  comp.affiliationRate = affiliation.discountRate;
+                  comp.affiliationRate = affiliation.discountAmount
+                    ? affiliation.discountAmount / comp.ticket_price
+                    : affiliation.discountRate;
                   break;
                 }
               }
