@@ -20,6 +20,8 @@ import WinningEmail, { GetWinnerData } from "@/components/emails/WinningEmail";
 import RemainingEmail from "@/components/emails/RemainingEmail";
 import NewsLetter from "@/components/newsLetter1";
 import FreeTickets from "@/components/emails/FreeTickets";
+import RunerUp from "@/components/emails/RunerUp";
+import RunerUp2 from "@/components/emails/RunerUp2";
 
 const Months = [
   "Jan",
@@ -2038,13 +2040,17 @@ export const RunUpPrizeRouter = createTRPCRouter({
           subject: `Run Up Prize Winner - Winuwatch #${
             existTicket.Order?.id || "000000"
           }`,
-          html: `You have won a run up prize for Winuwatch #${
-            existTicket.Order?.id
-          }. Your coupon code is <b>${
-            addedPrize.couponCode
-          }</b>. Please use this coupon code for the next competition to get a discount of £${
-            existTicket.Competition?.run_up_prize?.toString() || "0"
-          }.`,
+          html: RunerUp2({
+            runUpPrize: existTicket,
+            addedPrize: addedPrize,
+          }),
+          // `You have won a run up prize for Winuwatch #${
+          //   existTicket.Order?.id
+          // }. Your coupon code is <b>${
+          //   addedPrize.couponCode
+          // }</b>. Please use this coupon code for the next competition to get a discount of £${
+          //   existTicket.Competition?.run_up_prize?.toString() || "0"
+          // }.`,
         });
       } catch (e) {
         if (e instanceof TRPCError) throw e;
@@ -2092,13 +2098,16 @@ export const RunUpPrizeRouter = createTRPCRouter({
           subject: `Run Up Prize Winner - Winuwatch #${
             runUpPrize.ticket.Order?.id || "000000"
           }`,
-          html: `You have won a run up prize for Winuwatch #${
-            runUpPrize.ticket.Order?.id
-          }. Your coupon code is <b>${
-            runUpPrize.couponCode
-          }</b>. Please use this coupon code for the next competition to get a discount of £${
-            runUpPrize.ticket.Competition?.run_up_prize?.toString() || "0"
-          }.`,
+          html: RunerUp({
+            runUpPrize: runUpPrize,
+          }),
+          //            `You have won a run up prize for Winuwatch #${
+          //   runUpPrize.ticket.Order?.id
+          // }. Your coupon code is <b>${
+          //   runUpPrize.couponCode
+          // }</b>. Please use this coupon code for the next competition to get a discount of £${
+          //   runUpPrize.ticket.Competition?.run_up_prize?.toString() || "0"
+          // }.`,
         });
       } catch (e) {
         if (e instanceof TRPCError) throw e;
