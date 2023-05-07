@@ -19,6 +19,7 @@ import { TRPCError } from "@trpc/server";
 import WinningEmail, { GetWinnerData } from "@/components/emails/WinningEmail";
 import RemainingEmail from "@/components/emails/RemainingEmail";
 import NewsLetter from "@/components/newsLetter1";
+import FreeTickets from "@/components/emails/FreeTickets";
 
 const Months = [
   "Jan",
@@ -568,6 +569,13 @@ export const OrderRouter = createTRPCRouter({
                   orderBy: {
                     start_date: "asc",
                   },
+                  include: {
+                    Watches: {
+                      include: {
+                        images_url: true,
+                      },
+                    },
+                  },
                 });
 
                 console.log("next comp is ===>", nextCompetition);
@@ -683,15 +691,19 @@ export const OrderRouter = createTRPCRouter({
                     cc: "admin@winuwatch.uk",
                     to: updatedAffiliation.ownerEmail,
                     subject: `Claim your free ticket - Winuwatch`,
-                    html: `You won ${Math.floor(
-                      updatedAffiliation.uses / 5
-                    )} free ${
-                      Math.floor(updatedAffiliation.uses / 5) === 1
-                        ? "ticket"
-                        : "tickets"
-                    }, buy a ticket on next compition ${
-                      nextCompetition?.name || ""
-                    } with ID ${nextCompetition?.id || ""} to claim it!`,
+                    html: FreeTickets({
+                      tickets: Math.floor(updatedAffiliation.uses / 5),
+                      nextComp: nextCompetition,
+                    }),
+                    // `You won ${Math.floor(
+                    //   updatedAffiliation.uses / 5
+                    // )} free ${
+                    //   Math.floor(updatedAffiliation.uses / 5) === 1
+                    //     ? "ticket"
+                    //     : "tickets"
+                    // }, buy a ticket on next compition ${
+                    //   nextCompetition?.name || ""
+                    // } with ID ${nextCompetition?.id || ""} to claim it!`,
                   });
                 }
               }
@@ -789,6 +801,7 @@ export const OrderRouter = createTRPCRouter({
       });
       return true;
     }),
+
   createStripe: publicProcedure
     .input(CreateOrderStripeSchema)
     .mutation(async ({ ctx, input }) => {

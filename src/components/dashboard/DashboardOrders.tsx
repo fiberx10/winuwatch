@@ -26,7 +26,6 @@ import Loader from "../Loader";
 import { useRouter } from "next/router";
 import { Fade } from "@mui/material";
 
-
 const DashboardOrders = () => {
   const { locale } = useRouter();
   const [open, setOpen] = React.useState({
@@ -224,7 +223,9 @@ const DashboardOrders = () => {
                                   page * rowsPerPage + rowsPerPage
                                 )
                                 .filter(
-                                  (order) => order.status !== "INCOMPLETE"
+                                  (order) =>
+                                    order.status !== "INCOMPLETE" &&
+                                    order.status !== "PENDING"
                                 )
 
                                 .map((row) => (
