@@ -781,6 +781,29 @@ export const OrderRouter = createTRPCRouter({
         });
       }
     }),
+  getNextComp: publicProcedure
+    .input(z.string())
+    .query(async ({ ctx, input }) => {
+      const nextCompetition = await ctx.prisma.competition.findFirst({
+        where: {
+          id: {
+            not: input,
+          },
+          status: "ACTIVE",
+        },
+        orderBy: {
+          end_date: "asc",
+        },
+        include: {
+          Watches: {
+            include: {
+              images_url: true,
+            },
+          },
+        },
+      });
+      return nextCompetition;
+    }),
   sendEmail: publicProcedure
     .input(z.string())
     .mutation(async ({ ctx, input }) => {
