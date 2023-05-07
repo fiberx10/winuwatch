@@ -223,6 +223,9 @@ export default function CheckoutPage({
                                 ? affiliationData.isRunUpPrize
                                   ? affiliationData.discountRate /
                                     comp.number_tickets
+                                  : affiliationData.discountAmount
+                                  ? affiliationData.discountAmount /
+                                    comp.price_per_ticket
                                   : affiliationData.discountRate
                                 : comp.reduction,
                           }))

@@ -269,8 +269,7 @@ const DashboardAffiliation = () => {
                               onClick={() => {
                                 setAffilationToEdit({
                                   id: affiliation?.id || "",
-                                  competitionId:
-                                    affiliation?.competitionId || "",
+                                  competitionId: affiliation?.competitionId,
                                   discountRate: affiliation?.discountRate || 0,
                                   discountAmount: affiliation?.discountAmount,
                                   ownerEmail: affiliation?.ownerEmail || "",
@@ -427,16 +426,17 @@ const DashboardAffiliation = () => {
         <Formik
           initialValues={{
             ...affilationToEdit,
+            competitionId: affilationToEdit.competitionId,
             discountAmount: affilationToEdit.discountAmount || 0,
             discountRate: affilationToEdit.discountRate
               ? affilationToEdit.discountRate * 100
               : 0,
           }}
           onSubmit={async (values) => {
-            values.discountRate = values.discountRate
-              ? values.discountRate / 100
-              : 0;
+            values.discountRate = values.discountRate || 0;
             values.discountAmount = values.discountAmount || 0;
+            console.log(values);
+
             await handleEditditAffiliation(values);
           }}
         >

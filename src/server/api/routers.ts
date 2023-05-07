@@ -1621,7 +1621,7 @@ export const AffiliationRouter = createTRPCRouter({
         discountRate: z.number().gte(0).lte(100).optional(),
         discountAmount: z.number().gte(0).optional(),
         ownerEmail: z.string().email().optional(),
-        compitionId: z.string().optional(),
+        competitionId: z.string().optional(),
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -1631,15 +1631,19 @@ export const AffiliationRouter = createTRPCRouter({
           data.discountRate = data.discountRate / 100;
         }
         if (data.ownerEmail) {
+          console.log(data);
+
           const hasAffiliation = await ctx.prisma.affiliation.findFirst({
             where: {
-              competitionId: data.compitionId,
+              competitionId: data.competitionId,
               ownerEmail: data.ownerEmail,
               id: {
                 not: id,
               },
             },
           });
+          console.log(hasAffiliation);
+
           if (hasAffiliation) {
             throw new TRPCError({
               code: "BAD_REQUEST",
