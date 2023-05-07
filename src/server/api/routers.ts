@@ -850,7 +850,7 @@ export const OrderRouter = createTRPCRouter({
                   id: data.order?.affiliationId,
                 },
               });
-              if (affiliation) {
+              if (affiliation && affiliation.competitionId === comp.id) {
                 comp.affiliationRate = affiliation.discountAmount
                   ? affiliation.discountAmount / comp.ticket_price
                   : affiliation.discountRate;
