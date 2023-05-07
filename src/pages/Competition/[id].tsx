@@ -235,6 +235,7 @@ export default function Competition({
                     }
                     className={styles.donations}
                   >
+                    <h3>{t("freeTicket")}</h3>
                     <p>{t("donatedto")}</p>
                     {/* <div className={styles.compSponsors}> */}
                     {/* <Image
