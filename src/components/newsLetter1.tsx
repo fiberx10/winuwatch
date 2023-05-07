@@ -141,7 +141,12 @@ export const NewsLetter = ({
 
                   <tr>
                     <td>
-                      <div style={{ width: "100%", height: "520px" }}>
+                      <div
+                        style={{
+                          width: "100%",
+                          height: "550px",
+                        }}
+                      >
                         <div
                           style={{
                             maxHeight: "0",
@@ -249,7 +254,7 @@ export const NewsLetter = ({
                             textTransform: "uppercase",
                             backgroundColor: "#cbb9ac",
                             color: "white",
-                            padding: "50px 0px 10px 0px",
+                            padding: "30px 0px 10px 0px",
                             marginTop: "460px",
                           }}
                           border={0}
