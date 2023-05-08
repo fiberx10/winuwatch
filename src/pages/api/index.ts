@@ -7,7 +7,7 @@ import { Email } from "@/components/emails";
 import { Transporter } from "@/server/utils";
 import RemainingEmail from "@/components/emails/RemainingEmail";
 import FreeTickets from "@/components/emails/FreeTickets";
-import { NewsLetter } from "@/components/newsLetter1";
+import newsLetter1, { NewsLetter } from "@/components/newsLetter1";
 
 const prisma = new PrismaClient({
   log: ["query", "info", "warn"],
@@ -33,10 +33,7 @@ export default async function send(req: NextApiRequest, res: NextApiResponse) {
   //   cc: "admin@winuwatch.uk",
   //   to: "louihranim@gmail.com",
   //   subject: `Claim your free ticket - Winuwatch`,
-  //   html: FreeTickets({
-  //     tickets: 5,
-  //     nextComp: nextCompetition,
-  //   }),
+  //   html: newsLetter1(await GetWinnerData(TicketID, prisma)),
   //   // `You won ${Math.floor(
   //   //   updatedAffiliation.uses / 5
   //   // )} free ${
@@ -86,5 +83,5 @@ export default async function send(req: NextApiRequest, res: NextApiResponse) {
 
   // res.send(EmailRender);
 
-  res.send(NewsLetter(await GetWinnerData(TicketID, prisma)));
+  res.send(newsLetter1(await GetWinnerData(TicketID, prisma)));
 }
