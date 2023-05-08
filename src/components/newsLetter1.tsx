@@ -319,9 +319,8 @@ export const NewsLetter = ({
                                             margin: "5px 0",
                                           }}
                                         >
-                                          ONLY{" "}
-                                          {data?.Competition.remaining_tickets}{" "}
-                                          Tickets available
+                                          ONLY {data?.Competition.total_tickets}{" "}
+                                          Maximum Tickets
                                         </p>
                                         <p
                                           style={{
