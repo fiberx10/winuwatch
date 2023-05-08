@@ -8,7 +8,9 @@ import Head from "next/head";
 import { z } from "zod";
 import { SetStateAction, useEffect, useState } from "react";
 import styles from "@/styles/Checkout.module.css";
-//import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js";
+
+// import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js";
+
 import { useRouter } from "next/router";
 import { api, Formater, CreateOrderStripeSchema, i18n } from "@/utils";
 import { useCart } from "@/components/Store";
@@ -30,6 +32,7 @@ import type {
   InferGetServerSidePropsType,
 } from "next";
 import Link from "next/link";
+
 
 const IsLegal = (Birthdate = new Date()) => {
   const LegalAge = 18;
@@ -67,10 +70,70 @@ export default function CheckoutPage({
   const router = useRouter();
   const { mutateAsync: createOrder } = api.Order.createStripe.useMutation();
 
+import { useMutation } from "@tanstack/react-query";
+import axios, { type AxiosError } from "axios";
+import {
+  PayPalScriptProvider,
+  PayPalButtons,
+  FUNDING,
+} from "@paypal/react-paypal-js";
+import { OnApproveData } from "@paypal/paypal-js";
+
+export default function CheckoutPage({
+  id,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const [orderId, setOrderId] = useState<string>("");
+  const router = useRouter();
+  const t = useTranslations("checkout");
+  const { mutateAsync: createOrder } = api.Order.createPaypal.useMutation();
+  const { mutateAsync: captureOrder } = api.Order.capturePaypal.useMutation();
+  const { competitions, cardDetails, reset } = useCart();
+  const [loading, setLoading] = useState(false);
+
   const { data: items, isLoading } = api.Competition.getAll.useQuery({
     ids: competitions.map((comp) => comp.compID),
   });
   const { data: order } = api.Order.getOrderCheck.useQuery(id);
+
+
+  // PAYPAL //
+  const createMutation = useMutation<{ data: any }, AxiosError, any, Response>(
+    (): any => axios.post("/api/paypal/createOrder")
+  );
+  const captureMutation = useMutation<string, AxiosError, any, Response>(
+    // (data): any => axios.post("/api/paypal/captureOrder", data)
+    (data): any =>
+      captureOrder({
+        orderID: data.orderID as string,
+        reference: data.reference as string,
+      })
+  );
+  const createPayPalOrder = async (): Promise<string> => {
+    const response = await createMutation.mutateAsync({});
+    return response.data.orderID as string;
+  };
+
+  // eslint-disable-next-line @typescript-eslint/require-await
+  const onApprove = async (data: OnApproveData): Promise<void> => {
+    return captureMutation.mutate({
+      orderID: data.paymentID,
+      reference: data.orderID,
+    });
+  };
+  // PAYPAL //
+
+  const IsLegal = (Birthdate = new Date()) => {
+    const LegalAge = 18;
+    const now = new Date();
+    return (
+      new Date(
+        now.getFullYear() - LegalAge,
+        now.getMonth(),
+        now.getDate()
+      ).getTime() >= Birthdate.getTime()
+    );
+  };
+
   const [error, setError] = useState<string | undefined>();
   const {
     mutateAsync: checkDiscount,
@@ -180,6 +243,7 @@ export default function CheckoutPage({
               <Formik
                 validationSchema={Schema}
                 initialValues={{
+
                   ...order,
                   country:
                     order?.country === null || !order
@@ -192,6 +256,7 @@ export default function CheckoutPage({
                 }}
                 onSubmit={async (values, { setSubmitting }) => {
                   //if a value in the object values is undefined, it will not be sent to the server
+
                   try {
                     console.log("Form submitted:", values);
                     //we need to check if each value in values is not undefined
@@ -262,6 +327,37 @@ export default function CheckoutPage({
                     setError(error);
                     console.log(error);
                     // const res = CreateOrderSchema.safeParse(values);
+
+
+                  const { paymentId, error } = await createOrder({
+                    ...values,
+                    id: id,
+                    paymentMethod: values.paymentMethod as "PAYPAL" | "STRIPE",
+                    date: new Date(values.date),
+                    zip: values.zip.toString(),
+                    locale: router.locale,
+                  });
+                  if (paymentId) {
+                    // await resend.sendEmail({
+                    //   from: "test@winuwatch.uk",
+                    //   to: values.email,
+                    //   subject: "Order Confirmation",
+                    //   react: (
+                    //     <SlackConfirmEmail
+                    //       clientName={values.first_name}
+                    //       numerOfTickets={values.comps}
+                    //     />
+                    //   ),
+                    // })
+                    setOrderId(paymentId);
+
+                    setLoading(false);
+                    // await router.push(url);
+                  }
+                  setError(error);
+                  console.log(error);
+                  // const res = CreateOrderSchema.safeParse(values);
+
 
                     // if (res.success) {
                     //   console.log("Form submitted:", res.data);
@@ -534,9 +630,15 @@ export default function CheckoutPage({
                         ) : null}
                       </div>
                       <div className={styles.leftFormItem}>
+
                         {/* <h1>{t("paymethod")}</h1> */}
                         {/* <div className={styles.PaymentMethod}> */}
                         {/* <div className={styles.method}>
+
+                        <h1>{t("paymethod")}</h1>
+                        <div className={styles.PaymentMethod}>
+                          {/* <div className={styles.method}>
+
                             <Field
                               type="radio"
                               name="paymentMethod"
@@ -553,6 +655,7 @@ export default function CheckoutPage({
                               {t("creditcard")}
                             </p>
                           </div> */}
+
                         {/* <div className={styles.method}>
                         <Field
                           type="radio"
@@ -572,6 +675,27 @@ export default function CheckoutPage({
                         </p>
                       </div> */}
                         {/* </div> */}
+
+                          <div className={styles.method}>
+                            <Field
+                              type="radio"
+                              name="paymentMethod"
+                              value="PAYPAL"
+                              disabled
+                            />
+                            <p
+                              style={{
+                                color:
+                                  values.paymentMethod === "PAYPAL"
+                                    ? "#987358"
+                                    : "rgba(30, 30, 30, 0.6)",
+                              }}
+                            >
+                              PayPal
+                            </p>
+                          </div>
+                        </div>
+
                         <div className={styles.SignMeUp}>
                           <label>
                             <Field
@@ -820,6 +944,33 @@ export default function CheckoutPage({
                         </div>
 
                         <div className={styles.orderSumBot}>
+                          {/* paypal button */}
+                          {orderId ? (
+                            <div>
+                              {/* Display a message or a summary of the order details */}
+                            </div>
+                          ) : (
+                            <PayPalScriptProvider
+                              options={{
+                                "client-id": process.env
+                                  .NEXT_PUBLIC_PAYPAL_CLIENT_ID as string,
+                                currency: "PHP",
+                              }}
+                            >
+                              <PayPalButtons
+                                style={{
+                                  color: "gold",
+                                  shape: "rect",
+                                  label: "pay",
+                                  height: 50,
+                                }}
+                                fundingSource={FUNDING.PAYPAL}
+                                createOrder={createPayPalOrder}
+                                onApprove={onApprove}
+                              />
+                            </PayPalScriptProvider>
+                          )}
+
                           <button
                             disabled={isSubmitting || error ? true : false}
                             style={{

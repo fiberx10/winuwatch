@@ -1,5 +1,8 @@
+
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-import { z } from "zod";
+
+import { any, z } from "zod";
+
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { Competition, CompetitionStatus, order_status } from "@prisma/client";
 import { Prisma } from "@prisma/client";
@@ -15,6 +18,7 @@ import { WatchesSchema, CompetitionSchema } from "@/utils/zodSchemas";
 import type { PrismaClient } from "@prisma/client";
 import Email, { GetData } from "@/components/emails";
 import { faker } from "@faker-js/faker";
+
 import { TRPCError } from "@trpc/server";
 import WinningEmail, { GetWinnerData } from "@/components/emails/WinningEmail";
 import RemainingEmail from "@/components/emails/RemainingEmail";
@@ -23,6 +27,8 @@ import FreeTickets from "@/components/emails/FreeTickets";
 import RunerUp from "@/components/emails/RunerUp";
 import RunerUp2 from "@/components/emails/RunerUp2";
 import newsLetter1 from "@/components/newsLetter1";
+import client from "lib/paypal";
+import paypal from "@paypal/checkout-server-sdk";
 
 const Months = [
   "Jan",
@@ -70,6 +76,9 @@ const discountCodeGenerator = async (prisma: PrismaClient): Promise<string> => {
     "Failed to generate a unique discount code after 10 attempts"
   );
 };
+
+
+
 
 export const WinnersRouter = createTRPCRouter({
   getCSV: publicProcedure.input(z.string()).mutation(async ({ ctx, input }) => {
@@ -1025,6 +1034,224 @@ export const OrderRouter = createTRPCRouter({
 
         return {
           url: StripeOrder.url,
+        };
+      } catch (e) {
+        console.error(e);
+        return {
+          error: "Error in creating the order",
+          url: null,
+        };
+      }
+    }),
+  createPaypal: publicProcedure
+    .input(CreateOrderStripeSchema)
+    .mutation(async ({ ctx, input }) => {
+      try {
+        const { locale, comps, ...data } = input;
+        const PaypalClient = client();
+        const request = new paypal.orders.OrdersCreateRequest();
+        request.prefer("return=representation");
+        request.requestBody({
+          intent: "CAPTURE",
+          application_context: {
+            // shipping_preference: "NO_SHIPPING",
+            user_action: "PAY_NOW",
+            return_url: `${getBaseUrl()}/${locale}/Confirmation/${input.id}`, // Replace with your success URL
+            cancel_url: `${getBaseUrl()}/${locale}/Cancel/${input.id}`, // Replace with your cancel URL
+          },
+          purchase_units: [
+            {
+              reference_id: input.id,
+              amount: {
+                currency_code: "GBP",
+                value: data.totalPrice.toString(),
+                breakdown: {
+                  discount: {
+                    currency_code: "GBP",
+                    value: comps
+                      .reduce(function (res, item) {
+                        return res + item.reduction * item.number_tickets;
+                      }, 0)
+                      .toString(),
+                  },
+                  tax_total: {
+                    currency_code: "GBP",
+                    value: "0",
+                  },
+                  handling: {
+                    currency_code: "GBP",
+                    value: "0",
+                  },
+                  insurance: {
+                    currency_code: "GBP",
+                    value: "0",
+                  },
+                  shipping: {
+                    currency_code: "GBP",
+                    value: "0",
+                  },
+                  shipping_discount: {
+                    currency_code: "GBP",
+                    value: "0",
+                  },
+                  item_total: {
+                    currency_code: "GBP",
+                    value: data.totalPrice.toString(),
+                  },
+                },
+              },
+
+              items: (
+                await ctx.prisma.competition.findMany({
+                  where: {
+                    id: {
+                      in: comps.map(({ compID }) => compID),
+                    },
+                  },
+                  include: {
+                    Watches: {
+                      include: {
+                        images_url: true,
+                      },
+                    },
+                  },
+                })
+              ).map((comp) =>
+                comp.Watches
+                  ? {
+                      name: comp.Watches?.model ?? "Competition Ticket",
+                      quantity: (
+                        input.comps.find((item) => item.compID === comp.id)
+                          ?.number_tickets || 0
+                      ).toString(),
+                      unit_amount: {
+                        currency_code: "GBP",
+                        value: (
+                          comp.ticket_price *
+                          (1 -
+                            (input.comps.find(
+                              ({ compID }) => compID === comp.id
+                            )?.reduction || 0))
+                        ) // Apply any reduction to the price
+                          .toFixed(2), // Two decimal places
+                      },
+
+                      product_image_url: comp?.Watches?.images_url.map(
+                        ({ url }) => url
+                      ),
+                      category: "PHYSICAL_GOODS",
+                    }
+                  : {
+                      category: "PHYSICAL_GOODS",
+                      name: "Null",
+                      product_image_url: "null",
+                      quantity: "0",
+                      unit_amount: {
+                        currency_code: "GBP",
+                        value: "0",
+                      },
+                    }
+              ),
+            },
+          ],
+        });
+        const [Order, PaypalOrder] = await Promise.all([
+          await ctx.prisma.order.update({
+            where: {
+              id: input.id,
+            },
+            data: {
+              ...data,
+              status: order_status.PENDING,
+            },
+          }),
+          await PaypalClient.execute(request),
+        ]);
+        console.log(JSON.stringify(PaypalOrder));
+
+        // await ctx.prisma.order.update({
+        //   where: {
+        //     id: Order.id,
+        //   },
+        //   data: {
+        //     paymentId: PaypalOrder.result.id as string,
+        //   },
+        //   include: {
+        //     Ticket: true,
+        //     Competition: {
+        //       include: {
+        //         Watches: {
+        //           include: {
+        //             images_url: true,
+        //           },
+        //         },
+        //       },
+        //     },
+        //   },
+        // });
+        if (PaypalOrder.statusCode !== 201) {
+          return {
+            error: "Error in creating the order",
+            paymentId: null,
+          };
+        }
+        // res.json({ orderID: response.result.id })
+
+        return {
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+          paymentId: PaypalOrder.result.id as string,
+          reference: Order.id,
+        };
+      } catch (e) {
+        console.error(e);
+        return {
+          error: "Error in creating the order",
+          url: null,
+        };
+      }
+    }),
+  capturePaypal: publicProcedure
+    .input(z.object({ orderID: z.string(), reference: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      try {
+        const { orderID, reference } = input;
+        const PaypalClient = client();
+        const request = new paypal.orders.OrdersCaptureRequest(orderID);
+
+        const [response] = await Promise.all([
+          await PaypalClient.execute(request),
+        ]);
+        console.log(JSON.stringify(response));
+
+        if (!response) {
+          return {
+            error: "Error in capturing the payment",
+          };
+        }
+
+        await ctx.prisma.order.update({
+          where: {
+            id: reference,
+          },
+          data: {
+            paymentId: orderID,
+          },
+          include: {
+            Ticket: true,
+            Competition: {
+              include: {
+                Watches: {
+                  include: {
+                    images_url: true,
+                  },
+                },
+              },
+            },
+          },
+        });
+
+        return {
+          response,
         };
       } catch (e) {
         console.error(e);
