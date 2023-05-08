@@ -248,7 +248,7 @@ export const NewsLetter = ({
                               <div
                                 style={{
                                   background: "white",
-                                  marginTop: "10px",
+                                  marginTop: "5px",
                                   width: "fit-content",
                                   padding: "5px ",
                                 }}
