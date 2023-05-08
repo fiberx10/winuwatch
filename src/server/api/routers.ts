@@ -22,6 +22,7 @@ import NewsLetter from "@/components/newsLetter1";
 import FreeTickets from "@/components/emails/FreeTickets";
 import RunerUp from "@/components/emails/RunerUp";
 import RunerUp2 from "@/components/emails/RunerUp2";
+import newsLetter1 from "@/components/newsLetter1";
 
 const Months = [
   "Jan",
@@ -180,7 +181,7 @@ export const WinnersRouter = createTRPCRouter({
             subject: `NewsLetter Email - Winuwatch ${
               order.Competition.name || "000000"
             }`,
-            html: NewsLetter(data),
+            html: newsLetter1(data),
           });
         });
       return void 0; //TODO : Send email

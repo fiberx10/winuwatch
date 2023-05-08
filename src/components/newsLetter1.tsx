@@ -58,7 +58,7 @@ export const NewsLetter = ({
                 width="100%"
                 style={{
                   backgroundColor: "#cbb9ac",
-                  marginBottom: "50px",
+                  marginBottom: "0px",
                 }}
                 border={0}
                 cellPadding={0}
@@ -67,12 +67,7 @@ export const NewsLetter = ({
               >
                 <tbody
                   style={{
-                    backgroundImage: data
-                      ? `url(${
-                          data.Competition?.Watches?.images_url[0]
-                            ?.url as string
-                        })`
-                      : `url(https://firebasestorage.googleapis.com/v0/b/winuwatch-bd56d.appspot.com/o/newsletterwatch.jpg?alt=media&token=b9a66883-ab78-495f-8fce-9838a8590c3a)`,
+                    backgroundImage: "",
                     backgroundSize: "contain",
                     backgroundPosition: "100% 97%",
                     backgroundRepeat: "no-repeat",
@@ -145,6 +140,13 @@ export const NewsLetter = ({
                         style={{
                           width: "100%",
                           height: "550px",
+                          backgroundImage: `url(${
+                            data?.Competition?.Watches?.images_url[0]
+                              ?.url as string
+                          })`,
+                          backgroundSize: "cover",
+                          backgroundPosition: "100% -700%",
+                          backgroundRepeat: "no-repeat",
                         }}
                       >
                         <div
@@ -152,6 +154,7 @@ export const NewsLetter = ({
                             maxHeight: "0",
                             maxWidth: "0",
                             overflow: " visible",
+                            zIndex: 999,
                           }}
                         >
                           <div
@@ -161,41 +164,65 @@ export const NewsLetter = ({
                               marginBottom: "200px",
                               marginLeft: "10px",
                               display: "inline-block",
+                              marginTop: "10px",
                             }}
                           >
                             <div
                               style={{
                                 background: "white",
                                 borderRadius: "50%",
-                                width: "fit-content",
-                                padding: "30px 15px ",
+
+                                width: "120px",
+                                height: "120px",
+                                textAlign: "center",
+                                marginBottom: "20px",
                               }}
                             >
-                              <p
-                                style={{
-                                  letterSpacing: "0.3rem",
-                                  fontSize: "16px",
-                                  color: "#CBB9AC",
-                                  margin: "0",
-                                  fontWeight: "600",
-                                }}
-                              >
-                                WORTH
-                              </p>
-                              <p
-                                style={{
-                                  fontSize: "18px",
-                                  margin: "0",
-                                  fontFamily: "DM Serif Display",
-                                  color: "black",
-                                  fontWeight: "600",
-                                }}
-                              >
-                                {Formater(data?.Competition.price as number)}
-                              </p>
+                              <div>
+                                <p
+                                  style={{
+                                    letterSpacing: "0.3rem",
+                                    fontSize: "16px",
+                                    color: "#CBB9AC",
+                                    margin: "0",
+                                    fontWeight: "600",
+                                    paddingTop: "35px",
+                                  }}
+                                >
+                                  WORTH
+                                </p>
+                                <p
+                                  style={{
+                                    fontSize: "18px",
+                                    margin: "0",
+                                    fontFamily: "DM Serif Display",
+                                    color: "black",
+                                    fontWeight: "600",
+                                  }}
+                                >
+                                  {Formater(data?.Competition.price as number)}
+                                </p>
+                              </div>
                             </div>
                           </div>
                         </div>
+                        {/* <img
+                          alt="image"
+                          src={
+                            // data
+                            //   ?
+
+                            data?.Competition?.Watches?.images_url[0]
+                              ?.url as string
+
+                            // : `url(https://firebasestorage.googleapis.com/v0/b/winuwatch-bd56d.appspot.com/o/newsletterwatch.jpg?alt=media&token=b9a66883-ab78-495f-8fce-9838a8590c3a)`
+                          }
+                          width="100%"
+                          height="100%"
+                          style={{
+                            objectFit: "cover",
+                          }}
+                        /> */}
                         <div
                           style={{
                             maxHeight: "0",
@@ -206,7 +233,7 @@ export const NewsLetter = ({
                           <div
                             style={{
                               width: "100%",
-                              marginTop: "420px",
+                              marginTop: "480px",
 
                               display: "inline-block",
                             }}
@@ -215,9 +242,7 @@ export const NewsLetter = ({
                               style={{
                                 width: "95%",
 
-                                marginLeft: "0px",
-
-                                display: "inline-block",
+                                marginLeft: "2%",
                               }}
                             >
                               <div
@@ -255,7 +280,7 @@ export const NewsLetter = ({
                             backgroundColor: "#cbb9ac",
                             color: "white",
                             padding: "30px 0px 10px 0px",
-                            marginTop: "460px",
+                            marginTop: "550px",
                           }}
                           border={0}
                           cellPadding={0}
@@ -314,7 +339,7 @@ export const NewsLetter = ({
 
                                       <th
                                         style={{
-                                          width: "40%",
+                                          width: "100%",
                                         }}
                                       >
                                         <a
@@ -329,7 +354,7 @@ export const NewsLetter = ({
                                             border: "none",
                                             padding: "10px 15px",
                                             cursor: "pointer",
-                                            marginRight: "10px",
+                                            marginLeft: "0px",
                                             textDecoration: "none",
                                           }}
                                         >
@@ -352,7 +377,7 @@ export const NewsLetter = ({
               <table
                 align="center"
                 width="100%"
-                style={{ fontWeight: 500, paddingTop: "50px" }}
+                style={{ fontWeight: 500, paddingTop: "120px" }}
                 border={0}
                 cellPadding={0}
                 cellSpacing={0}
