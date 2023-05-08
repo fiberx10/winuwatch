@@ -241,8 +241,6 @@ export const NewsLetter = ({
                             <div
                               style={{
                                 width: "95%",
-
-                                marginLeft: "45%",
                               }}
                             >
                               <div
