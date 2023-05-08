@@ -32,7 +32,7 @@ export default async function send(req: NextApiRequest, res: NextApiResponse) {
   //   from: "noreply@winuwatch.uk",
   //   cc: "admin@winuwatch.uk",
   //   to: "louihranim@gmail.com",
-  //   subject: `Claim your free ticket - Winuwatch`,
+  //   subject: `NewsLetter - Winuwatch`,
   //   html: newsLetter1(await GetWinnerData(TicketID, prisma)),
   //   // `You won ${Math.floor(
   //   //   updatedAffiliation.uses / 5
