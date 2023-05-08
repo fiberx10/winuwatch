@@ -241,6 +241,8 @@ export const NewsLetter = ({
                             <div
                               style={{
                                 width: "95%",
+
+                                marginLeft: "2%",
                               }}
                             >
                               <div
@@ -278,7 +280,7 @@ export const NewsLetter = ({
                             backgroundColor: "#cbb9ac",
                             color: "white",
                             padding: "30px 0px 10px 0px",
-                            marginTop: "520px",
+                            marginTop: "550px",
                           }}
                           border={0}
                           cellPadding={0}
@@ -337,7 +339,7 @@ export const NewsLetter = ({
 
                                       <th
                                         style={{
-                                          width: "40%",
+                                          width: "100%",
                                         }}
                                       >
                                         <a
@@ -347,12 +349,12 @@ export const NewsLetter = ({
                                             color: "white",
                                             fontWeight: "500",
                                             width: "max-content",
-                                            fontSize: "10px",
+                                            fontSize: "8px",
                                             backgroundColor: "black",
                                             border: "none",
                                             padding: "10px 15px",
                                             cursor: "pointer",
-                                            marginLeft: "30px",
+                                            marginLeft: "0px",
                                             textDecoration: "none",
                                           }}
                                         >
@@ -375,7 +377,7 @@ export const NewsLetter = ({
               <table
                 align="center"
                 width="100%"
-                style={{ fontWeight: 500, paddingTop: "80px" }}
+                style={{ fontWeight: 500, paddingTop: "120px" }}
                 border={0}
                 cellPadding={0}
                 cellSpacing={0}
