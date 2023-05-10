@@ -920,6 +920,8 @@ export default function CheckoutPage({
                                             await router.push(
                                               `/Confirmation/${id}`
                                             );
+                                          } else {
+                                            setError("Payment Failed");
                                           }
                                         });
                                     }}
