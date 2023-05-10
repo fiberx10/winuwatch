@@ -821,7 +821,7 @@ export default function CheckoutPage({
                         {values.paymentMethod === "PAYPAL" ? (
                           <div style={{ marginTop: "20px" }}>
                             <PayPalScriptProvider
-                              options={{ "client-id": "test" }}
+                              options={{ "client-id": "test", currency: "GBP" }}
                             >
                               <PayPalButtons
                                 createOrder={(data, actions) => {
