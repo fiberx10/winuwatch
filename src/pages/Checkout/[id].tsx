@@ -30,6 +30,7 @@ import type {
 } from "next";
 import Link from "next/link";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
+import { env } from "@/env.mjs";
 
 const IsLegal = (Birthdate = new Date()) => {
   const LegalAge = 18;
@@ -890,7 +891,7 @@ export default function CheckoutPage({
                               <div style={{ marginTop: "20px" }}>
                                 <PayPalScriptProvider
                                   options={{
-                                    "client-id": "test",
+                                    "client-id": `${env.NEXT_PUBLIC_PAYPAL_CLIENT_ID}`,
                                     currency: "GBP",
                                   }}
                                 >
