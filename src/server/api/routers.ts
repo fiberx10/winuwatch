@@ -1034,7 +1034,18 @@ export const OrderRouter = createTRPCRouter({
         };
       }
     }),
+  // validatePaypal: publicProcedure.input(z.object({paypal: z.object({}), id: z.string()})).mutation(async ({ctx,input}) => {
+  // input.paypal.order.capture()
+  // await ctx.prisma.order.update({
+  //   where: {
+  //     id: input.id,
+  //   },
+  //   data: {
+  //     status: order_status.CONFIRMED,
+  //   },
+  // });
 
+  // }),
   createOrder: publicProcedure
     .input(CreateOrderFromCartSchema.optional())
     .mutation(async ({ ctx, input }) => {

@@ -8,7 +8,6 @@ import Head from "next/head";
 import { z } from "zod";
 import { SetStateAction, useEffect, useState } from "react";
 import styles from "@/styles/Checkout.module.css";
-//import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js";
 import { useRouter } from "next/router";
 import { api, Formater, CreateOrderStripeSchema, i18n } from "@/utils";
 import { useCart } from "@/components/Store";
@@ -30,6 +29,7 @@ import type {
   InferGetServerSidePropsType,
 } from "next";
 import Link from "next/link";
+import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 
 const IsLegal = (Birthdate = new Date()) => {
   const LegalAge = 18;
@@ -534,9 +534,9 @@ export default function CheckoutPage({
                         ) : null}
                       </div>
                       <div className={styles.leftFormItem}>
-                        {/* <h1>{t("paymethod")}</h1> */}
-                        {/* <div className={styles.PaymentMethod}> */}
-                        {/* <div className={styles.method}>
+                        <h1>{t("paymethod")}</h1>
+                        <div className={styles.PaymentMethod}>
+                          <div className={styles.method}>
                             <Field
                               type="radio"
                               name="paymentMethod"
@@ -552,26 +552,25 @@ export default function CheckoutPage({
                             >
                               {t("creditcard")}
                             </p>
-                          </div> */}
-                        {/* <div className={styles.method}>
-                        <Field
-                          type="radio"
-                          name="paymentMethod"
-                          value="PAYPAL"
-                          disabled
-                        />
-                        <p
-                          style={{
-                            color:
-                              values.paymentMethod === "PAYPAL"
-                                ? "#987358"
-                                : "rgba(30, 30, 30, 0.6)",
-                          }}
-                        >
-                          PayPal
-                        </p>
-                      </div> */}
-                        {/* </div> */}
+                          </div>
+                          <div className={styles.method}>
+                            <Field
+                              type="radio"
+                              name="paymentMethod"
+                              value="PAYPAL"
+                            />
+                            <p
+                              style={{
+                                color:
+                                  values.paymentMethod === "PAYPAL"
+                                    ? "#987358"
+                                    : "rgba(30, 30, 30, 0.6)",
+                              }}
+                            >
+                              PayPal
+                            </p>
+                          </div>
+                        </div>
                         <div className={styles.SignMeUp}>
                           <label>
                             <Field
@@ -819,27 +818,58 @@ export default function CheckoutPage({
                           })}
                         </div>
 
-                        <div className={styles.orderSumBot}>
-                          <button
-                            disabled={isSubmitting || error ? true : false}
-                            style={{
-                              backgroundColor: error
-                                ? "rgba(30, 30, 30, 0.3)"
-                                : isSubmitting
-                                ? "#cbb9ac"
-                                : "#cbb9ac",
-                              cursor:
-                                isSubmitting || error ? "default" : "pointer",
-                            }}
-                            type="submit"
-                            onClick={() => {
-                              if (!values.checkedTerms)
-                                return alert(`${t("shouldacceptterms")}`);
-                            }}
-                          >
-                            {isSubmitting ? <Loader2 /> : t("confirmorder")}
-                          </button>
-                        </div>
+                        {values.paymentMethod === "PAYPAL" ? (
+                          <div style={{ marginTop: "20px" }}>
+                            <PayPalScriptProvider
+                              options={{ "client-id": "test" }}
+                            >
+                              <PayPalButtons
+                                createOrder={(data, actions) => {
+                                  return actions.order.create({
+                                    purchase_units: [
+                                      {
+                                        amount: {
+                                          value: String(ComputedTotal),
+                                        },
+                                      },
+                                    ],
+                                  });
+                                }}
+                                onApprove={(data, actions) => {
+                                  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                  //@ts-ignore
+                                  return actions.order
+                                    .capture()
+                                    .then((details) => {
+                                      console.log(details);
+                                    });
+                                }}
+                              />
+                            </PayPalScriptProvider>
+                          </div>
+                        ) : (
+                          <div className={styles.orderSumBot}>
+                            <button
+                              disabled={isSubmitting || error ? true : false}
+                              style={{
+                                backgroundColor: error
+                                  ? "rgba(30, 30, 30, 0.3)"
+                                  : isSubmitting
+                                  ? "#cbb9ac"
+                                  : "#cbb9ac",
+                                cursor:
+                                  isSubmitting || error ? "default" : "pointer",
+                              }}
+                              type="submit"
+                              onClick={() => {
+                                if (!values.checkedTerms)
+                                  return alert(`${t("shouldacceptterms")}`);
+                              }}
+                            >
+                              {isSubmitting ? <Loader2 /> : t("confirmorder")}
+                            </button>
+                          </div>
+                        )}
                       </div>
                     </div>
                   </Form>
