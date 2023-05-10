@@ -25,7 +25,7 @@ const client = z.object({
   //DATABASE_URL: z.string().url(),
   NODE_ENV: z.enum(["development", "test", "production"]),
 
-  NEXT_PUBLIC_PAYPAL_ID: z.string().min(1),
+  NEXT_PUBLIC_PAYPAL_CLIENT_ID: z.string().min(1),
 });
 
 /**
@@ -38,7 +38,7 @@ const processEnv = {
   // DATABASE :
   DATABASE_URL: process.env.DATABASE_URL,
   NODE_ENV: process.env.NODE_ENV,
-  NEXT_PUBLIC_PAYPAL_ID: process.env.NEXT_PUBLIC_PAYPAL_ID,
+  NEXT_PUBLIC_PAYPAL_CLIENT_ID: process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID,
   STRIPE_ENDPOINT_SECRET: process.env.STRIPE_ENDPOINT_SECRET,
   STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
   SMTP_HOST: process.env.SMTP_HOST,

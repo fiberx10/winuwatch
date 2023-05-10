@@ -12,6 +12,9 @@ input::-webkit-inner-spin-button {
   width: 66px;
   height: 66px;
 }
+.apexcharts-tooltip * {
+  font-size: 10px !important;
+}
 .lds-ring2 div {
   box-sizing: border-box;
   display: block;

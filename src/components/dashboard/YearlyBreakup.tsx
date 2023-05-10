@@ -4,7 +4,7 @@ import { useTheme } from "@mui/material/styles";
 import { Grid, Stack, Typography, Avatar } from "@mui/material";
 import { IconArrowUpLeft, IconArrowDownRight } from "@tabler/icons-react";
 import DashboardCard from "../shared/DashboardCard";
-import { api } from "@/utils";
+import { Formater, api } from "@/utils";
 
 function getUniqueRandomHexColors(length: number) {
   const hexChars = "0123456789ABCDEF";
@@ -26,6 +26,7 @@ function getUniqueRandomHexColors(length: number) {
 const YearlyBreakup = () => {
   const currentYear = new Date().getFullYear();
   const { data } = api.Charts.yearlyEarnings.useQuery() || {};
+  const { data: compEarn } = api.Charts.competEarnings.useQuery();
   const { data: clientsCountry } = api.Charts.clientsCountry.useQuery() || {};
   // chart color
   const theme = useTheme();
@@ -35,10 +36,8 @@ const YearlyBreakup = () => {
   const dangerlight = "rgba(255, 94, 87, 0.2)";
 
   const seriescolumnchart =
-    clientsCountry?.map((item) => Number(item.total)) || [];
-  const seriesChartColor = getUniqueRandomHexColors(
-    clientsCountry?.length || 0
-  );
+    compEarn?.map((item) => Number(item.TotalOrderValue.toFixed(2))) || [];
+  const seriesChartColor = getUniqueRandomHexColors(compEarn?.length || 0);
 
   return (
     <DashboardCard title="Yearly Earnings">
@@ -116,7 +115,7 @@ const YearlyBreakup = () => {
         {/* column */}
         <Grid item xs={5} sm={5}>
           <Chart
-            title="Clients Country"
+            title="Competitions Earnings"
             options={{
               chart: {
                 type: "donut",
@@ -128,8 +127,15 @@ const YearlyBreakup = () => {
                 height: 155,
               },
               colors: seriesChartColor,
-              labels:
-                clientsCountry?.map((item) => item.country || "Unknown") || [],
+              labels: compEarn?.map((item) => {
+                const temp = item.competitionName.length;
+
+                if (temp > 20) {
+                  return item.competitionName.slice(0, 20) + "...";
+                } else {
+                  return item.competitionName;
+                }
+              }),
               plotOptions: {
                 pie: {
                   startAngle: 0,
@@ -145,7 +151,7 @@ const YearlyBreakup = () => {
                 fillSeriesColor: false,
               },
               stroke: {
-                show: false,
+                show: true,
               },
               dataLabels: {
                 enabled: false,
