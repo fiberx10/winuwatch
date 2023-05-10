@@ -1952,19 +1952,25 @@ export const ChartsRouter = createTRPCRouter({
     return result;
   }),
   competEarnings: publicProcedure.query(async ({ ctx }) => {
-    const data = await ctx.prisma.$queryRaw`SELECT 
-    c.id AS competitionId,
-    c.name AS competitionName,
-    SUM(o.totalPrice) AS TotalOrderValue
-FROM 
-    \`order\` AS o
-JOIN 
-    \`tickets\` AS t ON o.id = t.orderId
-JOIN
-    \`competition\` AS c ON t.competitionId = c.id
-GROUP BY 
-    c.id, c.name;`;
-    return data;
+    const data = await ctx.prisma.$queryRaw`
+    SELECT
+      c.id AS competitionId,
+      c.name AS competitionName,
+      SUM(o.totalPrice) AS TotalOrderValue
+    FROM
+      \`order\` AS o
+      JOIN \`tickets\` AS t ON o.id = t.orderId
+      JOIN \`competition\` AS c ON t.competitionId = c.id
+    WHERE
+      o.status = 'CONFIRMED'
+    GROUP BY
+      c.id, c.name;
+  `;
+    return data as Array<{
+      competitionId: string;
+      competitionName: string;
+      TotalOrderValue: number;
+    }>;
   }),
 
   // get total tickets sold per day for a month
