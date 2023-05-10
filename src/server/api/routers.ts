@@ -933,6 +933,30 @@ export const OrderRouter = createTRPCRouter({
       return true;
     }),
 
+  updatePaypalOrder: publicProcedure
+    .input(CreateOrderStripeSchema)
+    .mutation(async ({ ctx, input }) => {
+      const {
+        locale,
+        comps,
+        affiliationId = null,
+        runUpPrizeId = null,
+        ...data
+      } = input;
+      await ctx.prisma.order.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          ...data,
+          affiliationId: affiliationId,
+          runUpPrizeId: runUpPrizeId,
+          status: order_status.PENDING,
+        },
+      });
+      return true;
+    }),
+
   createStripe: publicProcedure
     .input(CreateOrderStripeSchema)
     .mutation(async ({ ctx, input }) => {
@@ -1927,6 +1951,22 @@ export const ChartsRouter = createTRPCRouter({
     };
     return result;
   }),
+  competEarnings: publicProcedure.query(async ({ ctx }) => {
+    const data = await ctx.prisma.$queryRaw`SELECT 
+    c.id AS competitionId,
+    c.name AS competitionName,
+    SUM(o.totalPrice) AS TotalOrderValue
+FROM 
+    \`order\` AS o
+JOIN 
+    \`tickets\` AS t ON o.id = t.orderId
+JOIN
+    \`competition\` AS c ON t.competitionId = c.id
+GROUP BY 
+    c.id, c.name;`;
+    return data;
+  }),
+
   // get total tickets sold per day for a month
   ticketSoldPerDay: publicProcedure.query(async ({ ctx }) => {
     try {

@@ -66,6 +66,9 @@ export default function CheckoutPage({
   const t = useTranslations("checkout");
   const router = useRouter();
   const { mutateAsync: createOrder } = api.Order.createStripe.useMutation();
+  const { mutateAsync: updateStatus } = api.Order.updateStatus.useMutation();
+  const { mutateAsync: updatePaypalOrder } =
+    api.Order.updatePaypalOrder.useMutation();
 
   const { data: items, isLoading } = api.Competition.getAll.useQuery({
     ids: competitions.map((comp) => comp.compID),
@@ -121,6 +124,7 @@ export default function CheckoutPage({
       }
     })();
   }, [order]);
+  const [isPaypal, setIsPaypal] = useState(false);
 
   return (
     <div
@@ -192,84 +196,146 @@ export default function CheckoutPage({
                 }}
                 onSubmit={async (values, { setSubmitting }) => {
                   //if a value in the object values is undefined, it will not be sent to the server
-                  try {
-                    console.log("Form submitted:", values);
-                    //we need to check if each value in values is not undefined
-                    //if it is undefined, we need to set it to null
-                    if (ComputedTotal < 0) {
-                      if (affiliationData?.isRunUpPrize) {
-                        setError(
-                          "The total price of your order is negative, try making an order that fits the discount"
-                        );
-                      } else {
-                        setError("Total price cannot be negative, try again");
+                  if (values.paymentMethod === "PAYPAL") {
+                    try {
+                      console.log("Form submitted:", values);
+                      //we need to check if each value in values is not undefined
+                      //if it is undefined, we need to set it to null
+                      if (ComputedTotal < 0) {
+                        if (affiliationData?.isRunUpPrize) {
+                          setError(
+                            "The total price of your order is negative, try making an order that fits the discount"
+                          );
+                        } else {
+                          setError("Total price cannot be negative, try again");
+                        }
+                        return;
                       }
-                      return;
-                    }
-                    const ValidatedValues = Schema.cast(values);
-                    const { url, error } = await createOrder({
-                      ...ValidatedValues,
-                      phone: ValidatedValues.phone
-                        ? ValidatedValues.phone.toString()
-                        : "",
-                      id: id,
-                      zip: ValidatedValues.zip.toString(),
-                      totalPrice: ComputedTotal,
-                      comps: affiliationData
-                        ? competitions.map((comp) => ({
-                            ...comp,
-                            reduction:
-                              affiliationData.competitionId === comp.compID
-                                ? affiliationData.isRunUpPrize
-                                  ? affiliationData.discountRate /
-                                    comp.number_tickets
-                                  : affiliationData.discountAmount
-                                  ? affiliationData.discountAmount /
-                                    comp.price_per_ticket
-                                  : affiliationData.discountRate
-                                : comp.reduction,
-                          }))
-                        : competitions,
-                      paymentMethod: values.paymentMethod as
-                        | "PAYPAL"
-                        | "STRIPE",
-                      date: new Date(values.date),
-                      affiliationId: affiliationData?.isRunUpPrize
-                        ? ""
-                        : affiliationData?.id,
-                      runUpPrizeId: affiliationData?.isRunUpPrize
-                        ? affiliationData.id
-                        : "",
-                      locale: router.locale
-                        ? (router.locale as (typeof i18n)[number])
-                        : "en",
-                    });
-                    if (url) {
-                      // await resend.sendEmail({
-                      //   from: "test@winuwatch.uk",
-                      //   to: values.email,
-                      //   subject: "Order Confirmation",
-                      //   react: (
-                      //     <SlackConfirmEmail
-                      //       clientName={values.first_name}
-                      //       numerOfTickets={values.comps}
-                      //     />
-                      //   ),
-                      // })
+                      const ValidatedValues = Schema.cast(values);
+                      await updatePaypalOrder({
+                        ...ValidatedValues,
+                        phone: ValidatedValues.phone
+                          ? ValidatedValues.phone.toString()
+                          : "",
+                        id: id,
+                        zip: ValidatedValues.zip.toString(),
+                        totalPrice: ComputedTotal,
+                        comps: affiliationData
+                          ? competitions.map((comp) => ({
+                              ...comp,
+                              reduction:
+                                affiliationData.competitionId === comp.compID
+                                  ? affiliationData.isRunUpPrize
+                                    ? affiliationData.discountRate /
+                                      comp.number_tickets
+                                    : affiliationData.discountAmount
+                                    ? affiliationData.discountAmount /
+                                      comp.price_per_ticket
+                                    : affiliationData.discountRate
+                                  : comp.reduction,
+                            }))
+                          : competitions,
+                        paymentMethod: values.paymentMethod as
+                          | "PAYPAL"
+                          | "STRIPE",
+                        date: new Date(values.date),
+                        paymentId: "",
+                        affiliationId: affiliationData?.isRunUpPrize
+                          ? ""
+                          : affiliationData?.id,
+                        runUpPrizeId: affiliationData?.isRunUpPrize
+                          ? affiliationData.id
+                          : "",
+                        locale: router.locale
+                          ? (router.locale as (typeof i18n)[number])
+                          : "en",
+                      });
+                      setIsPaypal(true);
+
                       setSubmitting(false);
-                      await router.push(url);
+                    } catch (e) {
+                      setError(e as any);
                     }
-                    setError(error);
-                    console.log(error);
-                    // const res = CreateOrderSchema.safeParse(values);
+                  } else {
+                    try {
+                      console.log("Form submitted:", values);
+                      //we need to check if each value in values is not undefined
+                      //if it is undefined, we need to set it to null
+                      if (ComputedTotal < 0) {
+                        if (affiliationData?.isRunUpPrize) {
+                          setError(
+                            "The total price of your order is negative, try making an order that fits the discount"
+                          );
+                        } else {
+                          setError("Total price cannot be negative, try again");
+                        }
+                        return;
+                      }
+                      const ValidatedValues = Schema.cast(values);
+                      const { url, error } = await createOrder({
+                        ...ValidatedValues,
+                        phone: ValidatedValues.phone
+                          ? ValidatedValues.phone.toString()
+                          : "",
+                        id: id,
+                        zip: ValidatedValues.zip.toString(),
+                        totalPrice: ComputedTotal,
+                        comps: affiliationData
+                          ? competitions.map((comp) => ({
+                              ...comp,
+                              reduction:
+                                affiliationData.competitionId === comp.compID
+                                  ? affiliationData.isRunUpPrize
+                                    ? affiliationData.discountRate /
+                                      comp.number_tickets
+                                    : affiliationData.discountAmount
+                                    ? affiliationData.discountAmount /
+                                      comp.price_per_ticket
+                                    : affiliationData.discountRate
+                                  : comp.reduction,
+                            }))
+                          : competitions,
+                        paymentMethod: values.paymentMethod as
+                          | "PAYPAL"
+                          | "STRIPE",
+                        date: new Date(values.date),
+                        affiliationId: affiliationData?.isRunUpPrize
+                          ? ""
+                          : affiliationData?.id,
+                        runUpPrizeId: affiliationData?.isRunUpPrize
+                          ? affiliationData.id
+                          : "",
+                        locale: router.locale
+                          ? (router.locale as (typeof i18n)[number])
+                          : "en",
+                      });
+                      if (url) {
+                        // await resend.sendEmail({
+                        //   from: "test@winuwatch.uk",
+                        //   to: values.email,
+                        //   subject: "Order Confirmation",
+                        //   react: (
+                        //     <SlackConfirmEmail
+                        //       clientName={values.first_name}
+                        //       numerOfTickets={values.comps}
+                        //     />
+                        //   ),
+                        // })
+                        setSubmitting(false);
+                        await router.push(url);
+                      }
+                      setError(error);
+                      console.log(error);
+                      // const res = CreateOrderSchema.safeParse(values);
 
-                    // if (res.success) {
-                    //   console.log("Form submitted:", res.data);
+                      // if (res.success) {
+                      //   console.log("Form submitted:", res.data);
 
-                    // }
-                    setSubmitting(false);
-                  } catch (e) {
-                    setError(e as any);
+                      // }
+                      setSubmitting(false);
+                    } catch (e) {
+                      setError(e as any);
+                    }
                   }
                 }}
               >
@@ -819,33 +885,55 @@ export default function CheckoutPage({
                         </div>
 
                         {values.paymentMethod === "PAYPAL" ? (
-                          <div style={{ marginTop: "20px" }}>
-                            <PayPalScriptProvider
-                              options={{ "client-id": "test", currency: "GBP" }}
-                            >
-                              <PayPalButtons
-                                createOrder={(data, actions) => {
-                                  return actions.order.create({
-                                    purchase_units: [
-                                      {
-                                        amount: {
-                                          value: String(ComputedTotal),
-                                        },
-                                      },
-                                    ],
-                                  });
-                                }}
-                                onApprove={(data, actions) => {
-                                  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                  //@ts-ignore
-                                  return actions.order
-                                    .capture()
-                                    .then((details) => {
-                                      console.log(details);
-                                    });
-                                }}
-                              />
-                            </PayPalScriptProvider>
+                          <div className={styles.paypal}>
+                            {isPaypal ? (
+                              <div style={{ marginTop: "20px" }}>
+                                <PayPalScriptProvider
+                                  options={{
+                                    "client-id": "test",
+                                    currency: "GBP",
+                                  }}
+                                >
+                                  <PayPalButtons
+                                    createOrder={(data, actions) => {
+                                      return actions.order.create({
+                                        purchase_units: [
+                                          {
+                                            amount: {
+                                              value: String(ComputedTotal),
+                                            },
+                                          },
+                                        ],
+                                      });
+                                    }}
+                                    onApprove={(data, actions) => {
+                                      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                      //@ts-ignore
+                                      return actions.order
+                                        .capture()
+                                        .then(async (details) => {
+                                          if (details.status === "COMPLETED") {
+                                            await updateStatus({
+                                              id: id,
+                                              status: "CONFIRMED",
+                                            });
+                                            await router.push(
+                                              `/Confirmation/${id}`
+                                            );
+                                          }
+                                        });
+                                    }}
+                                  />
+                                </PayPalScriptProvider>
+                              </div>
+                            ) : (
+                              <button
+                                type="submit"
+                                className={styles.paypalBtn}
+                              >
+                                Continue with Paypal
+                              </button>
+                            )}
                           </div>
                         ) : (
                           <div className={styles.orderSumBot}>

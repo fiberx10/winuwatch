@@ -71,56 +71,54 @@ export const useStore = create<{
 );
 
 export const useCart = create<RootState>()(
-  devtools(
-    persist(
-      (set, get) => ({
-        // modeleDate: null,
-        // setModeleDate: (date) => set({ modeleDate: date }),
-        AffiliationSession: undefined,
-        auth: false,
-        setAuth: (auth) => set({ auth: auth }),
-        competitions: [],
-        cardDetails: () => {
-          const { competitions } = get();
-          return {
-            Number_of_item: competitions.length,
-            totalCost: competitions.reduce(
-              (acc, c) =>
-                acc + c.number_tickets * c.price_per_ticket * (1 - c.reduction),
-              0
-            ),
-          };
-        },
-        addComp: (comp) =>
-          set(({ competitions }) => ({
-            competitions: [...competitions, comp],
-          })),
-        removeComp: (compID) =>
-          set(({ competitions }) => ({
-            competitions: competitions.filter((c) => c.compID !== compID),
-          })),
-        updateComp: (comp) =>
-          set(({ competitions }) =>
-            comp.number_tickets > 25 || comp.number_tickets < 1
-              ? {
-                  competitions,
-                }
-              : {
-                  competitions: competitions.map((c) =>
-                    c.compID === comp.compID ? { ...c, ...comp } : c
-                  ),
-                }
+  persist(
+    (set, get) => ({
+      // modeleDate: null,
+      // setModeleDate: (date) => set({ modeleDate: date }),
+      AffiliationSession: undefined,
+      auth: false,
+      setAuth: (auth) => set({ auth: auth }),
+      competitions: [],
+      cardDetails: () => {
+        const { competitions } = get();
+        return {
+          Number_of_item: competitions.length,
+          totalCost: competitions.reduce(
+            (acc, c) =>
+              acc + c.number_tickets * c.price_per_ticket * (1 - c.reduction),
+            0
           ),
-        reset: () =>
-          set({
-            AffiliationSession: undefined,
-            competitions: [],
-          }),
-      }),
-      {
-        name: "cart-store",
-        storage: createJSONStorage(() => sessionStorage),
-      }
-    )
+        };
+      },
+      addComp: (comp) =>
+        set(({ competitions }) => ({
+          competitions: [...competitions, comp],
+        })),
+      removeComp: (compID) =>
+        set(({ competitions }) => ({
+          competitions: competitions.filter((c) => c.compID !== compID),
+        })),
+      updateComp: (comp) =>
+        set(({ competitions }) =>
+          comp.number_tickets > 25 || comp.number_tickets < 1
+            ? {
+                competitions,
+              }
+            : {
+                competitions: competitions.map((c) =>
+                  c.compID === comp.compID ? { ...c, ...comp } : c
+                ),
+              }
+        ),
+      reset: () =>
+        set({
+          AffiliationSession: undefined,
+          competitions: [],
+        }),
+    }),
+    {
+      name: "cart-store",
+      storage: createJSONStorage(() => sessionStorage),
+    }
   )
 );
