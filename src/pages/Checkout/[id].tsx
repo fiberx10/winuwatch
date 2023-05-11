@@ -43,6 +43,7 @@ const IsLegal = (Birthdate = new Date()) => {
     ).getTime() >= Birthdate.getTime()
   );
 };
+import lookup from "country-code-lookup";
 
 const Schema = Yup.object().shape({
   first_name: Yup.string().required("Required"),
@@ -920,7 +921,9 @@ export default function CheckoutPage({
                                           address: {
                                             postal_code:
                                               values.zip || undefined,
-                                            country_code: "FR",
+                                            country_code:
+                                              lookup.byCountry(values.country)
+                                                ?.iso2 || "FR",
                                           },
                                           phone: {
                                             phone_number: {
