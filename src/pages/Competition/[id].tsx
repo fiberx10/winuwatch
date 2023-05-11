@@ -57,6 +57,7 @@ export default function Competition({
   const { addComp, updateComp, competitions, AffiliationSession } = useCart();
   const [image, setImage] = useState<string | undefined>(undefined);
   const router = useRouter();
+  const [redirecting, setRedirecting] = useState(false);
   return (
     <div
       style={{
@@ -75,7 +76,7 @@ export default function Competition({
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <NavBar />
-      {isLoading ? (
+      {isLoading || redirecting ? (
         <div
           style={{
             height: "80vh",
@@ -304,6 +305,9 @@ export default function Competition({
                           </div>
                           <button
                             onClick={() => {
+                              typeof window !== "undefined" &&
+                                window.scrollTo(0, 0);
+                              setRedirecting(true);
                               competitions.length > 0
                                 ? competitions.filter((comp) =>
                                     comp.compID === data.id

@@ -32,7 +32,11 @@ import type {
   InferGetServerSidePropsType,
 } from "next";
 import Link from "next/link";
-import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
+import {
+  PayPalScriptProvider,
+  PayPalButtons,
+  usePayPalScriptReducer,
+} from "@paypal/react-paypal-js";
 import { env } from "@/env.mjs";
 
 const IsLegal = (Birthdate = new Date()) => {
@@ -132,6 +136,23 @@ export default function CheckoutPage({
 
   const [isPaypal, setIsPaypal] = useState(false);
   const [submiting, setSubmiting] = useState(false);
+
+  const PaypalSpinner = () => {
+    const [{ isPending }] = usePayPalScriptReducer();
+    return isPending ? (
+      <div
+        style={{
+          width: "100%",
+          display: "grid",
+          placeItems: "center",
+        }}
+      >
+        {" "}
+        <Loader />{" "}
+      </div>
+    ) : null;
+  };
+
   return (
     <div
       style={{
@@ -911,6 +932,7 @@ export default function CheckoutPage({
                                     currency: "GBP",
                                   }}
                                 >
+                                  <PaypalSpinner />
                                   <PayPalButtons
                                     createOrder={(data, actions) => {
                                       return actions.order.create({
