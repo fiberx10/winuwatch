@@ -21,8 +21,8 @@ const config = {
     domains: [
       {
         domain: "winuwatch.co.il",
-        defaultLocale: "iw",
-        locales: ["iw"],
+        locales: ["il"],
+        defaultLocale: "il"
       },
       {
         domain: "winuwatch.com",
