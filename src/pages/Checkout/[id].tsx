@@ -50,7 +50,7 @@ const Schema = Yup.object().shape({
   last_name: Yup.string().required("Required"),
   town: Yup.string().required("Required"),
   zip: Yup.string().required("Required"),
-  phone: Yup.number(),
+  phone: Yup.number().required("Required").max(10, "Too Long!"),
   address: Yup.string().required("Required"),
   country: Yup.string().required("Required"),
   email: Yup.string().email("Invalid email").required("Required"),
@@ -461,6 +461,9 @@ export default function CheckoutPage({
                               <PhoneInput
                                 placeholder="Enter phone number"
                                 name="phone"
+                                addInternationalOption={false}
+                                defaultCountry={"FR"}
+                                international={false}
                                 id="phone"
                                 onChange={(value) =>
                                   setFieldValue("phone", value)
@@ -928,9 +931,7 @@ export default function CheckoutPage({
                                           phone: {
                                             phone_number: {
                                               national_number:
-                                                values.phone?.substring(
-                                                  4
-                                                ) as string,
+                                                values.phone as string,
                                             },
                                             phone_type: "MOBILE",
                                           },
