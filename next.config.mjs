@@ -17,6 +17,7 @@ const config = {
   i18n: {
     locales: ["en", "es", "fr", "ja", "il"],
     defaultLocale: "en",
+    localeDetection :false, 
     domains: [
       {
         domain: "winuwatch.co.il",
