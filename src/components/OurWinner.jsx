@@ -3,6 +3,7 @@ import styles from "../styles/Home.module.css";
 import "@splidejs/react-splide/css";
 import { Splide, SplideSlide } from "@splidejs/react-splide";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 
 const OurWinner = () => {
   const data = [
@@ -27,7 +28,7 @@ const OurWinner = () => {
       country: "France",
     },
   ];
-
+  const t = useTranslations("winners");
   return (
     <div className={styles.WinnCon}>
       <h1
@@ -36,13 +37,12 @@ const OurWinner = () => {
           padding: "0",
         }}
       >
-        Our Winners
+        {t("title")}
       </h1>
 
       <div className={styles.winnerCarou}>
         <p className={styles.activeDesc}>
-          We&apos;ve given away <span>£8,028,750</span> worth of timepieces -
-          and counting
+          {t("desc1")} <span>£8,028,750</span> {t("desc2")}
         </p>
         <div className={styles.splide}>
           <Splide
@@ -99,13 +99,13 @@ const OurWinner = () => {
                       style={{ transition: "all 1s ease" }}
                       className="activeName"
                     >
-                      <p>Name of the winner</p>
+                      <p>{t("nameOfWinner")}</p>
                       <h2>{item.name}</h2>
                       <span>{item.country.toUpperCase()}</span>
                     </div>
 
                     <div style={{ opacity: 0 }}>
-                      <p>Name of the winner</p>
+                      <p>{t("nameOfWinner")}</p>
                       <h2>{item.name}</h2>
                       <span>{item.country.toUpperCase()}</span>
                     </div>
@@ -189,7 +189,7 @@ const OurWinner = () => {
                     style={{ transition: "all 1s ease" }}
                     className="activeName"
                   >
-                    <p>Name of the winner</p>
+                    <p>{t("nameOfWinner")}</p>
                     <h2>{item.name}</h2>
                     <span>{item.country.toUpperCase()}</span>
                   </div>
