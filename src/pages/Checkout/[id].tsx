@@ -18,7 +18,10 @@ import { Formik, Form, Field } from "formik";
 import Datetime from "react-datetime";
 import "react-datetime/css/react-datetime.css";
 import { useTranslations } from "next-intl";
-import PhoneInput from "react-phone-number-input";
+import PhoneInput, {
+  getCountryCallingCode,
+  parsePhoneNumber,
+} from "react-phone-number-input";
 import * as Yup from "yup";
 import "react-phone-number-input/style.css";
 import Loader from "@/components/Loader";
@@ -29,7 +32,11 @@ import type {
   InferGetServerSidePropsType,
 } from "next";
 import Link from "next/link";
-import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
+import {
+  PayPalScriptProvider,
+  PayPalButtons,
+  usePayPalScriptReducer,
+} from "@paypal/react-paypal-js";
 import { env } from "@/env.mjs";
 
 const IsLegal = (Birthdate = new Date()) => {
@@ -128,6 +135,23 @@ export default function CheckoutPage({
   }, [order]);
 
   const [isPaypal, setIsPaypal] = useState(false);
+  const [submiting, setSubmiting] = useState(false);
+
+  const PaypalSpinner = () => {
+    const [{ isPending }] = usePayPalScriptReducer();
+    return isPending ? (
+      <div
+        style={{
+          width: "100%",
+          display: "grid",
+          placeItems: "center",
+        }}
+      >
+        {" "}
+        <Loader />{" "}
+      </div>
+    ) : null;
+  };
 
   return (
     <div
@@ -143,7 +167,7 @@ export default function CheckoutPage({
       </Head>
       <NavBar />
       <div className={styles.CheckoutMain}>
-        {isLoading ? (
+        {isLoading || submiting ? (
           <div
             style={{
               height: "80vh",
@@ -349,6 +373,7 @@ export default function CheckoutPage({
                   setFieldValue,
                   errors,
                   touched,
+                  handleSubmit,
                 }) => (
                   <Form>
                     <div className={styles.CheckoutLeft}>
@@ -461,6 +486,13 @@ export default function CheckoutPage({
                               <PhoneInput
                                 placeholder="Enter phone number"
                                 name="phone"
+                                required
+                                countryCallingCodeEditable={false}
+                                addInternationalOption={false}
+                                defaultCountry={"FR"}
+                                international={false}
+                                limitMaxLength={true}
+                                initialValueFormat="national"
                                 id="phone"
                                 onChange={(value) =>
                                   setFieldValue("phone", value)
@@ -688,6 +720,7 @@ export default function CheckoutPage({
                             const ComptetionData = items.find(
                               (compData) => compData.id === order.compID
                             );
+
                             return !ComptetionData ||
                               ComptetionData.Watches === null ? null : (
                               <div className={styles.orderItem} key={i}>
@@ -899,6 +932,7 @@ export default function CheckoutPage({
                                     currency: "GBP",
                                   }}
                                 >
+                                  <PaypalSpinner />
                                   <PayPalButtons
                                     createOrder={(data, actions) => {
                                       return actions.order.create({
@@ -928,8 +962,15 @@ export default function CheckoutPage({
                                           phone: {
                                             phone_number: {
                                               national_number:
-                                                values.phone?.substring(
-                                                  4
+                                                values.phone?.replaceAll(
+                                                  `+${getCountryCallingCode(
+                                                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                                    //@ts-ignore
+                                                    parsePhoneNumber(
+                                                      values.phone
+                                                    )?.country
+                                                  )}`,
+                                                  ""
                                                 ) as string,
                                             },
                                             phone_type: "MOBILE",
@@ -953,6 +994,7 @@ export default function CheckoutPage({
                                         .capture()
                                         .then(async (details) => {
                                           if (details.status === "COMPLETED") {
+                                            setSubmiting(true);
                                             await updateStatus({
                                               id: id,
                                               status: "CONFIRMED",
