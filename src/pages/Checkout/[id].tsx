@@ -6,10 +6,10 @@ import Footer from "@/components/Footer";
 import NavBar from "@/components/NavBar";
 import Head from "next/head";
 import { z } from "zod";
-import { SetStateAction, useEffect, useState } from "react";
+import { type SetStateAction, useEffect, useState } from "react";
 import styles from "@/styles/Checkout.module.css";
 import { useRouter } from "next/router";
-import { api, Formater, CreateOrderStripeSchema, i18n } from "@/utils";
+import { api, Formater, CreateOrderStripeSchema, type i18n } from "@/utils";
 import { useCart } from "@/components/Store";
 import { countryList } from "@/components/countries";
 import "@/styles/Checkout.module.css";
@@ -43,6 +43,7 @@ const IsLegal = (Birthdate = new Date()) => {
     ).getTime() >= Birthdate.getTime()
   );
 };
+import lookup from "country-code-lookup";
 
 const Schema = Yup.object().shape({
   first_name: Yup.string().required("Required"),
@@ -125,6 +126,9 @@ export default function CheckoutPage({
       }
     })();
   }, [order]);
+  function convertDigitIn(str: string) {
+    return str.split("/").reverse().join("/");
+  }
   const [isPaypal, setIsPaypal] = useState(false);
 
   return (
@@ -898,6 +902,41 @@ export default function CheckoutPage({
                                   <PayPalButtons
                                     createOrder={(data, actions) => {
                                       return actions.order.create({
+                                        application_context: {
+                                          shipping_preference: "NO_SHIPPING",
+                                          brand_name: "Win u Watch",
+                                          locale: "en-GB",
+                                          user_action: "PAY_NOW",
+                                        },
+                                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                        //@ts-ignore
+                                        payer: {
+                                          name: {
+                                            given_name:
+                                              values.first_name || undefined,
+                                            surname:
+                                              values.last_name || undefined,
+                                          },
+                                          email_address: values.email as string,
+                                          address: {
+                                            postal_code:
+                                              values.zip || undefined,
+                                            country_code:
+                                              lookup.byCountry(values.country)
+                                                ?.iso2 || "FR",
+                                          },
+                                          phone: {
+                                            phone_number: {
+                                              national_number:
+                                                values.phone?.substring(
+                                                  4
+                                                ) as string,
+                                            },
+                                            phone_type: "MOBILE",
+                                          },
+                                          tenant: "",
+                                          birth_date: "2000-01-01",
+                                        },
                                         purchase_units: [
                                           {
                                             amount: {
@@ -905,9 +944,6 @@ export default function CheckoutPage({
                                             },
                                           },
                                         ],
-                                        application_context: {
-                                          shipping_preference: "NO_SHIPPING",
-                                        },
                                       });
                                     }}
                                     onApprove={(data, actions) => {
