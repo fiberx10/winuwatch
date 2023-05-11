@@ -3,43 +3,55 @@ import styles from "../styles/Home.module.css";
 import "@splidejs/react-splide/css";
 import { Splide, SplideSlide } from "@splidejs/react-splide";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 
 const OurWinner = () => {
   const data = [
     {
-      img: "/images/winner/winner_1.png",
-      name: "Mike Hero",
+      img: "/images/winner/batman_winner.jfif",
+      name: "Johan A",
+      country: "France",
     },
     {
       img: "/images/winner/winner_2.png",
-      name: "Watch title",
+      name: `Be the winner`,
+      country: "France",
     },
     {
       img: "/images/winner/winner_3.png",
-      name: "Watch title",
+      name: "Be the winner",
+      country: "France",
     },
     {
       img: "/images/winner/winner_4.png",
-      name: "Watch title",
+      name: "Be the winner",
+      country: "France",
     },
   ];
-
+  const t = useTranslations("winners");
   return (
     <div className={styles.WinnCon}>
-      <h1>Our Winners</h1>
+      <h1
+        style={{
+          textAlign: "center",
+          padding: "0",
+        }}
+      >
+        {t("title")}
+      </h1>
 
       <div className={styles.winnerCarou}>
         <p className={styles.activeDesc}>
-          We&apos;ve given away <span>£8,028,750</span> worth of timepieces -
-          and counting
+          {t("desc1")} <span>£8,028,750</span> {t("desc2")}
         </p>
         <div className={styles.splide}>
           <Splide
             options={{
               type: "loop",
-              isNavigation: true,
+              isNavigation: false,
+              drag: false,
               cloneStatus: false,
-              arrows: true,
+              arrows: false,
               pagination: false,
               perPage: 2,
               padding: "21rem",
@@ -61,10 +73,16 @@ const OurWinner = () => {
           >
             {data.map((item, i) => {
               return (
-                <SplideSlide key={i}>
+                <SplideSlide
+                  style={{
+                    opacity: i === 0 ? 1 : 0,
+                  }}
+                  key={i}
+                >
                   <div
                     style={{
                       transition: "all 1s ease",
+                      opacity: i === 0 ? 1 : 0,
                     }}
                     className={styles.carouItem}
                   >
@@ -81,15 +99,15 @@ const OurWinner = () => {
                       style={{ transition: "all 1s ease" }}
                       className="activeName"
                     >
-                      <p>Name of the winner</p>
+                      <p>{t("nameOfWinner")}</p>
                       <h2>{item.name}</h2>
-                      <span>COUNTRY</span>
+                      <span>{item.country.toUpperCase()}</span>
                     </div>
 
                     <div style={{ opacity: 0 }}>
-                      <p>Name of the winner</p>
+                      <p>{t("nameOfWinner")}</p>
                       <h2>{item.name}</h2>
-                      <span>COUNTRY</span>
+                      <span>{item.country.toUpperCase()}</span>
                     </div>
                   </div>
                 </SplideSlide>
@@ -105,7 +123,7 @@ const OurWinner = () => {
         </p>
         <Splide
           options={{
-            rewind: true,
+            rewind: false,
             type: "loop",
             mediaQuery: "max",
             breakpoints: {
@@ -137,17 +155,26 @@ const OurWinner = () => {
                 perPage: 2,
               },
             },
-            autoplay: true,
+            autoplay: false,
             arrows: false,
             pagination: false,
+            drag: false,
           }}
           aria-label="My Favorite Images"
         >
           {data.map((item, i) => {
             return (
-              <SplideSlide key={i}>
+              <SplideSlide
+                style={{
+                  opacity: i === 0 ? 1 : 0,
+                }}
+                key={i}
+              >
                 <div
-                  style={{ transition: "all 1s ease" }}
+                  style={{
+                    transition: "all 1s ease",
+                    opacity: i === 0 ? 1 : 0,
+                  }}
                   className={styles.carouItem}
                 >
                   <Image
@@ -162,9 +189,9 @@ const OurWinner = () => {
                     style={{ transition: "all 1s ease" }}
                     className="activeName"
                   >
-                    <p>Name of the winner</p>
+                    <p>{t("nameOfWinner")}</p>
                     <h2>{item.name}</h2>
-                    <span>COUNTRY</span>
+                    <span>{item.country.toUpperCase()}</span>
                   </div>
                 </div>
               </SplideSlide>

@@ -34,7 +34,12 @@
     "securepay": " Paiement 100% sécurisé",
     "cart": "Panier"
   },
-
+  "winners": {
+    "title": "Nos gagnants",
+    "desc1": "Nous avons offert pour une valeur de",
+    "desc2": "en montres - et ce n'est pas fini",
+    "nameOfWinner": "Nom du gagnant"
+  },
   "philosophy": {
     "philoheader": "IL N'Y A PAS DE GÉNIE, QUE DU 'SAVOIR-FAIRE' DANS NOTRE ENTREPRISE FAMILIALE INDÉPENDANTE.",
     "philotext": "VOUS DEVEZ SAVOIR QUE NOUS SOMMES LE PREMIER SITE AU MONDE EN TERME DE PROBABILITÉ DE GAGNER.",
@@ -154,7 +159,10 @@
     "terms": "J'ACCEPTE DE RECEVOIR LES NEWSLETTERS PAR E-MAIL",
     "remaingtickets": "TICKETS  RESTANTS",
     "error": "Erreur lors de la création de la commande",
-    "shouldacceptterms": "Vous devez accepter les termes et conditions"
+    "shouldacceptterms": "Vous devez accepter les termes et conditions",
+    "havediscount": "Vous avez un coupon de réduction ?",
+    "enterDiscount": "Tapez le code",
+    "add": "Ajouter"
   },
   "navitems": {
     "phil": "PHILOSOPHIE",

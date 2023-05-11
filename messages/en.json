@@ -34,6 +34,12 @@
     "securepay": "100% Secure payment",
     "cart": "CART"
   },
+  "winners": {
+    "title": "Our Winners",
+    "desc1": "We've given away",
+    "desc2": "worth of watches - and counting",
+    "nameOfWinner": "Name of the winner"
+  },
   "philosophy": {
     "philoheader": "IN OUR FAMILY-OWNED BUSINESS, WE BELIEVE THAT THERE IS NO SUCH THING AS GENIUS, ONLY “KNOW-HOW”",
     "philoheaderdesc": " We are a large family-owned company where our team works tirelessly every day to bring you the most sought-after timepieces. We founded WINUWATCH with the goal of helping individuals turn their dream of owning a luxury watch into a reality.",
@@ -153,7 +159,10 @@
     "terms": "I AGREE TO RECEIVE EMAIL UPDATES AND NEWS",
     "remaingtickets": "REMAINING TICKETS",
     "error": "Error in the creating the order",
-    "shouldacceptterms": "You should accept the terms and conditions"
+    "shouldacceptterms": "You should accept the terms and conditions",
+    "havediscount": "Have a discount code ?",
+    "enterDiscount": "Enter discount code",
+    "add": "ADD"
   },
   "navitems": {
     "phil": "PHILOSOPHY",

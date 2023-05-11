@@ -11,7 +11,7 @@ import HowToPlay from "@/components/HowToPlay";
 import Certificate from "@/components/Certificate";
 import Reviews from "@/components/Reviews";
 import Footer from "@/components/Footer";
-//import OurWinner from "@/components/OurWinner";
+import OurWinner from "@/components/OurWinner";
 import UpComing from "@/components/UpComing";
 import { useRouter } from "next/router";
 //import { api } from "@/utils/api";
@@ -111,10 +111,9 @@ export default function Index() {
       </Head>
       <Header />
       <TheCompetition />
-      {/*
-              <OurWinner/>
 
-      */}
+      <OurWinner />
+
       <HowToPlay />
       <Certificate />
       <Reviews />

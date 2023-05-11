@@ -126,9 +126,7 @@ export default function CheckoutPage({
       }
     })();
   }, [order]);
-  function convertDigitIn(str: string) {
-    return str.split("/").reverse().join("/");
-  }
+
   const [isPaypal, setIsPaypal] = useState(false);
 
   return (
@@ -194,7 +192,7 @@ export default function CheckoutPage({
                     order?.country === null || !order
                       ? "France"
                       : order.country,
-                  paymentMethod: "STRIPE",
+                  paymentMethod: "PAYPAL",
                   checkedEmail: true,
                   checkedTerms: false,
                   date: new Date(),
@@ -572,12 +570,14 @@ export default function CheckoutPage({
                       </div>
                       {/* Insert coupon */}
                       <div className={styles.leftFormItem}>
-                        <h1>{/* {t("coupon")} */} Have a discount code ?</h1>
+                        <h1>
+                          {/* {t("coupon")} */} {t("havediscount")}
+                        </h1>
                         <div className={styles.CouponInput}>
                           <Field
                             type="text"
                             name="coupon"
-                            placeholder={"Enter discount code"}
+                            placeholder={t("enterDiscount")}
                             onChange={(e: {
                               target: {
                                 value: SetStateAction<string | undefined>;
@@ -595,7 +595,7 @@ export default function CheckoutPage({
                               });
                             }}
                           >
-                            ADD
+                            {t("add")}
                           </a>
                         </div>
                         {!!affiliationError ? (
@@ -605,25 +605,8 @@ export default function CheckoutPage({
                         ) : null}
                       </div>
                       <div className={styles.leftFormItem}>
-                        <h1>{t("paymethod")}</h1>
+                        {/* <h1>{t("paymethod")}</h1>
                         <div className={styles.PaymentMethod}>
-                          <div className={styles.method}>
-                            <Field
-                              type="radio"
-                              name="paymentMethod"
-                              value="STRIPE"
-                            />
-                            <p
-                              style={{
-                                color:
-                                  values.paymentMethod === "STRIPE"
-                                    ? "#987358"
-                                    : "rgba(30, 30, 30, 0.6)",
-                              }}
-                            >
-                              {t("creditcard")}
-                            </p>
-                          </div>
                           <div className={styles.method}>
                             <Field
                               type="radio"
@@ -641,7 +624,24 @@ export default function CheckoutPage({
                               PayPal
                             </p>
                           </div>
-                        </div>
+                          <div className={styles.method}>
+                            <Field
+                              type="radio"
+                              name="paymentMethod"
+                              value="STRIPE"
+                            />
+                            <p
+                              style={{
+                                color:
+                                  values.paymentMethod === "STRIPE"
+                                    ? "#987358"
+                                    : "rgba(30, 30, 30, 0.6)",
+                              }}
+                            >
+                              {t("creditcard")}
+                            </p>
+                          </div>
+                        </div> */}
                         <div className={styles.SignMeUp}>
                           <label>
                             <Field
