@@ -48,16 +48,6 @@ const YearlyBreakup = () => {
     compEarn?.map((item) => Number(item.TotalOrderValue.toFixed(2))) || [];
   const seriesChartColor = getUniqueRandomHexColors(compEarn?.length || 0);
   const [select, setSelect] = useState("All");
-  console.log(
-    compEarn?.map((item) => {
-      return compEarn
-        .reduce((a, b) => a + b.TotalOrderValue, 0)
-        .toLocaleString("en-GB", {
-          style: "currency",
-          currency: "GBP",
-        });
-    })
-  );
 
   return (
     <DashboardCard title="Yearly Earnings">
@@ -109,19 +99,16 @@ const YearlyBreakup = () => {
             >
               {/* £ */}
               {select === "All"
-                ? compEarn
-                    ?.reduce((a, b) => a + b.TotalOrderValue, 0)
-                    .toLocaleString("en-GB", {
-                      style: "currency",
-                      currency: "GBP",
-                    })
+                ? Formater(
+                    compEarn?.reduce(
+                      (a, b) => a + b.TotalOrderValue,
+                      0
+                    ) as number
+                  )
                 : compEarn?.map((item) => {
                     return (
                       item.competitionName === select &&
-                      item.TotalOrderValue.toLocaleString("en-GB", {
-                        style: "currency",
-                        currency: "GBP",
-                      })
+                      Formater(item.TotalOrderValue)
                     );
                   })}
             </Typography>
