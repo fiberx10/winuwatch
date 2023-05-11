@@ -126,9 +126,7 @@ export default function CheckoutPage({
       }
     })();
   }, [order]);
-  function convertDigitIn(str: string) {
-    return str.split("/").reverse().join("/");
-  }
+
   const [isPaypal, setIsPaypal] = useState(false);
 
   return (
