@@ -436,7 +436,6 @@
   position: relative;
 }
 .active {
-  height: 350px !important;
   width: 303px !important;
   object-fit: cover;
   opacity: 1 !important;
@@ -1193,7 +1192,7 @@
     margin: 0px -20px;
   }
   .activeDesc {
-    padding-left: 10px;
+    padding-left: 20px;
     margin: 20px 0px;
   }
   .howtoContainer {
