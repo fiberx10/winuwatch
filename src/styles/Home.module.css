@@ -1539,6 +1539,10 @@
     min-width: none;
     width: 35.3%;
   }
+  .activeDesc {
+    right: 22rem !important;
+    top: 1.5rem;
+  }
   .flexStart {
     min-width: none;
 
