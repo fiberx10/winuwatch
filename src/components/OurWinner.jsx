@@ -9,7 +9,7 @@ const OurWinner = () => {
   const data = [
     {
       img: "/images/winner/batman_winner.jfif",
-      name: "Johan A",
+      name: "Johan",
       country: "France",
     },
     {
@@ -96,18 +96,27 @@ const OurWinner = () => {
                       />
                     </div>
                     <div
-                      style={{ transition: "all 1s ease" }}
+                      style={{
+                        transition: "all 1s ease",
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                      }}
                       className="activeName"
                     >
-                      <p>{t("nameOfWinner")}</p>
+                      {/* <p>{t("nameOfWinner")}</p> */}
                       <h2>{item.name}</h2>
-                      <span>{item.country.toUpperCase()}</span>
+                      <span style={{ textAlign: "center" }}>
+                        {item.country.toUpperCase()}
+                      </span>
                     </div>
 
                     <div style={{ opacity: 0 }}>
-                      <p>{t("nameOfWinner")}</p>
+                      {/* <p>{t("nameOfWinner")}</p> */}
                       <h2>{item.name}</h2>
-                      <span>{item.country.toUpperCase()}</span>
+                      <span style={{ textAlign: "center" }}>
+                        {item.country.toUpperCase()}
+                      </span>
                     </div>
                   </div>
                 </SplideSlide>
@@ -118,8 +127,7 @@ const OurWinner = () => {
       </div>
       <div className={styles.AliceCarou}>
         <p className={styles.activeDesc}>
-          We&apos;ve given away <span>£8,028,750</span> worth of timepieces -
-          and counting
+          {t("desc1")} <span>£8,028,750</span> {t("desc2")}
         </p>
         <Splide
           options={{
@@ -189,7 +197,7 @@ const OurWinner = () => {
                     style={{ transition: "all 1s ease" }}
                     className="activeName"
                   >
-                    <p>{t("nameOfWinner")}</p>
+                    {/* <p>{t("nameOfWinner")}</p> */}
                     <h2>{item.name}</h2>
                     <span>{item.country.toUpperCase()}</span>
                   </div>
