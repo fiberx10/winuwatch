@@ -994,6 +994,8 @@ export default function CheckoutPage({
                                         .capture()
                                         .then(async (details) => {
                                           if (details.status === "COMPLETED") {
+                                            typeof window !== "undefined" &&
+                                              window.scrollTo(0, 0);
                                             setSubmiting(true);
                                             await updateStatus({
                                               id: id,
