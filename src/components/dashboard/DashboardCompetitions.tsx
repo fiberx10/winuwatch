@@ -49,7 +49,7 @@ const DashboardCompetitions = () => {
       data: i,
     });
   };
-  const { isLoading: CSVLoading, MutateAsync: CSVDownload } = api.Order.getConfirmedAsCSV.useMutation();
+  const { isLoading: CSVLoading, mutateAsync: CSVDownload } = api.Competition.getConfirmedAsCSV.useMutation();
   //DATA FROM BACKEND
   const { data, isLoading, refetch } = api.Competition.getAll.useQuery();
   const { data: activeComps, refetch: activeFetch } =
