@@ -36,7 +36,6 @@ const TheCompetition = () => {
         {data && data.length > 0 ? (
           data.map((watch) => {
             if (watch === null || watch.Watches === null) return null;
-
             return (
               <div className={styles.watches} key={watch.id}>
                 <div
@@ -61,7 +60,16 @@ const TheCompetition = () => {
                       ""
                     ) : (
                       <p>
-                        {t("only")} <b>{watch.total_tickets}</b> {t("tickets")}
+                        {t("only")} <b>{
+                        // If the end date is less than 1 day away, then show xxx
+                        
+                          Math.floor(
+                            (new Date(watch.end_date).getTime() - new Date().getTime()) /
+                              (1000 * 60 * 60 * 24)
+                          ) < 2
+                            ? "xxx"
+                            : watch.remaining_tickets
+                        }</b> {t("tickets")}
                       </p>
                     )}
                   </div>
