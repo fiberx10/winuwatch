@@ -17,7 +17,7 @@ import "react-datetime/css/react-datetime.css";
 import UpcomingComps from "./UpcomingComps";
 import Loader from "../Loader";
 import * as Yup from "yup";
-
+import { ExportToCsv } from "export-to-csv";
 const FixDate = (date: moment.MomentInput) =>
   moment(date).tz("Europe/London").toDate();
 
@@ -49,7 +49,7 @@ const DashboardCompetitions = () => {
       data: i,
     });
   };
-
+  const { isLoading: CSVLoading, MutateAsync: CSVDownload } = api.Order.getConfirmedAsCSV.useMutation();
   //DATA FROM BACKEND
   const { data, isLoading, refetch } = api.Competition.getAll.useQuery();
   const { data: activeComps, refetch: activeFetch } =
@@ -129,6 +129,27 @@ const DashboardCompetitions = () => {
                               onClick={() => handleShow(comp.id)}
                             >
                               Manage
+                            </Button>
+                            <Button
+                              variant="success"
+                              disabled={CSVLoading}
+                              onClick={async () => {
+                                //Here
+                                new ExportToCsv({
+                                  fieldSeparator: ",",
+                                  quoteStrings: '"',
+                                  decimalSeparator: ".",
+                                  showLabels: true,
+                                  showTitle: false,
+                                  title: "List of clients",
+                                  useTextFile: false,
+                                  useBom: true,
+                                  useKeysAsHeaders: true,
+                                  // headers: ['Column 1', 'Column 2', etc...] <-- Won't work with useKeysAsHeaders present!
+                                }).generateCsv(await CSVDownload(comp.id));
+                              }}
+                            >
+                              Export emails
                             </Button>
                           </div>
                           <span
