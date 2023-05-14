@@ -1196,6 +1196,7 @@ export const CompetitionRouter = createTRPCRouter({
         firstName : order.first_name,
         lastName : order.last_name, 
         phone : order.phone,
+        status : order.status,
       }));
   }),
   getAll: publicProcedure
