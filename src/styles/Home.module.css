@@ -436,7 +436,6 @@
   position: relative;
 }
 .active {
-  height: 350px !important;
   width: 303px !important;
   object-fit: cover;
   opacity: 1 !important;
@@ -1176,6 +1175,7 @@
     text-align: left;
     padding-left: 20px;
   }
+
   .AliceCarou {
     width: 100%;
     display: initial;
@@ -1193,7 +1193,7 @@
     margin: 0px -20px;
   }
   .activeDesc {
-    padding-left: 10px;
+    padding-left: 20px;
     margin: 20px 0px;
   }
   .howtoContainer {
@@ -1538,6 +1538,10 @@
   .flexEnd {
     min-width: none;
     width: 35.3%;
+  }
+  .activeDesc {
+    right: 22rem !important;
+    top: 1.5rem;
   }
   .flexStart {
     min-width: none;

@@ -15,7 +15,6 @@ const prisma = new PrismaClient({
 
 export default async function send(req: NextApiRequest, res: NextApiResponse) {
   // const OrderID = '8a0a819e-bc12-4d01-86c0-2f1e3e25dc75';
-  const TicketID = "clgwcdyeg01h4t5jgi5kzezv5";
 
   // const data = await GetWinnerData(TicketID, prisma);
   // const EmailRender = WinningEmail(data);
@@ -83,5 +82,20 @@ export default async function send(req: NextApiRequest, res: NextApiResponse) {
 
   // res.send(EmailRender);
 
-  res.send(newsLetter1(await GetWinnerData(TicketID, prisma)));
+  // res.send(newsLetter1(await GetWinnerData(TicketID, prisma)));
+  const competEarnings = await prisma.$queryRaw`
+  SELECT
+    c.id AS competitionId,
+    c.name AS competitionName,
+    SUM(o.totalPrice) AS TotalOrderValue
+  FROM
+    \`order\` AS o
+    JOIN \`tickets\` AS t ON o.id = t.orderId
+    JOIN \`competition\` AS c ON t.competitionId = c.id
+  WHERE
+    o.status = 'CONFIRMED'
+  GROUP BY
+    c.id, c.name;
+`;
+  res.send(competEarnings);
 }

@@ -34,6 +34,12 @@
     "securepay": "Pago 100% seguro.",
     "cart": "Carrito"
   },
+  "winners": {
+    "title": "Nuestros Ganadores",
+    "desc1": "Hemos otorgado",
+    "desc2": "en valor de relojes - y seguimos contando",
+    "nameOfWinner": "Nombre del ganador"
+  },
   "philosophy": {
     "philoheader": "EN NUESTRA EMPRESA FAMILIAR INDEPENDIENTE NO HAY GENIOS, SOLO PROFESIONALES.",
     "philoheaderdesc": " Somos una empresa familiar donde todo el mundo trabaja cada día para encontrarle los modelos de relojes más codiciados que están a su alcance, lanzamos WIN U WATCH para permitir que cualquier persona que sueñe con poseer un reloj de lujo, deje de ser un sueño para convertirse en una oportunidad real.",
@@ -153,7 +159,10 @@
     "terms": "ACEPTO RECIBIR ACTUALIZACIONES Y NOTICIAS POR CORREO ELECTRÓNICO",
     "remaingtickets": "ENTRADAS RESTANTES",
     "error": "Error al crear la orden",
-    "shouldacceptterms": "Debe aceptar los términos y condiciones"
+    "shouldacceptterms": "Debe aceptar los términos y condiciones",
+    "havediscount": "¿Tienes un código de descuento?",
+    "enterDiscount": "Introduce el código de descuento",
+    "add": "AGREGAR"
   },
   "navitems": {
     "phil": "FILOSOFÍA",

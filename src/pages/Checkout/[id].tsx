@@ -6,11 +6,10 @@ import Footer from "@/components/Footer";
 import NavBar from "@/components/NavBar";
 import Head from "next/head";
 import { z } from "zod";
-import { SetStateAction, useEffect, useState } from "react";
+import { type SetStateAction, useEffect, useState } from "react";
 import styles from "@/styles/Checkout.module.css";
-//import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js";
 import { useRouter } from "next/router";
-import { api, Formater, CreateOrderStripeSchema, i18n } from "@/utils";
+import { api, Formater, CreateOrderStripeSchema, type i18n } from "@/utils";
 import { useCart } from "@/components/Store";
 import { countryList } from "@/components/countries";
 import "@/styles/Checkout.module.css";
@@ -19,7 +18,10 @@ import { Formik, Form, Field } from "formik";
 import Datetime from "react-datetime";
 import "react-datetime/css/react-datetime.css";
 import { useTranslations } from "next-intl";
-import PhoneInput from "react-phone-number-input";
+import PhoneInput, {
+  getCountryCallingCode,
+  parsePhoneNumber,
+} from "react-phone-number-input";
 import * as Yup from "yup";
 import "react-phone-number-input/style.css";
 import Loader from "@/components/Loader";
@@ -30,6 +32,12 @@ import type {
   InferGetServerSidePropsType,
 } from "next";
 import Link from "next/link";
+import {
+  PayPalScriptProvider,
+  PayPalButtons,
+  usePayPalScriptReducer,
+} from "@paypal/react-paypal-js";
+import { env } from "@/env.mjs";
 
 const IsLegal = (Birthdate = new Date()) => {
   const LegalAge = 18;
@@ -42,6 +50,7 @@ const IsLegal = (Birthdate = new Date()) => {
     ).getTime() >= Birthdate.getTime()
   );
 };
+import lookup from "country-code-lookup";
 
 const Schema = Yup.object().shape({
   first_name: Yup.string().required("Required"),
@@ -66,6 +75,9 @@ export default function CheckoutPage({
   const t = useTranslations("checkout");
   const router = useRouter();
   const { mutateAsync: createOrder } = api.Order.createStripe.useMutation();
+  const { mutateAsync: updateStatus } = api.Order.updateStatus.useMutation();
+  const { mutateAsync: updatePaypalOrder } =
+    api.Order.updatePaypalOrder.useMutation();
 
   const { data: items, isLoading } = api.Competition.getAll.useQuery({
     ids: competitions.map((comp) => comp.compID),
@@ -122,6 +134,25 @@ export default function CheckoutPage({
     })();
   }, [order]);
 
+  const [isPaypal, setIsPaypal] = useState(false);
+  const [submiting, setSubmiting] = useState(false);
+
+  const PaypalSpinner = () => {
+    const [{ isPending }] = usePayPalScriptReducer();
+    return isPending ? (
+      <div
+        style={{
+          width: "100%",
+          display: "grid",
+          placeItems: "center",
+        }}
+      >
+        {" "}
+        <Loader />{" "}
+      </div>
+    ) : null;
+  };
+
   return (
     <div
       style={{
@@ -136,7 +167,7 @@ export default function CheckoutPage({
       </Head>
       <NavBar />
       <div className={styles.CheckoutMain}>
-        {isLoading ? (
+        {isLoading || submiting ? (
           <div
             style={{
               height: "80vh",
@@ -185,91 +216,153 @@ export default function CheckoutPage({
                     order?.country === null || !order
                       ? "France"
                       : order.country,
-                  paymentMethod: "STRIPE",
+                  paymentMethod: "PAYPAL",
                   checkedEmail: true,
                   checkedTerms: false,
                   date: new Date(),
                 }}
                 onSubmit={async (values, { setSubmitting }) => {
                   //if a value in the object values is undefined, it will not be sent to the server
-                  try {
-                    console.log("Form submitted:", values);
-                    //we need to check if each value in values is not undefined
-                    //if it is undefined, we need to set it to null
-                    if (ComputedTotal < 0) {
-                      if (affiliationData?.isRunUpPrize) {
-                        setError(
-                          "The total price of your order is negative, try making an order that fits the discount"
-                        );
-                      } else {
-                        setError("Total price cannot be negative, try again");
+                  if (values.paymentMethod === "PAYPAL") {
+                    try {
+                      console.log("Form submitted:", values);
+                      //we need to check if each value in values is not undefined
+                      //if it is undefined, we need to set it to null
+                      if (ComputedTotal < 0) {
+                        if (affiliationData?.isRunUpPrize) {
+                          setError(
+                            "The total price of your order is negative, try making an order that fits the discount"
+                          );
+                        } else {
+                          setError("Total price cannot be negative, try again");
+                        }
+                        return;
                       }
-                      return;
-                    }
-                    const ValidatedValues = Schema.cast(values);
-                    const { url, error } = await createOrder({
-                      ...ValidatedValues,
-                      phone: ValidatedValues.phone
-                        ? ValidatedValues.phone.toString()
-                        : "",
-                      id: id,
-                      zip: ValidatedValues.zip.toString(),
-                      totalPrice: ComputedTotal,
-                      comps: affiliationData
-                        ? competitions.map((comp) => ({
-                            ...comp,
-                            reduction:
-                              affiliationData.competitionId === comp.compID
-                                ? affiliationData.isRunUpPrize
-                                  ? affiliationData.discountRate /
-                                    comp.number_tickets
-                                  : affiliationData.discountAmount
-                                  ? affiliationData.discountAmount /
-                                    comp.price_per_ticket
-                                  : affiliationData.discountRate
-                                : comp.reduction,
-                          }))
-                        : competitions,
-                      paymentMethod: values.paymentMethod as
-                        | "PAYPAL"
-                        | "STRIPE",
-                      date: new Date(values.date),
-                      affiliationId: affiliationData?.isRunUpPrize
-                        ? ""
-                        : affiliationData?.id,
-                      runUpPrizeId: affiliationData?.isRunUpPrize
-                        ? affiliationData.id
-                        : "",
-                      locale: router.locale
-                        ? (router.locale as (typeof i18n)[number])
-                        : "en",
-                    });
-                    if (url) {
-                      // await resend.sendEmail({
-                      //   from: "test@winuwatch.uk",
-                      //   to: values.email,
-                      //   subject: "Order Confirmation",
-                      //   react: (
-                      //     <SlackConfirmEmail
-                      //       clientName={values.first_name}
-                      //       numerOfTickets={values.comps}
-                      //     />
-                      //   ),
-                      // })
+                      const ValidatedValues = Schema.cast(values);
+                      await updatePaypalOrder({
+                        ...ValidatedValues,
+                        phone: ValidatedValues.phone
+                          ? ValidatedValues.phone.toString()
+                          : "",
+                        id: id,
+                        zip: ValidatedValues.zip.toString(),
+                        totalPrice: ComputedTotal,
+                        comps: affiliationData
+                          ? competitions.map((comp) => ({
+                              ...comp,
+                              reduction:
+                                affiliationData.competitionId === comp.compID
+                                  ? affiliationData.isRunUpPrize
+                                    ? affiliationData.discountRate /
+                                      comp.number_tickets
+                                    : affiliationData.discountAmount
+                                    ? affiliationData.discountAmount /
+                                      comp.price_per_ticket
+                                    : affiliationData.discountRate
+                                  : comp.reduction,
+                            }))
+                          : competitions,
+                        paymentMethod: values.paymentMethod as
+                          | "PAYPAL"
+                          | "STRIPE",
+                        date: new Date(values.date),
+                        paymentId: "",
+                        affiliationId: affiliationData?.isRunUpPrize
+                          ? ""
+                          : affiliationData?.id,
+                        runUpPrizeId: affiliationData?.isRunUpPrize
+                          ? affiliationData.id
+                          : "",
+                        locale: router.locale
+                          ? (router.locale as (typeof i18n)[number])
+                          : "en",
+                      });
+                      setIsPaypal(true);
+
                       setSubmitting(false);
-                      await router.push(url);
+                    } catch (e) {
+                      setError(e as any);
                     }
-                    setError(error);
-                    console.log(error);
-                    // const res = CreateOrderSchema.safeParse(values);
+                  } else {
+                    try {
+                      console.log("Form submitted:", values);
+                      //we need to check if each value in values is not undefined
+                      //if it is undefined, we need to set it to null
+                      if (ComputedTotal < 0) {
+                        if (affiliationData?.isRunUpPrize) {
+                          setError(
+                            "The total price of your order is negative, try making an order that fits the discount"
+                          );
+                        } else {
+                          setError("Total price cannot be negative, try again");
+                        }
+                        return;
+                      }
+                      const ValidatedValues = Schema.cast(values);
+                      const { url, error } = await createOrder({
+                        ...ValidatedValues,
+                        phone: ValidatedValues.phone
+                          ? ValidatedValues.phone.toString()
+                          : "",
+                        id: id,
+                        zip: ValidatedValues.zip.toString(),
+                        totalPrice: ComputedTotal,
+                        comps: affiliationData
+                          ? competitions.map((comp) => ({
+                              ...comp,
+                              reduction:
+                                affiliationData.competitionId === comp.compID
+                                  ? affiliationData.isRunUpPrize
+                                    ? affiliationData.discountRate /
+                                      comp.number_tickets
+                                    : affiliationData.discountAmount
+                                    ? affiliationData.discountAmount /
+                                      comp.price_per_ticket
+                                    : affiliationData.discountRate
+                                  : comp.reduction,
+                            }))
+                          : competitions,
+                        paymentMethod: values.paymentMethod as
+                          | "PAYPAL"
+                          | "STRIPE",
+                        date: new Date(values.date),
+                        affiliationId: affiliationData?.isRunUpPrize
+                          ? ""
+                          : affiliationData?.id,
+                        runUpPrizeId: affiliationData?.isRunUpPrize
+                          ? affiliationData.id
+                          : "",
+                        locale: router.locale
+                          ? (router.locale as (typeof i18n)[number])
+                          : "en",
+                      });
+                      if (url) {
+                        // await resend.sendEmail({
+                        //   from: "test@winuwatch.uk",
+                        //   to: values.email,
+                        //   subject: "Order Confirmation",
+                        //   react: (
+                        //     <SlackConfirmEmail
+                        //       clientName={values.first_name}
+                        //       numerOfTickets={values.comps}
+                        //     />
+                        //   ),
+                        // })
+                        setSubmitting(false);
+                        await router.push(url);
+                      }
+                      setError(error);
+                      console.log(error);
+                      // const res = CreateOrderSchema.safeParse(values);
 
-                    // if (res.success) {
-                    //   console.log("Form submitted:", res.data);
+                      // if (res.success) {
+                      //   console.log("Form submitted:", res.data);
 
-                    // }
-                    setSubmitting(false);
-                  } catch (e) {
-                    setError(e as any);
+                      // }
+                      setSubmitting(false);
+                    } catch (e) {
+                      setError(e as any);
+                    }
                   }
                 }}
               >
@@ -280,6 +373,7 @@ export default function CheckoutPage({
                   setFieldValue,
                   errors,
                   touched,
+                  handleSubmit,
                 }) => (
                   <Form>
                     <div className={styles.CheckoutLeft}>
@@ -392,6 +486,13 @@ export default function CheckoutPage({
                               <PhoneInput
                                 placeholder="Enter phone number"
                                 name="phone"
+                                required
+                                countryCallingCodeEditable={false}
+                                addInternationalOption={false}
+                                defaultCountry={"FR"}
+                                international={false}
+                                limitMaxLength={true}
+                                initialValueFormat="national"
                                 id="phone"
                                 onChange={(value) =>
                                   setFieldValue("phone", value)
@@ -501,12 +602,14 @@ export default function CheckoutPage({
                       </div>
                       {/* Insert coupon */}
                       <div className={styles.leftFormItem}>
-                        <h1>{/* {t("coupon")} */} Have a discount code ?</h1>
+                        <h1>
+                          {/* {t("coupon")} */} {t("havediscount")}
+                        </h1>
                         <div className={styles.CouponInput}>
                           <Field
                             type="text"
                             name="coupon"
-                            placeholder={"Enter discount code"}
+                            placeholder={t("enterDiscount")}
                             onChange={(e: {
                               target: {
                                 value: SetStateAction<string | undefined>;
@@ -524,7 +627,7 @@ export default function CheckoutPage({
                               });
                             }}
                           >
-                            ADD
+                            {t("add")}
                           </a>
                         </div>
                         {!!affiliationError ? (
@@ -534,9 +637,26 @@ export default function CheckoutPage({
                         ) : null}
                       </div>
                       <div className={styles.leftFormItem}>
-                        {/* <h1>{t("paymethod")}</h1> */}
-                        {/* <div className={styles.PaymentMethod}> */}
-                        {/* <div className={styles.method}>
+                        {/* <h1>{t("paymethod")}</h1>
+                        <div className={styles.PaymentMethod}>
+                          <div className={styles.method}>
+                            <Field
+                              type="radio"
+                              name="paymentMethod"
+                              value="PAYPAL"
+                            />
+                            <p
+                              style={{
+                                color:
+                                  values.paymentMethod === "PAYPAL"
+                                    ? "#987358"
+                                    : "rgba(30, 30, 30, 0.6)",
+                              }}
+                            >
+                              PayPal
+                            </p>
+                          </div>
+                          <div className={styles.method}>
                             <Field
                               type="radio"
                               name="paymentMethod"
@@ -552,26 +672,8 @@ export default function CheckoutPage({
                             >
                               {t("creditcard")}
                             </p>
-                          </div> */}
-                        {/* <div className={styles.method}>
-                        <Field
-                          type="radio"
-                          name="paymentMethod"
-                          value="PAYPAL"
-                          disabled
-                        />
-                        <p
-                          style={{
-                            color:
-                              values.paymentMethod === "PAYPAL"
-                                ? "#987358"
-                                : "rgba(30, 30, 30, 0.6)",
-                          }}
-                        >
-                          PayPal
-                        </p>
-                      </div> */}
-                        {/* </div> */}
+                          </div>
+                        </div> */}
                         <div className={styles.SignMeUp}>
                           <label>
                             <Field
@@ -618,6 +720,7 @@ export default function CheckoutPage({
                             const ComptetionData = items.find(
                               (compData) => compData.id === order.compID
                             );
+
                             return !ComptetionData ||
                               ComptetionData.Watches === null ? null : (
                               <div className={styles.orderItem} key={i}>
@@ -819,27 +922,128 @@ export default function CheckoutPage({
                           })}
                         </div>
 
-                        <div className={styles.orderSumBot}>
-                          <button
-                            disabled={isSubmitting || error ? true : false}
-                            style={{
-                              backgroundColor: error
-                                ? "rgba(30, 30, 30, 0.3)"
-                                : isSubmitting
-                                ? "#cbb9ac"
-                                : "#cbb9ac",
-                              cursor:
-                                isSubmitting || error ? "default" : "pointer",
-                            }}
-                            type="submit"
-                            onClick={() => {
-                              if (!values.checkedTerms)
-                                return alert(`${t("shouldacceptterms")}`);
-                            }}
-                          >
-                            {isSubmitting ? <Loader2 /> : t("confirmorder")}
-                          </button>
-                        </div>
+                        {values.paymentMethod === "PAYPAL" ? (
+                          <div className={styles.paypal}>
+                            {isPaypal ? (
+                              <div style={{ marginTop: "20px" }}>
+                                <PayPalScriptProvider
+                                  options={{
+                                    "client-id": `${env.NEXT_PUBLIC_PAYPAL_CLIENT_ID}`,
+                                    currency: "GBP",
+                                  }}
+                                >
+                                  <PaypalSpinner />
+                                  <PayPalButtons
+                                    createOrder={(data, actions) => {
+                                      return actions.order.create({
+                                        application_context: {
+                                          shipping_preference: "NO_SHIPPING",
+                                          brand_name: "Win u Watch",
+                                          locale: "en-GB",
+                                          user_action: "PAY_NOW",
+                                        },
+                                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                        //@ts-ignore
+                                        payer: {
+                                          name: {
+                                            given_name:
+                                              values.first_name || undefined,
+                                            surname:
+                                              values.last_name || undefined,
+                                          },
+                                          email_address: values.email as string,
+                                          address: {
+                                            postal_code:
+                                              values.zip || undefined,
+                                            country_code:
+                                              lookup.byCountry(values.country)
+                                                ?.iso2 || "FR",
+                                          },
+                                          phone: {
+                                            phone_number: {
+                                              national_number:
+                                                values.phone?.replaceAll(
+                                                  `+${getCountryCallingCode(
+                                                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                                    //@ts-ignore
+                                                    parsePhoneNumber(
+                                                      values.phone
+                                                    )?.country
+                                                  )}`,
+                                                  ""
+                                                ) as string,
+                                            },
+                                            phone_type: "MOBILE",
+                                          },
+                                          tenant: "",
+                                          birth_date: "2000-01-01",
+                                        },
+                                        purchase_units: [
+                                          {
+                                            amount: {
+                                              value: String(ComputedTotal),
+                                            },
+                                          },
+                                        ],
+                                      });
+                                    }}
+                                    onApprove={(data, actions) => {
+                                      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                      //@ts-ignore
+                                      return actions.order
+                                        .capture()
+                                        .then(async (details) => {
+                                          if (details.status === "COMPLETED") {
+                                            typeof window !== "undefined" &&
+                                              window.scrollTo(0, 0);
+                                            setSubmiting(true);
+                                            await updateStatus({
+                                              id: id,
+                                              status: "CONFIRMED",
+                                            });
+                                            await router.push(
+                                              `/Confirmation/${id}`
+                                            );
+                                          } else {
+                                            setError("Payment Failed");
+                                          }
+                                        });
+                                    }}
+                                  />
+                                </PayPalScriptProvider>
+                              </div>
+                            ) : (
+                              <button
+                                type="submit"
+                                className={styles.paypalBtn}
+                              >
+                                Continue with Paypal
+                              </button>
+                            )}
+                          </div>
+                        ) : (
+                          <div className={styles.orderSumBot}>
+                            <button
+                              disabled={isSubmitting || error ? true : false}
+                              style={{
+                                backgroundColor: error
+                                  ? "rgba(30, 30, 30, 0.3)"
+                                  : isSubmitting
+                                  ? "#cbb9ac"
+                                  : "#cbb9ac",
+                                cursor:
+                                  isSubmitting || error ? "default" : "pointer",
+                              }}
+                              type="submit"
+                              onClick={() => {
+                                if (!values.checkedTerms)
+                                  return alert(`${t("shouldacceptterms")}`);
+                              }}
+                            >
+                              {isSubmitting ? <Loader2 /> : t("confirmorder")}
+                            </button>
+                          </div>
+                        )}
                       </div>
                     </div>
                   </Form>
