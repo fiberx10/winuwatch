@@ -2,6 +2,7 @@ import React from "react";
 import styles from "../styles/Home.module.css";
 import "@splidejs/react-splide/css";
 import { Splide, SplideSlide } from "@splidejs/react-splide";
+import { Formater } from "@/utils";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 
@@ -42,7 +43,7 @@ const OurWinner = () => {
 
       <div className={styles.winnerCarou}>
         <p className={styles.activeDesc}>
-          {t("desc1")} <span>£8,028,750</span> {t("desc2")}
+          {t("desc1")} <span>{Formater(17000)}</span> {t("desc2")}
         </p>
         <div className={styles.splide}>
           <Splide
