@@ -56,8 +56,9 @@ const TheCompetition = () => {
                   <div className={styles.watchContent}>
                     <Link href={`/Competition/${watch.id}`}>{t("start")}</Link>
                     <h3>{watch.name}</h3>
-                    <h4>{watch.total_tickets+ " "}{t("maxTickets")}</h4>
-                    {watch.end_date < new Date() ? (
+                    <p>{watch.total_tickets}{" "+t("maxTickets")}</p>
+                    {
+                    /* watch.end_date < new Date() ? (
                       ""
                     ) : (
                       <p>
@@ -70,11 +71,9 @@ const TheCompetition = () => {
                           ) < 2
                             ? "xxx"
                             : watch.remaining_tickets
-                          */
-                          watch.remaining_tickets
                         }</b> {t("tickets")}
                       </p>
-                    )}
+                      )*/}
                    
                   </div>
                 </div>
