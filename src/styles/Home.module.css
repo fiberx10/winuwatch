@@ -315,6 +315,7 @@
 .watches {
   display: flex;
   gap: 1rem;
+
 }
 .watchCon {
   width: 491px;
@@ -391,10 +392,17 @@
 }
 .watchCon p {
   font-weight: 400;
-  font-size: 25px;
+  font-size: 20px;
   margin-top: 5px !important;
   color: #987358;
   text-transform: uppercase;
+}
+.watchCon h4 {
+  font-size: 30px;
+  font-weight: 500;
+  color: #987358;
+  margin-top: 5px !important;
+
 }
 .watchCon b {
   font-size: 30px;

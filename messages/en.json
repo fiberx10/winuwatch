@@ -10,6 +10,7 @@
     "seconds": "Seconds",
     "start": "START NOW",
     "only": "",
+    "maxTickets": "MAXIMUM TICKETS",
     "tickets": "Remaining tickets",
     "nocompval": "No competitions available",
     "howtoplay": "HOW TO PLAY",

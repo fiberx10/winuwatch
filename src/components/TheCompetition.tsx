@@ -56,22 +56,26 @@ const TheCompetition = () => {
                   <div className={styles.watchContent}>
                     <Link href={`/Competition/${watch.id}`}>{t("start")}</Link>
                     <h3>{watch.name}</h3>
+                    <h4>{watch.total_tickets+ " " +t("maxTickets")}</h4>
                     {watch.end_date < new Date() ? (
                       ""
                     ) : (
                       <p>
                         {t("only")} <b>{
                         // If the end date is less than 1 day away, then show xxx
-                        
+                          /*
                           Math.floor(
                             (new Date(watch.end_date).getTime() - new Date().getTime()) /
                               (1000 * 60 * 60 * 24)
                           ) < 2
                             ? "xxx"
                             : watch.remaining_tickets
+                          */
+                          watch.remaining_tickets
                         }</b> {t("tickets")}
                       </p>
                     )}
+                   
                   </div>
                 </div>
                 <Timer displayFlex={false} date={watch.end_date} />
