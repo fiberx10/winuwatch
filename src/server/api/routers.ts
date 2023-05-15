@@ -1979,17 +1979,33 @@ export const ChartsRouter = createTRPCRouter({
   competEarnings: publicProcedure.query(async ({ ctx }) => {
     const data = await ctx.prisma.$queryRaw`
     SELECT
-      c.id AS competitionId,
-      c.name AS competitionName,
-      SUM(o.totalPrice) AS TotalOrderValue
+    c.id AS competitionId,
+    c.name AS competitionName,
+    COALESCE(SUM(ticket_price.price), 0) AS TotalOrderValue
+  FROM
+    \`competition\` AS c
+  LEFT JOIN (
+    SELECT
+      t.competitionId,
+      o.id AS orderId,
+      (o.totalPrice / count_tickets.ticket_count) AS price
     FROM
       \`order\` AS o
-      JOIN \`tickets\` AS t ON o.id = t.orderId
-      JOIN \`competition\` AS c ON t.competitionId = c.id
+    JOIN \`tickets\` AS t ON o.id = t.orderId
+    JOIN (
+      SELECT
+        orderId,
+        COUNT(*) as ticket_count
+      FROM
+        \`tickets\`
+      GROUP BY
+        orderId
+    ) AS count_tickets ON o.id = count_tickets.orderId
     WHERE
       o.status = 'CONFIRMED'
-    GROUP BY
-      c.id, c.name;
+  ) AS ticket_price ON c.id = ticket_price.competitionId
+  GROUP BY
+    c.id, c.name;
   `;
     return data as Array<{
       competitionId: string;
