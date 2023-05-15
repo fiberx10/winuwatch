@@ -128,7 +128,9 @@ const OurWinner = () => {
       </div>
       <div className={styles.AliceCarou}>
         <p className={styles.activeDesc}>
-          {t("desc1")} <span>£8,028,750</span> {t("desc2")}
+          {t("desc1")} <span>{
+         Formater(17000) 
+          }</span> {t("desc2")}
         </p>
         <Splide
           options={{

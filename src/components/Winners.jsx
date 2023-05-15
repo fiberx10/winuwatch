@@ -30,7 +30,7 @@ const Winners = () => {
 
       <div className={styles.winnerCarou}>
         <p className={styles.activeDesc}>
-          We&apos;ve given away <span>£8,028,750</span> worth of timepieces -
+          We&apos;ve given away <span>{Formater(17000)}</span> worth of timepieces -
           and counting
         </p>
         <div className={styles.splide}>
@@ -94,7 +94,7 @@ const Winners = () => {
       </div>
       <div className={styles.AliceCarou}>
         <p className={styles.activeDesc}>
-          We&apos;ve given away <span>£8,028,750</span> worth of timepieces -
+          We&apos;ve given away <span>{Formater(17000)}</span> worth of timepieces -
           and counting
         </p>
         <Splide
