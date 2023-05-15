@@ -29,7 +29,7 @@ const TheCompetition = () => {
   });
 
   return (
-    <div id="theComp" style={{ marginBottom: "280px" }} className={styles.Comp}>
+    <div id="theComp" style={{ marginBottom: "0px" }} className={styles.Comp}>
       <p className={styles.CompP}>{t("subtitle2")}</p>
       <h1 className={styles.background2}>{t("competitions")}</h1>
       <div className={styles.compWatches}>
@@ -40,41 +40,80 @@ const TheCompetition = () => {
               <div className={styles.watches} key={watch.id}>
                 <div
                   style={{
-                    background: watch.Watches.images_url[0]?.url
-                      ? `
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                  }}
+                  className={styles.watchConDiv}
+                >
+                  <div
+                    style={{
+                      background: watch.Watches.images_url[0]?.url
+                        ? `
                     url(${watch.Watches.images_url[0].url})`
-                      : `linear-gradient(
+                        : `linear-gradient(
                       180deg,
                       rgba(255, 255, 255, 0) 0%,
                       rgba(255, 255, 255, 0) 36.25%,
                       #faf8f6 100%
                     ),
                     url(../../public/images/tester.png)`,
-                  }}
-                  className={styles.watchCon}
-                >
-                  <div className={styles.watchContent}>
-                    <Link href={`/Competition/${watch.id}`}>{t("start")}</Link>
-                    <h3>{watch.name}</h3>
-                    <p>{watch.total_tickets}{" "+t("maxTickets")}</p>
-                    {
-                    /* watch.end_date < new Date() ? (
-                      ""
+                    }}
+                    className={styles.watchCon}
+                  >
+                    <div className={styles.watchContent}>
+                      <Link href={`/Competition/${watch.id}`}>
+                        {t("start")}
+                      </Link>
+                    </div>
+                  </div>
+                  <div className={styles.newWatchCon}>
+                    <h3
+                      style={{
+                        width: "450px",
+                      }}
+                    >
+                      {watch.name}
+                    </h3>
+                    {/* <p>{watch.total_tickets}{" "+t("maxTickets")}</p> */}
+
+                    {/* // If the end date is less than 1 day away, then show xxx */}
+
+                    {Math.floor(
+                      (new Date(watch.end_date).getTime() -
+                        new Date().getTime()) /
+                        (1000 * 60 * 60 * 24)
+                    ) < 2 ? (
+                      <div
+                        style={{
+                          display: "flex",
+                          flexDirection: "column",
+                          alignItems: "center",
+                        }}
+                      >
+                        <p>
+                          {watch.total_tickets}
+                          {" " + t("maxTickets")}
+                        </p>
+                        <p
+                          style={{
+                            fontSize: "14px",
+                            margin: "0",
+                          }}
+                        >
+                          {t("only")}{" "}
+                          <span style={{ fontWeight: "600", fontSize: "18px" }}>
+                            {watch.remaining_tickets}
+                          </span>{" "}
+                          {t("tickets")}
+                        </p>
+                      </div>
                     ) : (
                       <p>
-                        {t("only")} <b>{
-                        // If the end date is less than 1 day away, then show xxx
-                          /*
-                          Math.floor(
-                            (new Date(watch.end_date).getTime() - new Date().getTime()) /
-                              (1000 * 60 * 60 * 24)
-                          ) < 2
-                            ? "xxx"
-                            : watch.remaining_tickets
-                        }</b> {t("tickets")}
+                        {watch.total_tickets}
+                        {" " + t("maxTickets")}
                       </p>
-                      )*/}
-                   
+                    )}
                   </div>
                 </div>
                 <Timer displayFlex={false} date={watch.end_date} />
