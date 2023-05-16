@@ -103,7 +103,7 @@ const TheCompetition = () => {
                         >
                           {t("only")}{" "}
                           <span style={{ fontWeight: "600", fontSize: "18px" }}>
-                            {/* {watch.remaining_tickets} */} 89
+                            {/* {watch.remaining_tickets} */} 49
                           </span>{" "}
                           {t("tickets")}
                         </p>
