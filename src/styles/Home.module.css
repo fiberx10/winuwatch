@@ -274,6 +274,22 @@
   -webkit-background-clip: text;
   -webkit-box-decoration-break: clone;
 }
+@media only screen and (max-width: 768px) {
+  .shareExp {
+    display: none !important;
+  }
+  .shareExpM {
+    display: grid !important;
+    place-items: center;
+  }
+  .AliceContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: fit-content !important;
+    gap: 3rem;
+  }
+}
 .background4 {
   background-image: url(https://content.rolex.com/dam/watches/family-pages/datejust/2023/a-date-with-destiny/classic-watches-datejust-a-date-with-destiny-yellow-cut-out.jpg);
   background-repeat: repeat-y;
@@ -741,6 +757,48 @@
   flex-direction: column;
   gap: 1rem;
 }
+.shareExp {
+  width: 14rem;
+  height: 50px;
+  background-color: #cbb9ac;
+  border: none;
+  font-weight: 700;
+  font-size: 13px;
+  text-transform: uppercase;
+  color: white;
+  font-family: "Montserrat", sans-serif;
+  cursor: pointer;
+  text-decoration: none;
+  display: grid;
+  place-items: center;
+}
+.shareExp:hover {
+  border: #cbb9ac 1px solid;
+  background-color: white;
+  color: #927c66;
+  transition: all 0.5s;
+}
+.shareExpM {
+  width: 14rem;
+  display: none;
+  height: 50px;
+  background-color: #cbb9ac;
+  border: none;
+  font-weight: 700;
+  font-size: 13px;
+  text-transform: uppercase;
+  color: white;
+  font-family: "Montserrat", sans-serif;
+  cursor: pointer;
+  text-decoration: none;
+  place-items: center;
+}
+.shareExpM:hover {
+  border: #cbb9ac 1px solid;
+  background-color: white;
+  color: #927c66;
+  transition: all 0.5s;
+}
 .RevBot h2 {
   font-weight: 400;
   font-size: 36px;
@@ -1020,7 +1078,7 @@
     font-size: 25px;
   }
   .ReviewsContainer {
-    margin-bottom: 220px !important;
+    margin-bottom: 120px !important;
   }
   .upComingMain h1 {
     font-size: 32px !important;
@@ -1042,7 +1100,7 @@
     top: 60%;
   }
   .AliceContainer h1 {
-    margin-left: 10px;
+    padding-left: 10px;
     top: -4%;
   }
   .certifBox p {
@@ -1614,9 +1672,7 @@
   .Rev {
     padding: 0px 20px;
   }
-  .AliceContainer h1 {
-    margin-left: 20px;
-  }
+
   .upComingMain h1 {
     padding: 0px 10px;
   }
