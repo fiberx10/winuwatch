@@ -17,11 +17,12 @@ const config = {
   i18n: {
     locales: ["en", "es", "fr", "ja", "il"],
     defaultLocale: "en",
+    localeDetection :false, 
     domains: [
       {
         domain: "winuwatch.co.il",
-        defaultLocale: "iw",
-        locales: ["iw"],
+        locales: ["il"],
+        defaultLocale: "il"
       },
       {
         domain: "winuwatch.com",
