@@ -429,8 +429,15 @@
   text-transform: uppercase;
 }
 .WinnCon img {
-  height: 250px;
+  height: 350px;
   object-fit: contain;
+}
+.MaxTickts {
+  font-size: 30px;
+  font-weight: 600;
+}
+.TotalTickts {
+  font-size: 28px !important;
 }
 @keyframes fadeIn {
   from {
@@ -450,7 +457,7 @@
   position: relative;
 }
 .active {
-  width: 303px !important;
+  width: 403px !important;
   object-fit: cover;
   opacity: 1 !important;
   transition: all 0.5s ease;
