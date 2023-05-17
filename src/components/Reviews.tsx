@@ -113,7 +113,29 @@ const Reviews = () => {
             );
           })}
         />
-        <h1 className={styles.background4}>TRUSTPILOT</h1>
+        <a
+          href="https://fr.trustpilot.com/review/winuwatch.uk"
+          className={styles.shareExpM}
+        >
+          Share your experience
+        </a>
+        <h1
+          style={{
+            width: "100%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+          className={styles.background4}
+        >
+          TRUSTPILOT{" "}
+          <a
+            href="https://fr.trustpilot.com/review/winuwatch.uk"
+            className={styles.shareExp}
+          >
+            Share your experience
+          </a>
+        </h1>
       </div>
     </div>
   );
