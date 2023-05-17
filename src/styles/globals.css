@@ -285,14 +285,14 @@ html {
   transition: all 0.3s ease-in-out;
 } */
 .carouImgCon {
-  height: 350px;
+  height: 450px;
   display: flex;
   align-items: flex-end;
 }
 
 .is-active .is-visible .carouImgCon img {
-  height: 350px;
-  width: 303px;
+  height: 450px;
+  width: 403px;
   object-fit: contain;
   transition: all 0.3s ease-in-out;
 }

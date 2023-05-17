@@ -92,8 +92,8 @@ const OurWinner = () => {
                         className={styles.active}
                         src={item.img}
                         alt="rec"
-                        width={200}
-                        height={200}
+                        width={300}
+                        height={300}
                       />
                     </div>
                     <div
@@ -128,9 +128,7 @@ const OurWinner = () => {
       </div>
       <div className={styles.AliceCarou}>
         <p className={styles.activeDesc}>
-          {t("desc1")} <span>{
-         Formater(17000) 
-          }</span> {t("desc2")}
+          {t("desc1")} <span>{Formater(17000)}</span> {t("desc2")}
         </p>
         <Splide
           options={{

@@ -91,8 +91,10 @@ const TheCompetition = () => {
                           alignItems: "center",
                         }}
                       >
-                        <p>
-                          {watch.total_tickets}
+                        <p className={styles.TotalTickts}>
+                          <span className={styles.MaxTickts}>
+                            {watch.total_tickets}
+                          </span>
                           {" " + t("maxTickets")}
                         </p>
                         <p
@@ -109,8 +111,10 @@ const TheCompetition = () => {
                         </p>
                       </div>
                     ) : (
-                      <p>
-                        {watch.total_tickets}
+                      <p className={styles.TotalTickts}>
+                        <span className={styles.MaxTickts}>
+                          {watch.total_tickets}
+                        </span>
                         {" " + t("maxTickets")}
                       </p>
                     )}
