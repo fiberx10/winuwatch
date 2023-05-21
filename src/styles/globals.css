@@ -359,6 +359,9 @@ html {
   font-weight: 300;
   font-size: 16px;
 }
+.alice-carousel__dots-item:not(.__custom):not(:last-child) {
+  margin-right: 10px !important;
+}
 
 .splide__slide {
   display: flex;
