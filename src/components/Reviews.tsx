@@ -47,6 +47,15 @@ const Reviews = () => {
       fullname: "Koskas",
       time: "14.3.2023",
     },
+    {
+      name: "trustpilot",
+      score: 5,
+      numberOfRev: 1,
+      review: "Site top",
+      fullRev: "Site top , huissier pour vérifier le tirage",
+      fullname: "Michael Koskas",
+      time: "02.5.2023",
+    },
   ];
   useEffect(() => {
     const handleScroll = () => {
