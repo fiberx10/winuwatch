@@ -431,7 +431,7 @@
   text-transform: uppercase;
 }
 .WinnCon img {
-  height: 250px;
+  height: 350px;
   object-fit: contain;
 }
 @keyframes fadeIn {
