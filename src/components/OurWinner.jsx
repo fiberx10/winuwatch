@@ -45,7 +45,7 @@ const OurWinner = () => {
 
       <div className={styles.winnerCarou}>
         <p className={styles.activeDesc}>
-          {t("desc1")} <span>£8,047,750</span> {t("desc2")}
+          {t("desc1")} <span>{Formater(36000)}</span> {t("desc2")}
         </p>
         <div className={styles.splide}>
           <Splide
@@ -186,7 +186,7 @@ const OurWinner = () => {
       </div>
       <div className={styles.AliceCarou}>
         <p className={styles.activeDesc}>
-          {t("desc1")} <span>£8,047,750</span> {t("desc2")}
+          {t("desc1")} <span>{Formater(36000)}</span> {t("desc2")}
         </p>
         <Splide
           options={{
