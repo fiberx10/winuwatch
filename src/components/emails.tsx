@@ -346,7 +346,7 @@ export const Email = ({
                                             color: 'black',
                                             textDecoration: 'underline',
                                           }}
-                                          href={`${getBaseUrl()}/ticket/${
+                                          href={`https://winuwatch.com/ticket/${
                                             ticket?.id
                                           }`}
                                         >

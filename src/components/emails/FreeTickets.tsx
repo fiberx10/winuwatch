@@ -4,7 +4,7 @@ import type {
   PrismaClient,
   Watches,
 } from "@prisma/client";
-
+import { getBaseUrl } from '@/utils';
 import { renderToString } from "react-dom/server";
 
 export const GetWinnerData = async (
@@ -76,7 +76,7 @@ export const FreeTickets = (data: {
           >
             <img
               alt="Logo"
-              src="https://www.win-u-watch.uk/images/newLogo.png"
+              src= {getBaseUrl() + "/images/newLogo.png"}
               width={200}
               height={100}
               style={{
@@ -432,7 +432,7 @@ export const FreeTickets = (data: {
             >
               <img
                 alt="instaFollow"
-                src="https://www.win-u-watch.uk/images/InstaFooter.png"
+                src={getBaseUrl() + "/images/InstaFooter.png"}
                 style={{ margin: "0  auto" }}
               />
             </a>
@@ -463,7 +463,7 @@ export const FreeTickets = (data: {
                   textDecoration: "none",
                   color: "black",
                 }}
-                href="https://www.win-u-watch.uk/Privacy_Policy"
+                href= {getBaseUrl() + "/Privacy_Policy"}
               >
                 <h5
                   style={{

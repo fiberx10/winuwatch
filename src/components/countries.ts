@@ -243,7 +243,7 @@ export const countryList = [
   "Virgin Islands (British)",
   "Virgin Islands (U.S.)",
   "Wallis and Futuna",
-  "Western Sahara",
+
   "Yemen",
   "Zambia",
   "Zimbabwe",

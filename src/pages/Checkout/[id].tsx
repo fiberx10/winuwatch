@@ -1017,7 +1017,7 @@ export default function CheckoutPage({
                                 type="submit"
                                 className={styles.paypalBtn}
                               >
-                                Continue with Paypal
+                                Continue 
                               </button>
                             )}
                           </div>

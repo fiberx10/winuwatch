@@ -2,6 +2,7 @@ import React from "react";
 import styles from "../styles/Home.module.css";
 import "@splidejs/react-splide/css";
 import { Splide, SplideSlide } from "@splidejs/react-splide";
+import { Formater } from "@/utils";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 
@@ -97,8 +98,8 @@ const OurWinner = () => {
                         className={styles.active}
                         src={item.img}
                         alt="rec"
-                        width={200}
-                        height={200}
+                        width={300}
+                        height={300}
                       />
                     </div>
                     <div
