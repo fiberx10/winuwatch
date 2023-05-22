@@ -266,6 +266,17 @@
   -webkit-background-clip: text;
   -webkit-box-decoration-break: clone;
 }
+.background7 {
+  background-image: url(https://content.rolex.com/dam/watches/family-pages/datejust/2023/a-date-with-destiny/classic-watches-datejust-a-date-with-destiny-yellow-cut-out.jpg);
+  background-position: center;
+  background-repeat: repeat-y;
+
+  background-clip: text;
+  background-size: 100% 100vh;
+  color: transparent;
+  -webkit-background-clip: text;
+  -webkit-box-decoration-break: clone;
+}
 .background3 {
   background-image: url(https://content.rolex.com/dam/watches/family-pages/datejust/2023/a-date-with-destiny/classic-watches-datejust-a-date-with-destiny-yellow-cut-out.jpg);
   background-repeat: repeat-y;
@@ -439,9 +450,9 @@
   transition: all 1s ease-in-out;
 }
 .WinnCon h1 {
-  font-weight: 400;
+  font-weight: 600;
   font-size: 45px;
-  font-family: "Iskry", sans-serif;
+  font-family: "Montserrat", sans-serif;
   text-transform: uppercase;
 }
 .WinnCon img {
