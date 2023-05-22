@@ -326,7 +326,6 @@ export const AuthRouter = createTRPCRouter({
 });
 
 export const OrderRouter = createTRPCRouter({
-  
   getAll: publicProcedure.input(z.string()).query(
     async ({ ctx, input }) =>
       await ctx.prisma.order.findMany({
@@ -383,6 +382,18 @@ export const OrderRouter = createTRPCRouter({
       }
 
       return order;
+    }),
+  getOrderName: publicProcedure
+    .input(z.string())
+    .query(async ({ ctx, input }) => {
+      const data = await ctx.prisma.order.findUnique({
+        where: {
+          id: input,
+        },
+      });
+      return {
+        fullname: String(data?.first_name) + " " + String(data?.last_name),
+      };
     }),
   AddTicketsAfterConfirmation: publicProcedure
     .input(z.object({ id: z.string(), comps: Comps }))
@@ -1175,8 +1186,9 @@ export const OrderRouter = createTRPCRouter({
 });
 
 export const CompetitionRouter = createTRPCRouter({
-  getConfirmedAsCSV: publicProcedure.input(z.string()).mutation(
-    async ({ ctx, input }) => {
+  getConfirmedAsCSV: publicProcedure
+    .input(z.string())
+    .mutation(async ({ ctx, input }) => {
       const data = await ctx.prisma.order.findMany({
         where: {
           //status: order_status.CONFIRMED,
@@ -1192,13 +1204,13 @@ export const CompetitionRouter = createTRPCRouter({
       });
       return data.map((order) => ({
         competitionId: input,
-        email : order.email,
-        firstName : order.first_name,
-        lastName : order.last_name, 
-        phone : order.phone,
-        status : order.status,
+        email: order.email,
+        firstName: order.first_name,
+        lastName: order.last_name,
+        phone: order.phone,
+        status: order.status,
       }));
-  }),
+    }),
   getAll: publicProcedure
     .input(
       z
