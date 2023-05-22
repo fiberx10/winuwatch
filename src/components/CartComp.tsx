@@ -10,13 +10,14 @@ import { CloseOutlined } from "@ant-design/icons";
 import { useTranslations } from "next-intl";
 import Loader from "./Loader";
 import { Form, Formik } from "formik";
+import { log } from "console";
 const CartComp = () => {
   const t = useTranslations("cart");
   const [open, setOpen] = useState(false);
   const [wrong, setWrong] = useState(false);
   const handleClose = () => setOpen(false);
   const { cardDetails, updateComp, removeComp, competitions } = useCart();
-
+  console.log(competitions);
   const { data, isLoading } = api.Competition.getAll.useQuery({
     ids: competitions.map(({ compID }) => compID),
   });
@@ -129,14 +130,13 @@ const CartComp = () => {
                     onClick={() => {
                       updateComp({
                         reduction:
-                          // comp.number_tickets === 6
-                          //   ? 0.1
-                          //   : comp.number_tickets === 11
-                          //   ? 0.15
-                          //   : comp.number_tickets === 21
-                          //   ? 0.2
-                          //   :
-                          0,
+                          comp.number_tickets === 16
+                            ? 0.1
+                            : comp.number_tickets === 21
+                            ? 0.15
+                            : comp.number_tickets === 26
+                            ? 0.2
+                            : 0,
                         compID: comp.compID,
                         number_tickets:
                           comp.number_tickets > 1
@@ -160,14 +160,14 @@ const CartComp = () => {
                   <div
                     onClick={() => {
                       updateComp({
-                        reduction: 0,
-                          /*comp.number_tickets === 4
+                        reduction:
+                          comp.number_tickets === 14
                             ? 0.1
-                            : comp.number_tickets === 9
-                            ? 0.15
                             : comp.number_tickets === 19
+                            ? 0.15
+                            : comp.number_tickets === 24
                             ? 0.2
-                            : 0,*/
+                            : 0,
                         compID: comp.compID,
                         number_tickets:
                           comp.number_tickets < ComptetionData.remaining_tickets
@@ -194,9 +194,9 @@ const CartComp = () => {
                   </h2>
                   <p>
                     {comp.reduction > 0 &&
-                      (comp.number_tickets === 5 ||
-                        comp.number_tickets === 10 ||
-                        comp.number_tickets === 20) &&
+                      (comp.number_tickets === 15 ||
+                        comp.number_tickets === 20 ||
+                        comp.number_tickets === 25) &&
                       `${t("discount")}: \t${Formater(
                         comp.reduction *
                           comp.number_tickets *

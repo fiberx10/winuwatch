@@ -94,7 +94,7 @@ export default function CheckoutPage({
   useEffect(() => {
     setComputedTotal(
       competitions.reduce(
-        (total, { number_tickets, price_per_ticket, compID }) => {
+        (total, { number_tickets, price_per_ticket, compID, reduction }) => {
           const discountRate =
             affiliationData && affiliationData.competitionId === compID
               ? affiliationData.discountAmount
@@ -110,7 +110,11 @@ export default function CheckoutPage({
             return totalPriceForCompetition;
           }
 
-          return total + totalPriceForCompetition;
+          return (
+            total +
+            totalPriceForCompetition -
+            reduction * number_tickets * price_per_ticket
+          );
         },
         0
       )
