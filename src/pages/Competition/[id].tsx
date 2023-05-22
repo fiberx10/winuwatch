@@ -161,7 +161,7 @@ export default function Competition({
                               onClick={() =>
                                 setCounter({
                                   value: item,
-                                  reduction: TheReduction,
+                                  reduction: reduction,
                                 })
                               }
                               disabled={item > data.remaining_tickets}
@@ -190,8 +190,8 @@ export default function Competition({
                             >
                               <span
                                 style={{
-                                  fontSize: TheReduction > 0 ? "18px" : "24px",
-                                  height: TheReduction > 0 ? "23px" : "initial",
+                                  fontSize: reduction > 0 ? "18px" : "24px",
+                                  height: reduction > 0 ? "23px" : "initial",
                                 }}
                               >
                                 {item}
@@ -200,7 +200,7 @@ export default function Competition({
                                 style={{ fontSize: "10px" }}
                                 className={styles.sold}
                               >
-                                {TheReduction > 0 && `-${TheReduction * 100}%`}
+                                {reduction > 0 && `-${reduction * 100}%`}
                               </p>
                             </ToggleButton>
                           );

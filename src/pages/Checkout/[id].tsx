@@ -94,7 +94,7 @@ export default function CheckoutPage({
   useEffect(() => {
     setComputedTotal(
       competitions.reduce(
-        (total, { number_tickets, price_per_ticket, compID }) => {
+        (total, { number_tickets, price_per_ticket, compID, reduction }) => {
           const discountRate =
             affiliationData && affiliationData.competitionId === compID
               ? affiliationData.discountAmount
@@ -110,12 +110,21 @@ export default function CheckoutPage({
             return totalPriceForCompetition;
           }
 
-          return total + totalPriceForCompetition;
+          return (
+            total +
+            totalPriceForCompetition -
+            reduction * number_tickets * price_per_ticket
+          );
         },
         0
       )
     );
-  }, [affiliationData?.discountRate, affiliationData?.discountAmount]);
+  }, [
+    affiliationData?.discountRate,
+    affiliationData?.discountAmount,
+    competitions,
+    affiliationData,
+  ]);
   useEffect(() => {
     void (async () => {
       if (competitions && competitions.length === 0) {
@@ -761,19 +770,35 @@ export default function CheckoutPage({
                                         )
                                       )}
                                   </span>
-                                  {!affiliationData && order.reduction > 0 && (
-                                    <p
+                                  {order.reduction > 0 && (
+                                    <div
                                       style={{
                                         color: "#a8957e",
+                                        display: "flex",
+                                        justifyContent: "space-between",
                                       }}
                                     >
-                                      {`${t("discount")}\t${Formater(
-                                        order.reduction *
-                                          (order.number_tickets *
-                                            ComptetionData.ticket_price),
-                                        router.locale
-                                      )}`}
-                                    </p>
+                                      <p
+                                        style={{
+                                          color: "#a8957e",
+                                        }}
+                                      >
+                                        {t("discount")}
+                                      </p>
+                                      <p
+                                        style={{
+                                          color: "#a8957e",
+                                          padding: "0 72px 0 0",
+                                        }}
+                                      >
+                                        {`\t${Formater(
+                                          order.reduction *
+                                            (order.number_tickets *
+                                              ComptetionData.ticket_price),
+                                          router.locale
+                                        )}`}
+                                      </p>
+                                    </div>
                                   )}
                                   {affiliationData &&
                                   affiliationData.competitionId ===

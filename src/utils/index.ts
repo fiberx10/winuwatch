@@ -102,14 +102,14 @@ export const TICKETREDUC = [
   },
   {
     value: 15,
-    reduction: 0,
+    reduction: 0.1,
   },
   {
     value: 20,
-    reduction: 0,
+    reduction: 0.15,
   },
   {
     value: 25,
-    reduction: 0,
+    reduction: 0.2,
   },
 ];
