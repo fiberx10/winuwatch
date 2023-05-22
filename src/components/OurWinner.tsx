@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styles from "../styles/Home.module.css";
 import "@splidejs/react-splide/css";
 import { Splide, SplideSlide } from "@splidejs/react-splide";
@@ -32,12 +32,27 @@ const OurWinner = () => {
     // },
   ];
   const t = useTranslations("winners");
+  useEffect(() => {
+    const handleScroll = () => {
+      const background = document.querySelector(
+        `.${styles.background7 ?? "undefined"}`
+      ) as HTMLElement & { style: CSSStyleDeclaration };
+      if (background) {
+        background.style.backgroundPositionY =
+          window.scrollY === 0 ? "-124px" : `${-window.scrollY}px`;
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
   return (
     <div className={styles.WinnCon}>
       <h1
+        className={styles.background7}
         style={{
           textAlign: "center",
           padding: "0",
+          textTransform: "uppercase",
         }}
       >
         {t("title")}
