@@ -13,6 +13,7 @@ import { useTranslations } from "next-intl";
 import { useCart } from "@/components/Store";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
+import Loader from "@/components/Loader";
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { id } = context.query;
   return {
@@ -35,6 +36,7 @@ export default function Confirmation({
     id: id,
     comps: competitions,
   });
+  const { data: order, isLoading } = api.Order.getOrderName.useQuery(id);
   const t = useTranslations("thanku");
 
   useEffect(() => {
@@ -56,19 +58,34 @@ export default function Confirmation({
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <NavBar />
-      <div className={styles.confirmwrapper}></div>
-      <div className={styles.confirmwrapper}>
-        <div className={styles.confirm_text}>
-          <h1>
-            {`${t("thank")} ${
-              data && data.first_name !== null ? data.first_name : ""
-            } ${t("foryourorder")}`}
-          </h1>
-          <p>
-            {t("confirm")} <br /> {t("confemail")}
-          </p>
+      {isLoading ? (
+        <div
+          style={{
+            height: "80vh",
+            width: "100%",
+            display: "grid",
+            placeItems: "center",
+          }}
+        >
+          <Loader />
         </div>
-      </div>
+      ) : (
+        <>
+          <div className={styles.confirmwrapper}></div>
+          <div className={styles.confirmwrapper}>
+            <div className={styles.confirm_text}>
+              <h1>
+                {`${t("thank")} ${String(
+                  order?.fullname === undefined ? "" : order?.fullname
+                )} ${t("foryourorder")}`}
+              </h1>
+              <p>
+                {t("confirm")} <br /> {t("confemail")}
+              </p>
+            </div>
+          </div>
+        </>
+      )}
       <Footer />
     </div>
   );

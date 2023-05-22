@@ -55,10 +55,10 @@ import lookup from "country-code-lookup";
 const Schema = Yup.object().shape({
   first_name: Yup.string().required("Required"),
   last_name: Yup.string().required("Required"),
-
+  town: Yup.string().required("Required"),
   zip: Yup.string().required("Required"),
   phone: Yup.number(),
-
+  address: Yup.string().required("Required"),
   country: Yup.string().required("Required"),
   email: Yup.string().email("Invalid email").required("Required"),
   checkedEmail: Yup.boolean()
@@ -276,8 +276,6 @@ export default function CheckoutPage({
                         locale: router.locale
                           ? (router.locale as (typeof i18n)[number])
                           : "en",
-                        town: "",
-                        address: "",
                       });
                       setIsPaypal(true);
 
@@ -306,8 +304,6 @@ export default function CheckoutPage({
                         phone: ValidatedValues.phone
                           ? ValidatedValues.phone.toString()
                           : "",
-                        town: "",
-                        address: "",
                         id: id,
                         zip: ValidatedValues.zip.toString(),
                         totalPrice: ComputedTotal,
@@ -440,20 +436,7 @@ export default function CheckoutPage({
                                 </div>
                               ) : null}
                             </div>
-                            {/* <div className={styles.formField}>
-                              <label htmlFor="lastName">{t("address")}</label>
-                              <Field
-                                required
-                                id="address"
-                                type="text"
-                                name="address"
-                              />
-                              {errors.address && touched.address ? (
-                                <div style={{ color: "red" }}>
-                                  {errors.address}
-                                </div>
-                              ) : null}
-                            </div> */}
+
                             <div className={styles.formField}>
                               <label htmlFor="lastName">{t("zip")}</label>
                               <Field
@@ -468,7 +451,21 @@ export default function CheckoutPage({
                               ) : null}
                             </div>
                           </div>
-                          {/* <div className={styles.formRow}>
+                          <div className={styles.formRow}>
+                            <div className={styles.formField}>
+                              <label htmlFor="lastName">{t("address")}</label>
+                              <Field
+                                required
+                                id="address"
+                                type="text"
+                                name="address"
+                              />
+                              {errors.address && touched.address ? (
+                                <div style={{ color: "red" }}>
+                                  {errors.address}
+                                </div>
+                              ) : null}
+                            </div>
                             <div className={styles.formField}>
                               <label htmlFor="Town">{t("city")}</label>
                               <Field
@@ -483,7 +480,7 @@ export default function CheckoutPage({
                                 </div>
                               ) : null}
                             </div>
-                          </div> */}
+                          </div>
                           <div className={styles.formRow}>
                             <div className={styles.formField}>
                               <label htmlFor="Phone">{t("phone")}</label>
