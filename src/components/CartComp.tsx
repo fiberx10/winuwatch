@@ -10,7 +10,6 @@ import { CloseOutlined } from "@ant-design/icons";
 import { useTranslations } from "next-intl";
 import Loader from "./Loader";
 import { Form, Formik } from "formik";
-import { log } from "console";
 const CartComp = () => {
   const t = useTranslations("cart");
   const [open, setOpen] = useState(false);
