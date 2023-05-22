@@ -12,22 +12,24 @@ const OurWinner = () => {
       img: "/images/winner/batman_winner.jfif",
       name: "Johan",
       country: "France",
+      watch: "Rolex Batman",
     },
     {
-      img: "/images/winner/winner_2.png",
-      name: `Be the winner`,
+      img: "/images/winner/pepsi_winner.jfif",
+      name: `David`,
       country: "France",
+      watch: "Rolex Pepsi",
     },
-    {
-      img: "/images/winner/winner_3.png",
-      name: "Be the winner",
-      country: "France",
-    },
-    {
-      img: "/images/winner/winner_4.png",
-      name: "Be the winner",
-      country: "France",
-    },
+    // {
+    //   img: "/images/winner/winner_3.png",
+    //   name: "Be the winner",
+    //   country: "France",
+    // },
+    // {
+    //   img: "/images/winner/winner_4.png",
+    //   name: "Be the winner",
+    //   country: "France",
+    // },
   ];
   const t = useTranslations("winners");
   return (
@@ -43,23 +45,27 @@ const OurWinner = () => {
 
       <div className={styles.winnerCarou}>
         <p className={styles.activeDesc}>
-          {t("desc1")} <span>{Formater(17000)}</span> {t("desc2")}
+          {t("desc1")} <span>{Formater(36000)}</span> {t("desc2")}
         </p>
         <div className={styles.splide}>
           <Splide
             options={{
               type: "loop",
-              isNavigation: false,
+              isNavigation: true,
               drag: false,
               cloneStatus: false,
               arrows: false,
               pagination: false,
               perPage: 2,
-              padding: "21rem",
+              padding: "10rem",
               classes: {
                 arrows: "splideArr",
               },
               breakpoints: {
+                931: {
+                  perPage: 2,
+                  padding: "10rem",
+                },
                 1281: {
                   perPage: 2,
                   padding: "10rem",
@@ -76,14 +82,14 @@ const OurWinner = () => {
               return (
                 <SplideSlide
                   style={{
-                    opacity: i === 0 ? 1 : 0,
+                    opacity: i === 0 ? 1 : i === 1 ? 1 : 0,
                   }}
                   key={i}
                 >
                   <div
                     style={{
-                      transition: "all 1s ease",
-                      opacity: i === 0 ? 1 : 0,
+                      transition: "all 0.3s ease",
+                      opacity: i === 0 ? 1 : i === 1 ? 1 : 0,
                     }}
                     className={styles.carouItem}
                   >
@@ -98,14 +104,41 @@ const OurWinner = () => {
                     </div>
                     <div
                       style={{
-                        transition: "all 1s ease",
+                        transition: "all 0.3s ease",
                         display: "flex",
                         flexDirection: "column",
                         alignItems: "center",
+                        gap: "0.5rem",
                       }}
                       className="activeName"
                     >
                       {/* <p>{t("nameOfWinner")}</p> */}
+                      <p
+                        style={{
+                          margin: "0",
+                          textAlign: "center",
+                        }}
+                      >
+                        Winner of the
+                        <br />
+                        <b
+                          style={{
+                            fontWeight: "400",
+                            fontFamily: "Iskry ,sans-serif",
+                            textTransform: "uppercase",
+                          }}
+                        >
+                          {item.watch}
+                        </b>
+                      </p>
+                      <hr
+                        style={{
+                          width: "30%",
+                          height: "2px",
+                          backgroundColor: " #e4dad3",
+                          border: "none",
+                        }}
+                      />
                       <h2>{item.name}</h2>
                       <span style={{ textAlign: "center" }}>
                         {item.country.toUpperCase()}
@@ -113,7 +146,32 @@ const OurWinner = () => {
                     </div>
 
                     <div style={{ opacity: 0 }}>
-                      {/* <p>{t("nameOfWinner")}</p> */}
+                      <p
+                        style={{
+                          margin: "0",
+                          textAlign: "center",
+                        }}
+                      >
+                        Winner of the
+                        <br />
+                        <b
+                          style={{
+                            fontWeight: "400",
+                            fontFamily: "Iskry ,sans-serif",
+                            textTransform: "uppercase",
+                          }}
+                        >
+                          {item.watch}
+                        </b>
+                      </p>
+                      <hr
+                        style={{
+                          width: "30%",
+                          height: "2px",
+                          backgroundColor: " #e4dad3",
+                          border: "none",
+                        }}
+                      />
                       <h2>{item.name}</h2>
                       <span style={{ textAlign: "center" }}>
                         {item.country.toUpperCase()}
@@ -128,7 +186,7 @@ const OurWinner = () => {
       </div>
       <div className={styles.AliceCarou}>
         <p className={styles.activeDesc}>
-          {t("desc1")} <span>{Formater(17000)}</span> {t("desc2")}
+          {t("desc1")} <span>{Formater(36000)}</span> {t("desc2")}
         </p>
         <Splide
           options={{
@@ -167,7 +225,7 @@ const OurWinner = () => {
             autoplay: false,
             arrows: false,
             pagination: false,
-            drag: false,
+            drag: true,
           }}
           aria-label="My Favorite Images"
         >
@@ -175,14 +233,14 @@ const OurWinner = () => {
             return (
               <SplideSlide
                 style={{
-                  opacity: i === 0 ? 1 : 0,
+                  opacity: i === 0 ? 1 : i === 1 ? 1 : 0,
                 }}
                 key={i}
               >
                 <div
                   style={{
                     transition: "all 1s ease",
-                    opacity: i === 0 ? 1 : 0,
+                    opacity: i === 0 ? 1 : i === 1 ? 1 : 0,
                   }}
                   className={styles.carouItem}
                 >
@@ -195,12 +253,45 @@ const OurWinner = () => {
                   />
 
                   <div
-                    style={{ transition: "all 1s ease" }}
+                    style={{
+                      transition: "all 1s ease",
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      gap: "0.5rem",
+                    }}
                     className="activeName"
                   >
-                    {/* <p>{t("nameOfWinner")}</p> */}
+                    <p
+                      style={{
+                        margin: "0",
+                        textAlign: "center",
+                      }}
+                    >
+                      Winner of the
+                      <br />
+                      <b
+                        style={{
+                          fontWeight: "400",
+                          fontFamily: "Iskry ,sans-serif",
+                          textTransform: "uppercase",
+                        }}
+                      >
+                        {item.watch}
+                      </b>
+                    </p>
+                    <hr
+                      style={{
+                        width: "30%",
+                        height: "2px",
+                        backgroundColor: " #e4dad3",
+                        border: "none",
+                      }}
+                    />
                     <h2>{item.name}</h2>
-                    <span>{item.country.toUpperCase()}</span>
+                    <span style={{ textAlign: "center" }}>
+                      {item.country.toUpperCase()}
+                    </span>
                   </div>
                 </div>
               </SplideSlide>

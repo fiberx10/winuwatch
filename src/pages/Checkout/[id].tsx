@@ -436,6 +436,22 @@ export default function CheckoutPage({
                                 </div>
                               ) : null}
                             </div>
+
+                            <div className={styles.formField}>
+                              <label htmlFor="lastName">{t("zip")}</label>
+                              <Field
+                                required
+                                id="zip"
+                                name="zip"
+                                type="number"
+                                min={0}
+                              />
+                              {errors.zip && touched.zip ? (
+                                <div style={{ color: "red" }}>{errors.zip}</div>
+                              ) : null}
+                            </div>
+                          </div>
+                          <div className={styles.formRow}>
                             <div className={styles.formField}>
                               <label htmlFor="lastName">{t("address")}</label>
                               <Field
@@ -450,8 +466,6 @@ export default function CheckoutPage({
                                 </div>
                               ) : null}
                             </div>
-                          </div>
-                          <div className={styles.formRow}>
                             <div className={styles.formField}>
                               <label htmlFor="Town">{t("city")}</label>
                               <Field
@@ -464,19 +478,6 @@ export default function CheckoutPage({
                                 <div style={{ color: "red" }}>
                                   {errors.town}
                                 </div>
-                              ) : null}
-                            </div>
-                            <div className={styles.formField}>
-                              <label htmlFor="lastName">{t("zip")}</label>
-                              <Field
-                                required
-                                id="zip"
-                                name="zip"
-                                type="number"
-                                min={0}
-                              />
-                              {errors.zip && touched.zip ? (
-                                <div style={{ color: "red" }}>{errors.zip}</div>
                               ) : null}
                             </div>
                           </div>
@@ -1017,7 +1018,7 @@ export default function CheckoutPage({
                                 type="submit"
                                 className={styles.paypalBtn}
                               >
-                                Continue 
+                                Continue
                               </button>
                             )}
                           </div>
