@@ -65,13 +65,14 @@ const OurWinner = () => {
         <div className={styles.splide}>
           <Splide
             options={{
+              type: "none",
               isNavigation: true,
               drag: false,
               cloneStatus: false,
               arrows: false,
               pagination: false,
               perPage: 2,
-              padding: "20rem",
+              padding: "18rem",
               classes: {
                 arrows: "splideArr",
               },
