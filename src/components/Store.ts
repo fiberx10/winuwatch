@@ -46,6 +46,7 @@ export const Dashmenus = [
   "Orders",
   "Winners",
   "Affiliations",
+  "Free Tickets",
 ] as const;
 
 export const Othermenus = ["Communication", "Settings"] as const;

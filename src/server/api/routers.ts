@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
-import { Competition, CompetitionStatus, order_status } from "@prisma/client";
+import { Competition, CompetitionStatus, order_status, PaymentMethod} from "@prisma/client";
 import { Prisma } from "@prisma/client";
 import {
   getBaseUrl,
@@ -23,6 +23,7 @@ import FreeTickets from "@/components/emails/FreeTickets";
 import RunerUp from "@/components/emails/RunerUp";
 import RunerUp2 from "@/components/emails/RunerUp2";
 import newsLetter1 from "@/components/newsLetter1";
+import EmailF from "@/components/emailsFree";
 
 const Months = [
   "Jan",
@@ -395,6 +396,82 @@ export const OrderRouter = createTRPCRouter({
         fullname: String(data?.first_name) + " " + String(data?.last_name),
       };
     }),
+  SendFreeTickets_fixed : publicProcedure
+    .input(
+      z.object({
+        compId: z.string(),
+        orderId: z.string(),
+        numTickts: z.number(),
+      })
+    ).mutation(async ({ ctx, input }) => {
+      const [NextComp, OgOrder]  = await ctx.prisma.$transaction([
+            ctx.prisma.competition.findFirstOrThrow({
+            where: {
+              id: input.compId,
+            },
+            include: {
+              Ticket: {
+                where: {
+                  competitionId: input.compId,
+                  orderId: input.orderId,
+                },
+              },
+              Watches: {
+                include: {
+                  images_url: true,
+                },
+              },
+            },
+          }),
+          ctx.prisma.order.findFirstOrThrow({
+            where: {
+              id: input.orderId,
+            },
+          }),
+        ]);
+        const {id, ...rest} = OgOrder;
+      const FreeticketOrder = await ctx.prisma.order.create({
+        data: {
+          ...rest,
+          paymentMethod : PaymentMethod.MARKETING, //this needs to be chnaged
+          status: order_status.CONFIRMED,
+          totalPrice : 0,
+          createdAt: new Date(),
+          Ticket: {
+            create: Array.from({ length: input.numTickts }).map(() => ({
+              Competition: {
+                connect: {
+                  id: input.compId,
+                },
+              },
+            })),
+          }
+        },
+        include: {
+          Ticket: true,
+        },
+      });
+      await Transporter.sendMail({
+        from: "noreply@winuwatch.uk",
+        cc: "admin@winuwatch.uk",
+        to: OgOrder?.email,
+        subject: `Here are your free tickets - Winuwatch`,
+        html: EmailF({
+          order: FreeticketOrder,
+          numTickts: input.numTickts,
+          comp: NextComp,
+          }),
+        })
+      return FreeticketOrder;
+    }),
+  getComps: publicProcedure.query(
+    async ({ ctx }) =>
+      await ctx.prisma.competition.findMany({
+        orderBy: {
+          end_date: "desc",
+        },
+      })
+  ),
   AddTicketsAfterConfirmation: publicProcedure
     .input(z.object({ id: z.string(), comps: Comps }))
     .query(async ({ ctx, input }) => {
