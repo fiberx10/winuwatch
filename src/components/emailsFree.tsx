@@ -3,20 +3,21 @@ import { Formater, getBaseUrl, DateFormater } from "@/utils";
 
 import { renderToString } from "react-dom/server";
 
-export const GetData = async (OrderID: string, prismaClient: PrismaClient) => {
-  const [order, comps] = await Promise.all([
+export const GetData = async (OrderID: string, CompID: string, prismaClient: PrismaClient) => {
+  const [order, comp] = await Promise.all([
     prismaClient.order.findUnique({
       where: {
         id: OrderID,
       },
-    }),
-    prismaClient.competition.findMany({
       include: {
-        Ticket: {
-          where: {
-            orderId: OrderID,
-          },
-        },
+        Ticket: true
+      },
+    }),
+    prismaClient.competition.findUnique({
+      where: {
+        id: CompID,
+      },
+      include: {
         Watches: {
           include: {
             images_url: true,
@@ -29,13 +30,7 @@ export const GetData = async (OrderID: string, prismaClient: PrismaClient) => {
   return {
     order,
     numTickts: 0,
-    comps: comps
-      .filter(({ Ticket }) => Ticket.length > 0)
-      .map((comp) => ({
-        ...comp,
-        affiliationCode: "",
-        affiliationRate: 0,
-      })),
+    comp
   };
 };
 
@@ -57,7 +52,7 @@ export const Reduction = (ticketPrice: number, ticketNumber: number) => {
 };
 export const EmailF = ({
   order,
-  comps,
+  comp,
   numTickts,
 }: ReturnType<typeof GetData> extends Promise<infer T>
   ? T extends Promise<infer U>
@@ -158,13 +153,14 @@ export const EmailF = ({
                 </td>
               </tr>
               <tr>
-                {comps?.map((c, i) => (
-                  <tbody key={i}>
+                { comp && comp !==null &&  (
+                  <tbody >
                     <tr>
                       <td>
+
                         <img
-                          alt={c.id}
-                          src={c.Watches?.images_url[0]?.url}
+                          alt={comp.id}
+                          src={comp.Watches?.images_url[0]?.url}
                           width="100%"
                           height="500px"
                           style={{
@@ -210,7 +206,7 @@ export const EmailF = ({
                                     padding: "0px 0px 0px 20px",
                                   }}
                                 >
-                                  {c.name}
+                                  {comp.name}
                                 </p>
                                 <table
                                   align="center"
@@ -254,7 +250,7 @@ export const EmailF = ({
                                           }}
                                         >
                                           QUANTITY:{" "}
-                                          {c.Ticket.slice(0, numTickts).length}
+                                          {numTickts}
                                         </p>
                                       </td>
 
@@ -293,8 +289,7 @@ export const EmailF = ({
                                 }}
                               >
                                 <tbody>
-                                  {c.Ticket.slice(0, numTickts).map(
-                                    (ticket, index) => (
+                                  { order?.Ticket.map((ticket, index) => (
                                       <tr
                                         key={index}
                                         style={{
@@ -365,16 +360,16 @@ export const EmailF = ({
                                   >
                                     What happens now?
                                     <br /> the contest will end on{" "}
-                                    {DateFormater(c.end_date) +
+                                    {DateFormater(comp.end_date) +
                                       " (Local Time in London) "}
                                     , the winners will be announced on{" "}
-                                    {DateFormater(c.drawing_date) +
+                                    {DateFormater(comp.drawing_date) +
                                       " (Local Time in London) "}
                                   </p>
                                 </td>
                               </tr>
                               {/* add discount code so he can share it with his friends and when it's used 5 times he gets a free ticket */}
-                              {c.affiliationCode && order?.totalPrice !== 0 ? (
+                              {/*c.affiliationCode && order?.totalPrice !== 0 ? (
                                 <tr style={{ margin: "0 0 20px 0" }}>
                                   <td
                                     style={{
@@ -406,14 +401,14 @@ export const EmailF = ({
                                     </p>
                                   </td>
                                 </tr>
-                              ) : null}
+                                    ) : null*/}
                             </tr>
                           </tbody>
                         </table>
                       </td>
                     </tr>
                   </tbody>
-                ))}
+                )}
               </tr>
               <tr style={{}}>
                 <p

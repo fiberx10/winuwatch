@@ -458,17 +458,9 @@ export const OrderRouter = createTRPCRouter({
         html: EmailF({
           order: FreeticketOrder,
           numTickts: input.numTickts,
-          comps: [{
-            ...NextComp,
-            Ticket: {
-              ...FreeticketOrder.Ticket,
-            },
-            affiliationCode: "",
-            affiliationRate: 0,
-          }],
-
-        }),
-      });
+          comp: NextComp,
+          }),
+        })
       return FreeticketOrder;
     }),
   getComps: publicProcedure.query(
