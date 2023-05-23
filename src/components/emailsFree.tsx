@@ -1,4 +1,4 @@
-import type { PrismaClient } from "@prisma/client";
+import type { Competition, ImagesUrl, Order, PrismaClient, Ticket, Watches } from "@prisma/client";
 import { Formater, getBaseUrl, DateFormater } from "@/utils";
 
 import { renderToString } from "react-dom/server";
@@ -50,15 +50,37 @@ export const Reduction = (ticketPrice: number, ticketNumber: number) => {
       : ticketPrice * ticketNumber
   );
 };
+/*
+
+(Order & {
+    Ticket: Ticket[];
+}) | null
+(Competition & {
+    Watches: (Watches & {
+        images_url: ImagesUrl[];
+    }) | null;
+}) | null
+
+
+ numTickts: number
+
+*/
 export const EmailF = ({
   order,
   comp,
   numTickts,
-}: ReturnType<typeof GetData> extends Promise<infer T>
-  ? T extends Promise<infer U>
-    ? U
-    : T
-  : never) => (
+}:{
+  order: (Order & {
+    Ticket: Ticket[];
+}) ,
+comp: (Competition & {
+    Watches: (Watches & {
+        images_url: ImagesUrl[];
+    }) | null;
+    Ticket: Ticket[]; 
+}),
+numTickts: number
+}) => (
   <>
     <head>
       <link rel="preconnect" href="https://fonts.googleapis.com" />
