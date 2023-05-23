@@ -450,6 +450,9 @@ export const OrderRouter = createTRPCRouter({
           Ticket: true,
         },
       });
+      if( FreeticketOrder === null) {
+        throw new Error("Order not found");
+      }
       await Transporter.sendMail({
         from: "noreply@winuwatch.uk",
         cc: "admin@winuwatch.uk",
