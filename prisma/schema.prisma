@@ -202,4 +202,5 @@ enum PaymentMethod {
   PAYPAL
   STRIPE
   AFFILIATION
+  MARKETING
 }

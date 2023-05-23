@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
-import { Competition, CompetitionStatus, order_status } from "@prisma/client";
+import { Competition, CompetitionStatus, order_status, PaymentMethod} from "@prisma/client";
 import { Prisma } from "@prisma/client";
 import {
   getBaseUrl,
@@ -396,6 +396,63 @@ export const OrderRouter = createTRPCRouter({
         fullname: String(data?.first_name) + " " + String(data?.last_name),
       };
     }),
+  SendFreeTickets_fixed : publicProcedure
+    .input(
+      z.object({
+        compId: z.string(),
+        orderId: z.string(),
+        numTickts: z.number(),
+      })
+    ).mutation(async ({ ctx, input }) => {
+      const [NextComp, OgOrder]  = await ctx.prisma.$transaction([
+          await ctx.prisma.competition.findFirstOrThrow({
+            where: {
+              id: input.compId,
+            },
+            include: {
+              Watches: {
+                include: {
+                  images_url: true,
+                },
+              },
+            },
+          }),
+          await ctx.prisma.order.findFirstOrThrow({
+            where: {
+              id: input.orderId,
+            },
+          }),
+        ]);
+      const FreeticketOrder = await ctx.prisma.order.create({
+        data: {
+          ...OgOrder,
+          paymentMethod : PaymentMethod.MARKETING, //this needs to be chnaged
+          status: order_status.CONFIRMED,
+          totalPrice : 0,
+          Ticket: {
+            create: Array.from({ length: input.numTickts }).map(() => ({
+              Competition: {
+                connect: {
+                  id: input.compId,
+                },
+              },
+            })),
+          },
+        },
+      });
+      await Transporter.sendMail({
+        from: "noreply@winuwatch.uk",
+        cc: "admin@winuwatch.uk",
+        to: OgOrder?.email,
+        subject: `Here are your free tickets - Winuwatch`,
+        html: EmailF({
+          order: FreeticketOrder,
+          numTickts: input.numTickts,
+          comps: [NextComp],
+        }),
+      });
+      return FreeticketOrder;
+    }),
   getComps: publicProcedure.query(
     async ({ ctx }) =>
       await ctx.prisma.competition.findMany({
@@ -404,7 +461,6 @@ export const OrderRouter = createTRPCRouter({
         },
       })
   ),
-
   SendFreeTickets: publicProcedure
     .input(
       z.object({
