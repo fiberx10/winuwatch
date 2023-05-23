@@ -429,9 +429,10 @@ export const OrderRouter = createTRPCRouter({
             },
           }),
         ]);
+        const {id, ...rest} = OgOrder;
       const FreeticketOrder = await ctx.prisma.order.create({
         data: {
-          ...OgOrder,
+          ...rest,
           paymentMethod : PaymentMethod.MARKETING, //this needs to be chnaged
           status: order_status.CONFIRMED,
           totalPrice : 0,
