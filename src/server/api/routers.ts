@@ -453,6 +453,14 @@ export const OrderRouter = createTRPCRouter({
       });
       return FreeticketOrder;
     }),
+  getComps: publicProcedure.query(
+    async ({ ctx }) =>
+      await ctx.prisma.competition.findMany({
+        orderBy: {
+          end_date: "desc",
+        },
+      })
+  ),
   SendFreeTickets: publicProcedure
     .input(
       z.object({
