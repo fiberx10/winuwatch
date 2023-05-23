@@ -450,9 +450,6 @@ export const OrderRouter = createTRPCRouter({
           Ticket: true,
         },
       });
-      if( FreeticketOrder === null) {
-        throw new Error("Order not found");
-      }
       await Transporter.sendMail({
         from: "noreply@winuwatch.uk",
         cc: "admin@winuwatch.uk",
@@ -474,113 +471,6 @@ export const OrderRouter = createTRPCRouter({
         },
       })
   ),
-  SendFreeTickets: publicProcedure
-    .input(
-      z.object({
-        compId: z.string(),
-        orderId: z.string(),
-        numTickts: z.number(),
-      })
-    )
-    .mutation(async ({ ctx, input }) => {
-      const comps = await ctx.prisma.competition
-        .findMany({
-          include: {
-            Ticket: {
-              where: {
-                competitionId: input.compId,
-                orderId: input.orderId,
-              },
-            },
-            Watches: {
-              include: {
-                images_url: true,
-              },
-            },
-          },
-        })
-        .then((e) =>
-          e
-            .filter(({ Ticket }) => Ticket.length > 0)
-            .map((comp) => ({
-              ...comp,
-
-              affiliationCode: "",
-              affiliationRate: 0,
-            }))
-        )
-        .then((e) =>
-          e.filter((ex) =>
-            ex.Ticket.slice(0, ex.Ticket.length - input.numTickts)
-          )
-        );
-      console.log("comps", comps);
-
-      await ctx.prisma.order.update({
-        where: {
-          id: input.orderId,
-        },
-        data: {
-          Ticket: {
-            createMany: {
-              data: new Array(input.numTickts)
-                .fill(0)
-                .map((_) => ({
-                  competitionId: input.compId,
-                }))
-
-                .flat(),
-            },
-          },
-        },
-      });
-      const order = await ctx.prisma.order.findUnique({
-        where: {
-          id: input.orderId,
-        },
-      });
-
-      await Transporter.sendMail({
-        from: "noreply@winuwatch.uk",
-        cc: "admin@winuwatch.uk",
-        to: order?.email,
-        subject: `Here are your free tickets - Winuwatch`,
-        html: EmailF({
-          order: order,
-          numTickts: input.numTickts,
-          comps: await ctx.prisma.competition
-            .findMany({
-              include: {
-                Ticket: {
-                  where: {
-                    competitionId: input.compId,
-                    orderId: input.orderId,
-                  },
-                },
-                Watches: {
-                  include: {
-                    images_url: true,
-                  },
-                },
-              },
-            })
-            .then((e) =>
-              e
-                .filter(({ Ticket }) => Ticket.length > 0)
-                .map((comp) => ({
-                  ...comp,
-                  affiliationCode: "",
-                  affiliationRate: 0,
-                }))
-            )
-            .then((e) =>
-              e.filter((ex) =>
-                ex.Ticket.slice(0, ex.Ticket.length - input.numTickts)
-              )
-            ),
-        }),
-      });
-    }),
   AddTicketsAfterConfirmation: publicProcedure
     .input(z.object({ id: z.string(), comps: Comps }))
     .query(async ({ ctx, input }) => {
