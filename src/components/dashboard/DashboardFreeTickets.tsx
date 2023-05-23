@@ -38,7 +38,7 @@ const DashboardFreeTickets = () => {
   });
   const { mutateAsync: SendFreeTickets } =
     api.Order.SendFreeTickets.useMutation();
-  const { mutateAsync } = api.Winners.getCSV.useMutation();
+  const { data: competitions } = api.Order.getComps.useQuery();
 
   const { data, isLoading } = api.Competition.getAll.useQuery();
 
@@ -286,59 +286,80 @@ const DashboardFreeTickets = () => {
                                                 Send Free Tickets
                                               </Typography>
                                             </Box>
-                                            <Formik
-                                              initialValues={{
-                                                tickets: row.Ticket.length,
-                                              }}
-                                              onSubmit={async (
-                                                values,
-                                                { setSubmitting }
-                                              ) => {
-                                                await SendFreeTickets({
-                                                  compId: comp.id,
-                                                  orderId: row.id,
-                                                  numTickts: values.tickets,
-                                                });
-                                                console.log(values);
-                                                setResend({
-                                                  id: row.id,
-                                                  open: true,
-                                                });
-                                                setSubmitting(false);
-                                              }}
-                                            >
-                                              {({
-                                                values,
-                                                isSubmitting,
-                                                setValues,
-                                                setFieldValue,
-                                                errors,
-                                                touched,
-                                                handleSubmit,
-                                              }) => (
-                                                <Form
-                                                  style={{
-                                                    display: "flex",
-                                                    alignItems: "center",
-                                                    gap: "1rem",
+                                            {competitions &&
+                                              competitions[0] && (
+                                                <Formik
+                                                  initialValues={{
+                                                    tickets: row.Ticket.length,
+                                                    comp: competitions[0].id,
+                                                  }}
+                                                  onSubmit={async (
+                                                    values,
+                                                    { setSubmitting }
+                                                  ) => {
+                                                    await SendFreeTickets({
+                                                      compId: values.comp,
+                                                      orderId: row.id,
+                                                      numTickts: values.tickets,
+                                                    });
+                                                    console.log(values);
+                                                    setResend({
+                                                      id: row.id,
+                                                      open: true,
+                                                    });
+                                                    setSubmitting(false);
                                                   }}
                                                 >
-                                                  <Field
-                                                    name="tickets"
-                                                    type="number"
-                                                  />
-                                                  <Button
-                                                    size="sm"
-                                                    type="submit"
-                                                    style={{
-                                                      width: "max-content",
-                                                    }}
-                                                  >
-                                                    Send Tickets
-                                                  </Button>
-                                                </Form>
+                                                  {({
+                                                    values,
+                                                    isSubmitting,
+                                                    setValues,
+                                                    setFieldValue,
+                                                    errors,
+                                                    touched,
+                                                    handleSubmit,
+                                                  }) => (
+                                                    <Form
+                                                      style={{
+                                                        display: "flex",
+                                                        alignItems: "center",
+                                                        gap: "1rem",
+                                                      }}
+                                                    >
+                                                      <Field
+                                                        name="tickets"
+                                                        type="number"
+                                                      />
+                                                      <Field
+                                                        as="select"
+                                                        name="comp"
+                                                      >
+                                                        {competitions?.map(
+                                                          (compe) => {
+                                                            return (
+                                                              <option
+                                                                key={compe.id}
+                                                                value={compe.id}
+                                                              >
+                                                                {compe.name}
+                                                              </option>
+                                                            );
+                                                          }
+                                                        )}
+                                                      </Field>
+                                                      <Button
+                                                        size="sm"
+                                                        type="submit"
+                                                        style={{
+                                                          width: "max-content",
+                                                        }}
+                                                      >
+                                                        Send Tickets
+                                                      </Button>
+                                                    </Form>
+                                                  )}
+                                                </Formik>
                                               )}
-                                            </Formik>
                                           </Box>
                                         </Collapse>
                                       </TableCell>
