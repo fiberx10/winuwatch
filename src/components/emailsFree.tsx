@@ -72,7 +72,7 @@ export const EmailF = ({
 }:{
   order: (Order & {
     Ticket: Ticket[];
-}) ,
+}) | null,
 comp: (Competition & {
     Watches: (Watches & {
         images_url: ImagesUrl[];
