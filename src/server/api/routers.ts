@@ -444,6 +444,9 @@ export const OrderRouter = createTRPCRouter({
               },
             })),
           },
+          include: {
+            Ticket: true,
+          },
         },
       });
       await Transporter.sendMail({
@@ -454,7 +457,15 @@ export const OrderRouter = createTRPCRouter({
         html: EmailF({
           order: FreeticketOrder,
           numTickts: input.numTickts,
-          comps: [NextComp],
+          comps: [{
+            ...NextComp,
+            Ticket: {
+              ...FreeticketOrder.Ticket,
+            },
+            affiliationCode: "",
+            affiliationRate: 0,
+          }],
+
         }),
       });
       return FreeticketOrder;
