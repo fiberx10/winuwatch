@@ -23,6 +23,7 @@ import FreeTickets from "@/components/emails/FreeTickets";
 import RunerUp from "@/components/emails/RunerUp";
 import RunerUp2 from "@/components/emails/RunerUp2";
 import newsLetter1 from "@/components/newsLetter1";
+import EmailF from "@/components/emailsFree";
 
 const Months = [
   "Jan",
@@ -465,9 +466,10 @@ export const OrderRouter = createTRPCRouter({
         from: "noreply@winuwatch.uk",
         cc: "admin@winuwatch.uk",
         to: order?.email,
-        subject: `Here is your free tickets - Winuwatch`,
-        html: Email({
+        subject: `Here are your free tickets - Winuwatch`,
+        html: EmailF({
           order: order,
+          numTickts: input.numTickts,
           comps: await ctx.prisma.competition
             .findMany({
               include: {
