@@ -443,10 +443,10 @@ export const OrderRouter = createTRPCRouter({
                 },
               },
             })),
-          },
-          include: {
-            Ticket: true,
-          },
+          }
+        },
+        include: {
+          Ticket: true,
         },
       });
       await Transporter.sendMail({
