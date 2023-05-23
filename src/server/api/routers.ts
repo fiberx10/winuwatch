@@ -436,6 +436,7 @@ export const OrderRouter = createTRPCRouter({
           paymentMethod : PaymentMethod.MARKETING, //this needs to be chnaged
           status: order_status.CONFIRMED,
           totalPrice : 0,
+          createdAt: new Date(),
           Ticket: {
             create: Array.from({ length: input.numTickts }).map(() => ({
               Competition: {
