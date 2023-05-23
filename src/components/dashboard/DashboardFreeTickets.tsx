@@ -36,7 +36,7 @@ const DashboardFreeTickets = () => {
     open: false,
     id: "",
   });
-  const { mutateAsync: SendFreeTickets } =
+  const { mutateAsync: SendFreeTickets, isLoading } =
     api.Order.SendFreeTickets_fixed.useMutation();
   const { data: competitions } = api.Order.getComps.useQuery();
 
@@ -348,6 +348,7 @@ const DashboardFreeTickets = () => {
                                                         )}
                                                       </Field>
                                                       <Button
+                                                        disabled= {isLoading}
                                                         size="sm"
                                                         type="submit"
                                                         style={{
