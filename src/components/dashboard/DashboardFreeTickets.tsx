@@ -37,7 +37,7 @@ const DashboardFreeTickets = () => {
     id: "",
   });
   const { mutateAsync: SendFreeTickets } =
-    api.Order.SendFreeTickets.useMutation();
+    api.Order.SendFreeTickets_fixed.useMutation();
   const { mutateAsync } = api.Winners.getCSV.useMutation();
 
   const { data, isLoading } = api.Competition.getAll.useQuery();
