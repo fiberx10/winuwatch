@@ -40,7 +40,6 @@ const DashboardFreeTickets = () => {
     api.Order.SendFreeTickets_fixed.useMutation();
   const { data: competitions } = api.Order.getComps.useQuery();
 
-
   const { data, isLoading } = api.Competition.getAll.useQuery();
 
   // UPDATE

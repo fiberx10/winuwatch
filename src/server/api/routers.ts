@@ -405,11 +405,17 @@ export const OrderRouter = createTRPCRouter({
       })
     ).mutation(async ({ ctx, input }) => {
       const [NextComp, OgOrder]  = await ctx.prisma.$transaction([
-          await ctx.prisma.competition.findFirstOrThrow({
+            ctx.prisma.competition.findFirstOrThrow({
             where: {
               id: input.compId,
             },
             include: {
+              Ticket: {
+                where: {
+                  competitionId: input.compId,
+                  orderId: input.orderId,
+                },
+              },
               Watches: {
                 include: {
                   images_url: true,
@@ -417,7 +423,7 @@ export const OrderRouter = createTRPCRouter({
               },
             },
           }),
-          await ctx.prisma.order.findFirstOrThrow({
+          ctx.prisma.order.findFirstOrThrow({
             where: {
               id: input.orderId,
             },
