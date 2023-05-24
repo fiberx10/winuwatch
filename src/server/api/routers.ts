@@ -1994,7 +1994,7 @@ SELECT SUM(c.ticket_price) as TotalOrderValue , c.name as competitionName, c.id 
 FROM competition c
 INNER JOIN tickets t ON c.id = t.competitionId
 INNER JOIN \`order\` o ON o.id = t.orderId
-where o.status = "CONFIRMED" and o.paymentMethod in ("PAYPAL","STRIPE")
+where o.status = "CONFIRMED"
 GROUP BY c.name, c.id;
   `;
     return data as Array<{
