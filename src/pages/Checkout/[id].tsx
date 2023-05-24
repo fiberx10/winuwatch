@@ -789,8 +789,12 @@ export default function CheckoutPage({
                                         style={{
                                           color: "#a8957e",
                                           padding: "0 72px 0 0",
+                                          display: "flex",
+                                          alignItems: "center",
+                                          gap: "1rem",
                                         }}
                                       >
+                                        <p>{order.reduction * 100}% OFF</p>
                                         {`\t${Formater(
                                           order.reduction *
                                             (order.number_tickets *
@@ -813,8 +817,16 @@ export default function CheckoutPage({
                                             style={{
                                               color: "#a8957e",
                                               padding: "0 72px 0 0",
+                                              display: "flex",
+                                              alignItems: "center",
+                                              gap: "1rem",
                                             }}
                                           >
+                                            <p>
+                                              {affiliationData.discountRate *
+                                                100}
+                                              % OFF
+                                            </p>
                                             {affiliationData.isRunUpPrize
                                               ? Formater(
                                                   affiliationData.discountRate
