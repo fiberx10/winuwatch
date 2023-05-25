@@ -75,6 +75,7 @@ export default function Competition({
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      {/*
       <div
         style={{
           display: "flex",
@@ -91,7 +92,7 @@ export default function Competition({
         }}
       >
         {t("banner")}
-      </div>
+      </div>*/}
       <NavBar />
       {isLoading || redirecting ? (
         <div
