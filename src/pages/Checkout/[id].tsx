@@ -101,6 +101,10 @@ export default function CheckoutPage({
                 ? affiliationData.discountAmount / price_per_ticket
                 : affiliationData.discountRate
               : 0;
+          const totalPriceWReduction = reduction
+            ? number_tickets * price_per_ticket -
+              number_tickets * price_per_ticket * reduction
+            : number_tickets * price_per_ticket;
           const totalPriceForCompetition = affiliationData?.isRunUpPrize
             ? number_tickets * price_per_ticket - discountRate
             : number_tickets * price_per_ticket * (1 - discountRate);
@@ -110,11 +114,9 @@ export default function CheckoutPage({
             return totalPriceForCompetition;
           }
 
-          return (
-            total +
-            totalPriceForCompetition -
-            reduction * number_tickets * price_per_ticket
-          );
+          return affiliationData?.isRunUpPrize
+            ? total + totalPriceWReduction - discountRate
+            : total + totalPriceWReduction * (1 - discountRate);
         },
         0
       )
