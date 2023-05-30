@@ -454,7 +454,7 @@ export default function CheckoutPage({
                                 required
                                 id="zip"
                                 name="zip"
-                                type="number"
+                                type="text"
                                 min={0}
                               />
                               {errors.zip && touched.zip ? (
@@ -839,8 +839,14 @@ export default function CheckoutPage({
                                                 )
                                               : Formater(
                                                   affiliationData.discountRate *
-                                                    (order.number_tickets *
-                                                      ComptetionData.ticket_price),
+                                                    (order.reduction
+                                                      ? order.number_tickets *
+                                                          order.price_per_ticket -
+                                                        order.number_tickets *
+                                                          order.price_per_ticket *
+                                                          order.reduction
+                                                      : order.number_tickets *
+                                                        order.price_per_ticket),
                                                   router.locale
                                                 )}
                                           </p>
