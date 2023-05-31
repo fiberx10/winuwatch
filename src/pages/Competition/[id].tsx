@@ -156,53 +156,107 @@ export default function Competition({
                         ).map(({ value: item, reduction }, i) => {
                           const TheReduction = 0;
                           return (
-                            <ToggleButton
+                            <div
                               key={i}
-                              onClick={() =>
-                                setCounter({
-                                  value: item,
-                                  reduction: reduction,
-                                })
-                              }
-                              disabled={item > data.remaining_tickets}
-                              sx={{
-                                cursor:
-                                  item > data.remaining_tickets
-                                    ? "help"
-                                    : "pointer",
-                                width: "55px",
-                                height: "55px",
-                                backgroundColor:
-                                  counter.value === item
-                                    ? "rgb(146, 124, 102, 0.5)"
-                                    : "initial",
-                                color:
-                                  counter.value === item
-                                    ? "white !important"
-                                    : "initial",
-                                border:
-                                  counter.value === item
-                                    ? "2px solid rgb(146, 124, 102) !important"
-                                    : "initial",
+                              style={{
+                                display: "flex",
+                                flexDirection: "column",
+                                alignItems: "flex-start",
+                                justifyContent: "flex-start",
+                                gap: "0.5rem",
+                                width: reduction > 0 ? "102px" : "55px",
                               }}
-                              value={item}
-                              aria-label="left aligned"
                             >
-                              <span
-                                style={{
-                                  fontSize: reduction > 0 ? "18px" : "24px",
-                                  height: reduction > 0 ? "23px" : "initial",
+                              <ToggleButton
+                                onClick={() =>
+                                  setCounter({
+                                    value: item,
+                                    reduction: reduction,
+                                  })
+                                }
+                                disabled={item > data.remaining_tickets}
+                                sx={{
+                                  cursor:
+                                    item > data.remaining_tickets
+                                      ? "help"
+                                      : "pointer",
+                                  width: reduction > 0 ? "100px" : "55px",
+                                  borderRadius:
+                                    reduction > 0 ? "20px !important" : "50%",
+                                  height: "55px",
+                                  backgroundColor:
+                                    counter.value === item
+                                      ? "rgb(146, 124, 102, 0.5)"
+                                      : "initial",
+                                  color:
+                                    counter.value === item
+                                      ? "white !important"
+                                      : "initial",
+                                  border:
+                                    counter.value === item
+                                      ? "2px solid rgb(146, 124, 102) !important"
+                                      : "initial",
                                 }}
+                                value={item}
+                                aria-label="left aligned"
                               >
-                                {item}
-                              </span>
-                              <p
-                                style={{ fontSize: "10px" }}
-                                className={styles.sold}
-                              >
-                                {reduction > 0 && `-${reduction * 100}%`}
-                              </p>
-                            </ToggleButton>
+                                <span
+                                  style={{
+                                    fontSize: reduction > 0 ? "18px" : "24px",
+                                    height: reduction > 0 ? "23px" : "initial",
+                                  }}
+                                >
+                                  {item}
+                                </span>
+                                <p
+                                  style={{ fontSize: "10px" }}
+                                  className={styles.sold}
+                                >
+                                  {reduction > 0 && `-${reduction * 100}%`}
+                                </p>
+                              </ToggleButton>
+                              {reduction > 0 && item === 15 ? (
+                                <p
+                                  style={{
+                                    width: "100%",
+                                    textAlign: "center",
+                                    fontWeight: "500",
+                                    fontSize: "14px",
+                                  }}
+                                >
+                                  15 tickets = 1/
+                                  {(data.total_tickets / 15).toFixed(0)} chance
+                                  to win !
+                                </p>
+                              ) : reduction > 0 && item === 20 ? (
+                                <p
+                                  style={{
+                                    width: "100%",
+                                    textAlign: "center",
+                                    fontWeight: "500",
+                                    fontSize: "14px",
+                                  }}
+                                >
+                                  20 tickets = 1/
+                                  {(data.total_tickets / 20).toFixed(0)} chance
+                                  to win !
+                                </p>
+                              ) : reduction > 0 && item === 25 ? (
+                                <p
+                                  style={{
+                                    width: "100%",
+                                    textAlign: "center",
+                                    fontWeight: "500",
+
+                                    fontSize: "14px",
+                                  }}
+                                >
+                                  25 tickets = 1/
+                                  {(data.total_tickets / 25).toFixed(0)} chance
+                                  to win !
+                                </p>
+                              ) : null}
+                            </div>
                           );
                         })
                       )}
