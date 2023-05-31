@@ -2082,7 +2082,55 @@ GROUP BY c.name, c.id;
   // get total tickets sold per day for a month
   ticketSoldPerDay: publicProcedure.query(async ({ ctx }) => {
     try {
-      const date = new Date();
+      //const date = new Date();
+      //const CurrentMonth = new Date().getMonth() + 1;
+      const  res = (await ctx.prisma.$queryRaw<
+          Array<{
+            tickets_number: bigint;
+            month: number;
+            year: number;
+          }>
+        >`  select 
+            count(*) as tickets_number, 
+            MONTH(t.createdat) as month,
+            YEAR(t.createdat) as year
+          from tickets t
+          inner join \`order\`o on(o.id = t.orderId)
+          where o.status="CONFIRMED"
+          and YEAR(t.createdat) = YEAR(CURDATE())
+          group by MONTH(t.createdat),YEAR(t.createdat)
+          ORDER BY YEAR(t.createdat),MONTH(t.createdat) DESC;
+      `).map((comp) => ({
+          ...comp,
+          total_tickets: Number(comp.tickets_number),
+        }));
+        return ({
+          totalTicketsThisMonth : res[0]?.total_tickets || 0,
+          totalTicketsLastMonth : res[1]?.total_tickets || 0,
+          total : res.reduce((acc, curr) => acc + curr.total_tickets, 0),
+          data : [] as Array<{
+            month: string;
+            year: number;
+            total_tickets: number;
+          }>, 
+        
+        })
+
+    } catch (error) {
+      console.log(error);
+      return {
+        totalTicketsThisMonth : 0,
+        totalTicketsLastMonth : 0,
+        total : 0,
+        data : [] as Array<{
+          month: string;
+          year: number;
+          total_tickets: number;
+        }>,  }
+      }
+    }
+  ),
+      /*
       const data: Array<{
         date: string;
         total_tickets: number;
@@ -2129,8 +2177,7 @@ GROUP BY c.name, c.id;
     } catch (e) {
       console.log(e);
       return { data: [], totalTicketsThisMonth: 0, totalTicketsLastMonth: 0 };
-    }
-  }),
+    }*/
   clientsCountry: publicProcedure.query(async ({ ctx }) => {
     try {
       const data: Array<{

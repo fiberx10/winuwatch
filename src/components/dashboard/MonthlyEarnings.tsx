@@ -13,7 +13,7 @@ import DashboardCard from "@/components/shared/DashboardCard";
 import { api } from "@/utils";
 
 const MonthlyEarnings = () => {
-  const { data: dataObj } = api.Charts.ticketSoldPerDay.useQuery() || {};
+  const { data: dataObj } = api.Charts.ticketSoldPerDay.useQuery(); 
 
   // chart color
   const theme = useTheme();
