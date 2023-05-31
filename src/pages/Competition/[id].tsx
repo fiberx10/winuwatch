@@ -161,11 +161,13 @@ export default function Competition({
                               style={{
                                 display: "flex",
                                 flexDirection: "column",
-                                alignItems: "flex-start",
+                                alignItems: "center",
                                 justifyContent: "flex-start",
                                 gap: "0.5rem",
                                 width: reduction > 0 ? "102px" : "55px",
+                                marginRight: reduction > 0 ? "1rem" : "0",
                               }}
+                              className={styles.ticket}
                             >
                               <ToggleButton
                                 onClick={() =>
@@ -182,7 +184,7 @@ export default function Competition({
                                       : "pointer",
                                   width: reduction > 0 ? "100px" : "55px",
                                   borderRadius:
-                                    reduction > 0 ? "20px !important" : "50%",
+                                    reduction > 0 ? "25px !important" : "50%",
                                   height: "55px",
                                   backgroundColor:
                                     counter.value === item
