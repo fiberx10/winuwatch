@@ -294,7 +294,7 @@ html {
   height: 450px;
   width: 403px;
   object-fit: contain;
-  transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out !important;
 }
 
 .splide__slide--clone img {
@@ -312,7 +312,7 @@ html {
   opacity: 0 !important;
 }
 .is-prev img {
-  height: 250px !important;
+  height: 300px !important;
   width: initial !important;
 }
 .is-prev .activeName {
@@ -328,7 +328,7 @@ html {
   opacity: 0;
 }
 .is-next img {
-  height: 250px !important;
+  height: 300px !important;
   width: initial !important;
 }
 

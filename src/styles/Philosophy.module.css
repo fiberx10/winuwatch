@@ -20,6 +20,39 @@
   background-position: contain;
   z-index: -999;
 }
+.AboutImg {
+  width: 100%;
+  background: linear-gradient(
+      180deg,
+      #faf8f6 0%,
+      rgba(255, 255, 255, 0) 47.35%,
+      #faf8f6 99.33%
+    ),
+    url(../../public/images/Philo.png);
+  height: 1630px;
+  background-position: 50%;
+  background-repeat: no-repeat;
+  position: absolute;
+  background-size: cover;
+
+  bottom: 25%;
+  background-position: contain;
+  z-index: -999;
+}
+.About {
+  height: 3872px;
+  background: linear-gradient(
+    180deg,
+    #faf8f6 0%,
+    rgba(206, 198, 189, 0) 50.83%,
+    #a8957e 100%
+  );
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
 .Philo {
   height: 2072px;
   background: linear-gradient(
@@ -49,6 +82,18 @@
   font-weight: 400;
   font-size: 45px;
   line-height: 68px;
+  color: #987358;
+}
+.philoHeader h2 {
+  text-transform: uppercase;
+  font-weight: 400;
+  font-size: 28px;
+  color: #987358;
+}
+.philoHeader li {
+  text-transform: uppercase;
+  font-weight: 400;
+  font-size: 20px;
   color: #987358;
 }
 .philoHeader p {
@@ -94,6 +139,23 @@
     font-size: 18px;
     line-height: 2rem;
     padding: 0px 10px;
+  }
+  .AboutImg {
+    bottom: 29%;
+  }
+  .About {
+    height: 5572px;
+    background: linear-gradient(
+      180deg,
+      #faf8f6 0%,
+      rgba(206, 198, 189, 0) 50.83%,
+      #a8957e 100%
+    );
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
   }
   .Philo {
     background: linear-gradient(

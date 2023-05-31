@@ -94,13 +94,17 @@ export default function CheckoutPage({
   useEffect(() => {
     setComputedTotal(
       competitions.reduce(
-        (total, { number_tickets, price_per_ticket, compID }) => {
+        (total, { number_tickets, price_per_ticket, compID, reduction }) => {
           const discountRate =
             affiliationData && affiliationData.competitionId === compID
               ? affiliationData.discountAmount
                 ? affiliationData.discountAmount / price_per_ticket
                 : affiliationData.discountRate
               : 0;
+          const totalPriceWReduction = reduction
+            ? number_tickets * price_per_ticket -
+              number_tickets * price_per_ticket * reduction
+            : number_tickets * price_per_ticket;
           const totalPriceForCompetition = affiliationData?.isRunUpPrize
             ? number_tickets * price_per_ticket - discountRate
             : number_tickets * price_per_ticket * (1 - discountRate);
@@ -110,12 +114,19 @@ export default function CheckoutPage({
             return totalPriceForCompetition;
           }
 
-          return total + totalPriceForCompetition;
+          return affiliationData?.isRunUpPrize
+            ? total + totalPriceWReduction - discountRate
+            : total + totalPriceWReduction * (1 - discountRate);
         },
         0
       )
     );
-  }, [affiliationData?.discountRate, affiliationData?.discountAmount]);
+  }, [
+    affiliationData?.discountRate,
+    affiliationData?.discountAmount,
+    competitions,
+    affiliationData,
+  ]);
   useEffect(() => {
     void (async () => {
       if (competitions && competitions.length === 0) {
@@ -443,7 +454,7 @@ export default function CheckoutPage({
                                 required
                                 id="zip"
                                 name="zip"
-                                type="number"
+                                type="text"
                                 min={0}
                               />
                               {errors.zip && touched.zip ? (
@@ -761,19 +772,39 @@ export default function CheckoutPage({
                                         )
                                       )}
                                   </span>
-                                  {!affiliationData && order.reduction > 0 && (
-                                    <p
+                                  {order.reduction > 0 && (
+                                    <div
                                       style={{
                                         color: "#a8957e",
+                                        display: "flex",
+                                        justifyContent: "space-between",
                                       }}
                                     >
-                                      {`${t("discount")}\t${Formater(
-                                        order.reduction *
-                                          (order.number_tickets *
-                                            ComptetionData.ticket_price),
-                                        router.locale
-                                      )}`}
-                                    </p>
+                                      <p
+                                        style={{
+                                          color: "#a8957e",
+                                        }}
+                                      >
+                                        {t("discount")}
+                                      </p>
+                                      <p
+                                        style={{
+                                          color: "#a8957e",
+                                          padding: "0 72px 0 0",
+                                          display: "flex",
+                                          alignItems: "center",
+                                          gap: "1rem",
+                                        }}
+                                      >
+                                        <p>{order.reduction * 100}% OFF</p>
+                                        {`\t${Formater(
+                                          order.reduction *
+                                            (order.number_tickets *
+                                              ComptetionData.ticket_price),
+                                          router.locale
+                                        )}`}
+                                      </p>
+                                    </div>
                                   )}
                                   {affiliationData &&
                                   affiliationData.competitionId ===
@@ -788,8 +819,16 @@ export default function CheckoutPage({
                                             style={{
                                               color: "#a8957e",
                                               padding: "0 72px 0 0",
+                                              display: "flex",
+                                              alignItems: "center",
+                                              gap: "1rem",
                                             }}
                                           >
+                                            <p>
+                                              {affiliationData.discountRate *
+                                                100}
+                                              % OFF
+                                            </p>
                                             {affiliationData.isRunUpPrize
                                               ? Formater(
                                                   affiliationData.discountRate
@@ -800,8 +839,14 @@ export default function CheckoutPage({
                                                 )
                                               : Formater(
                                                   affiliationData.discountRate *
-                                                    (order.number_tickets *
-                                                      ComptetionData.ticket_price),
+                                                    (order.reduction
+                                                      ? order.number_tickets *
+                                                          order.price_per_ticket -
+                                                        order.number_tickets *
+                                                          order.price_per_ticket *
+                                                          order.reduction
+                                                      : order.number_tickets *
+                                                        order.price_per_ticket),
                                                   router.locale
                                                 )}
                                           </p>
