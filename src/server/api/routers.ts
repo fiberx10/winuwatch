@@ -2082,7 +2082,53 @@ GROUP BY c.name, c.id;
   // get total tickets sold per day for a month
   ticketSoldPerDay: publicProcedure.query(async ({ ctx }) => {
     try {
-      const date = new Date();
+      //const date = new Date();
+      //const CurrentMonth = new Date().getMonth() + 1;
+      const  res = (await ctx.prisma.$queryRaw<
+          Array<{
+            tickets_number: bigint;
+            month: number;
+            year: number;
+          }>
+        >`  select 
+            count(*) as tickets_number, 
+            MONTH(t.createdat) as month,
+            YEAR(t.createdat) as year
+          from tickets t
+          inner join \`order\`o on(o.id = t.orderId)
+          where o.status="CONFIRMED"
+          and YEAR(t.createdat) = YEAR(CURDATE())
+          group by MONTH(t.createdat),YEAR(t.createdat)
+          ORDER BY YEAR(t.createdat),MONTH(t.createdat) DESC;
+      `).map((comp) => ({
+          ...comp,
+          tickets_number: Number(comp.tickets_number),
+        }));
+        return ({
+          totalTicketsThisMonth : res[0]?.tickets_number || 0,
+          totalTicketsLastMonth : res[1]?.tickets_number || 0,
+          data : [] as Array<{
+            month: string;
+            year: number;
+            tickets_number: number;
+          }>, 
+        
+        })
+
+    } catch (error) {
+      console.log(error);
+      return {
+        totalTicketsThisMonth : 0,
+        totalTicketsLastMonth : 0,
+        data : [{
+          month : 1,
+          year : 2021,
+          tickets_number : 0
+        }] }
+      }
+    }
+  ),
+      /*
       const data: Array<{
         date: string;
         total_tickets: number;
@@ -2129,8 +2175,7 @@ GROUP BY c.name, c.id;
     } catch (e) {
       console.log(e);
       return { data: [], totalTicketsThisMonth: 0, totalTicketsLastMonth: 0 };
-    }
-  }),
+    }*/
   clientsCountry: publicProcedure.query(async ({ ctx }) => {
     try {
       const data: Array<{
