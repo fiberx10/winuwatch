@@ -2102,15 +2102,16 @@ GROUP BY c.name, c.id;
           ORDER BY YEAR(t.createdat),MONTH(t.createdat) DESC;
       `).map((comp) => ({
           ...comp,
-          tickets_number: Number(comp.tickets_number),
+          total_tickets: Number(comp.tickets_number),
         }));
         return ({
-          totalTicketsThisMonth : res[0]?.tickets_number || 0,
-          totalTicketsLastMonth : res[1]?.tickets_number || 0,
+          totalTicketsThisMonth : res[0]?.total_tickets || 0,
+          totalTicketsLastMonth : res[1]?.total_tickets || 0,
+          total : res.reduce((acc, curr) => acc + curr.total_tickets, 0),
           data : [] as Array<{
             month: string;
             year: number;
-            tickets_number: number;
+            total_tickets: number;
           }>, 
         
         })
@@ -2120,11 +2121,12 @@ GROUP BY c.name, c.id;
       return {
         totalTicketsThisMonth : 0,
         totalTicketsLastMonth : 0,
-        data : [{
-          month : 1,
-          year : 2021,
-          tickets_number : 0
-        }] }
+        total : 0,
+        data : [] as Array<{
+          month: string;
+          year: number;
+          total_tickets: number;
+        }>,  }
       }
     }
   ),
