@@ -155,8 +155,14 @@
   gap: 0.5rem;
   align-items: center;
   flex-wrap: wrap;
-  width: 80%;
+  width: 85%;
   transition: all 0.5s ease;
+}
+
+@media only screen and (max-width: 500px) {
+  .ticket {
+    margin-right: 0 !important;
+  }
 }
 .tickets button {
   border: 2px solid #b3b3b3;
