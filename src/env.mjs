@@ -13,6 +13,7 @@ const server = z.object({
   SMTP_PORT: z.string().min(1),
   SMTP_USER: z.string().min(1),
   SMTP_PASSWORD: z.string().min(1),
+  ADMIN_PASSWORD: z.string().default("1234"),
   HOST: z.string(),
 });
 
@@ -46,6 +47,7 @@ const processEnv = {
   SMTP_USER: process.env.SMTP_USER,
   SMTP_PASSWORD: process.env.SMTP_PASSWORD,
   HOST: process.env.NEXTAUTH_URL,
+  ADMIN_PASSWORD: process.env.ADMIN_PASSWORD,
 };
 
 // Don't touch the part below

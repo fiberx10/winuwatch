@@ -24,6 +24,7 @@ import RunerUp from "@/components/emails/RunerUp";
 import RunerUp2 from "@/components/emails/RunerUp2";
 import newsLetter1 from "@/components/newsLetter1";
 import EmailF from "@/components/emailsFree";
+import { env } from "@/env.mjs";
 
 const Months = [
   "Jan",
@@ -318,12 +319,9 @@ export const TicketsRouter = createTRPCRouter({
 export const AuthRouter = createTRPCRouter({
   auth: publicProcedure
     .input(z.object({ username: z.string(), password: z.string() }))
-    .mutation(({ input }) => {
-      const user = { username: "admin", password: "1234" };
-      return (
-        input.username === user.username && input.password === user.password
-      );
-    }),
+    .mutation(({ input }) => 
+        input.username === "admin" && input.password ===  env.ADMIN_PASSWORD
+    ),
 });
 
 export const OrderRouter = createTRPCRouter({
