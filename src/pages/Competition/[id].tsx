@@ -75,6 +75,24 @@ export default function Competition({
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      {/*
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          height: "fit-content",
+          width: "100%",
+          backgroundColor: "#a8957e",
+          color: "white",
+          padding: "15px",
+          fontFamily: "Montserrat",
+          textAlign: "center",
+          fontSize: "14px",
+        }}
+      >
+        {t("banner")}
+      </div>*/}
       <NavBar />
       {isLoading || redirecting ? (
         <div
