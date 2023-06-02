@@ -80,6 +80,24 @@ const CartComp = () => {
         });
   }, [id, router]);
 
+  useEffect(() => {
+    competitions.map((comp) =>
+      updateComp({
+        reduction:
+          comp.number_tickets === 15
+            ? 0.1
+            : comp.number_tickets === 20
+            ? 0.15
+            : comp.number_tickets === 25
+            ? 0.2
+            : 0,
+        compID: comp.compID,
+        number_tickets: comp.number_tickets,
+        price_per_ticket: comp.price_per_ticket,
+      })
+    );
+  }, []);
+
   return (
     <div className={styles.CartMain}>
       {isLoading ? (
@@ -347,3 +365,6 @@ const CartComp = () => {
 };
 
 export default CartComp;
+function setCounter(arg0: { value: any; reduction: any }): any {
+  throw new Error("Function not implemented.");
+}
