@@ -365,6 +365,3 @@ const CartComp = () => {
 };
 
 export default CartComp;
-function setCounter(arg0: { value: any; reduction: any }): any {
-  throw new Error("Function not implemented.");
-}
