@@ -85,8 +85,9 @@ export default function NavBar() {
             <Link href={"/#theComp"}>{t("comp")}</Link>
             <Link href={"/#Howtoplay"}>{t("howto")}</Link>
             <Link href={"/Philosophy"}>{t("phil")}</Link>
-
-            <Link href={"/AboutUs"}>Who We Are</Link>
+            {
+              //<Link href={"/AboutUs"}>Who We Are</Link>
+            }
           </div>
         </Drawer>
       </div>
