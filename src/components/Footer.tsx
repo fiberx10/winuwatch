@@ -98,13 +98,19 @@ const Footer = () => {
         style={{
           background:
             typeof window !== "undefined" &&
-            (windowLocation === "/es/Philosophy" ||
+            (windowLocation === "/es/AboutUs" ||
+              windowLocation === "/fr/AboutUs" ||
+              windowLocation === "/il/AboutUs" ||
+              windowLocation === "/ja/AboutUs" ||
+              windowLocation === "/es/Philosophy" ||
               windowLocation === "/fr/Philosophy" ||
               windowLocation === "/il/Philosophy" ||
               windowLocation === "/ja/Philosophy")
               ? "#a8957e"
               : typeof window !== "undefined" &&
                 windowLocation === "/Philosophy"
+              ? "#a8957e"
+              : typeof window !== "undefined" && windowLocation === "/AboutUs"
               ? "#a8957e"
               : "#cbb9ac",
         }}

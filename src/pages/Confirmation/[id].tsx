@@ -74,11 +74,12 @@ export default function Confirmation({
           <div className={styles.confirmwrapper}></div>
           <div className={styles.confirmwrapper}>
             <div className={styles.confirm_text}>
-              <h1>
-                {`${t("thank")} ${String(
-                  order?.fullname === undefined ? "" : order?.fullname
-                )} ${t("foryourorder")}`}
-              </h1>
+              <div className={styles.confirm_text}>
+                <h1>
+                  {String(order?.fullname === undefined ? "" : order?.fullname)}
+                </h1>
+                <h1>{`${t("thank")} ${t("foryourorder")}`}</h1>
+              </div>
               <p>
                 {t("confirm")} <br /> {t("confemail")}
               </p>
