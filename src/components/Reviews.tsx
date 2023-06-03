@@ -10,7 +10,7 @@ const Reviews = () => {
     {
       name: "trustpilot",
       score: 5,
-      numberOfRev: 12,
+      numberOfRev: 1,
       review: "I had the best experience online.",
       fullRev:
         "I had the best experience online. The website is very intuitive and functional. I wish to win and to expand my watches collection, good luck to me !",
@@ -20,7 +20,7 @@ const Reviews = () => {
     {
       name: "trustpilot",
       score: 4.8,
-      numberOfRev: 9,
+      numberOfRev: 1,
       review: "Very good idea and a beautiful website",
       fullRev:
         "Very good idea and a beautiful website. thank you for giving us the chance to participate in the competition( with only one ticket! ) ",
@@ -53,7 +53,7 @@ const Reviews = () => {
       numberOfRev: 1,
       review: "Site top",
       fullRev: "Site top , huissier pour vérifier le tirage",
-      fullname: "Michael Koskas",
+      fullname: "Michael",
       time: "02.5.2023",
     },
   ];

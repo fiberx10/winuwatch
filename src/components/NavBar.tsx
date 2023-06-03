@@ -86,7 +86,7 @@ export default function NavBar() {
             <Link href={"/#Howtoplay"}>{t("howto")}</Link>
             <Link href={"/Philosophy"}>{t("phil")}</Link>
 
-            <Link href={"/AboutUs"}>About Us</Link>
+            <Link href={"/AboutUs"}>Who We Are</Link>
           </div>
         </Drawer>
       </div>
@@ -125,7 +125,7 @@ export default function NavBar() {
           style={{ color: navColor }}
           href={"/AboutUs"}
         >
-          About Us
+          Who We Are
         </Link>
 
         <Link style={{ color: navColor }} href={"/Cart"}>
