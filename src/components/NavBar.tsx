@@ -120,14 +120,16 @@ export default function NavBar() {
         >
           {t("phil")}
         </Link>
-
-        <Link
+        {
+          /*
+          <Link
           className={styles.mobile}
           style={{ color: navColor }}
           href={"/AboutUs"}
-        >
+          >
           Who We Are
-        </Link>
+          </Link>
+        */}
 
         <Link style={{ color: navColor }} href={"/Cart"}>
           {`${t("cart")} (${cardDetails().Number_of_item})`}
