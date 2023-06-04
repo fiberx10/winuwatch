@@ -151,8 +151,8 @@ export default function Competition({
                         <p>{t("noticketleft")}</p>
                       ) : (
                         TICKETREDUC.filter(
-                          ({ value }) =>
-                            value <= data.remaining_tickets && value <= filter
+                          ({ value }) => value <= data.remaining_tickets
+                          // && value <= filter
                         ).map(({ value: item, reduction }, i) => {
                           const TheReduction = 0;
                           return (
@@ -262,7 +262,7 @@ export default function Competition({
                           );
                         })
                       )}
-                      <button
+                      {/* <button
                         style={{
                           display:
                             filter === MAX_TICKETS ||
@@ -275,7 +275,7 @@ export default function Competition({
                         className={styles.showMore}
                       >
                         +
-                      </button>
+                      </button> */}
                     </div>
                   )}
                 </div>
