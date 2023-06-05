@@ -220,7 +220,7 @@ export default function Competition({
                               {reduction > 0 && item === 15 ? (
                                 <p
                                   style={{
-                                    width: "100%",
+                                    width: "7rem",
                                     textAlign: "center",
                                     fontWeight: "500",
                                     fontSize: "14px",
@@ -233,7 +233,7 @@ export default function Competition({
                               ) : reduction > 0 && item === 20 ? (
                                 <p
                                   style={{
-                                    width: "100%",
+                                    width: "7rem",
                                     textAlign: "center",
                                     fontWeight: "500",
                                     fontSize: "14px",
@@ -246,7 +246,7 @@ export default function Competition({
                               ) : reduction > 0 && item === 25 ? (
                                 <p
                                   style={{
-                                    width: "100%",
+                                    width: "7rem",
                                     textAlign: "center",
                                     fontWeight: "500",
 
