@@ -227,6 +227,7 @@ export default function Competition({
                                   }}
                                 >
                                   {item}
+                                  {reduction ? "T" : ""}
                                 </span>
                                 <p
                                   style={{ fontSize: "10px" }}
