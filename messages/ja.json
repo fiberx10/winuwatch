@@ -105,7 +105,10 @@
     "stonesnumber": "石の数",
     "glass": "ガラス",
     "bezelmeterial": "ベゼル素材",
-    "timezone": "（ロンドンの現地時間）"
+    "timezone": "（ロンドンの現地時間）",
+    "donated": "A part of the money is donated to the following associations",
+    "heart": "GOOD HEART",
+    "heartDesc": "Our mission and our commitment are to help the most deprived families."
   },
   "thanku": {
     "thank": "ありがとうございます",

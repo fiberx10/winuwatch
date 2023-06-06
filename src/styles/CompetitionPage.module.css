@@ -320,6 +320,12 @@
   .compSponsors {
     margin: 10px 0px 20px 0px;
   }
+  .compSponsors {
+    width: 100% !important;
+  }
+  .CompBotBot {
+    flex-direction: column;
+  }
   .donations {
     width: 100%;
     margin-bottom: 20px;

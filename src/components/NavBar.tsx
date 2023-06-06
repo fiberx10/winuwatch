@@ -85,6 +85,7 @@ export default function NavBar() {
             <Link href={"/#theComp"}>{t("comp")}</Link>
             <Link href={"/#Howtoplay"}>{t("howto")}</Link>
             <Link href={"/Philosophy"}>{t("phil")}</Link>
+            <Link href={"/Charity"}>{t("charity")}</Link>
 
             <Link href={"/AboutUs"}>Who We Are</Link>
           </div>
@@ -126,6 +127,13 @@ export default function NavBar() {
           href={"/AboutUs"}
         >
           Who We Are
+        </Link>
+        <Link
+          className={styles.mobile}
+          style={{ color: navColor }}
+          href={"/Charity"}
+        >
+          {t("charity")}
         </Link>
 
         <Link style={{ color: navColor }} href={"/Cart"}>
