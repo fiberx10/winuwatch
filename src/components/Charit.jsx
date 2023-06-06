@@ -29,7 +29,7 @@ const Charit = () => {
         <div className={styles.CharityH1}>
           <h1>{t("charityheader")}</h1>
         </div>
-        <h3> {Formater(594828, locale)}</h3>
+        <h3> {Formater(data.reduce((a, b) => a + b.amount, 0), locale)}</h3>
       </div>
       <div className={styles.CharityGrid}>
         {data.map((charity, i) => (

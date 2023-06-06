@@ -87,7 +87,7 @@ export default function NavBar() {
             <Link href={"/Philosophy"}>{t("phil")}</Link>
             <Link href={"/Charity"}>{t("charity")}</Link>
 
-            <Link href={"/AboutUs"}>Who We Are</Link>
+            {/*<Link href={"/AboutUs"}>Who We Are</Link> */}
           </div>
         </Drawer>
       </div>
@@ -120,7 +120,9 @@ export default function NavBar() {
         >
           {t("phil")}
         </Link>
-
+        {
+          /*
+         
         <Link
           className={styles.mobile}
           style={{ color: navColor }}
@@ -128,6 +130,8 @@ export default function NavBar() {
         >
           Who We Are
         </Link>
+         */
+        }
         <Link
           className={styles.mobile}
           style={{ color: navColor }}
