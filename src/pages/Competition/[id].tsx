@@ -230,7 +230,10 @@ export default function Competition({
                                   {reduction ? "T" : ""}
                                 </span>
                                 <p
-                                  style={{ fontSize: "10px" }}
+                                  style={{
+                                    fontSize: "12px",
+                                    fontWeight: "600",
+                                  }}
                                   className={styles.sold}
                                 >
                                   {reduction > 0 && `-${reduction * 100}%`}
@@ -241,7 +244,7 @@ export default function Competition({
                                   style={{
                                     width: "7rem",
                                     textAlign: "center",
-                                    fontWeight: "500",
+                                    fontWeight: "600",
                                     fontSize: "14px",
                                   }}
                                 >
@@ -254,7 +257,7 @@ export default function Competition({
                                   style={{
                                     width: "7rem",
                                     textAlign: "center",
-                                    fontWeight: "500",
+                                    fontWeight: "600",
                                     fontSize: "14px",
                                   }}
                                 >
@@ -267,7 +270,7 @@ export default function Competition({
                                   style={{
                                     width: "7rem",
                                     textAlign: "center",
-                                    fontWeight: "500",
+                                    fontWeight: "600",
 
                                     fontSize: "14px",
                                   }}
