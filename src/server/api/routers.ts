@@ -439,7 +439,7 @@ export const OrderRouter = createTRPCRouter({
       const FreeticketOrder = await ctx.prisma.order.create({
         data: {
           ...rest,
-          paymentMethod: "MARKETING", //this needs to be chnaged
+          paymentMethod: PaymentMethod.MARKETING, //this needs to be chnaged
           status: order_status.CONFIRMED,
           totalPrice: 0,
           createdAt: new Date(),
