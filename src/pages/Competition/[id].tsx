@@ -227,6 +227,7 @@ export default function Competition({
                                   }}
                                 >
                                   {item}
+                                  {reduction ? "T" : ""}
                                 </span>
                                 <p
                                   style={{ fontSize: "10px" }}
@@ -297,7 +298,13 @@ export default function Competition({
                     </div>
                   )}
                 </div>
-                <div className={styles.CompBot}>
+                <div
+                  style={{
+                    flexDirection: nextComp ? "column" : "row",
+                    alignItems: nextComp ? "flex-end" : "flex-start",
+                  }}
+                  className={styles.CompBot}
+                >
                   <div
                     style={
                       router.locale === "il"
@@ -311,30 +318,53 @@ export default function Competition({
                     }
                     className={styles.donations}
                   >
-                    <h3>{t("freeTicket")}</h3>
-                    {nextComp && (
-                      <p>
-                        {t("donatedto")}
-                        {nextComp?.Watches?.model}
-                        {t("nextText")}
-                        {nextComp?.Watches?.model}
-                      </p>
+                    {nextComp ? (
+                      <>
+                        <h3>{t("freeTicket")}</h3>
+
+                        <p>
+                          {t("donatedto")}
+                          {nextComp?.Watches?.model}
+                          {t("nextText")}
+                          {nextComp?.Watches?.model}
+                        </p>
+                      </>
+                    ) : (
+                      <div
+                        style={{
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: "0.5rem",
+                          alignItems: "flex-start",
+                          justifyContent: "flex-start",
+                          height: "100%",
+                        }}
+                      >
+                        <p
+                          style={{
+                            width: "70%",
+                          }}
+                        >
+                          A part of the money is donated to the following
+                          associations
+                        </p>
+                        <div className={styles.compSponsors}>
+                          <Image
+                            width={130}
+                            height={50}
+                            alt="donation"
+                            src="/images/cancerRes.png"
+                          />
+                          <Image
+                            width={130}
+                            height={50}
+                            style={{ objectFit: "contain" }}
+                            alt="donation"
+                            src="/images/woodlandLogo.png"
+                          />
+                        </div>
+                      </div>
                     )}
-                    {/* <div className={styles.compSponsors}> */}
-                    {/* <Image
-                        width={130}
-                        height={50}
-                        alt="donation"
-                        src="/images/cancerRes.png"
-                      /> */}
-                    {/* <Image
-                        width={130}
-                        height={50}
-                        style={{ objectFit: "contain" }}
-                        alt="donation"
-                        src="/images/woodlandLogo.png"
-                      /> */}
-                    {/* </div> */}
                   </div>
                   {data.remaining_tickets === 0 || data.end_date < new Date()
                     ? ""
