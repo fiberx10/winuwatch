@@ -6,13 +6,15 @@ import { useTranslations } from "next-intl";
 
 const Charit = () => {
   const t = useTranslations("charity");
+  const c = useTranslations("competition");
   const { locale } = useRouter();
   const data = [
     {
-      img: "/images/woodland.png",
-      name: "Woodland trust UK",
+      img: "/images/HeartBig.png",
+      name: c("heart"),
       amount: 2346,
-      desc: t("woodland"),
+      desc: c("heartDesc"),
+      link: "https://levtov.fr/",
     },
     // {
     //   img: "/images/cancerRes.png",
@@ -38,7 +40,7 @@ const Charit = () => {
                 height={300}
                 alt="charity"
                 src={charity.img}
-                style={{ objectFit: "cover" }}
+                style={{ objectFit: "contain" }}
               />
             </div>
             <div className={styles.CharityBot}>
@@ -48,7 +50,9 @@ const Charit = () => {
               </div>
               <h3>{charity.name}</h3>
               <p>{charity.desc}</p>
-              <button>{t("readmore")}</button>
+              <a target="_blank" href={charity.link}>
+                {t("readmore")}
+              </a>
             </div>
           </div>
         ))}
