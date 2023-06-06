@@ -104,7 +104,10 @@
     "stonesnumber": "Number of stones",
     "glass": "Glass",
     "bezelmeterial": "Bezel material",
-    "timezone": "(Local Time in London)"
+    "timezone": "(Local Time in London)",
+    "donated": "A part of the money is donated to the following associations",
+    "heart": "GOOD HEART",
+    "heartDesc": "Our mission and our commitment are to help the most deprived families."
   },
   "thanku": {
     "thank": "THANK YOU",

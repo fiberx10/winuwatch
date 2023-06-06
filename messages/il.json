@@ -104,7 +104,10 @@
     "stonesnumber": "מספר אבנים",
     "glass": "זכוכית",
     "bezelmeterial": "חומר המסגרת",
-    "timezone": "(שעון מקומי בלונדון)"
+    "timezone": "(שעון מקומי בלונדון)",
+    "donated": "A part of the money is donated to the following associations",
+    "heart": "GOOD HEART",
+    "heartDesc": "Our mission and our commitment are to help the most deprived families."
   },
   "thanku": {
     "thank": "!על ההזמנה שלך",

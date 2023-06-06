@@ -361,8 +361,7 @@ export default function Competition({
                           color: "rgba(0, 0, 0, 0.6)",
                         }}
                       >
-                        A part of the money is donated to the following
-                        associations
+                        {t("donated")}
                       </p>
                       <div
                         style={{
@@ -387,7 +386,7 @@ export default function Competition({
                               fontWeight: "500",
                             }}
                           >
-                            GOOD HEART
+                            {t("heart")}
                           </h1>
                           <p
                             style={{
@@ -396,8 +395,7 @@ export default function Competition({
                               fontSize: "14px",
                             }}
                           >
-                            Our mission and our commitment are to help the most
-                            deprived families.
+                            {t("heartDesc")}
                           </p>
                         </div>
                       </div>
