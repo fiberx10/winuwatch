@@ -46,7 +46,9 @@ const Charit = () => {
             <div className={styles.CharityBot}>
               <div>
                 <h4>{t("donation")}</h4>
-                <p className={styles.amount}>${charity.amount}</p>
+                <p className={styles.amount}>
+                  {Formater(charity.amount, locale)}
+                </p>
               </div>
               <h3>{charity.name}</h3>
               <p>{charity.desc}</p>
