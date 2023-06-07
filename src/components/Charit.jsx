@@ -6,13 +6,15 @@ import { useTranslations } from "next-intl";
 
 const Charit = () => {
   const t = useTranslations("charity");
+  const c = useTranslations("competition");
   const { locale } = useRouter();
   const data = [
     {
-      img: "/images/woodland.png",
-      name: "Woodland trust UK",
+      img: "/images/HeartBig.png",
+      name: c("heart"),
       amount: 2346,
-      desc: t("woodland"),
+      desc: c("heartDesc"),
+      link: "https://levtov.fr/",
     },
     // {
     //   img: "/images/cancerRes.png",
@@ -27,7 +29,7 @@ const Charit = () => {
         <div className={styles.CharityH1}>
           <h1>{t("charityheader")}</h1>
         </div>
-        <h3> {Formater(594828, locale)}</h3>
+        <h3> {Formater(data.reduce((a, b) => a + b.amount, 0), locale)}</h3>
       </div>
       <div className={styles.CharityGrid}>
         {data.map((charity, i) => (
@@ -38,17 +40,21 @@ const Charit = () => {
                 height={300}
                 alt="charity"
                 src={charity.img}
-                style={{ objectFit: "cover" }}
+                style={{ objectFit: "contain" }}
               />
             </div>
             <div className={styles.CharityBot}>
               <div>
                 <h4>{t("donation")}</h4>
-                <p className={styles.amount}>${charity.amount}</p>
+                <p className={styles.amount}>
+                  {Formater(charity.amount, locale)}
+                </p>
               </div>
               <h3>{charity.name}</h3>
               <p>{charity.desc}</p>
-              <button>{t("readmore")}</button>
+              <a target="_blank" href={charity.link}>
+                {t("readmore")}
+              </a>
             </div>
           </div>
         ))}

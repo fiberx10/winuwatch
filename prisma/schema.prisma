@@ -155,13 +155,13 @@ model Affiliation {
   id             String      @id @default(cuid())
   discountCode   String      @unique
   discountRate   Float       @default(0.1)
-  discountAmount Float       @default(0)
   ownerEmail     String
   createdAt      DateTime    @default(now())
   competitionId  String
   uses           Int         @default(0)
   updatedAt      DateTime    @updatedAt
   compToWin      String?
+  discountAmount Float       @default(0)
   Order          Order[]
   competition    Competition @relation(fields: [competitionId], references: [id])
 

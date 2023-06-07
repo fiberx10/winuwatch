@@ -104,7 +104,10 @@
     "stonesnumber": "Número de piedras",
     "glass": "Cristal",
     "bezelmeterial": "Material del bisel",
-    "timezone": "(Hora Local en Londres)"
+    "timezone": "(Hora Local en Londres)",
+    "donated": "Una parte del dinero se dona a las siguientes asociaciones",
+    "heart": "BUEN CORAZÓN",
+    "heartDesc": "Nuestra misión y nuestro compromiso es ayudar a las familias más necesitadas."
   },
   "thanku": {
     "thank": "¡GRACIAS!",

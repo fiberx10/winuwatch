@@ -1,7 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
-import { Competition, CompetitionStatus, order_status, PaymentMethod} from "@prisma/client";
+import {
+  Competition,
+  CompetitionStatus,
+  order_status,
+  PaymentMethod,
+} from "@prisma/client";
 import { Prisma } from "@prisma/client";
 import {
   getBaseUrl,
@@ -394,46 +399,47 @@ export const OrderRouter = createTRPCRouter({
         fullname: String(data?.first_name) + " " + String(data?.last_name),
       };
     }),
-  SendFreeTickets_fixed : publicProcedure
+  SendFreeTickets_fixed: publicProcedure
     .input(
       z.object({
         compId: z.string(),
         orderId: z.string(),
         numTickts: z.number(),
       })
-    ).mutation(async ({ ctx, input }) => {
-      const [NextComp, OgOrder]  = await ctx.prisma.$transaction([
-            ctx.prisma.competition.findFirstOrThrow({
-            where: {
-              id: input.compId,
-            },
-            include: {
-              Ticket: {
-                where: {
-                  competitionId: input.compId,
-                  orderId: input.orderId,
-                },
-              },
-              Watches: {
-                include: {
-                  images_url: true,
-                },
+    )
+    .mutation(async ({ ctx, input }) => {
+      const [NextComp, OgOrder] = await ctx.prisma.$transaction([
+        ctx.prisma.competition.findFirstOrThrow({
+          where: {
+            id: input.compId,
+          },
+          include: {
+            Ticket: {
+              where: {
+                competitionId: input.compId,
+                orderId: input.orderId,
               },
             },
-          }),
-          ctx.prisma.order.findFirstOrThrow({
-            where: {
-              id: input.orderId,
+            Watches: {
+              include: {
+                images_url: true,
+              },
             },
-          }),
-        ]);
-        const {id, ...rest} = OgOrder;
+          },
+        }),
+        ctx.prisma.order.findFirstOrThrow({
+          where: {
+            id: input.orderId,
+          },
+        }),
+      ]);
+      const { id, ...rest } = OgOrder;
       const FreeticketOrder = await ctx.prisma.order.create({
         data: {
           ...rest,
-          paymentMethod : PaymentMethod.MARKETING, //this needs to be chnaged
+          paymentMethod: PaymentMethod.MARKETING, //this needs to be chnaged
           status: order_status.CONFIRMED,
-          totalPrice : 0,
+          totalPrice: 0,
           createdAt: new Date(),
           Ticket: {
             create: Array.from({ length: input.numTickts }).map(() => ({
@@ -443,7 +449,7 @@ export const OrderRouter = createTRPCRouter({
                 },
               },
             })),
-          }
+          },
         },
         include: {
           Ticket: true,
@@ -458,8 +464,8 @@ export const OrderRouter = createTRPCRouter({
           order: FreeticketOrder,
           numTickts: input.numTickts,
           comp: NextComp,
-          }),
-        })
+        }),
+      });
       return FreeticketOrder;
     }),
   getComps: publicProcedure.query(

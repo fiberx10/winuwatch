@@ -227,9 +227,13 @@ export default function Competition({
                                   }}
                                 >
                                   {item}
+                                  {reduction ? "T" : ""}
                                 </span>
                                 <p
-                                  style={{ fontSize: "10px" }}
+                                  style={{
+                                    fontSize: "12px",
+                                    fontWeight: "600",
+                                  }}
                                   className={styles.sold}
                                 >
                                   {reduction > 0 && `-${reduction * 100}%`}
@@ -240,7 +244,7 @@ export default function Competition({
                                   style={{
                                     width: "7rem",
                                     textAlign: "center",
-                                    fontWeight: "500",
+                                    fontWeight: "600",
                                     fontSize: "14px",
                                   }}
                                 >
@@ -253,7 +257,7 @@ export default function Competition({
                                   style={{
                                     width: "7rem",
                                     textAlign: "center",
-                                    fontWeight: "500",
+                                    fontWeight: "600",
                                     fontSize: "14px",
                                   }}
                                 >
@@ -266,7 +270,7 @@ export default function Competition({
                                   style={{
                                     width: "7rem",
                                     textAlign: "center",
-                                    fontWeight: "500",
+                                    fontWeight: "600",
 
                                     fontSize: "14px",
                                   }}
@@ -297,7 +301,13 @@ export default function Competition({
                     </div>
                   )}
                 </div>
-                <div className={styles.CompBot}>
+                <div
+                  style={{
+                    flexDirection: "column",
+                    alignItems: nextComp ? "flex-end" : "flex-start",
+                  }}
+                  className={styles.CompBot}
+                >
                   <div
                     style={
                       router.locale === "il"
@@ -311,107 +321,166 @@ export default function Competition({
                     }
                     className={styles.donations}
                   >
-                    <h3>{t("freeTicket")}</h3>
                     {nextComp && (
-                      <p>
-                        {t("donatedto")}
-                        {nextComp?.Watches?.model}
-                        {t("nextText")}
-                        {nextComp?.Watches?.model}
-                      </p>
-                    )}
-                    {/* <div className={styles.compSponsors}> */}
-                    {/* <Image
-                        width={130}
-                        height={50}
-                        alt="donation"
-                        src="/images/cancerRes.png"
-                      /> */}
-                    {/* <Image
-                        width={130}
-                        height={50}
-                        style={{ objectFit: "contain" }}
-                        alt="donation"
-                        src="/images/woodlandLogo.png"
-                      /> */}
-                    {/* </div> */}
-                  </div>
-                  {data.remaining_tickets === 0 || data.end_date < new Date()
-                    ? ""
-                    : data.start_date < new Date() && (
-                        <div className={styles.addtoCart}>
-                          <div className={styles.prices}>
-                            {router.locale === "il" ? (
-                              <p>
-                                {`${Formater(
-                                  data.ticket_price,
-                                  router.locale
-                                )} x ${counter.value} ${t("tickets")}`}
-                              </p>
-                            ) : (
-                              <p>
-                                {`${t("tickets")} ${counter.value} x ${Formater(
-                                  data.ticket_price,
-                                  router.locale
-                                )}`}
-                              </p>
-                            )}
+                      <>
+                        <h3>{t("freeTicket")}</h3>
 
-                            {counter.reduction > 0 && (
-                              <p>
-                                {`${t("discount")}: ${Formater(
-                                  data.ticket_price *
-                                    counter.reduction *
-                                    counter.value,
-                                  router.locale
-                                )}`}
-                              </p>
-                            )}
-                            <span>
-                              {Formater(
-                                counter.value * data.ticket_price -
-                                  counter.value *
-                                    data.ticket_price *
-                                    counter.reduction,
-                                router.locale
-                              )}
-                            </span>
-                          </div>
-                          <button
-                            onClick={() => {
-                              typeof window !== "undefined" &&
-                                window.scrollTo(0, 0);
-                              setRedirecting(true);
-                              competitions.length > 0
-                                ? competitions.filter((comp) =>
-                                    comp.compID === data.id
-                                      ? updateComp({
-                                          reduction: counter.reduction,
-                                          compID: data.id,
-                                          number_tickets:
-                                            counter.value + comp.number_tickets,
-                                          price_per_ticket: data.ticket_price,
-                                        })
-                                      : addComp({
-                                          reduction: counter.reduction,
-                                          compID: data.id,
-                                          number_tickets: counter.value,
-                                          price_per_ticket: data.ticket_price,
-                                        })
-                                  )
-                                : addComp({
-                                    reduction: counter.reduction,
-                                    compID: data.id,
-                                    number_tickets: counter.value,
-                                    price_per_ticket: data.ticket_price,
-                                  });
-                              void router.push("/Cart");
+                        <p>
+                          {t("donatedto")}
+                          {nextComp?.Watches?.model}
+                          {t("nextText")}
+                          {nextComp?.Watches?.model}
+                        </p>
+                      </>
+                    )}{" "}
+                  </div>
+                  <div
+                    style={{
+                      display: "flex",
+
+                      width: "100%",
+                      justifyContent: "space-between",
+                    }}
+                    className={styles.CompBotBot}
+                  >
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "0.5rem",
+                        alignItems: "flex-start",
+                        justifyContent: "flex-start",
+                        height: "100%",
+                        width: "50%",
+                      }}
+                      className={styles.compSponsors}
+                    >
+                      <p
+                        style={{
+                          width: "70%",
+                          color: "rgba(0, 0, 0, 0.6)",
+                        }}
+                      >
+                        {t("donated")}
+                      </p>
+                      <div
+                        style={{
+                          display: "flex",
+                        }}
+                        className={styles.compSponsors}
+                      >
+                        <Image
+                          width={130}
+                          height={70}
+                          alt="donation"
+                          style={{
+                            objectFit: "contain",
+                            mixBlendMode: "darken",
+                          }}
+                          src="/images/Heart.png"
+                        />
+                        <div>
+                          <h1
+                            style={{
+                              fontSize: "20px",
+                              fontWeight: "500",
                             }}
                           >
-                            {t("continue")}
-                          </button>
+                            {t("heart")}
+                          </h1>
+                          <p
+                            style={{
+                              color: "rgba(30, 30, 30, 0.68)",
+                              fontWeight: "400",
+                              fontSize: "14px",
+                            }}
+                          >
+                            {t("heartDesc")}
+                          </p>
                         </div>
-                      )}
+                      </div>
+                    </div>
+
+                    {data.remaining_tickets === 0 || data.end_date < new Date()
+                      ? ""
+                      : data.start_date < new Date() && (
+                          <div className={styles.addtoCart}>
+                            <div className={styles.prices}>
+                              {router.locale === "il" ? (
+                                <p>
+                                  {`${Formater(
+                                    data.ticket_price,
+                                    router.locale
+                                  )} x ${counter.value} ${t("tickets")}`}
+                                </p>
+                              ) : (
+                                <p>
+                                  {`${t("tickets")} ${
+                                    counter.value
+                                  } x ${Formater(
+                                    data.ticket_price,
+                                    router.locale
+                                  )}`}
+                                </p>
+                              )}
+
+                              {counter.reduction > 0 && (
+                                <p>
+                                  {`${t("discount")}: ${Formater(
+                                    data.ticket_price *
+                                      counter.reduction *
+                                      counter.value,
+                                    router.locale
+                                  )}`}
+                                </p>
+                              )}
+                              <span>
+                                {Formater(
+                                  counter.value * data.ticket_price -
+                                    counter.value *
+                                      data.ticket_price *
+                                      counter.reduction,
+                                  router.locale
+                                )}
+                              </span>
+                            </div>
+                            <button
+                              onClick={() => {
+                                typeof window !== "undefined" &&
+                                  window.scrollTo(0, 0);
+                                setRedirecting(true);
+                                competitions.length > 0
+                                  ? competitions.filter((comp) =>
+                                      comp.compID === data.id
+                                        ? updateComp({
+                                            reduction: counter.reduction,
+                                            compID: data.id,
+                                            number_tickets:
+                                              counter.value +
+                                              comp.number_tickets,
+                                            price_per_ticket: data.ticket_price,
+                                          })
+                                        : addComp({
+                                            reduction: counter.reduction,
+                                            compID: data.id,
+                                            number_tickets: counter.value,
+                                            price_per_ticket: data.ticket_price,
+                                          })
+                                    )
+                                  : addComp({
+                                      reduction: counter.reduction,
+                                      compID: data.id,
+                                      number_tickets: counter.value,
+                                      price_per_ticket: data.ticket_price,
+                                    });
+                                void router.push("/Cart");
+                              }}
+                            >
+                              {t("continue")}
+                            </button>
+                          </div>
+                        )}
+                  </div>
                 </div>
               </div>
             </div>

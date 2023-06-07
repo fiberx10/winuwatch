@@ -242,8 +242,8 @@
 }
 .CompBot {
   display: flex;
-  align-items: flex-end;
-  flex-direction: column;
+  align-items: flex-start;
+
   justify-content: space-between;
   width: 100%;
   gap: 1rem;
@@ -319,6 +319,12 @@
   }
   .compSponsors {
     margin: 10px 0px 20px 0px;
+  }
+  .compSponsors {
+    width: 100% !important;
+  }
+  .CompBotBot {
+    flex-direction: column;
   }
   .donations {
     width: 100%;
