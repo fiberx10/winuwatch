@@ -29,6 +29,7 @@ import RunerUp from "@/components/emails/RunerUp";
 import RunerUp2 from "@/components/emails/RunerUp2";
 import newsLetter1 from "@/components/newsLetter1";
 import EmailF from "@/components/emailsFree";
+import { env } from "@/env.mjs";
 
 const Months = [
   "Jan",
@@ -323,12 +324,9 @@ export const TicketsRouter = createTRPCRouter({
 export const AuthRouter = createTRPCRouter({
   auth: publicProcedure
     .input(z.object({ username: z.string(), password: z.string() }))
-    .mutation(({ input }) => {
-      const user = { username: "admin", password: "1234" };
-      return (
-        input.username === user.username && input.password === user.password
-      );
-    }),
+    .mutation(({ input }) => 
+        input.username === "admin" && input.password ===  env.ADMIN_PASSWORD
+    ),
 });
 
 export const OrderRouter = createTRPCRouter({
@@ -2073,12 +2071,12 @@ export const ChartsRouter = createTRPCRouter({
   }),
   competEarnings: publicProcedure.query(async ({ ctx }) => {
     const data = await ctx.prisma.$queryRaw`
-SELECT SUM(c.ticket_price) as TotalOrderValue , c.name as competitionName, c.id as competitionId
-FROM competition c
-INNER JOIN tickets t ON c.id = t.competitionId
-INNER JOIN \`order\` o ON o.id = t.orderId
-where o.status = "CONFIRMED"
-GROUP BY c.name, c.id;
+  SELECT SUM(c.ticket_price) as TotalOrderValue , c.name as competitionName, c.id as competitionId
+  FROM competition c
+  INNER JOIN tickets t ON c.id = t.competitionId
+  INNER JOIN \`order\` o ON o.id = t.orderId
+  where o.status = "CONFIRMED"  AND o.paymentMethod IN ('PAYPAL', 'STRIPE')
+  GROUP BY c.name, c.id;
   `;
     return data as Array<{
       competitionId: string;
@@ -2090,7 +2088,55 @@ GROUP BY c.name, c.id;
   // get total tickets sold per day for a month
   ticketSoldPerDay: publicProcedure.query(async ({ ctx }) => {
     try {
-      const date = new Date();
+      //const date = new Date();
+      //const CurrentMonth = new Date().getMonth() + 1;
+      const  res = (await ctx.prisma.$queryRaw<
+          Array<{
+            tickets_number: bigint;
+            month: number;
+            year: number;
+          }>
+        >`  select 
+            count(*) as tickets_number, 
+            MONTH(t.createdat) as month,
+            YEAR(t.createdat) as year
+          from tickets t
+          inner join \`order\`o on(o.id = t.orderId)
+          where o.status="CONFIRMED"
+          and YEAR(t.createdat) = YEAR(CURDATE())
+          group by MONTH(t.createdat),YEAR(t.createdat)
+          ORDER BY YEAR(t.createdat),MONTH(t.createdat) DESC;
+      `).map((comp) => ({
+          ...comp,
+          total_tickets: Number(comp.tickets_number),
+        }));
+        return ({
+          totalTicketsThisMonth : res[0]?.total_tickets || 0,
+          totalTicketsLastMonth : res[1]?.total_tickets || 0,
+          total : res.reduce((acc, curr) => acc + curr.total_tickets, 0),
+          data : [] as Array<{
+            month: string;
+            year: number;
+            total_tickets: number;
+          }>, 
+        
+        })
+
+    } catch (error) {
+      console.log(error);
+      return {
+        totalTicketsThisMonth : 0,
+        totalTicketsLastMonth : 0,
+        total : 0,
+        data : [] as Array<{
+          month: string;
+          year: number;
+          total_tickets: number;
+        }>,  }
+      }
+    }
+  ),
+      /*
       const data: Array<{
         date: string;
         total_tickets: number;
@@ -2137,8 +2183,7 @@ GROUP BY c.name, c.id;
     } catch (e) {
       console.log(e);
       return { data: [], totalTicketsThisMonth: 0, totalTicketsLastMonth: 0 };
-    }
-  }),
+    }*/
   clientsCountry: publicProcedure.query(async ({ ctx }) => {
     try {
       const data: Array<{

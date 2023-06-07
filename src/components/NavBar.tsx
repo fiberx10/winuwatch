@@ -88,6 +88,7 @@ export default function NavBar() {
             <Link href={"/Charity"}>{t("charity")}</Link>
 
             {/*<Link href={"/AboutUs"}>Who We Are</Link> */}
+
           </div>
         </Drawer>
       </div>
@@ -122,13 +123,18 @@ export default function NavBar() {
         </Link>
         {
           /*
+
          
         <Link
+
+          <Link
+
           className={styles.mobile}
           style={{ color: navColor }}
           href={"/AboutUs"}
-        >
+          >
           Who We Are
+
         </Link>
          */
         }
@@ -138,7 +144,8 @@ export default function NavBar() {
           href={"/Charity"}
         >
           {t("charity")}
-        </Link>
+          </Link>
+
 
         <Link style={{ color: navColor }} href={"/Cart"}>
           {`${t("cart")} (${cardDetails().Number_of_item})`}
