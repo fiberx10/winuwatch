@@ -103,14 +103,14 @@ const OurWinner = () => {
             {data.map((item, i) => (
               <SplideSlide
                 style={{
-                  opacity: i === 0 ? 1 : i === 1 ? 1 : 0,
+                  opacity: i === 0 ? 1 : i === 1 ? 1 : i === 2 ? 1 : 0,
                 }}
                 key={i}
               >
                 <div
                   style={{
                     transition: "all 0.3s ease",
-                    opacity: i === 0 ? 1 : i === 1 ? 1 : 0,
+                    opacity: i === 0 ? 1 : i === 1 ? 1 : i === 2 ? 1 : 0,
                   }}
                   className={styles.carouItem}
                 >
@@ -253,14 +253,14 @@ const OurWinner = () => {
             return (
               <SplideSlide
                 style={{
-                  opacity: i === 0 ? 1 : i === 1 ? 1 : 0,
+                  opacity: i === 0 ? 1 : i === 1 ? 1 : i === 2 ? 1 : 0,
                 }}
                 key={i}
               >
                 <div
                   style={{
                     transition: "all 1s ease",
-                    opacity: i === 0 ? 1 : i === 1 ? 1 : 0,
+                    opacity: i === 0 ? 1 : i === 1 ? 1 : i === 2 ? 1 : 0,
                   }}
                   className={styles.carouItem}
                 >
