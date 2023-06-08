@@ -52,6 +52,7 @@ const OurWinner = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
   return (
     <div className={styles.WinnCon}>
       <h1
@@ -78,7 +79,7 @@ const OurWinner = () => {
               cloneStatus: false,
               arrows: false,
               pagination: false,
-              perPage: 2,
+              perPage: 3,
               padding: "5rem", //              padding: "18rem",
               classes: {
                 arrows: "splideArr",
@@ -102,6 +103,7 @@ const OurWinner = () => {
           >
             {data.map((item, i) => (
               <SplideSlide
+                // className={i === 2 ? "splide__slide--clone" : ""}
                 style={{
                   opacity: i === 0 ? 1 : i === 1 ? 1 : i === 2 ? 1 : 0,
                 }}
@@ -130,6 +132,7 @@ const OurWinner = () => {
                       flexDirection: "column",
                       alignItems: "center",
                       gap: "0.5rem",
+                      // opacity: i === 0 ? 1 : i === 1 ? 1 : i === 2 ? 0 : 0,
                     }}
                     className="activeName"
                   >
