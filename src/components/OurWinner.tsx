@@ -22,7 +22,7 @@ const OurWinner = () => {
       watch: "Rolex Pepsi",
     },
     {
-      img: "/images/winner/184d4b9a-d18b-40be-9297-ae581450af44.jfif",
+      img: "/images/winner/daytona_winner.jfif",
       name: "Avraham",
       country: "USA",
       watch: "Rolex Daytona",
@@ -100,109 +100,107 @@ const OurWinner = () => {
             }}
             aria-label="My Favorite Images"
           >
-            {data.map((item, i) => {
-              return (
-                <SplideSlide
+            {data.map((item, i) => (
+              <SplideSlide
+                style={{
+                  opacity: i === 0 ? 1 : i === 1 ? 1 : 0,
+                }}
+                key={i}
+              >
+                <div
                   style={{
+                    transition: "all 0.3s ease",
                     opacity: i === 0 ? 1 : i === 1 ? 1 : 0,
                   }}
-                  key={i}
+                  className={styles.carouItem}
                 >
+                  <div className="carouImgCon">
+                    <Image
+                      className={styles.active}
+                      src={item.img}
+                      alt="rec"
+                      width={300}
+                      height={300}
+                    />
+                  </div>
                   <div
                     style={{
                       transition: "all 0.3s ease",
-                      opacity: i === 0 ? 1 : i === 1 ? 1 : 0,
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      gap: "0.5rem",
                     }}
-                    className={styles.carouItem}
+                    className="activeName"
                   >
-                    <div className="carouImgCon">
-                      <Image
-                        className={styles.active}
-                        src={item.img}
-                        alt="rec"
-                        width={300}
-                        height={300}
-                      />
-                    </div>
-                    <div
+                    {/* <p>{t("nameOfWinner")}</p> */}
+                    <p
                       style={{
-                        transition: "all 0.3s ease",
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "center",
-                        gap: "0.5rem",
+                        margin: "0",
+                        textAlign: "center",
                       }}
-                      className="activeName"
                     >
-                      {/* <p>{t("nameOfWinner")}</p> */}
-                      <p
+                      Winner of the
+                      <br />
+                      <b
                         style={{
-                          margin: "0",
-                          textAlign: "center",
+                          fontWeight: "400",
+                          fontFamily: "Iskry ,sans-serif",
+                          textTransform: "uppercase",
                         }}
                       >
-                        Winner of the
-                        <br />
-                        <b
-                          style={{
-                            fontWeight: "400",
-                            fontFamily: "Iskry ,sans-serif",
-                            textTransform: "uppercase",
-                          }}
-                        >
-                          {item.watch}
-                        </b>
-                      </p>
-                      <hr
-                        style={{
-                          width: "30%",
-                          height: "2px",
-                          backgroundColor: " #e4dad3",
-                          border: "none",
-                        }}
-                      />
-                      <h2>{item.name}</h2>
-                      <span style={{ textAlign: "center" }}>
-                        {item.country.toUpperCase()}
-                      </span>
-                    </div>
-
-                    <div style={{ opacity: 0 }}>
-                      <p
-                        style={{
-                          margin: "0",
-                          textAlign: "center",
-                        }}
-                      >
-                        Winner of the
-                        <br />
-                        <b
-                          style={{
-                            fontWeight: "400",
-                            fontFamily: "Iskry ,sans-serif",
-                            textTransform: "uppercase",
-                          }}
-                        >
-                          {item.watch}
-                        </b>
-                      </p>
-                      <hr
-                        style={{
-                          width: "30%",
-                          height: "2px",
-                          backgroundColor: " #e4dad3",
-                          border: "none",
-                        }}
-                      />
-                      <h2>{item.name}</h2>
-                      <span style={{ textAlign: "center" }}>
-                        {item.country.toUpperCase()}
-                      </span>
-                    </div>
+                        {item.watch}
+                      </b>
+                    </p>
+                    <hr
+                      style={{
+                        width: "30%",
+                        height: "2px",
+                        backgroundColor: " #e4dad3",
+                        border: "none",
+                      }}
+                    />
+                    <h2>{item.name}</h2>
+                    <span style={{ textAlign: "center" }}>
+                      {item.country.toUpperCase()}
+                    </span>
                   </div>
-                </SplideSlide>
-              );
-            })}
+
+                  <div style={{ opacity: 0 }}>
+                    <p
+                      style={{
+                        margin: "0",
+                        textAlign: "center",
+                      }}
+                    >
+                      Winner of the
+                      <br />
+                      <b
+                        style={{
+                          fontWeight: "400",
+                          fontFamily: "Iskry ,sans-serif",
+                          textTransform: "uppercase",
+                        }}
+                      >
+                        {item.watch}
+                      </b>
+                    </p>
+                    <hr
+                      style={{
+                        width: "30%",
+                        height: "2px",
+                        backgroundColor: " #e4dad3",
+                        border: "none",
+                      }}
+                    />
+                    <h2>{item.name}</h2>
+                    <span style={{ textAlign: "center" }}>
+                      {item.country.toUpperCase()}
+                    </span>
+                  </div>
+                </div>
+              </SplideSlide>
+            ))}
           </Splide>
         </div>
       </div>
