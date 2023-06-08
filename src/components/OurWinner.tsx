@@ -7,6 +7,7 @@ import Image from "next/image";
 import { useTranslations } from "next-intl";
 
 const OurWinner = () => {
+  const AmountGiven = 70000;
   const data = [
     {
       img: "/images/winner/batman_winner.jfif",
@@ -19,6 +20,12 @@ const OurWinner = () => {
       name: `David`,
       country: "France",
       watch: "Rolex Pepsi",
+    },
+    {
+      img: "/images/winner/daytona_winner.jfif",
+      name: "Avraham",
+      country: "USA",
+      watch: "Rolex Daytona",
     },
     // {
     //   img: "/images/winner/winner_3.png",
@@ -60,7 +67,7 @@ const OurWinner = () => {
 
       <div className={styles.winnerCarou}>
         <p className={styles.activeDesc}>
-          {t("desc1")} <span>{Formater(36000)}</span> {t("desc2")}
+          {t("desc1")} <span>{Formater(AmountGiven)}</span> {t("desc2")}
         </p>
         <div className={styles.splide}>
           <Splide
@@ -93,115 +100,113 @@ const OurWinner = () => {
             }}
             aria-label="My Favorite Images"
           >
-            {data.map((item, i) => {
-              return (
-                <SplideSlide
+            {data.map((item, i) => (
+              <SplideSlide
+                style={{
+                  opacity: i === 0 ? 1 : i === 1 ? 1 : i === 2 ? 1 : 0,
+                }}
+                key={i}
+              >
+                <div
                   style={{
-                    opacity: i === 0 ? 1 : i === 1 ? 1 : 0,
+                    transition: "all 0.3s ease",
+                    opacity: i === 0 ? 1 : i === 1 ? 1 : i === 2 ? 1 : 0,
                   }}
-                  key={i}
+                  className={styles.carouItem}
                 >
+                  <div className="carouImgCon">
+                    <Image
+                      className={styles.active}
+                      src={item.img}
+                      alt="rec"
+                      width={300}
+                      height={300}
+                    />
+                  </div>
                   <div
                     style={{
                       transition: "all 0.3s ease",
-                      opacity: i === 0 ? 1 : i === 1 ? 1 : 0,
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      gap: "0.5rem",
                     }}
-                    className={styles.carouItem}
+                    className="activeName"
                   >
-                    <div className="carouImgCon">
-                      <Image
-                        className={styles.active}
-                        src={item.img}
-                        alt="rec"
-                        width={300}
-                        height={300}
-                      />
-                    </div>
-                    <div
+                    {/* <p>{t("nameOfWinner")}</p> */}
+                    <p
                       style={{
-                        transition: "all 0.3s ease",
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "center",
-                        gap: "0.5rem",
+                        margin: "0",
+                        textAlign: "center",
                       }}
-                      className="activeName"
                     >
-                      {/* <p>{t("nameOfWinner")}</p> */}
-                      <p
+                      Winner of the
+                      <br />
+                      <b
                         style={{
-                          margin: "0",
-                          textAlign: "center",
+                          fontWeight: "400",
+                          fontFamily: "Iskry ,sans-serif",
+                          textTransform: "uppercase",
                         }}
                       >
-                        Winner of the
-                        <br />
-                        <b
-                          style={{
-                            fontWeight: "400",
-                            fontFamily: "Iskry ,sans-serif",
-                            textTransform: "uppercase",
-                          }}
-                        >
-                          {item.watch}
-                        </b>
-                      </p>
-                      <hr
-                        style={{
-                          width: "30%",
-                          height: "2px",
-                          backgroundColor: " #e4dad3",
-                          border: "none",
-                        }}
-                      />
-                      <h2>{item.name}</h2>
-                      <span style={{ textAlign: "center" }}>
-                        {item.country.toUpperCase()}
-                      </span>
-                    </div>
-
-                    <div style={{ opacity: 0 }}>
-                      <p
-                        style={{
-                          margin: "0",
-                          textAlign: "center",
-                        }}
-                      >
-                        Winner of the
-                        <br />
-                        <b
-                          style={{
-                            fontWeight: "400",
-                            fontFamily: "Iskry ,sans-serif",
-                            textTransform: "uppercase",
-                          }}
-                        >
-                          {item.watch}
-                        </b>
-                      </p>
-                      <hr
-                        style={{
-                          width: "30%",
-                          height: "2px",
-                          backgroundColor: " #e4dad3",
-                          border: "none",
-                        }}
-                      />
-                      <h2>{item.name}</h2>
-                      <span style={{ textAlign: "center" }}>
-                        {item.country.toUpperCase()}
-                      </span>
-                    </div>
+                        {item.watch}
+                      </b>
+                    </p>
+                    <hr
+                      style={{
+                        width: "30%",
+                        height: "2px",
+                        backgroundColor: " #e4dad3",
+                        border: "none",
+                      }}
+                    />
+                    <h2>{item.name}</h2>
+                    <span style={{ textAlign: "center" }}>
+                      {item.country.toUpperCase()}
+                    </span>
                   </div>
-                </SplideSlide>
-              );
-            })}
+
+                  <div style={{ opacity: 0 }}>
+                    <p
+                      style={{
+                        margin: "0",
+                        textAlign: "center",
+                      }}
+                    >
+                      Winner of the
+                      <br />
+                      <b
+                        style={{
+                          fontWeight: "400",
+                          fontFamily: "Iskry ,sans-serif",
+                          textTransform: "uppercase",
+                        }}
+                      >
+                        {item.watch}
+                      </b>
+                    </p>
+                    <hr
+                      style={{
+                        width: "30%",
+                        height: "2px",
+                        backgroundColor: " #e4dad3",
+                        border: "none",
+                      }}
+                    />
+                    <h2>{item.name}</h2>
+                    <span style={{ textAlign: "center" }}>
+                      {item.country.toUpperCase()}
+                    </span>
+                  </div>
+                </div>
+              </SplideSlide>
+            ))}
           </Splide>
         </div>
       </div>
       <div className={styles.AliceCarou}>
         <p className={styles.activeDesc}>
-          {t("desc1")} <span>{Formater(36000)}</span> {t("desc2")}
+          {t("desc1")} <span>{Formater(AmountGiven)}</span> {t("desc2")}
         </p>
         <Splide
           options={{
@@ -248,14 +253,14 @@ const OurWinner = () => {
             return (
               <SplideSlide
                 style={{
-                  opacity: i === 0 ? 1 : i === 1 ? 1 : 0,
+                  opacity: i === 0 ? 1 : i === 1 ? 1 : i === 2 ? 1 : 0,
                 }}
                 key={i}
               >
                 <div
                   style={{
                     transition: "all 1s ease",
-                    opacity: i === 0 ? 1 : i === 1 ? 1 : 0,
+                    opacity: i === 0 ? 1 : i === 1 ? 1 : i === 2 ? 1 : 0,
                   }}
                   className={styles.carouItem}
                 >
