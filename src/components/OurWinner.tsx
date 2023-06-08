@@ -7,6 +7,7 @@ import Image from "next/image";
 import { useTranslations } from "next-intl";
 
 const OurWinner = () => {
+  const AmountGiven = 70000;
   const data = [
     {
       img: "/images/winner/batman_winner.jfif",
@@ -19,6 +20,12 @@ const OurWinner = () => {
       name: `David`,
       country: "France",
       watch: "Rolex Pepsi",
+    },
+    {
+      img: "/images/winner/184d4b9a-d18b-40be-9297-ae581450af44.jfif",
+      name: "Avraham",
+      country: "USA",
+      watch: "Rolex Daytona",
     },
     // {
     //   img: "/images/winner/winner_3.png",
@@ -60,7 +67,7 @@ const OurWinner = () => {
 
       <div className={styles.winnerCarou}>
         <p className={styles.activeDesc}>
-          {t("desc1")} <span>{Formater(36000)}</span> {t("desc2")}
+          {t("desc1")} <span>{Formater(AmountGiven)}</span> {t("desc2")}
         </p>
         <div className={styles.splide}>
           <Splide
@@ -201,7 +208,7 @@ const OurWinner = () => {
       </div>
       <div className={styles.AliceCarou}>
         <p className={styles.activeDesc}>
-          {t("desc1")} <span>{Formater(36000)}</span> {t("desc2")}
+          {t("desc1")} <span>{Formater(AmountGiven)}</span> {t("desc2")}
         </p>
         <Splide
           options={{
