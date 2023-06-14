@@ -68,6 +68,7 @@
     "next-intl": "^2.12.0",
     "nodemailer": "^6.9.1",
     "prettier": "^2.8.6",
+    "raw-body": "^2.5.2",
     "react": "18.2.0",
     "react-alice-carousel": "^2.7.0",
     "react-apexcharts": "^1.4.0",

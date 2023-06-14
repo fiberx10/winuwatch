@@ -107,7 +107,9 @@
     "timezone": "(Hora Local en Londres)",
     "donated": "Una parte del dinero se dona a las siguientes asociaciones",
     "heart": "BUEN CORAZÓN",
-    "heartDesc": "Nuestra misión y nuestro compromiso es ayudar a las familias más necesitadas."
+    "heartDesc": "Nuestra misión y nuestro compromiso es ayudar a las familias más necesitadas.",
+    "superhero": "Super-Héroes",
+    "superheroDesc": "Super-Héroes ayuda a niños gravemente enfermos. Para que la vida siga siendo un regalo... incluso para ellos."  
   },
   "thanku": {
     "thank": "¡GRACIAS!",

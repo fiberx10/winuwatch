@@ -15,7 +15,7 @@ import type {
 import styles from "@/styles/CompetitionPage.module.css";
 import { useCart } from "@/components/Store";
 import ToggleButton from "@mui/material/ToggleButton";
-import { Formater, DateFormater, MAX_TICKETS, TICKETREDUC } from "@/utils";
+import { Formater, DateFormater, Charities, TICKETREDUC } from "@/utils";
 import { useState } from "react";
 import Image from "next/image";
 import Loader from "@/components/Loader";
@@ -351,54 +351,57 @@ export default function Competition({
                         alignItems: "flex-start",
                         justifyContent: "flex-start",
                         height: "100%",
-                        width: "50%",
+                        width: "70%",
                       }}
                       className={styles.compSponsors}
                     >
                       <p
                         style={{
-                          width: "70%",
+                          //width: "70%",
                           color: "rgba(0, 0, 0, 0.6)",
                         }}
                       >
                         {t("donated")}
                       </p>
-                      <div
-                        style={{
-                          display: "flex",
-                        }}
-                        className={styles.compSponsors}
-                      >
-                        <Image
-                          width={130}
-                          height={70}
-                          alt="donation"
+                      {Charities.map((item, charityIndex) => (
+                        <div
                           style={{
-                            objectFit: "contain",
-                            mixBlendMode: "darken",
+                            display: "flex",
                           }}
-                          src="/images/Heart.png"
-                        />
-                        <div>
-                          <h1
+                          key={charityIndex}
+                          className={styles.compSponsors}
+                        >
+                          <Image
+                            width={130}
+                            height={70}
+                            alt="donation"
                             style={{
-                              fontSize: "20px",
-                              fontWeight: "500",
+                              objectFit: "contain",
+                              mixBlendMode: "darken",
                             }}
-                          >
-                            {t("heart")}
-                          </h1>
-                          <p
-                            style={{
-                              color: "rgba(30, 30, 30, 0.68)",
-                              fontWeight: "400",
-                              fontSize: "14px",
-                            }}
-                          >
-                            {t("heartDesc")}
-                          </p>
+                            src={item.img}
+                          />
+                          <div>
+                            <h1
+                              style={{
+                                fontSize: "20px",
+                                fontWeight: "500",
+                              }}
+                            >
+                              {t(item.name)}
+                            </h1>
+                            <p
+                              style={{
+                                color: "rgba(30, 30, 30, 0.68)",
+                                fontWeight: "400",
+                                fontSize: "14px",
+                              }}
+                            >
+                              {t(item.desc)}
+                            </p>
+                          </div>
                         </div>
-                      </div>
+                      ))}
                     </div>
 
                     {data.remaining_tickets === 0 || data.end_date < new Date()

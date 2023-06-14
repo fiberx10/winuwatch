@@ -1,6 +1,6 @@
 import styles from "@/styles/Charity.module.css";
 import Image from "next/image";
-import { Formater } from "@/utils";
+import { Formater, Charities } from "@/utils";
 import { useRouter } from "next/router";
 import { useTranslations } from "next-intl";
 
@@ -8,7 +8,7 @@ const Charit = () => {
   const t = useTranslations("charity");
   const c = useTranslations("competition");
   const { locale } = useRouter();
-  const data = [
+  /*const data = [
     {
       img: "/images/HeartBig.png",
       name: c("heart"),
@@ -22,18 +22,18 @@ const Charit = () => {
     //   amount: 2346,
     //   desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur et sollicitudin eros. ",
     // },
-  ];
+  ];*/
   return (
     <div className={styles.CharityMain}>
       <div className={styles.CharityHeader}>
         <div className={styles.CharityH1}>
           <h1>{t("charityheader")}</h1>
         </div>
-        <h3> {Formater(data.reduce((a, b) => a + b.amount, 0), locale)}</h3>
+        <h3> {Formater(Charities.reduce((a, b) => a + b.amount, 0), locale)}</h3>
       </div>
       <div className={styles.CharityGrid}>
-        {data.map((charity, i) => (
-          <div className={styles.charity} key={i}>
+        {Charities.map((charity, charityIndex) => (
+          <div className={styles.charity} key={charityIndex}>
             <div className={styles.charityTop}>
               <Image
                 width={300}
@@ -50,8 +50,8 @@ const Charit = () => {
                   {Formater(charity.amount, locale)}
                 </p>
               </div>
-              <h3>{charity.name}</h3>
-              <p>{charity.desc}</p>
+              <h3>{c(charity.name)}</h3>
+              <p>{c(charity.desc)}</p>
               <a target="_blank" href={charity.link}>
                 {t("readmore")}
               </a>
