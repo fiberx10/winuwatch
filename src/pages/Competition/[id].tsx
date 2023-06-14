@@ -363,11 +363,12 @@ export default function Competition({
                       >
                         {t("donated")}
                       </p>
-                      {Charities.map((item, i) => (
+                      {Charities.map((item, charityIndex) => (
                         <div
                           style={{
                             display: "flex",
                           }}
+                          key={charityIndex}
                           className={styles.compSponsors}
                         >
                           <Image

@@ -32,8 +32,8 @@ const Charit = () => {
         <h3> {Formater(Charities.reduce((a, b) => a + b.amount, 0), locale)}</h3>
       </div>
       <div className={styles.CharityGrid}>
-        {Charities.map((charity, i) => (
-          <div className={styles.charity} key={i}>
+        {Charities.map((charity, charityIndex) => (
+          <div className={styles.charity} key={charityIndex}>
             <div className={styles.charityTop}>
               <Image
                 width={300}
