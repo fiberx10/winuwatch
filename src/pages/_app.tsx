@@ -4,14 +4,12 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { api } from "@/utils/api";
 import "@/styles/globals.css";
 import { type AbstractIntlMessages, NextIntlProvider } from "next-intl";
+import {useEffect} from "react";
+import {analytics} from "@/utils/firebase";
 
 type PageProps = {
   messages: AbstractIntlMessages;
   now: number;
-};
-
-type Props = Omit<AppProps<PageProps>, "pageProps"> & {
-  pageProps: PageProps;
 };
 
 const queryClient = new QueryClient({
@@ -23,10 +21,37 @@ const queryClient = new QueryClient({
   },
 });
 
-function MyApp({ Component, pageProps }: Props) {
+const gtag = {
+  GA_TRACKING_ID: "G-LY2QC1SJ1P",
+};
+function MyApp({
+  Component,
+  pageProps,
+}: Omit<AppProps<PageProps>, "pageProps"> & {
+  pageProps: PageProps;
+}) {/*
+  const router = useRouter();
+  useEffect(() => {
+    const handleRouteChange = (url: string) => {
+      // @ts-ignore
+      window.gtag("config", gtag.GA_TRACKING_ID, {
+        page_path: url,
+      });
+    };
+    router.events.on("routeChangeComplete", handleRouteChange);
+    return () => {
+      router.events.off("routeChangeComplete", handleRouteChange);
+    };
+  }, [router.events]);
+
+  */
+  useEffect(() => {
+    analytics;
+  }, []);
   return (
     <NextIntlProvider messages={pageProps.messages}>
       <QueryClientProvider client={queryClient}>
+
         <Component {...pageProps} />
         <ReactQueryDevtools />
       </QueryClientProvider>
