@@ -10,7 +10,7 @@ import { useEffect } from "react";
 import Head from "next/head";
 import Script from "next/script";
 import { useRouter } from "next/router";
-
+import { env } from "@/env.mjs";
 type PageProps = {
   messages: AbstractIntlMessages;
   now: number;
@@ -25,27 +25,6 @@ const queryClient = new QueryClient({
   },
 });
 
-const gtag = {
-  GA_TRACKING_ID: "G-LY2QC1SJ1P",
-  
-  /*pageview: (url: string) => {
-    // https://developers.google.com/analytics/devguides/collection/gtagjs/pages
-    // @ts-ignore
-    window.gtag("config", gtag.GA_TRACKING_ID, {
-      page_path: url,
-    });
-  },
-  event: ({ action, category, label, value }: any) => {
-    // https://developers.google.com/analytics/devguides/collection/gtagjs/events
-    // @ts-ignore
-    window.gtag("event", action, {
-      event_category: category,
-      event_label: label,
-      value: value,
-    });
-  },*/
-};
-
 function MyApp({
   Component,
   pageProps,
@@ -57,7 +36,7 @@ function MyApp({
     const handleRouteChange = (url: string) => {
       // @
       //@ts-ignore
-      window.gtag("config", gtag.GA_TRACKING_ID, {
+      window.gtag("config", env.NEXT_PUBLIC_GA_TRACKING_ID, {
         page_path: url,
       });
     };
@@ -77,7 +56,7 @@ function MyApp({
                 function gtag(){dataLayer.push(arguments);}
                 gtag('js', new Date());
 
-                gtag('config', '${gtag.GA_TRACKING_ID}', {
+                gtag('config', '${env.NEXT_PUBLIC_GA_TRACKING_ID}', {
                   page_path: window.location.pathname,
                 });
               `,
@@ -86,7 +65,7 @@ function MyApp({
         </Head>
         <Script
           strategy="afterInteractive"
-          src={`https://www.googletagmanager.com/gtag/js?id=${gtag.GA_TRACKING_ID}`}
+          src={`https://www.googletagmanager.com/gtag/js?id=${env.NEXT_PUBLIC_GA_TRACKING_ID}`}
         />
         <Component {...pageProps} />
         <ReactQueryDevtools />
