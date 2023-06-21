@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
 import type { AppProps } from "next/app";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -25,7 +27,8 @@ const queryClient = new QueryClient({
 
 const gtag = {
   GA_TRACKING_ID: "G-LY2QC1SJ1P",
-  pageview: (url: string) => {
+  
+  /*pageview: (url: string) => {
     // https://developers.google.com/analytics/devguides/collection/gtagjs/pages
     // @ts-ignore
     window.gtag("config", gtag.GA_TRACKING_ID, {
@@ -40,7 +43,7 @@ const gtag = {
       event_label: label,
       value: value,
     });
-  },
+  },*/
 };
 
 function MyApp({
@@ -52,7 +55,11 @@ function MyApp({
   const router = useRouter();
   useEffect(() => {
     const handleRouteChange = (url: string) => {
-      gtag.pageview(url);
+      // @
+      //@ts-ignore
+      window.gtag("config", gtag.GA_TRACKING_ID, {
+        page_path: url,
+      });
     };
     router.events.on("routeChangeComplete", handleRouteChange);
     return () => {
