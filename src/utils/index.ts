@@ -113,3 +113,26 @@ export const TICKETREDUC = [
     reduction: 0.2,
   },
 ];
+
+
+export const Charities: Array<{
+  img: string;
+  name: any;
+  amount: number;
+  desc: any;
+  link: string;
+}> = [
+  {
+    img: "/images/HeartBig.png",
+    name: "heart",
+    amount: 2346,
+    desc: "heartDesc",
+    link: "https://levtov.fr/",
+  },{
+    img: "/images/SuperHero.png",
+    name: "superhero",
+    amount: 3435,
+    desc: "superheroDesc",
+    link: "https://www.associationsuperheros.org/checkout/donate?donatePageId=5c6dcb3ce79c70c63089d77b",
+  }
+] 
