@@ -2070,19 +2070,21 @@ export const ChartsRouter = createTRPCRouter({
     return result;
   }),
   competEarnings: publicProcedure.query(async ({ ctx }) => {
-    const data = await ctx.prisma.$queryRaw`
-  SELECT SUM(c.ticket_price) as TotalOrderValue , c.name as competitionName, c.id as competitionId
-  FROM competition c
-  INNER JOIN tickets t ON c.id = t.competitionId
-  INNER JOIN \`order\` o ON o.id = t.orderId
-  where o.status = "CONFIRMED"  AND o.paymentMethod IN ('PAYPAL', 'STRIPE')
-  GROUP BY c.name, c.id;
-  `;
-    return data as Array<{
+    return await ctx.prisma.$queryRaw<Array<{
       competitionId: string;
       competitionName: string;
       TotalOrderValue: number;
-    }>;
+    }>>`
+    SELECT c.id as competitionId , c.name as competitionName, SUM(subquery.totalPrice) as TotalOrderValue
+    FROM competition c
+    INNER JOIN (
+      SELECT DISTINCT o.id, o.totalPrice, t.competitionId
+      FROM \`order\` o
+      INNER JOIN tickets t ON o.id = t.orderId
+      WHERE o.status = "CONFIRMED"  AND o.paymentMethod IN ('PAYPAL', 'STRIPE')
+      ) AS subquery ON c.id = subquery.competitionId
+    group by c.id;
+  `;
   }),
 
   // get total tickets sold per day for a month
