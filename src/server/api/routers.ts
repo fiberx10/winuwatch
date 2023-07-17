@@ -1232,7 +1232,7 @@ export const OrderRouter = createTRPCRouter({
       });
     }),
   updateStatus: publicProcedure
-    .input(z.object({ id: z.string(), status: z.nativeEnum(order_status) , paymentId: z.string()}))
+    .input(z.object({ id: z.string(), status: z.nativeEnum(order_status) , paymentId: z.string().optional()}))
     .mutation(async ({ ctx, input }) => {
       return await ctx.prisma.order.update({
         where: {
