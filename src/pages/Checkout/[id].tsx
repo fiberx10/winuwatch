@@ -1046,6 +1046,7 @@ export default function CheckoutPage({
                                             await updateStatus({
                                               id: id,
                                               status: "CONFIRMED",
+                                              paymentId : details.id.toString()
                                             });
                                             await router.push(
                                               `/Confirmation/${id}`
