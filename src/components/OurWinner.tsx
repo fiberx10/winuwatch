@@ -27,7 +27,7 @@ const OurWinner = () => {
       country: "USA",
       watch: "Rolex Daytona",
     },{
-      img: "/images/winner/419629c8-f8e1-41e7-b7bf-0ef7094872db.jfif",
+      img: "/images/winner/patek_winner.jfif",
       name: "Amiel",
       country: "Spain",
       watch: "Patek Philippe Aquanaut",
@@ -42,7 +42,7 @@ const OurWinner = () => {
     //   name: "Be the winner",
     //   country: "France",
     // },
-  ];
+  ].reverse();
   const t = useTranslations("winners");
   useEffect(() => {
     const handleScroll = () => {
