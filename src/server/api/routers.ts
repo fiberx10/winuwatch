@@ -2084,6 +2084,16 @@ export const ChartsRouter = createTRPCRouter({
       TotalOrderValue: number;
     }>;
   }),
+  competEarningsNew: publicProcedure.query(async ({ ctx }) => {
+    const data = await ctx.prisma.$queryRaw`
+      select * from vw_TotalAmountPerCompetition;
+  `;
+    return data as Array<{
+      competitionId: string;
+      competitionName: string;
+      TotalOrderValue: number;
+    }>;
+  }),
 
   // get total tickets sold per day for a month
   ticketSoldPerDay: publicProcedure.query(async ({ ctx }) => {
