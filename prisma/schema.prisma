@@ -109,6 +109,7 @@ model Ticket {
   createdAt     DateTime     @default(now())
   updatedAt     DateTime     @updatedAt
   ticketPrice   Float        @default(0)
+  reduction     Float       
   Order         Order        @relation(fields: [orderId], references: [id])
   Competition   Competition  @relation(fields: [competitionId], references: [id])
   RunUpPrize    RunUpPrize[]

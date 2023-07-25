@@ -479,7 +479,30 @@ export const OrderRouter = createTRPCRouter({
   AddTicketsAfterConfirmation: publicProcedure
     .input(z.object({ id: z.string(), comps: Comps }))
     .query(async ({ ctx, input }) => {
+
       try {
+        let affiliation: { discountRate: number, competitionId: string } | null;
+
+        const order = await ctx.prisma.order.findUnique({
+          where: {
+            id: input.id,
+          },
+          select: {
+            affiliationId: true,
+          },
+        });
+
+        if (order?.affiliationId != null) {
+         affiliation = await ctx.prisma.affiliation.findUnique({
+          where: {
+            id: order.affiliationId,
+          },
+          select: {
+            discountRate: true,
+            competitionId: true,
+          },
+        });        
+      }
         if (input.comps.length > 0) {
           await ctx.prisma.order.update({
             where: {
@@ -489,9 +512,11 @@ export const OrderRouter = createTRPCRouter({
               Ticket: {
                 createMany: {
                   data: input.comps
-                    .map(({ compID, number_tickets }) =>
+                    .map(({ reduction,price_per_ticket,compID, number_tickets }) =>
                       new Array(number_tickets).fill(0).map((_) => ({
                         competitionId: compID,
+                        ticketPrice : price_per_ticket,
+                        reduction:     (affiliation && affiliation.competitionId=== compID) ? affiliation.discountRate + reduction : reduction ,
                       }))
                     )
                     .flat(),
