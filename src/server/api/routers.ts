@@ -2095,22 +2095,22 @@ export const ChartsRouter = createTRPCRouter({
     };
     return result;
   }),
+  // competEarnings: publicProcedure.query(async ({ ctx }) => {
+  //   const data = await ctx.prisma.$queryRaw`
+  // SELECT SUM(c.ticket_price) as TotalOrderValue , c.name as competitionName, c.id as competitionId
+  // FROM competition c
+  // INNER JOIN tickets t ON c.id = t.competitionId
+  // INNER JOIN \`order\` o ON o.id = t.orderId
+  // where o.status = "CONFIRMED"  AND o.paymentMethod IN ('PAYPAL', 'STRIPE')
+  // GROUP BY c.name, c.id;
+  // `;
+  //   return data as Array<{
+  //     competitionId: string;
+  //     competitionName: string;
+  //     TotalOrderValue: number;
+  //   }>;
+  // }),
   competEarnings: publicProcedure.query(async ({ ctx }) => {
-    const data = await ctx.prisma.$queryRaw`
-  SELECT SUM(c.ticket_price) as TotalOrderValue , c.name as competitionName, c.id as competitionId
-  FROM competition c
-  INNER JOIN tickets t ON c.id = t.competitionId
-  INNER JOIN \`order\` o ON o.id = t.orderId
-  where o.status = "CONFIRMED"  AND o.paymentMethod IN ('PAYPAL', 'STRIPE')
-  GROUP BY c.name, c.id;
-  `;
-    return data as Array<{
-      competitionId: string;
-      competitionName: string;
-      TotalOrderValue: number;
-    }>;
-  }),
-  competEarningsNew: publicProcedure.query(async ({ ctx }) => {
       //using views for a cleaner code and better performance, you can visualize the views in the database
     const data : CompetitionData[]  = await ctx.prisma.$queryRaw`
       select * from vw_TotalAmountPerCompetition;
