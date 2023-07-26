@@ -14,6 +14,7 @@ import {
   CreateOrderFromCartSchema,
   CreateOrderStripeSchema,
   Comps,
+  CompetitionData,
 } from "@/utils";
 import { Transporter, Stripe } from "../utils";
 import { WatchesSchema, CompetitionSchema } from "@/utils/zodSchemas";
@@ -2110,14 +2111,18 @@ export const ChartsRouter = createTRPCRouter({
     }>;
   }),
   competEarningsNew: publicProcedure.query(async ({ ctx }) => {
-    const data = await ctx.prisma.$queryRaw`
+      //using views for a cleaner code and better performance, you can visualize the views in the database
+    const data : CompetitionData[]  = await ctx.prisma.$queryRaw`
       select * from vw_TotalAmountPerCompetition;
-  `;
-    return data as Array<{
-      competitionId: string;
-      competitionName: string;
-      TotalOrderValue: number;
-    }>;
+        `;
+      //console.log(data);
+     const data_old : CompetitionData[]  = await ctx.prisma.$queryRaw`
+     select * from vw_OldTotalAmountPerCompetition;
+        `;
+      //console.log(data_old);
+      const combinedData = data_old.concat(data);
+      //console.log(combinedData);
+    return combinedData;
   }),
 
   // get total tickets sold per day for a month
