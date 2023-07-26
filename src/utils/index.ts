@@ -123,11 +123,11 @@ export const Charities: Array<{
   link: string;
 }> = [
   {
-    img: "/images/HeartBig.png",
+    img: "/images/jFox.png",
     name: "heart",
     amount: 2346,
     desc: "heartDesc",
-    link: "https://levtov.fr/",
+    link: "https://www.michaeljfox.org/",
   },{
     img: "/images/SuperHero.png",
     name: "superhero",
