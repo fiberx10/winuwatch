@@ -32,6 +32,18 @@ const TheCompetition = () => {
     <div id="theComp" style={{ marginBottom: "0px" }} className={styles.Comp}>
       <p className={styles.CompP}>{t("subtitle2")}</p>
       <h1 className={styles.background2}>{t("competitions")}</h1>
+      {/*
+      
+      <p style={{
+        textAlign: "center",
+        marginBottom: "20px",
+        marginTop: "-10px",
+        width: "70%",
+        fontWeight: "400",
+        fontSize: "20px",
+        color: "#987358"
+      }}>{t("tempComp")}</p>
+    */}
       <div className={styles.compWatches}>
         {data && data.length > 0 ? (
           data.map((watch) => {

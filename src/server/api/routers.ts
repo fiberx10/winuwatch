@@ -14,6 +14,7 @@ import {
   CreateOrderFromCartSchema,
   CreateOrderStripeSchema,
   Comps,
+  CompetitionData,
 } from "@/utils";
 import { Transporter, Stripe } from "../utils";
 import { WatchesSchema, CompetitionSchema } from "@/utils/zodSchemas";
@@ -479,7 +480,30 @@ export const OrderRouter = createTRPCRouter({
   AddTicketsAfterConfirmation: publicProcedure
     .input(z.object({ id: z.string(), comps: Comps }))
     .query(async ({ ctx, input }) => {
+
       try {
+        let affiliation: { discountRate: number, competitionId: string } | null;
+
+        const order = await ctx.prisma.order.findUnique({
+          where: {
+            id: input.id,
+          },
+          select: {
+            affiliationId: true,
+          },
+        });
+
+        if (order?.affiliationId != null) {
+         affiliation = await ctx.prisma.affiliation.findUnique({
+          where: {
+            id: order.affiliationId,
+          },
+          select: {
+            discountRate: true,
+            competitionId: true,
+          },
+        });        
+      }
         if (input.comps.length > 0) {
           await ctx.prisma.order.update({
             where: {
@@ -489,9 +513,11 @@ export const OrderRouter = createTRPCRouter({
               Ticket: {
                 createMany: {
                   data: input.comps
-                    .map(({ compID, number_tickets }) =>
+                    .map(({ reduction,price_per_ticket,compID, number_tickets }) =>
                       new Array(number_tickets).fill(0).map((_) => ({
                         competitionId: compID,
+                        ticketPrice : price_per_ticket,
+                        reduction:     (affiliation && affiliation.competitionId=== compID) ? affiliation.discountRate + reduction : reduction ,
                       }))
                     )
                     .flat(),
@@ -1232,7 +1258,7 @@ export const OrderRouter = createTRPCRouter({
       });
     }),
   updateStatus: publicProcedure
-    .input(z.object({ id: z.string(), status: z.nativeEnum(order_status) }))
+    .input(z.object({ id: z.string(), status: z.nativeEnum(order_status) , paymentId: z.string().optional()}))
     .mutation(async ({ ctx, input }) => {
       return await ctx.prisma.order.update({
         where: {
@@ -1240,6 +1266,7 @@ export const OrderRouter = createTRPCRouter({
         },
         data: {
           status: input.status,
+          paymentId: input.paymentId
         },
       });
     }),
@@ -2069,20 +2096,34 @@ export const ChartsRouter = createTRPCRouter({
     };
     return result;
   }),
+  // competEarnings: publicProcedure.query(async ({ ctx }) => {
+  //   const data = await ctx.prisma.$queryRaw`
+  // SELECT SUM(c.ticket_price) as TotalOrderValue , c.name as competitionName, c.id as competitionId
+  // FROM competition c
+  // INNER JOIN tickets t ON c.id = t.competitionId
+  // INNER JOIN \`order\` o ON o.id = t.orderId
+  // where o.status = "CONFIRMED"  AND o.paymentMethod IN ('PAYPAL', 'STRIPE')
+  // GROUP BY c.name, c.id;
+  // `;
+  //   return data as Array<{
+  //     competitionId: string;
+  //     competitionName: string;
+  //     TotalOrderValue: number;
+  //   }>;
+  // }),
   competEarnings: publicProcedure.query(async ({ ctx }) => {
-    const data = await ctx.prisma.$queryRaw`
-  SELECT SUM(c.ticket_price) as TotalOrderValue , c.name as competitionName, c.id as competitionId
-  FROM competition c
-  INNER JOIN tickets t ON c.id = t.competitionId
-  INNER JOIN \`order\` o ON o.id = t.orderId
-  where o.status = "CONFIRMED"  AND o.paymentMethod IN ('PAYPAL', 'STRIPE')
-  GROUP BY c.name, c.id;
-  `;
-    return data as Array<{
-      competitionId: string;
-      competitionName: string;
-      TotalOrderValue: number;
-    }>;
+      //using views for a cleaner code and better performance, you can visualize the views in the database
+    const data : CompetitionData[]  = await ctx.prisma.$queryRaw`
+      select * from vw_TotalAmountPerCompetition;
+        `;
+      //console.log(data);
+     const data_old : CompetitionData[]  = await ctx.prisma.$queryRaw`
+     select * from vw_OldTotalAmountPerCompetition;
+        `;
+      //console.log(data_old);
+      const combinedData = data_old.concat(data);
+      //console.log(combinedData);
+    return combinedData;
   }),
 
   // get total tickets sold per day for a month

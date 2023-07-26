@@ -123,11 +123,11 @@ export const Charities: Array<{
   link: string;
 }> = [
   {
-    img: "/images/HeartBig.png",
+    img: "/images/jFox.png",
     name: "heart",
     amount: 2346,
     desc: "heartDesc",
-    link: "https://levtov.fr/",
+    link: "https://www.michaeljfox.org/",
   },{
     img: "/images/SuperHero.png",
     name: "superhero",
@@ -136,3 +136,9 @@ export const Charities: Array<{
     link: "https://www.associationsuperheros.org/checkout/donate?donatePageId=5c6dcb3ce79c70c63089d77b",
   }
 ] 
+
+export interface CompetitionData {
+  competitionId: string;
+  competitionName: string;
+  TotalOrderValue: number;
+}
