@@ -137,7 +137,7 @@
   text-transform: uppercase;
   color: #1e1e1e;
 }
-
+/* @media only screen and (max-) */
 @media only screen and (min-width: 320px) and (max-width: 848px) {
   .CharityMain {
     margin-top: 3rem;
@@ -161,9 +161,9 @@
     width: 355px;
     padding-bottom: 20px;
   }
-  .charity button {
+  .charity a {
     position: initial;
-    margin-top: 50px;
+    margin-top: 30px;
   }
   .CharityBot {
     align-items: center;
