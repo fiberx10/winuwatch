@@ -7,7 +7,7 @@ import Image from "next/image";
 import { useTranslations } from "next-intl";
 
 const OurWinner = () => {
-  const AmountGiven = 70000;
+  const AmountGiven = 126000;
   const data = [
     {
       img: "/images/winner/batman_winner.jfif",
@@ -27,6 +27,12 @@ const OurWinner = () => {
       country: "USA",
       watch: "Rolex Daytona",
     },
+    {
+      img: "/images/winner/patek_winner.jfif",
+      name: "Amiel",
+      country: "Spain",
+      watch: "Patek Philippe Aquanaut",
+    },
     // {
     //   img: "/images/winner/winner_3.png",
     //   name: "Be the winner",
@@ -37,7 +43,7 @@ const OurWinner = () => {
     //   name: "Be the winner",
     //   country: "France",
     // },
-  ];
+  ].reverse();
   const t = useTranslations("winners");
   useEffect(() => {
     const handleScroll = () => {
@@ -104,15 +110,12 @@ const OurWinner = () => {
             {data.map((item, i) => (
               <SplideSlide
                 // className={i === 2 ? "splide__slide--clone" : ""}
-                style={{
-                  opacity: i === 0 ? 1 : i === 1 ? 1 : i === 2 ? 1 : 0,
-                }}
+
                 key={i}
               >
                 <div
                   style={{
                     transition: "all 0.3s ease",
-                    opacity: i === 0 ? 1 : i === 1 ? 1 : i === 2 ? 1 : 0,
                   }}
                   className={styles.carouItem}
                 >
@@ -254,16 +257,10 @@ const OurWinner = () => {
         >
           {data.map((item, i) => {
             return (
-              <SplideSlide
-                style={{
-                  opacity: i === 0 ? 1 : i === 1 ? 1 : i === 2 ? 1 : 0,
-                }}
-                key={i}
-              >
+              <SplideSlide key={i}>
                 <div
                   style={{
                     transition: "all 1s ease",
-                    opacity: i === 0 ? 1 : i === 1 ? 1 : i === 2 ? 1 : 0,
                   }}
                   className={styles.carouItem}
                 >
