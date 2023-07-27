@@ -132,16 +132,16 @@ const DashboardOrders = () => {
                         comp.status === "ACTIVE"
                           ? "green"
                           : comp.status === "NOT_ACTIVE"
-                          ? "red"
-                          : "blue",
+                            ? "red"
+                            : "blue",
                     }}
                   >
                     <GoPrimitiveDot />
                     {comp.status.valueOf() === "COMPLETED"
                       ? "COMPLETED"
                       : comp.status.valueOf() === "NOT_ACTIVE"
-                      ? "NOT ACTIVE"
-                      : "ACTIVE"}
+                        ? "NOT ACTIVE"
+                        : "ACTIVE"}
                   </span>
                 </div>
                 {show.data === comp.id && (
@@ -259,7 +259,10 @@ const DashboardOrders = () => {
                                         {row.paymentMethod}
                                       </TableCell>
                                       <TableCell align="right">
-                                        £{row.totalPrice}
+                                        £{row.Ticket.length *
+                                          (row.Ticket[0]!.ticketPrice -
+                                            (row.Ticket[0]!.ticketPrice *
+                                              (row.Ticket[0]!.reduction || 0)))}
                                       </TableCell>
                                       <TableCell align="right">
                                         {row.status}
@@ -419,10 +422,10 @@ const DashboardOrders = () => {
                                                     </TableCell>
                                                     <TableCell align="right">
                                                       {Formater(
-                                                        row.totalPrice /
-                                                          row.Ticket.length,
-                                                        locale
-                                                      )}
+                                                        (row.Ticket[0]!.ticketPrice -
+                                                          (row.Ticket[0]!.ticketPrice * (row.Ticket[0]!.reduction || 0)))
+                                                      )
+                                                      }
                                                     </TableCell>
                                                     <TableCell align="right">
                                                       {ticket.id.toUpperCase()}
