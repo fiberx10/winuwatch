@@ -36,6 +36,7 @@ const YearlyBreakup = () => {
   const currentYear = new Date().getFullYear();
   const { data } = api.Charts.yearlyEarnings.useQuery() || {};
   const { data: compEarn } = api.Charts.competEarnings.useQuery();
+
   const { data: clientsCountry } = api.Charts.clientsCountry.useQuery() || {};
   // chart color
   const theme = useTheme();
