@@ -227,8 +227,9 @@ const DashboardOrders = () => {
                                     order.status !== "INCOMPLETE" &&
                                     order.status !== "PENDING"
                                 )
-
-                                .map((row) => (
+                                .map((row) => { 
+                                  console.log(row);
+                                  return (
                                   <>
                                     <TableRow
                                       key={row.id}
@@ -259,10 +260,10 @@ const DashboardOrders = () => {
                                         {row.paymentMethod}
                                       </TableCell>
                                       <TableCell align="right">
-                                        £{row.Ticket.length *
-                                          (row.Ticket[0]!.ticketPrice -
-                                            (row.Ticket[0]!.ticketPrice *
-                                              (row.Ticket[0]!.reduction || 0)))}
+                                       
+                                      {/* (t.ticketprice * (1 - t.reduction)) * (1 - t.affiliation_reduction) */}
+                                        {(row.Ticket[0]!.ticketPrice * (1-row.Ticket[0]!.reduction!) * (1-row.Ticket[0]!.affiliation_reduction!))*row.Ticket.length} £
+                                          
                                       </TableCell>
                                       <TableCell align="right">
                                         {row.status}
@@ -422,8 +423,7 @@ const DashboardOrders = () => {
                                                     </TableCell>
                                                     <TableCell align="right">
                                                       {Formater(
-                                                        (row.Ticket[0]!.ticketPrice -
-                                                          (row.Ticket[0]!.ticketPrice * (row.Ticket[0]!.reduction || 0)))
+                                                        row.Ticket[0]!.ticketPrice * (1-row.Ticket[0]!.reduction!) * (1-row.Ticket[0]!.affiliation_reduction!)
                                                       )
                                                       }
                                                     </TableCell>
@@ -439,7 +439,7 @@ const DashboardOrders = () => {
                                       </TableCell>
                                     </TableRow>
                                   </>
-                                ))}
+                                )})}
                             </TableBody>
                           </Table>
                           <TablePagination
