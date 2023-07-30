@@ -256,9 +256,9 @@ export const Email = ({
                                             lineHeight: "24px",
                                             margin: "5px 0",
                                           }}
-                                        >
-                                          QUANTITY: {c.Ticket.length} - TOTAL:
-                                          {order?.totalPrice}
+                                        >   {/* (t.ticketprice * (1 - t.reduction)) * (1 - t.affiliation_reduction) */}
+                                          QUANTITY: {c.Ticket.length} - TOTAL: {(c.Ticket[0]!.ticketPrice * (1-c.Ticket[0]!.reduction!) * (1-c.Ticket[0]!.affiliation_reduction))*c.Ticket.length} £
+                                        
                                         </p>
                                       </td>
 
