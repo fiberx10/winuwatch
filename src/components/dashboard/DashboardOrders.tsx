@@ -262,8 +262,7 @@ const DashboardOrders = () => {
                                       <TableCell align="right">
                                        
                                       {/* (t.ticketprice * (1 - t.reduction)) * (1 - t.affiliation_reduction) */}
-                                        {(row.Ticket[0]!.ticketPrice * (1-row.Ticket[0]!.reduction!) * (1-row.Ticket[0]!.affiliation_reduction!))*row.Ticket.length} £
-                                          
+                                        {row.Ticket[0]?.ticketPrice != 0 ? (row.Ticket[0]!.ticketPrice * (1-row.Ticket[0]!.reduction!) * (1-row.Ticket[0]!.affiliation_reduction!))*row.Ticket.length : row.totalPrice} £
                                       </TableCell>
                                       <TableCell align="right">
                                         {row.status}
@@ -423,8 +422,9 @@ const DashboardOrders = () => {
                                                     </TableCell>
                                                     <TableCell align="right">
                                                       {Formater(
-                                                        row.Ticket[0]!.ticketPrice * (1-row.Ticket[0]!.reduction!) * (1-row.Ticket[0]!.affiliation_reduction!)
-                                                      )
+                                                        row.Ticket[0]!.ticketPrice != 0 ? (row.Ticket[0]!.ticketPrice * (1-row.Ticket[0]!.reduction!) * (1-row.Ticket[0]!.affiliation_reduction!))
+                                                        : 35
+                                                        )
                                                       }
                                                     </TableCell>
                                                     <TableCell align="right">
