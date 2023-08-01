@@ -136,3 +136,9 @@ export const Charities: Array<{
     link: "https://www.associationsuperheros.org/checkout/donate?donatePageId=5c6dcb3ce79c70c63089d77b",
   }
 ] 
+
+export interface CompetitionData {
+  competitionId: string;
+  competitionName: string;
+  TotalOrderValue: number;
+}
