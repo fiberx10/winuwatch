@@ -103,15 +103,17 @@ model Order {
 }
 
 model Ticket {
-  id            String       @id @default(cuid())
-  orderId       String
-  competitionId String
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime     @updatedAt
-  ticketPrice   Float        @default(0)
-  Order         Order        @relation(fields: [orderId], references: [id])
-  Competition   Competition  @relation(fields: [competitionId], references: [id])
-  RunUpPrize    RunUpPrize[]
+  id                    String       @id @default(cuid())
+  orderId               String
+  competitionId         String
+  createdAt             DateTime     @default(now())
+  updatedAt             DateTime     @updatedAt
+  ticketPrice           Float        @default(0)
+  reduction             Float?       @default(0)
+  affiliation_reduction Float?       @default(0)
+  Order                 Order        @relation(fields: [orderId], references: [id])
+  Competition           Competition  @relation(fields: [competitionId], references: [id])
+  RunUpPrize            RunUpPrize[]
 
   @@index([competitionId])
   @@index([orderId])
