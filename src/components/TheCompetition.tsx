@@ -109,6 +109,7 @@ const TheCompetition = () => {
                           </span>
                           {" " + t("maxTickets")}
                         </p>
+                        {/*
                         <p
                           style={{
                             fontSize: "14px",
@@ -117,10 +118,11 @@ const TheCompetition = () => {
                         >
                           {t("only")}{" "}
                           <span style={{ fontWeight: "600", fontSize: "18px" }}>
-                            {/* {watch.remaining_tickets} */} 80
+                             {watch.remaining_tickets}
                           </span>{" "}
                           {t("tickets")}
                         </p>
+                        */}
                       </div>
                     ) : (
                       <p className={styles.TotalTickts}>
