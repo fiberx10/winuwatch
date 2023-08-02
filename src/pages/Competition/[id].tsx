@@ -321,18 +321,17 @@ export default function Competition({
                     }
                     className={styles.donations}
                   >
-                    {nextComp && (
-                      <>
-                        <h3>{t("freeTicket")}</h3>
-
+                    <h3>{t("freeTicket")}</h3>
+                    <>
+                      {nextComp && (
                         <p>
                           {t("donatedto")}
                           {nextComp?.Watches?.model}
                           {t("nextText")}
                           {nextComp?.Watches?.model}
                         </p>
-                      </>
-                    )}{" "}
+                      )}
+                    </>
                   </div>
                   <div
                     style={{
