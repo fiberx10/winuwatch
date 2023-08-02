@@ -517,7 +517,7 @@ export const OrderRouter = createTRPCRouter({
                       new Array(number_tickets).fill(0).map((_) => ({
                         competitionId: compID,
                         ticketPrice : price_per_ticket,
-                        reduction:   reduction ,
+                        reduction:   reduction? reduction : 0 ,
                         affiliation_reduction: affiliation?.competitionId == compID ? affiliation.discountRate : 0,
                       }))
                     )
