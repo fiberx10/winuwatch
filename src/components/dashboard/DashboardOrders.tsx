@@ -423,7 +423,7 @@ const DashboardOrders = () => {
                                                     <TableCell align="right">
                                                       {Formater(
                                                         row.Ticket[0]!.ticketPrice != 0 ? (row.Ticket[0]!.ticketPrice * (1-row.Ticket[0]!.reduction!) * (1-row.Ticket[0]!.affiliation_reduction!))
-                                                        : 35
+                                                        : row.totalPrice / row.Ticket.length
                                                         )
                                                       }
                                                     </TableCell>
