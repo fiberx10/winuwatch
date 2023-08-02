@@ -2121,7 +2121,7 @@ export const ChartsRouter = createTRPCRouter({
         ctx.prisma.$queryRaw<CompetitionData[]>`select * from vw_TotalAmountPerCompetition;`,
         ctx.prisma.$queryRaw<CompetitionData[]>`select * from vw_OldTotalAmountPerCompetition;`,
       ]);
-    return data_old.concat(data);
+    return [...data,...data_old]
   }),
 
   // get total tickets sold per day for a month
