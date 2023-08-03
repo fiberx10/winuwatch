@@ -2116,46 +2116,11 @@ export const ChartsRouter = createTRPCRouter({
       //using views for a cleaner code and better performance, you can visualize the views in the database
            const [
         data,
-        data_old,
-        temp,
+        data_old
       ] = await Promise.all([
         ctx.prisma.$queryRaw<CompetitionData[]>`select * from vw_TotalAmountPerCompetition;`,
         ctx.prisma.$queryRaw<CompetitionData[]>`select * from vw_OldTotalAmountPerCompetition;`,
-        ctx.prisma.$queryRaw<CompetitionData[]>`
-        SELECT
-          SUM(subquery.totalPrice) AS TotalOrderValue
-        FROM
-          (competition c
-          JOIN (
-              SELECT
-                  DISTINCT o.id AS id,
-                  o.totalPrice AS totalPrice,
-                  t.competitionId AS competitionId
-              FROM
-                  (\`order\` o
-                  JOIN tickets t ON
-                      (o.id = t.orderId)
-                  )
-              WHERE
-                  (o.status = 'CONFIRMED'
-                  AND o.paymentMethod IN ('PAYPAL', 'STRIPE')
-                  AND t.competitionId IN ('cljviwa8h0005mm08avqg1inf')
-                  AND t.ticketPrice = 0)
-          ) subquery ON (c.id = subquery.competitionId)
-        )
-        GROUP BY
-          c.id,
-          c.name;
-      `,
       ]);
-      // we integrated the new logic while a competition is still running therefor we need to add the old data to the new data
-      data.map((d) => {
-        d.competitionId === 'cljviwa8h0005mm08avqg1inf' ? d.TotalOrderValue
-         = temp[0]!.TotalOrderValue + d.TotalOrderValue : d.TotalOrderValue = d.TotalOrderValue
-      }
-      );
-      
-    
 
     return [...data,...data_old]
   }),
