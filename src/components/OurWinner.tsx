@@ -7,7 +7,7 @@ import Image from "next/image";
 import { useTranslations } from "next-intl";
 
 const OurWinner = () => {
-  const AmountGiven = 126000;
+  const AmountGiven = 126000+21000;
   const data = [
     {
       img: "/images/winner/batman_winner.jfif",
@@ -33,6 +33,12 @@ const OurWinner = () => {
       country: "Spain",
       watch: "Patek Philippe Aquanaut",
     },
+    {
+      img: "/images/winner/sprite_winner.jpeg",
+      name: "Jonathan A.",
+      country: "France",
+      watch: "Rolex Sprite",
+    }
     // {
     //   img: "/images/winner/winner_3.png",
     //   name: "Be the winner",

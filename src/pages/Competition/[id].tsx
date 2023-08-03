@@ -331,7 +331,7 @@ export default function Competition({
                           {nextComp?.Watches?.model}
                         </p>
                       ) : (
-                        <p>{t("donatedto2")}</p>
+                        <>{t("donatedto2")}</>
                       )
                     }
                   </div>
