@@ -31,6 +31,7 @@ import RunerUp2 from "@/components/emails/RunerUp2";
 import newsLetter1 from "@/components/newsLetter1";
 import EmailF from "@/components/emailsFree";
 import { env } from "@/env.mjs";
+import { generateAccessToken } from "@/utils/paypal.ts";
 
 const Months = [
   "Jan",
@@ -325,8 +326,9 @@ export const TicketsRouter = createTRPCRouter({
 export const AuthRouter = createTRPCRouter({
   auth: publicProcedure
     .input(z.object({ username: z.string(), password: z.string() }))
-    .mutation(({ input }) => 
-        input.username === "admin" && input.password ===  env.ADMIN_PASSWORD
+    .mutation(
+      ({ input }) =>
+        input.username === "admin" && input.password === env.ADMIN_PASSWORD
     ),
 });
 
@@ -480,9 +482,8 @@ export const OrderRouter = createTRPCRouter({
   AddTicketsAfterConfirmation: publicProcedure
     .input(z.object({ id: z.string(), comps: Comps }))
     .query(async ({ ctx, input }) => {
-
       try {
-        let affiliation: { discountRate: number, competitionId: string } | null;
+        let affiliation: { discountRate: number; competitionId: string } | null;
 
         const order = await ctx.prisma.order.findUnique({
           where: {
@@ -494,16 +495,16 @@ export const OrderRouter = createTRPCRouter({
         });
 
         if (order?.affiliationId != null) {
-         affiliation = await ctx.prisma.affiliation.findUnique({
-          where: {
-            id: order.affiliationId,
-          },
-          select: {
-            discountRate: true,
-            competitionId: true,
-          },
-        });        
-      }
+          affiliation = await ctx.prisma.affiliation.findUnique({
+            where: {
+              id: order.affiliationId,
+            },
+            select: {
+              discountRate: true,
+              competitionId: true,
+            },
+          });
+        }
         if (input.comps.length > 0) {
           await ctx.prisma.order.update({
             where: {
@@ -513,13 +514,22 @@ export const OrderRouter = createTRPCRouter({
               Ticket: {
                 createMany: {
                   data: input.comps
-                    .map(({ reduction,price_per_ticket,compID, number_tickets }) =>
-                      new Array(number_tickets).fill(0).map((_) => ({
-                        competitionId: compID,
-                        ticketPrice : price_per_ticket,
-                        reduction:   reduction? reduction : 0 ,
-                        affiliation_reduction: affiliation?.competitionId == compID ? affiliation.discountRate : 0,
-                      }))
+                    .map(
+                      ({
+                        reduction,
+                        price_per_ticket,
+                        compID,
+                        number_tickets,
+                      }) =>
+                        new Array(number_tickets).fill(0).map((_) => ({
+                          competitionId: compID,
+                          ticketPrice: price_per_ticket,
+                          reduction: reduction ? reduction : 0,
+                          affiliation_reduction:
+                            affiliation?.competitionId == compID
+                              ? affiliation.discountRate
+                              : 0,
+                        }))
                     )
                     .flat(),
                 },
@@ -1242,6 +1252,55 @@ export const OrderRouter = createTRPCRouter({
         },
       });
     }),
+
+  createApplePayOrder: publicProcedure
+    .input(z.object({ purchaseAmount: z.number() }))
+    .mutation(async ({ ctx, input }) => {
+      const { purchaseAmount } = input;
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+      const accessToken = (await generateAccessToken()) as string;
+      const url = `${env.PAYPAL_API_URL as string}/v2/checkout/orders`;
+      const response = await fetch(url, {
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify({
+          intent: "CAPTURE",
+          puchase_units: [
+            {
+              amount: {
+                currency_code: "GBP",
+                value: purchaseAmount,
+              },
+            },
+          ],
+        }),
+      });
+      const data = await response.json();
+      return data;
+    }),
+  applePayPaymentCapture: publicProcedure
+    .input(z.object({ orderId: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const { orderId } = input;
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+      const accessToken = (await generateAccessToken()) as string;
+      const url = `${
+        env.PAYPAL_API_URL as string
+      }/v2/checkout/orders/${orderId}/capture`;
+      const response = await fetch(url, {
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      const data = await response.json();
+      return data;
+    }),
+
   update: publicProcedure
     .input(
       CreateOrderSchema.extend({
@@ -1258,8 +1317,15 @@ export const OrderRouter = createTRPCRouter({
         },
       });
     }),
+
   updateStatus: publicProcedure
-    .input(z.object({ id: z.string(), status: z.nativeEnum(order_status) , paymentId: z.string().optional()}))
+    .input(
+      z.object({
+        id: z.string(),
+        status: z.nativeEnum(order_status),
+        paymentId: z.string().optional(),
+      })
+    )
     .mutation(async ({ ctx, input }) => {
       return await ctx.prisma.order.update({
         where: {
@@ -1267,7 +1333,7 @@ export const OrderRouter = createTRPCRouter({
         },
         data: {
           status: input.status,
-          paymentId: input.paymentId
+          paymentId: input.paymentId,
         },
       });
     }),
@@ -2113,15 +2179,16 @@ export const ChartsRouter = createTRPCRouter({
   //   }>;
   // }),
   competEarnings: publicProcedure.query(async ({ ctx }) => {
-      //using views for a cleaner code and better performance, you can visualize the views in the database
-      const [
-        data,
-        data_old,
-      ] = await Promise.all([
-        ctx.prisma.$queryRaw<CompetitionData[]>`select * from vw_TotalAmountPerCompetition;`,
-        ctx.prisma.$queryRaw<CompetitionData[]>`select * from vw_OldTotalAmountPerCompetition;`,
-      ]);
-    return [...data,...data_old]
+    //using views for a cleaner code and better performance, you can visualize the views in the database
+    const [data, data_old] = await Promise.all([
+      ctx.prisma.$queryRaw<
+        CompetitionData[]
+      >`select * from vw_TotalAmountPerCompetition;`,
+      ctx.prisma.$queryRaw<
+        CompetitionData[]
+      >`select * from vw_OldTotalAmountPerCompetition;`,
+    ]);
+    return [...data, ...data_old];
   }),
 
   // get total tickets sold per day for a month
@@ -2129,7 +2196,8 @@ export const ChartsRouter = createTRPCRouter({
     try {
       //const date = new Date();
       //const CurrentMonth = new Date().getMonth() + 1;
-      const  res = (await ctx.prisma.$queryRaw<
+      const res = (
+        await ctx.prisma.$queryRaw<
           Array<{
             tickets_number: bigint;
             month: number;
@@ -2145,37 +2213,36 @@ export const ChartsRouter = createTRPCRouter({
           and YEAR(t.createdat) = YEAR(CURDATE())
           group by MONTH(t.createdat),YEAR(t.createdat)
           ORDER BY YEAR(t.createdat),MONTH(t.createdat) DESC;
-      `).map((comp) => ({
-          ...comp,
-          total_tickets: Number(comp.tickets_number),
-        }));
-        return ({
-          totalTicketsThisMonth : res[0]?.total_tickets || 0,
-          totalTicketsLastMonth : res[1]?.total_tickets || 0,
-          total : res.reduce((acc, curr) => acc + curr.total_tickets, 0),
-          data : [] as Array<{
-            month: string;
-            year: number;
-            total_tickets: number;
-          }>, 
-        
-        })
-
-    } catch (error) {
-      console.log(error);
+      `
+      ).map((comp) => ({
+        ...comp,
+        total_tickets: Number(comp.tickets_number),
+      }));
       return {
-        totalTicketsThisMonth : 0,
-        totalTicketsLastMonth : 0,
-        total : 0,
-        data : [] as Array<{
+        totalTicketsThisMonth: res[0]?.total_tickets || 0,
+        totalTicketsLastMonth: res[1]?.total_tickets || 0,
+        total: res.reduce((acc, curr) => acc + curr.total_tickets, 0),
+        data: [] as Array<{
           month: string;
           year: number;
           total_tickets: number;
-        }>,  }
-      }
+        }>,
+      };
+    } catch (error) {
+      console.log(error);
+      return {
+        totalTicketsThisMonth: 0,
+        totalTicketsLastMonth: 0,
+        total: 0,
+        data: [] as Array<{
+          month: string;
+          year: number;
+          total_tickets: number;
+        }>,
+      };
     }
-  ),
-      /*
+  }),
+  /*
       const data: Array<{
         date: string;
         total_tickets: number;

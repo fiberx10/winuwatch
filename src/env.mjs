@@ -15,6 +15,10 @@ const server = z.object({
   SMTP_PASSWORD: z.string().min(1),
   ADMIN_PASSWORD: z.string().default("1234"),
   HOST: z.string(),
+  PAYPAL_CLIENT_ID: z.string().min(1),
+  PAYPAL_APP_SECRET: z.string().min(1),
+  PAYPAL_MERCHANT_ID: z.string().min(1),
+  PAYPAL_API_URL: z.string().min(1),
 });
 
 /**
@@ -25,8 +29,9 @@ const client = z.object({
   // database :
   //DATABASE_URL: z.string().url(),
   NODE_ENV: z.enum(["development", "test", "production"]),
-  NEXT_PUBLIC_PAYPAL_CLIENT_ID: z.string().min(1),
   NEXT_PUBLIC_GA_TRACKING_ID: z.string().min(1),
+  NEXT_PUBLIC_PAYPAL_CLIENT_ID: z.string().min(1),
+  NEXT_PUBLIC_PAYPAL_MERCHANT_ID: z.string().min(1),
 });
 
 /**
@@ -40,6 +45,7 @@ const processEnv = {
   DATABASE_URL: process.env.DATABASE_URL,
   NODE_ENV: process.env.NODE_ENV,
   NEXT_PUBLIC_PAYPAL_CLIENT_ID: process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID,
+  NEXT_PUBLIC_PAYPAL_MERCHANT_ID: process.env.NEXT_PUBLIC_PAYPAL_ID,
   STRIPE_ENDPOINT_SECRET: process.env.STRIPE_ENDPOINT_SECRET,
   STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
   SMTP_HOST: process.env.SMTP_HOST,
@@ -49,6 +55,10 @@ const processEnv = {
   HOST: process.env.NEXTAUTH_URL,
   ADMIN_PASSWORD: process.env.ADMIN_PASSWORD,
   NEXT_PUBLIC_GA_TRACKING_ID: process.env.NEXT_PUBLIC_GA_TRACKING_ID,
+  PAYPAL_CLIENT_ID: process.env.PAYPAL_CLIENT_ID,
+  PAYPAL_APP_SECRET: process.env.PAYPAL_APP_SECRET,
+  PAYPAL_MERCHANT_ID: process.env.PAYPAL_MERCHANT_ID,
+  PAYPAL_API_URL: process.env.PAYPAL_API_URL,
 };
 
 // Don't touch the part below

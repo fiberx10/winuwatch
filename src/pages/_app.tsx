@@ -45,6 +45,7 @@ function MyApp({
       router.events.off("routeChangeComplete", handleRouteChange);
     };
   }, [router.events]);
+
   return (
     <NextIntlProvider messages={pageProps.messages}>
       <QueryClientProvider client={queryClient}>
@@ -67,6 +68,20 @@ function MyApp({
           strategy="afterInteractive"
           src={`https://www.googletagmanager.com/gtag/js?id=${env.NEXT_PUBLIC_GA_TRACKING_ID}`}
         />
+
+
+        <Script
+          src="https://applepay.cdn-apple.com/jsapi/v1/apple-pay-sdk.js"
+          strategy="afterInteractive"
+        ></Script>
+        <Script
+          src={
+            `https://www.paypal.com/sdk/js?client-id=${env.NEXT_PUBLIC_PAYPAL_CLIENT_ID}&currency=USD&buyer-country=US&merchant-id=${env.NEXT_PUBLIC_PAYPAL_MERCHANT_ID}&components=applepay`
+          }
+          strategy="afterInteractive"
+        ></Script>
+
+
         <Component {...pageProps} />
         <ReactQueryDevtools />
       </QueryClientProvider>

@@ -3,10 +3,11 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable  @typescript-eslint/restrict-template-expressions */
 import Footer from "@/components/Footer";
+import Script from "next/script";
 import NavBar from "@/components/NavBar";
 import Head from "next/head";
 import { z } from "zod";
-import { type SetStateAction, useEffect, useState } from "react";
+import { type SetStateAction, useEffect, useState, useLayoutEffect } from "react";
 import styles from "@/styles/Checkout.module.css";
 import { useRouter } from "next/router";
 import { api, Formater, CreateOrderStripeSchema, type i18n } from "@/utils";
@@ -37,7 +38,11 @@ import {
   PayPalButtons,
   usePayPalScriptReducer,
 } from "@paypal/react-paypal-js";
+
+
 import { env } from "@/env.mjs";
+
+import { useRef } from "react";
 
 const IsLegal = (Birthdate = new Date()) => {
   const LegalAge = 18;
@@ -69,6 +74,7 @@ const Schema = Yup.object().shape({
 export default function CheckoutPage({
   id,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+
   const { competitions: competitionsFromStore, reset } = useCart();
   const [competitions, setCompetitions] = useState(competitionsFromStore);
   const [ComputedTotal, setComputedTotal] = useState(0);
@@ -89,6 +95,20 @@ export default function CheckoutPage({
     error: affiliationError,
     data: affiliationData,
   } = api.Affiliation.checkDiscount.useMutation({});
+
+
+  const {
+    mutateAsync: createApplePayOrder,
+    error: applePayOrderError,
+    data: applePayOrderData,
+  } = api.Order.createApplePayOrder.useMutation();
+
+  const {
+    mutateAsync: applePayPaymentCapture,
+    error: applePayPaymentCaptureError,
+    data: applePayPaymentCaptureData,
+  } = api.Order.applePayPaymentCapture.useMutation();
+
   const [affiliationCode, setAffiliationCode] = useState<string | undefined>();
 
   useEffect(() => {
@@ -103,7 +123,7 @@ export default function CheckoutPage({
               : 0;
           const totalPriceWReduction = reduction
             ? number_tickets * price_per_ticket -
-              number_tickets * price_per_ticket * reduction
+            number_tickets * price_per_ticket * reduction
             : number_tickets * price_per_ticket;
           const totalPriceForCompetition = affiliationData?.isRunUpPrize
             ? number_tickets * price_per_ticket - discountRate
@@ -164,6 +184,128 @@ export default function CheckoutPage({
     ) : null;
   };
 
+
+  // paypal and apple pay
+  const applePayContainerRef = useRef<HTMLDivElement>(null);
+
+
+
+
+  async function setupApplepay() {
+    if (typeof window === 'undefined' || typeof paypal === 'undefined' || !paypal.Applepay) {
+      return;
+    }
+    const applepay = paypal.Applepay();
+    const {
+      isEligible,
+      countryCode,
+      currencyCode,
+      merchantCapabilities,
+      supportedNetworks,
+    } = await applepay.config();
+
+    if (!isEligible) {
+      console.log("Apple Pay is not available");
+      return;
+    }
+
+    if (!applePayContainerRef.current) {
+      return;
+    }
+
+    applePayContainerRef.current.innerHTML = '<apple-pay-button id="btn-appl" buttonstyle="black" type="buy" locale="en">';
+
+    applePayContainerRef.current.addEventListener("click", onClick);
+
+    function onClick() {
+      console.log({ merchantCapabilities, currencyCode, supportedNetworks })
+
+      const paymentRequest = {
+        countryCode,
+        currencyCode: 'GBP',
+        merchantCapabilities,
+        supportedNetworks,
+        requiredBillingContactFields: [
+          "name",
+          "phone",
+          "email",
+          "postalAddress",
+        ],
+        requiredShippingContactFields: [
+        ],
+        total: {
+          label: "Total",
+          amount: String(ComputedTotal),
+          type: "final",
+        },
+      };
+
+      const session = new ApplePaySession(4, paymentRequest);
+
+      session.onvalidatemerchant = (event: any) => {
+        applepay
+          .validateMerchant({
+            validationUrl: event.validationURL,
+          })
+          .then((payload) => {
+            session.completeMerchantValidation(payload.merchantSession);
+          })
+          .catch((err) => {
+            console.error(err);
+            session.abort();
+          });
+      };
+
+      session.onpaymentmethodselected = () => {
+        session.completePaymentMethodSelection({
+          newTotal: paymentRequest.total,
+        });
+      };
+
+      session.onpaymentauthorized = async (event) => {
+        try {
+          void await createApplePayOrder({
+            purchaseAmount: ComputedTotal,
+          });
+
+          if (!applePayOrderData) {
+            throw new Error("error creating apple pay order")
+          }
+
+          const { id } = applePayOrderData;
+          await applepay.confirmOrder({ orderId: id, token: event.payment.token, billingContact: event.payment.billingContact, shippingContact: event.payment.shippingContact });
+
+
+
+          void await applePayPaymentCapture({ orderId: id });
+
+          session.completePayment({
+            status: window.ApplePaySession.STATUS_SUCCESS,
+          });
+        } catch (err) {
+          console.error(err);
+          session.completePayment({
+            status: window.ApplePaySession.STATUS_FAILURE,
+          });
+        }
+      };
+      session.oncancel = () => {
+        console.log("Apple Pay Cancelled !!")
+      }
+      session.begin();
+    }
+  }
+
+
+  useLayoutEffect(() => {
+    document.addEventListener("DOMContentLoaded", (event) => {
+      if (ApplePaySession?.supportsVersion(4) && ApplePaySession?.canMakePayments()) {
+        setupApplepay().catch(console.error);
+      }
+    });
+  }, []);
+
+
   return (
     <div
       style={{
@@ -176,6 +318,7 @@ export default function CheckoutPage({
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+
       <NavBar />
       <div className={styles.CheckoutMain}>
         {isLoading || submiting ? (
@@ -260,18 +403,18 @@ export default function CheckoutPage({
                         totalPrice: ComputedTotal,
                         comps: affiliationData
                           ? competitions.map((comp) => ({
-                              ...comp,
-                              reduction:
-                                affiliationData.competitionId === comp.compID
-                                  ? affiliationData.isRunUpPrize
-                                    ? affiliationData.discountRate /
-                                      comp.number_tickets
-                                    : affiliationData.discountAmount
+                            ...comp,
+                            reduction:
+                              affiliationData.competitionId === comp.compID
+                                ? affiliationData.isRunUpPrize
+                                  ? affiliationData.discountRate /
+                                  comp.number_tickets
+                                  : affiliationData.discountAmount
                                     ? affiliationData.discountAmount /
-                                      comp.price_per_ticket
+                                    comp.price_per_ticket
                                     : affiliationData.discountRate
-                                  : comp.reduction,
-                            }))
+                                : comp.reduction,
+                          }))
                           : competitions,
                         paymentMethod: values.paymentMethod as
                           | "PAYPAL"
@@ -320,18 +463,18 @@ export default function CheckoutPage({
                         totalPrice: ComputedTotal,
                         comps: affiliationData
                           ? competitions.map((comp) => ({
-                              ...comp,
-                              reduction:
-                                affiliationData.competitionId === comp.compID
-                                  ? affiliationData.isRunUpPrize
-                                    ? affiliationData.discountRate /
-                                      comp.number_tickets
-                                    : affiliationData.discountAmount
+                            ...comp,
+                            reduction:
+                              affiliationData.competitionId === comp.compID
+                                ? affiliationData.isRunUpPrize
+                                  ? affiliationData.discountRate /
+                                  comp.number_tickets
+                                  : affiliationData.discountAmount
                                     ? affiliationData.discountAmount /
-                                      comp.price_per_ticket
+                                    comp.price_per_ticket
                                     : affiliationData.discountRate
-                                  : comp.reduction,
-                            }))
+                                : comp.reduction,
+                          }))
                           : competitions,
                         paymentMethod: values.paymentMethod as
                           | "PAYPAL"
@@ -579,7 +722,7 @@ export default function CheckoutPage({
                                     const isValidDate =
                                       date.getFullYear() === year &&
                                       date.getMonth() ===
-                                        (month as number) - 1 &&
+                                      (month as number) - 1 &&
                                       date.getDate() === day;
                                     const isOver18 = date <= minDate;
 
@@ -799,15 +942,15 @@ export default function CheckoutPage({
                                         <p>{order.reduction * 100}% OFF</p>
                                         {`\t${Formater(
                                           order.reduction *
-                                            (order.number_tickets *
-                                              ComptetionData.ticket_price),
+                                          (order.number_tickets *
+                                            ComptetionData.ticket_price),
                                           router.locale
                                         )}`}
                                       </p>
                                     </div>
                                   )}
                                   {affiliationData &&
-                                  affiliationData.competitionId ===
+                                    affiliationData.competitionId ===
                                     ComptetionData.id ? (
                                     <div>
                                       <div className={styles.coupon}>
@@ -831,22 +974,22 @@ export default function CheckoutPage({
                                             </p>
                                             {affiliationData.isRunUpPrize
                                               ? Formater(
-                                                  affiliationData.discountRate
-                                                )
+                                                affiliationData.discountRate
+                                              )
                                               : !!affiliationData.discountAmount
-                                              ? Formater(
+                                                ? Formater(
                                                   affiliationData.discountAmount
                                                 )
-                                              : Formater(
+                                                : Formater(
                                                   affiliationData.discountRate *
-                                                    (order.reduction
-                                                      ? order.number_tickets *
-                                                          order.price_per_ticket -
-                                                        order.number_tickets *
-                                                          order.price_per_ticket *
-                                                          order.reduction
-                                                      : order.number_tickets *
-                                                        order.price_per_ticket),
+                                                  (order.reduction
+                                                    ? order.number_tickets *
+                                                    order.price_per_ticket -
+                                                    order.number_tickets *
+                                                    order.price_per_ticket *
+                                                    order.reduction
+                                                    : order.number_tickets *
+                                                    order.price_per_ticket),
                                                   router.locale
                                                 )}
                                           </p>
@@ -855,7 +998,7 @@ export default function CheckoutPage({
                                     </div>
                                   ) : null}
                                   {competitions[competitions.length - 1] ===
-                                  competitions[i] ? (
+                                    competitions[i] ? (
                                     <div className={styles.OrdersFlexBotSum}>
                                       <div className={styles.orderSum}>
                                         <p>{`TOTAL`}</p>
@@ -1046,7 +1189,7 @@ export default function CheckoutPage({
                                             await updateStatus({
                                               id: id,
                                               status: "CONFIRMED",
-                                              paymentId : details.id.toString()
+                                              paymentId: details.id.toString()
                                             });
                                             await router.push(
                                               `/Confirmation/${id}`
@@ -1058,6 +1201,7 @@ export default function CheckoutPage({
                                     }}
                                   />
                                 </PayPalScriptProvider>
+                                <div id="applepay-container" ref={applePayContainerRef}></div>
                               </div>
                             ) : (
                               <button
@@ -1076,8 +1220,8 @@ export default function CheckoutPage({
                                 backgroundColor: error
                                   ? "rgba(30, 30, 30, 0.3)"
                                   : isSubmitting
-                                  ? "#cbb9ac"
-                                  : "#cbb9ac",
+                                    ? "#cbb9ac"
+                                    : "#cbb9ac",
                                 cursor:
                                   isSubmitting || error ? "default" : "pointer",
                               }}
