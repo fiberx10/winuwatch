@@ -2183,16 +2183,17 @@ export const ChartsRouter = createTRPCRouter({
   //   }>;
   // }),
   competEarnings: publicProcedure.query(async ({ ctx }) => {
-    //using views for a cleaner code and better performance, you can visualize the views in the database
-    const [data, data_old] = await Promise.all([
-      ctx.prisma.$queryRaw<
-        CompetitionData[]
-      >`select * from vw_TotalAmountPerCompetition;`,
-      ctx.prisma.$queryRaw<
-        CompetitionData[]
-      >`select * from vw_OldTotalAmountPerCompetition;`,
-    ]);
-    return [...data, ...data_old];
+
+      //using views for a cleaner code and better performance, you can visualize the views in the database
+           const [
+        data,
+        data_old
+      ] = await Promise.all([
+        ctx.prisma.$queryRaw<CompetitionData[]>`select * from vw_TotalAmountPerCompetition;`,
+        ctx.prisma.$queryRaw<CompetitionData[]>`select * from vw_OldTotalAmountPerCompetition;`,
+      ]);
+
+    return [...data,...data_old]
   }),
 
   // get total tickets sold per day for a month
