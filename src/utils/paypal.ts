@@ -6,10 +6,15 @@ const {
 } = env;
 
 export async function generateAccessToken() {
-  const auth = Buffer.from(`${PAYPAL_CLIENT_ID as string}:${PAYPAL_APP_SECRET as string}`).toString(
+  if (!PAYPAL_API_URL || !PAYPAL_APP_SECRET || !PAYPAL_CLIENT_ID) {
+    throw new Error("Paypal environment variables not set");
+  }
+  // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+  const auth = Buffer.from(`${PAYPAL_CLIENT_ID}:${PAYPAL_APP_SECRET}`).toString(
     "base64"
   );
-  const response = await fetch(`${PAYPAL_API_URL as string}/v1/oauth2/token`, {
+  // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+  const response = await fetch(`${PAYPAL_API_URL}/v1/oauth2/token`, {
     method: "post",
     body: "grant_type=client_credentials",
     headers: {

@@ -31,7 +31,7 @@ import RunerUp2 from "@/components/emails/RunerUp2";
 import newsLetter1 from "@/components/newsLetter1";
 import EmailF from "@/components/emailsFree";
 import { env } from "@/env.mjs";
-import { generateAccessToken } from "@/utils/paypal.ts";
+import { generateAccessToken } from "@/utils/paypal";
 
 const Months = [
   "Jan",
@@ -1258,8 +1258,9 @@ export const OrderRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       const { purchaseAmount } = input;
       // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-      const accessToken = (await generateAccessToken()) as string;
-      const url = `${env.PAYPAL_API_URL as string}/v2/checkout/orders`;
+      const accessToken = await generateAccessToken();
+      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+      const url = `${env.PAYPAL_API_URL}/v2/checkout/orders`;
       const response = await fetch(url, {
         method: "post",
         headers: {
@@ -1278,6 +1279,7 @@ export const OrderRouter = createTRPCRouter({
           ],
         }),
       });
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const data = await response.json();
       return data;
     }),
@@ -1286,9 +1288,10 @@ export const OrderRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       const { orderId } = input;
       // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-      const accessToken = (await generateAccessToken()) as string;
+      const accessToken = await generateAccessToken();
       const url = `${
-        env.PAYPAL_API_URL as string
+        // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+        env.PAYPAL_API_URL
       }/v2/checkout/orders/${orderId}/capture`;
       const response = await fetch(url, {
         method: "post",
@@ -1297,6 +1300,7 @@ export const OrderRouter = createTRPCRouter({
           Authorization: `Bearer ${accessToken}`,
         },
       });
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const data = await response.json();
       return data;
     }),

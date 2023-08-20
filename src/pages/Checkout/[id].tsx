@@ -1,9 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable  @typescript-eslint/restrict-template-expressions */
 import Footer from "@/components/Footer";
-import Script from "next/script";
 import NavBar from "@/components/NavBar";
 import Head from "next/head";
 import { z } from "zod";
@@ -192,9 +192,11 @@ export default function CheckoutPage({
 
 
   async function setupApplepay() {
-    if (typeof window === 'undefined' || typeof paypal === 'undefined' || !paypal.Applepay) {
+    if (typeof window === 'undefined') {
       return;
     }
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     const applepay = paypal.Applepay();
     const {
       isEligible,
@@ -240,6 +242,8 @@ export default function CheckoutPage({
         },
       };
 
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       const session = new ApplePaySession(4, paymentRequest);
 
       session.onvalidatemerchant = (event: any) => {
@@ -247,10 +251,11 @@ export default function CheckoutPage({
           .validateMerchant({
             validationUrl: event.validationURL,
           })
-          .then((payload) => {
+          // 
+          .then((payload: any) => {
             session.completeMerchantValidation(payload.merchantSession);
           })
-          .catch((err) => {
+          .catch((err: any) => {
             console.error(err);
             session.abort();
           });
@@ -262,7 +267,7 @@ export default function CheckoutPage({
         });
       };
 
-      session.onpaymentauthorized = async (event) => {
+      session.onpaymentauthorized = async (event: any) => {
         try {
           void await createApplePayOrder({
             purchaseAmount: ComputedTotal,
@@ -280,11 +285,15 @@ export default function CheckoutPage({
           void await applePayPaymentCapture({ orderId: id });
 
           session.completePayment({
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
             status: window.ApplePaySession.STATUS_SUCCESS,
           });
         } catch (err) {
           console.error(err);
           session.completePayment({
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
             status: window.ApplePaySession.STATUS_FAILURE,
           });
         }
@@ -299,6 +308,8 @@ export default function CheckoutPage({
 
   useLayoutEffect(() => {
     document.addEventListener("DOMContentLoaded", (event) => {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       if (ApplePaySession?.supportsVersion(4) && ApplePaySession?.canMakePayments()) {
         setupApplepay().catch(console.error);
       }
