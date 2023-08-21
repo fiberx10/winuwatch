@@ -215,6 +215,8 @@ export default function CheckoutPage({
       return;
     }
 
+    console.log("Apple Pay is available");
+
     applePayContainerRef.current.innerHTML = '<apple-pay-button id="btn-appl" buttonstyle="black" type="buy" locale="en">';
 
     applePayContainerRef.current.addEventListener("click", onClick);
@@ -306,15 +308,17 @@ export default function CheckoutPage({
   }
 
 
-  useLayoutEffect(() => {
-    document.addEventListener("DOMContentLoaded", (event) => {
+
+    console.log("useLayoutEffect")
+    document.addEventListener("load", (event) => {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       if (ApplePaySession?.supportsVersion(4) && ApplePaySession?.canMakePayments()) {
+        console.log("Apple Pay is available");
         setupApplepay().catch(console.error);
       }
     });
-  }, []);
+
 
 
   return (
@@ -1126,11 +1130,15 @@ export default function CheckoutPage({
                           <div className={styles.paypal}>
                             {isPaypal ? (
                               <div style={{ marginTop: "20px" }}>
+                                <div id="applepay-container" ref={applePayContainerRef}></div>
                                 <PayPalScriptProvider
                                   options={{
                                     "client-id": `${env.NEXT_PUBLIC_PAYPAL_CLIENT_ID}`,
+                                    "merchant-id": `${env.NEXT_PUBLIC_PAYPAL_MERCHANT_ID}`,
                                     currency: "GBP",
+                                    components: "buttons",
                                   }}
+
                                 >
                                   <PaypalSpinner />
                                   <PayPalButtons
@@ -1212,7 +1220,7 @@ export default function CheckoutPage({
                                     }}
                                   />
                                 </PayPalScriptProvider>
-                                <div id="applepay-container" ref={applePayContainerRef}></div>
+
                               </div>
                             ) : (
                               <button

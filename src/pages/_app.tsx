@@ -74,12 +74,11 @@ function MyApp({
           src="https://applepay.cdn-apple.com/jsapi/v1/apple-pay-sdk.js"
           strategy="afterInteractive"
         ></Script>
-        <Script
+        {/* <Script
           src={
             `https://www.paypal.com/sdk/js?client-id=${env.NEXT_PUBLIC_PAYPAL_CLIENT_ID}&currency=USD&buyer-country=US&merchant-id=${env.NEXT_PUBLIC_PAYPAL_MERCHANT_ID}&components=applepay`
           }
-          strategy="afterInteractive"
-        ></Script>
+        ></Script> */}
 
 
         <Component {...pageProps} />
