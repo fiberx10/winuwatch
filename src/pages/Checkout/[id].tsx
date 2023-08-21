@@ -310,7 +310,8 @@ export default function CheckoutPage({
 
 
     console.log("useLayoutEffect")
-    document.addEventListener("load", (event) => {
+    document.addEventListener("DOMContentLoaded", (event) => {
+      console.log("DOMContentLoaded")
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       if (ApplePaySession?.supportsVersion(4) && ApplePaySession?.canMakePayments()) {
