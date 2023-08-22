@@ -308,35 +308,35 @@ export default function CheckoutPage({
 
 
 
-    console.log("useLayoutEffect")
-    useLayoutEffect(() => {
-      console.log("DOMContentLoaded")
-       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      if (!ApplePaySession) {
-        console.log("Apple Pay Session is not available");
-        return; 
-      }
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      if (typeof paypal === "undefined" || !paypal) {
-        console.log("Paypal is not available");
-        return;
-      }
-       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      if (typeof paypal !== "undefined") {
-        console.log("Paypal is available");
-      }
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      // if (ApplePaySession?.supportsVersion(4) && ApplePaySession?.canMakePayments()) {
-        console.log("Apple Pay is available");
-        setupApplepay().catch(console.error);
-      // }
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-    });
+  console.log("useLayoutEffect")
+  useLayoutEffect(() => {
+    console.log("DOMContentLoaded")
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    if (!ApplePaySession) {
+      console.log("Apple Pay Session is not available");
+      return;
+    }
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    if (typeof paypal === "undefined" || !paypal) {
+      console.log("Paypal is not available");
+      return;
+    }
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    if (typeof paypal !== "undefined") {
+      console.log("Paypal is available");
+    }
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    // if (ApplePaySession?.supportsVersion(4) && ApplePaySession?.canMakePayments()) {
+    console.log("Apple Pay is available");
+    setupApplepay().catch(console.error);
+    // }
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+  }, []);
 
 
 
@@ -1150,87 +1150,86 @@ export default function CheckoutPage({
                             {isPaypal ? (
                               <div style={{ marginTop: "20px" }}>
                                 <div id="applepay-container" ref={applePayContainerRef}></div>
-                              
-                                  <PaypalSpinner />
-                                  <PayPalButtons
-                                    createOrder={(data, actions) => {
-                                      return actions.order.create({
-                                        application_context: {
-                                          shipping_preference: "NO_SHIPPING",
-                                          brand_name: "Win u Watch",
-                                          locale: "en-GB",
-                                          user_action: "PAY_NOW",
-                                        },
-                                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                        //@ts-ignore
-                                        payer: {
-                                          name: {
-                                            given_name:
-                                              values.first_name || undefined,
-                                            surname:
-                                              values.last_name || undefined,
-                                          },
-                                          email_address: values.email as string,
-                                          address: {
-                                            postal_code:
-                                              values.zip || undefined,
-                                            country_code:
-                                              lookup.byCountry(values.country)
-                                                ?.iso2 || "FR",
-                                          },
-                                          phone: {
-                                            phone_number: {
-                                              national_number:
-                                                values.phone?.replaceAll(
-                                                  `+${getCountryCallingCode(
-                                                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                                    //@ts-ignore
-                                                    parsePhoneNumber(
-                                                      values.phone
-                                                    )?.country
-                                                  )}`,
-                                                  ""
-                                                ) as string,
-                                            },
-                                            phone_type: "MOBILE",
-                                          },
-                                          tenant: "",
-                                          birth_date: "2000-01-01",
-                                        },
-                                        purchase_units: [
-                                          {
-                                            amount: {
-                                              value: String(ComputedTotal),
-                                            },
-                                          },
-                                        ],
-                                      });
-                                    }}
-                                    onApprove={(data, actions) => {
+
+                                <PaypalSpinner />
+                                <PayPalButtons
+                                  createOrder={(data, actions) => {
+                                    return actions.order.create({
+                                      application_context: {
+                                        shipping_preference: "NO_SHIPPING",
+                                        brand_name: "Win u Watch",
+                                        locale: "en-GB",
+                                        user_action: "PAY_NOW",
+                                      },
                                       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                                       //@ts-ignore
-                                      return actions.order
-                                        .capture()
-                                        .then(async (details) => {
-                                          if (details.status === "COMPLETED") {
-                                            typeof window !== "undefined" &&
-                                              window.scrollTo(0, 0);
-                                            setSubmiting(true);
-                                            await updateStatus({
-                                              id: id,
-                                              status: "CONFIRMED",
-                                              paymentId: details.id.toString()
-                                            });
-                                            await router.push(
-                                              `/Confirmation/${id}`
-                                            );
-                                          } else {
-                                            setError("Payment Failed");
-                                          }
-                                        });
-                                    }}
-                                  />
-
+                                      payer: {
+                                        name: {
+                                          given_name:
+                                            values.first_name || undefined,
+                                          surname:
+                                            values.last_name || undefined,
+                                        },
+                                        email_address: values.email as string,
+                                        address: {
+                                          postal_code:
+                                            values.zip || undefined,
+                                          country_code:
+                                            lookup.byCountry(values.country)
+                                              ?.iso2 || "FR",
+                                        },
+                                        phone: {
+                                          phone_number: {
+                                            national_number:
+                                              values.phone?.replaceAll(
+                                                `+${getCountryCallingCode(
+                                                  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                                  //@ts-ignore
+                                                  parsePhoneNumber(
+                                                    values.phone
+                                                  )?.country
+                                                )}`,
+                                                ""
+                                              ) as string,
+                                          },
+                                          phone_type: "MOBILE",
+                                        },
+                                        tenant: "",
+                                        birth_date: "2000-01-01",
+                                      },
+                                      purchase_units: [
+                                        {
+                                          amount: {
+                                            value: String(ComputedTotal),
+                                          },
+                                        },
+                                      ],
+                                    });
+                                  }}
+                                  onApprove={(data, actions) => {
+                                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                    //@ts-ignore
+                                    return actions.order
+                                      .capture()
+                                      .then(async (details) => {
+                                        if (details.status === "COMPLETED") {
+                                          typeof window !== "undefined" &&
+                                            window.scrollTo(0, 0);
+                                          setSubmiting(true);
+                                          await updateStatus({
+                                            id: id,
+                                            status: "CONFIRMED",
+                                            paymentId: details.id.toString()
+                                          });
+                                          await router.push(
+                                            `/Confirmation/${id}`
+                                          );
+                                        } else {
+                                          setError("Payment Failed");
+                                        }
+                                      });
+                                  }}
+                                />
                               </div>
                             ) : (
                               <button
