@@ -318,6 +318,8 @@ export default function CheckoutPage({
         console.log("Apple Pay Session is not available");
         return; 
       }
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       if (!paypal) {
         console.log("Paypal is not available");
         return;
