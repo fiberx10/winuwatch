@@ -79,7 +79,7 @@ function MyApp({
 
         <Script
           src="https://applepay.cdn-apple.com/jsapi/v1/apple-pay-sdk.js"
-        // strategy="afterInteractive"
+          strategy="afterInteractive"
         ></Script>
         {/* <Script
           src={
