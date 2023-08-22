@@ -310,15 +310,19 @@ export default function CheckoutPage({
 
 
     console.log("useLayoutEffect")
-    document.addEventListener("DOMContentLoaded", (event) => {
+    useLayoutEffect(() => {
       console.log("DOMContentLoaded")
+      if (!ApplePaySession) {
+        console.log("Apple Pay Session is not available");
+        return;
+      }
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       if (ApplePaySession?.supportsVersion(4) && ApplePaySession?.canMakePayments()) {
         console.log("Apple Pay is available");
         setupApplepay().catch(console.error);
       }
-    });
+    }, []);
 
 
 
