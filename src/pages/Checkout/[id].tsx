@@ -320,9 +320,14 @@ export default function CheckoutPage({
       }
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      if (!paypal) {
+      if (typeof paypal === "undefined" || !paypal) {
         console.log("Paypal is not available");
         return;
+      }
+       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      if (typeof paypal !== "undefined") {
+        console.log("Paypal is available");
       }
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
@@ -332,7 +337,7 @@ export default function CheckoutPage({
       // }
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-    }, [paypal]);
+    });
 
 
 
