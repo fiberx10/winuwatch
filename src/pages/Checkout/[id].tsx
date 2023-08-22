@@ -313,7 +313,7 @@ export default function CheckoutPage({
     console.log("DOMContentLoaded")
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    if (!ApplePaySession) {
+    if (typeof ApplePaySession === "undefined" || !ApplePaySession) {
       console.log("Apple Pay Session is not available");
       return;
     }
@@ -330,10 +330,10 @@ export default function CheckoutPage({
     }
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    // if (ApplePaySession?.supportsVersion(4) && ApplePaySession?.canMakePayments()) {
-    console.log("Apple Pay is available");
-    setupApplepay().catch(console.error);
-    // }
+    if (ApplePaySession?.supportsVersion(4) && ApplePaySession?.canMakePayments()) {
+      console.log("Apple Pay is available");
+      setupApplepay().catch(console.error);
+    }
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
   }, []);
