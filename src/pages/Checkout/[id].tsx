@@ -34,7 +34,6 @@ import type {
 } from "next";
 import Link from "next/link";
 import {
-  PayPalScriptProvider,
   PayPalButtons,
   usePayPalScriptReducer,
 } from "@paypal/react-paypal-js";
@@ -1151,15 +1150,7 @@ export default function CheckoutPage({
                             {isPaypal ? (
                               <div style={{ marginTop: "20px" }}>
                                 <div id="applepay-container" ref={applePayContainerRef}></div>
-                                <PayPalScriptProvider
-                                  options={{
-                                    "client-id": `${env.NEXT_PUBLIC_PAYPAL_CLIENT_ID}`,
-                                    "merchant-id": `${env.NEXT_PUBLIC_PAYPAL_MERCHANT_ID}`,
-                                    currency: "GBP",
-                                    components: "buttons,applepay",
-                                  }}
-
-                                >
+                              
                                   <PaypalSpinner />
                                   <PayPalButtons
                                     createOrder={(data, actions) => {
@@ -1239,7 +1230,6 @@ export default function CheckoutPage({
                                         });
                                     }}
                                   />
-                                </PayPalScriptProvider>
 
                               </div>
                             ) : (

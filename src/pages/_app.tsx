@@ -11,6 +11,11 @@ import Head from "next/head";
 import Script from "next/script";
 import { useRouter } from "next/router";
 import { env } from "@/env.mjs";
+import {
+  PayPalScriptProvider,
+} from "@paypal/react-paypal-js";
+
+
 type PageProps = {
   messages: AbstractIntlMessages;
   now: number;
@@ -74,7 +79,7 @@ function MyApp({
 
         <Script
           src="https://applepay.cdn-apple.com/jsapi/v1/apple-pay-sdk.js"
-          // strategy="afterInteractive"
+        // strategy="afterInteractive"
         ></Script>
         {/* <Script
           src={
@@ -82,8 +87,16 @@ function MyApp({
           }
         ></Script> */}
 
-
-        <Component {...pageProps} />
+        <PayPalScriptProvider
+          options={{
+            "client-id": `${env.NEXT_PUBLIC_PAYPAL_CLIENT_ID}`,
+            "merchant-id": `${env.NEXT_PUBLIC_PAYPAL_MERCHANT_ID}`,
+            currency: "GBP",
+            components: "buttons,applepay",
+          }}
+        >
+          <Component {...pageProps} />
+        </PayPalScriptProvider>
         <ReactQueryDevtools />
       </QueryClientProvider>
     </NextIntlProvider>
