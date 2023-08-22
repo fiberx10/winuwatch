@@ -1137,7 +1137,7 @@ export default function CheckoutPage({
                                     "client-id": `${env.NEXT_PUBLIC_PAYPAL_CLIENT_ID}`,
                                     "merchant-id": `${env.NEXT_PUBLIC_PAYPAL_MERCHANT_ID}`,
                                     currency: "GBP",
-                                    components: "buttons",
+                                    components: "buttons,applepay",
                                   }}
 
                                 >
