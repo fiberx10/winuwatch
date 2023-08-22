@@ -316,6 +316,10 @@ export default function CheckoutPage({
       // @ts-ignore
       if (!ApplePaySession) {
         console.log("Apple Pay Session is not available");
+        return; 
+      }
+      if (!paypal) {
+        console.log("Paypal is not available");
         return;
       }
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -324,7 +328,9 @@ export default function CheckoutPage({
         console.log("Apple Pay is available");
         setupApplepay().catch(console.error);
       // }
-    }, []);
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+    }, [paypal]);
 
 
 
