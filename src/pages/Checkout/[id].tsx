@@ -312,6 +312,8 @@ export default function CheckoutPage({
     console.log("useLayoutEffect")
     useLayoutEffect(() => {
       console.log("DOMContentLoaded")
+       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       if (!ApplePaySession) {
         console.log("Apple Pay Session is not available");
         return;
