@@ -334,10 +334,10 @@ export default function CheckoutPage({
     }
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    if (ApplePaySession?.supportsVersion(4) && ApplePaySession?.canMakePayments()) {
+    // if (ApplePaySession?.supportsVersion(4) && ApplePaySession?.canMakePayments()) {
       console.log("Apple Pay can make payments");
       setupApplepay().catch(console.error);
-    }
+    // }
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
   }, []);
