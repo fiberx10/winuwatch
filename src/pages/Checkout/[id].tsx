@@ -196,7 +196,8 @@ export default function CheckoutPage({
     }
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    const applepay = paypal.Applepay();    if (!applePayContainerRef.current) {
+    const applepay = paypal.Applepay();   
+     if (!applePayContainerRef.current) {
       return;
     }
     applePayContainerRef.current.innerHTML = '<apple-pay-button id="btn-appl" buttonstyle="black" type="buy" locale="en">';
