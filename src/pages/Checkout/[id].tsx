@@ -196,7 +196,12 @@ export default function CheckoutPage({
     }
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    const applepay = paypal.Applepay();
+    const applepay = paypal.Applepay();    if (!applePayContainerRef.current) {
+      return;
+    }
+    applePayContainerRef.current.innerHTML = '<apple-pay-button id="btn-appl" buttonstyle="black" type="buy" locale="en">';
+
+
     const {
       isEligible,
       countryCode,
@@ -210,13 +215,11 @@ export default function CheckoutPage({
       return;
     }
 
-    if (!applePayContainerRef.current) {
-      return;
-    }
+
 
     console.log("Apple Pay is available");
 
-    applePayContainerRef.current.innerHTML = '<apple-pay-button id="btn-appl" buttonstyle="black" type="buy" locale="en">';
+
 
     applePayContainerRef.current.addEventListener("click", onClick);
 
@@ -331,7 +334,7 @@ export default function CheckoutPage({
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     if (ApplePaySession?.supportsVersion(4) && ApplePaySession?.canMakePayments()) {
-      console.log("Apple Pay is available");
+      console.log("Apple Pay can make payments");
       setupApplepay().catch(console.error);
     }
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
